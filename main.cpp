@@ -19,7 +19,7 @@
 //-----------------------------------------
 // マクロ定義
 //-----------------------------------------
-#define CLASS_NAME	"windowclass"		// ウインドウクラスの名前
+#define CLASS_NAME	"windowclass"					// ウインドウクラスの名前
 #define WINDOW_NAME	"フライングパワーディスク"		// ウインドウクラスの名前（キャプションに表示）
 #define FVF_VERTEX_2D	(D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_TEX1)
 
