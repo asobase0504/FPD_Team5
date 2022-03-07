@@ -40,7 +40,8 @@ LPDIRECT3D9	g_pD3D = NULL;
 LPDIRECT3DDEVICE9 g_pD3DDevice = NULL;
 LPD3DXFONT g_pFont = NULL;	// フォントへのポインタ
 int g_nCountFPS = 0;		// FPSカウンタ
-static MODE s_mode = MODE_TITLE;
+//static MODE s_mode = MODE_TITLE;
+static MODE s_mode = MODE_GAME;
 static bool s_bExit;
 
 //=========================================
