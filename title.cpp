@@ -1,8 +1,7 @@
 //==================================================
 //
 // ƒ^ƒCƒgƒ‹‰æ–Ê ( title.cpp )
-// Author  : katsuki mizuki
-// Author:Teruto Sato
+// Author : Yuda Kaito
 // Author:Kishimoto Eiji
 //
 //==================================================

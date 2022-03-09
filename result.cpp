@@ -5,8 +5,7 @@
 //
 //================================
 #include "result.h"
-#include "fade.h"
-#include <time.h>
+#include "input.h"
 
 //============================
 // ƒŠƒUƒ‹ƒg‚Ì‰Šú‰»ˆ—
