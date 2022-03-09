@@ -3,7 +3,7 @@
 // ステージ(ヘッダーファイル)
 // Author Tanimoto_Kosuke
 //
-// Update 22/03/07
+// Update 22/03/09
 // 
 //=========================================
 #ifndef _STAGE_H_
@@ -14,8 +14,20 @@
 //****************************************************************************
 //マクロ定義
 //****************************************************************************
-#define STAGE_WIDTH		(SCREEN_WIDTH - 200)	//ステージの横サイズ
-#define STAGE_HEIGHT	(SCREEN_HEIGHT - 200)	//ステージの縦サイズ
+#define STAGE_WIDTH			(SCREEN_WIDTH)	//ステージの横サイズ
+#define STAGE_HEIGHT		(SCREEN_HEIGHT - 200)	//ステージの縦サイズ
+#define MAX_STAGE			(2)						//ステージの最大数
+#define MAX_IMAGE_STAGE		(2)						//ステージ画像の最大数
+
+//****************************************************************************
+//ステージの種類
+//****************************************************************************
+typedef enum
+{
+	STAGE_TYPE_FRONT = 0,	//ステージ前側
+	STAGE_TYPE_BACK,		//ステージ後ろ側
+	STAGE_TYPE_MAX
+}STAGE_TYPE;
 
 //****************************************************************************
 //構造体の定義
@@ -26,19 +38,10 @@ typedef struct
 	D3DXVECTOR3 rot;	//回転
 	D3DXVECTOR3 nor;	//法線
 	D3DXCOLOR	col;	//色
+	STAGE_TYPE type;	//種類
 	float fAngle;		//角度(アークタンジェント)
 	float fLength;		//長さ(スクウェアルート)
 }STAGE;
-
-typedef enum
-{
-	STAGE_COLLISION_NONE = 0,
-	STAGE_COLLISION_TOP,
-	STAGE_COLLISION_BOTTOM,
-	STAGE_COLLISION_RIGHT,
-	STAGE_COLLISION_LEFT,
-	STAGE_COLLISION_MAX
-}STAGE_COLLISION;
 
 //****************************************************************************
 //プロトタイプ宣言
@@ -47,7 +50,5 @@ void InitStage(void);
 void UninitStage(void);
 void UpdateStage(void);
 void DrawStage(void);
-
-//STAGE_COLLISION ColisionStage(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVECTOR3 *pMove, D3DXVECTOR3 *pNor,float fWidth, float fHeight);
 
 #endif

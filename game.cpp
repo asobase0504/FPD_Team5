@@ -12,7 +12,6 @@
 #include "input.h"
 #include "sound.h"
 #include "stage.h"
-#include "goal.h"
 #include <stdio.h>
 
 //------------------------------------
@@ -29,7 +28,6 @@
 void InitGame(void)
 {
 	InitStage();
-	InitGoal();
 }
 
 //=========================================
@@ -38,7 +36,6 @@ void InitGame(void)
 void UninitGame(void)
 {
 	UninitStage();
-	UninitGoal();
 }
 
 //=========================================
@@ -47,7 +44,6 @@ void UninitGame(void)
 void UpdateGame(void)
 {
 	UpdateStage();
-	UpdateGoal();
 }
 
 //=========================================
@@ -56,5 +52,4 @@ void UpdateGame(void)
 void DrawGame()
 {
 	DrawStage();
-	DrawGoal();
 }

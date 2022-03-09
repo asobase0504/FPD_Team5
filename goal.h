@@ -3,7 +3,7 @@
 // ゴール(ヘッダーファイル)
 // Author Tanimoto_Kosuke
 //
-// Update 22/03/07
+// Update 22/03/09
 // 
 //=========================================
 #ifndef _GOAL_H_
@@ -30,6 +30,16 @@ typedef enum
 	GOAL_TYPE_MAX
 }GOAL_TYPE;
 
+typedef enum
+{
+	GOAL_COLLISION_NONE = 0,
+	GOAL_COLLISION_TOP,
+	GOAL_COLLISION_BOTTOM,
+	GOAL_COLLISION_RIGHT,
+	GOAL_COLLISION_LEFT,
+	GOAL_COLLISION_MAX
+}GOAL_COLLISION;
+
 //****************************************************************************
 //構造体の定義
 //****************************************************************************
@@ -42,6 +52,7 @@ typedef struct
 	GOAL_TYPE type;		//種類
 	float fAngle;		//角度(アークタンジェント)
 	float fLength;		//長さ(スクウェアルート)
+	bool bUse;			//使用判定
 }GOAL;
 
 //****************************************************************************
@@ -51,5 +62,9 @@ void InitGoal(void);
 void UninitGoal(void);
 void UpdateGoal(void);
 void DrawGoal(void);
+
+void ColisionGoal(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVECTOR3 *pMove, D3DXVECTOR3 *pNor,float fWidth, float fHeight);
+GOAL *GetGoal(void);
+
 
 #endif
