@@ -40,8 +40,8 @@ LPDIRECT3D9	g_pD3D = NULL;
 LPDIRECT3DDEVICE9 g_pD3DDevice = NULL;
 LPD3DXFONT g_pFont = NULL;	// フォントへのポインタ
 int g_nCountFPS = 0;		// FPSカウンタ
-//static MODE s_mode = MODE_TITLE;
 static MODE s_mode = MODE_GAME;
+static MODE s_modeNext = MODE_NONE;
 static bool s_bExit;
 
 //=========================================
@@ -297,7 +297,7 @@ HRESULT Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	InitSound(hWnd);
 
 	// モードの設定
-	InitFade(s_mode);
+	InitFade();
 
 	return S_OK;
 }
@@ -422,7 +422,7 @@ void DrawFPS(void)
 //=========================================
 // モードの設定
 //=========================================
-void SetMode(MODE mode)
+void SetMode()
 {
 	// 現在の画面(モード)の終了処理
 	switch (s_mode)
@@ -440,7 +440,7 @@ void SetMode(MODE mode)
 	}
 
 	// 新しい画面(モード)の初期化処理
-	switch (mode)
+	switch (s_modeNext)
 	{
 	case MODE_TITLE:	// タイトル画面
 		InitTitle();
@@ -453,7 +453,8 @@ void SetMode(MODE mode)
 		break;
 	}
 
-	s_mode = mode;	// 現在の画面(モード)を切り替える
+	s_mode = s_modeNext;	// 現在の画面(モード)を切り替える
+	s_modeNext = MODE_NONE;
 }
 
 //=========================================
@@ -470,4 +471,12 @@ MODE GetMode(void)
 void ExitExe(void)
 {
 	s_bExit = true;
+}
+
+//=========================================
+// モードの変更
+//=========================================
+void ChangeMode(MODE mode)
+{
+	s_modeNext = mode;
 }
