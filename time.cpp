@@ -146,13 +146,13 @@ void UpdateTime(void)
 	//頂点バッファをアンロック
 	g_pVtxBuffTime->Unlock();
 
-	if (g_nTime <= 0)
+	/*if (g_nTime <= 0)
 	{
 		if (GetFade() == FADE_NONE)
 		{
-			SetFade(MODE_RESULT);
+			ChangeMode(MODE_RESULT);
 		}
-	}
+	}*/
 }
 //タイムの描画処理
 void DrawTime(void)
