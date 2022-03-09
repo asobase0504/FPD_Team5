@@ -156,6 +156,7 @@
     <ClCompile Include="game.cpp" />
     <ClCompile Include="goal.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="menu.cpp" />
     <ClCompile Include="result.cpp" />
     <ClCompile Include="sound.cpp" />
     <ClCompile Include="stage.cpp" />
@@ -166,6 +167,7 @@
     <ClInclude Include="game.h" />
     <ClInclude Include="goal.h" />
     <ClInclude Include="main.h" />
+    <ClInclude Include="menu.h" />
     <ClInclude Include="result.h" />
     <ClInclude Include="sound.h" />
     <ClInclude Include="stage.h" />
