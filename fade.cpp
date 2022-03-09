@@ -2,6 +2,7 @@
 // 
 // 3DƒQ[ƒ€§ì ( fade.cpp )
 // Author  : katsuki mizuki
+// Author  : Yuda Kaito
 // 
 //==================================================
 #include "fade.h"

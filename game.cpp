@@ -7,13 +7,13 @@
 //------------------------------------
 // include
 //------------------------------------
-#include "game.h"
 #include "main.h"
+#include "game.h"
+#include "input.h"
 #include "sound.h"
-#include "fade.h"
-#include <stdio.h>
 #include "stage.h"
 #include "goal.h"
+#include <stdio.h>
 
 //------------------------------------
 // マクロ定義
@@ -22,7 +22,6 @@
 //------------------------------------
 // スタティック変数
 //------------------------------------
-static bool s_bPause;	// ポーズ中かどうか
 
 //=========================================
 // 初期化

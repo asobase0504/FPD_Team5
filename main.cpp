@@ -32,6 +32,7 @@ void Uninit(void);
 void Update(void);
 void Draw(void);
 void DrawFPS(void);
+void ChangeMode(MODE mode);
 
 //-----------------------------------------
 // グローバル変数
@@ -40,7 +41,7 @@ LPDIRECT3D9	g_pD3D = NULL;
 LPDIRECT3DDEVICE9 g_pD3DDevice = NULL;
 LPD3DXFONT g_pFont = NULL;	// フォントへのポインタ
 int g_nCountFPS = 0;		// FPSカウンタ
-static MODE s_mode = MODE_GAME;
+static MODE s_mode = MODE_NONE;
 static MODE s_modeNext = MODE_NONE;
 static bool s_bExit;
 
@@ -296,8 +297,10 @@ HRESULT Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 
 	InitSound(hWnd);
 
-	// モードの設定
 	InitFade();
+
+	// モードの設定
+	ChangeMode(MODE_GAME);
 
 	return S_OK;
 }
@@ -358,6 +361,8 @@ void Update(void)
 	}
 
 	UpdateFade();	// フェード
+
+	SetMode();
 }
 
 //=========================================
@@ -422,8 +427,23 @@ void DrawFPS(void)
 //=========================================
 // モードの設定
 //=========================================
-void SetMode()
+void SetMode(void)
 {
+	if (s_modeNext == MODE_NONE)
+	{// 次のモードが決まってない
+		return;
+	}
+
+	if (GetFade() == FADE_NONE)
+	{// 何もしていない状態なら
+		StartFadeOut();
+	}
+
+	if (GetFade() != FADE_IN)
+	{// フェードイン状態じゃない
+		return;
+	}
+
 	// 現在の画面(モード)の終了処理
 	switch (s_mode)
 	{
@@ -435,7 +455,6 @@ void SetMode()
 		break;
 	case MODE_RESULT:
 		UninitResult();
-		break;
 		break;
 	}
 
