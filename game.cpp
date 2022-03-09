@@ -12,6 +12,7 @@
 #include "sound.h"
 #include "fade.h"
 #include <stdio.h>
+#include "stage.h"
 
 //------------------------------------
 // マクロ定義
@@ -27,6 +28,7 @@ static bool s_bPause;	// ポーズ中かどうか
 //=========================================
 void InitGame(void)
 {
+	InitStage();
 }
 
 //=========================================
@@ -34,6 +36,7 @@ void InitGame(void)
 //=========================================
 void UninitGame(void)
 {
+	UninitStage();
 }
 
 //=========================================
@@ -41,6 +44,7 @@ void UninitGame(void)
 //=========================================
 void UpdateGame(void)
 {
+	UpdateStage();
 }
 
 //=========================================
@@ -48,4 +52,5 @@ void UpdateGame(void)
 //=========================================
 void DrawGame()
 {
+	DrawStage();
 }
