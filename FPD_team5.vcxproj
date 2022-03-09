@@ -157,8 +157,11 @@
     <ClCompile Include="goal.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="result.cpp" />
+    <ClCompile Include="score.cpp" />
+    <ClCompile Include="setting.cpp" />
     <ClCompile Include="sound.cpp" />
     <ClCompile Include="stage.cpp" />
+    <ClCompile Include="time.cpp" />
     <ClCompile Include="title.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -167,9 +170,15 @@
     <ClInclude Include="goal.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="result.h" />
+    <ClInclude Include="score.h" />
+    <ClInclude Include="setting.h" />
     <ClInclude Include="sound.h" />
     <ClInclude Include="stage.h" />
+    <ClInclude Include="time.h" />
     <ClInclude Include="title.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
