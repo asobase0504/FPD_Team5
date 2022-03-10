@@ -230,9 +230,14 @@ void UpdateStage(void)
 	//頂点バッファをアンロックする
 	s_pVtxBuffStage->Unlock();
 
+	//ディスクが動かない場合
 	if (pDisk->move.x == 0.0f && pDisk->move.y == 0.0f)
 	{
 		s_bFell = true;
+	}
+	else
+	{
+		s_bFell = false;
 	}
 
 	//ディスクが落ちた場合
@@ -243,6 +248,11 @@ void UpdateStage(void)
 	else
 	{
 		s_fFellCounter = 0;
+	}
+
+	if (s_fFellCounter >= FALL_DISK_DELETE)
+	{
+		pDisk->bUse = false;
 	}
 
 	UpdateGoal();
