@@ -29,6 +29,7 @@ void UninitWall(void);
 void UpdateWall(void);
 void DrawWall(void);
 void SetWall(D3DXVECTOR3 pos, float width, float height, float angle);
-void WallBounce(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pLastPos, D3DXVECTOR3 *pMove, float fRadius);
+void WallBounce(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pLastPos, D3DXVECTOR3 *pMove, D3DXVECTOR3 *pAcc, float fRadius);
+bool SpecialWallBounce(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pLastPos, D3DXVECTOR3 *pMove, float fRadius);
 
 #endif
