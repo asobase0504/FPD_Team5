@@ -2,6 +2,7 @@
 //								  //
 //       ディスクのヘッダー		  //
 //       Author: Ricci Alex		  //
+//       Author: tanimoto		  //
 //								  //
 //================================//
 #ifndef _DISK_H_		//このマクロが定義されてなかったら
@@ -45,5 +46,7 @@ void UpdateDisk(void);
 void DrawDisk(void);
 void SetDisk(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 acc, DISK_TYPE type, float size);
 void UpdateSpecialDisk(int nCntDisk, int nPlayer);
+
+Disk *GetDisk(void);
 
 #endif
