@@ -262,8 +262,8 @@ void ColisionGoal(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pLastPos, float fWidth, float 
 		{
 			if (s_aGoal[nCntGoal].type == GOAL_TYPE_NORMAL)
 			{//3“_ƒS[ƒ‹‚Ìê‡
-				if (pPos->y > s_aGoal[nCntGoal].pos.y - ((GOAL_HEIGHT - STRIKE_GOAL_HEIGHT) / 2)
-					&& pPos->y < s_aGoal[nCntGoal].pos.y + ((GOAL_HEIGHT - STRIKE_GOAL_HEIGHT) / 2)
+				if (pPos->y > s_aGoal[nCntGoal].pos.y - (GOAL_HEIGHT / 2)
+					&& pPos->y < s_aGoal[nCntGoal].pos.y + (GOAL_HEIGHT / 2)
 					&& pPos->x + fWidth / 2 > s_aGoal[nCntGoal].pos.x 
 					&& pPos->x - fWidth / 2 < s_aGoal[nCntGoal].pos.x)
 				{
