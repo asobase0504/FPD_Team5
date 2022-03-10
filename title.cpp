@@ -107,6 +107,9 @@ void InitTitle(void)
 	pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);
 	pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);
 
+	// 頂点バッファをアンロックする
+	s_pVtxBuff->Unlock();
+
 	/*********** メニューのセット **********/
 
 	//メニューの引数の情報
