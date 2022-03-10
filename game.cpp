@@ -9,10 +9,13 @@
 //------------------------------------
 #include "main.h"
 #include "game.h"
+#include "player.h"
 #include "input.h"
 #include "sound.h"
 #include "stage.h"
 #include <stdio.h>
+#include "wall.h"
+#include "disk.h"
 
 //------------------------------------
 // É}ÉNÉçíËã`
@@ -28,6 +31,9 @@
 void InitGame(void)
 {
 	InitStage();
+	InitPlayer();
+	InitWall();
+	InitDisk();
 }
 
 //=========================================
@@ -36,6 +42,9 @@ void InitGame(void)
 void UninitGame(void)
 {
 	UninitStage();
+	UninitPlayer();
+	UninitWall();
+	UninitDisk();
 }
 
 //=========================================
@@ -44,6 +53,9 @@ void UninitGame(void)
 void UpdateGame(void)
 {
 	UpdateStage();
+	UpdatePlayer();
+	UpdateWall();
+	UpdateDisk();
 }
 
 //=========================================
@@ -52,4 +64,7 @@ void UpdateGame(void)
 void DrawGame()
 {
 	DrawStage();
+	DrawPlayer();
+	DrawWall();
+	DrawDisk();
 }

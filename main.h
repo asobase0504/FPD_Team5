@@ -62,5 +62,4 @@ LPDIRECT3DDEVICE9 GetDevice(void);
 void SetMode(void);
 MODE GetMode(void);
 void ExitExe(void);
-
 #endif	// !_MAIN_H_
