@@ -9,6 +9,7 @@
 //------------------------------------
 #include "main.h"
 #include "game.h"
+#include "player.h"
 #include "input.h"
 #include "sound.h"
 #include "stage.h"
@@ -28,6 +29,7 @@
 void InitGame(void)
 {
 	InitStage();
+	InitPlayer();
 }
 
 //=========================================
@@ -36,6 +38,7 @@ void InitGame(void)
 void UninitGame(void)
 {
 	UninitStage();
+	UninitPlayer();
 }
 
 //=========================================
@@ -44,6 +47,7 @@ void UninitGame(void)
 void UpdateGame(void)
 {
 	UpdateStage();
+	UpdatePlayer();
 }
 
 //=========================================
@@ -52,4 +56,5 @@ void UpdateGame(void)
 void DrawGame()
 {
 	DrawStage();
+	DrawPlayer();
 }
