@@ -11,9 +11,8 @@
 LPDIRECT3DTEXTURE9 g_pTextureTime = NULL;			//テクスチャヘノポインタ
 LPDIRECT3DVERTEXBUFFER9 g_pVtxBuffTime = NULL;		//頂点バッファへのポインタ
 D3DXVECTOR3 g_posTime[3];							//タイムの位置
-int g_nSelectTime;									//タイトルの移動のカウンター
 bool bTimeFlag;										//タイトルの移動のフラグ
-int g_nTime[MAX_TIME];								//タイムの値
+static int g_nTime[MAX_TIME];						//タイムの値
 int g_nCntTime;										//タイムのカウンター
 static int s_nSelectTime;
 
@@ -103,20 +102,9 @@ void UninitTime(void)
 	}
 }
 //タイムの更新処理
-void UpdateTime(void)
+void UpdateTime(int *p_nSelectTime)
 {
 	int aPosTexU[3];			//各桁の数字を格納
-
-	/*if (GetKeyboardTrigger(DIK_A)|| GetKeyboardTrigger(DIK_LEFT)
-		&& (s_nSelectTime > 0 && s_nSelectTime <= 5))
-	{
-		s_nSelectTime--;
-	}
-	if (GetKeyboardTrigger(DIK_D) || GetKeyboardTrigger(DIK_RIGHT)
-		&& s_nSelectTime <= 0 && s_nSelectTime < 5)
-	{
-		s_nSelectTime++;
-	}*/
 
 	g_nCntTime++;				//nCntTimeが引かれていく
 	if (g_nCntTime % 60 == 0)		//nCntTimeが0より小さくなったら

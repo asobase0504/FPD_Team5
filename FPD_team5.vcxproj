@@ -160,7 +160,7 @@
     <ClCompile Include="menu.cpp" />
     <ClCompile Include="result.cpp" />
     <ClCompile Include="score.cpp" />
-    <ClCompile Include="setting.cpp" />
+    <ClCompile Include="option.cpp" />
     <ClCompile Include="sound.cpp" />
     <ClCompile Include="stage.cpp" />
     <ClCompile Include="time.cpp" />
@@ -175,7 +175,7 @@
     <ClInclude Include="menu.h" />
     <ClInclude Include="result.h" />
     <ClInclude Include="score.h" />
-    <ClInclude Include="setting.h" />
+    <ClInclude Include="option.h" />
     <ClInclude Include="sound.h" />
     <ClInclude Include="stage.h" />
     <ClInclude Include="time.h" />

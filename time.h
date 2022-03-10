@@ -16,7 +16,7 @@
 //プロトタイプ宣言
 void InitTime(void);
 void UninitTime(void);
-void UpdateTime(void);
+void UpdateTime(int *p_nSelectTime);
 void DrawTime(void);
 void SetTime(void);
 #endif
