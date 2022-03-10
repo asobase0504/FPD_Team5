@@ -206,6 +206,7 @@ void MovePlayer(void)
 		pPlayer->move.x += 1.0f;
 	}
 
+	pPlayer->move *= 1.25f;
 //	D3DXVec3Normalize(&pPlayer->move, &pPlayer->move);
 }
 
@@ -224,9 +225,32 @@ void ThrowPlayer(void)
 {
 	Player *pPlayer = s_player;
 
+	D3DXVECTOR3 vec(1.0f,0.0f,0.0f);
+
+	if (GetKeyboardPress(DIK_W))
+	{
+		vec.y -= 1.0f;
+	}
+	if (GetKeyboardPress(DIK_A))
+	{
+		vec.x -= 1.0f;
+	}
+	if (GetKeyboardPress(DIK_S))
+	{
+		vec.y += 1.0f;
+	}
+	if (GetKeyboardPress(DIK_D))
+	{
+		vec.x += 1.0f;
+	}
+
 	if (GetKeyboardPress(DIK_RETURN))
 	{
-		SetDisk(pPlayer->pos, D3DXVECTOR3(5.0f,0.0f,0.0f), D3DXVECTOR3(0.0f,0.0f,0.0f),20.0f);
+		SetDisk(pPlayer->pos, vec, D3DXVECTOR3(0.0f, 0.0f, 0.0f), DISK_TYPE_NORMAL, 40.0f);
+	}
+	if (GetKeyboardPress(DIK_SPACE))
+	{
+		SetDisk(pPlayer->pos, vec, D3DXVECTOR3(0.0f, 0.0f, 0.0f), DISK_TYPE_LOB, 40.0f);
 	}
 }
 

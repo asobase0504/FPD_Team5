@@ -75,8 +75,6 @@ void InitDisk(void)
 
 	//頂点バッファをアンロックする
 	g_pVtxBuffDisk->Unlock();
-
-	SetDisk(D3DXVECTOR3(200.0f, 300.0f, 0.0f), D3DXVECTOR3(5.0f, -3.0f, 0.0f), D3DXVECTOR3(0.0f, -0.0f, 0.0f), 20.0f);
 }
 
 //====================================
