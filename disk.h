@@ -18,6 +18,7 @@ typedef struct
 	D3DXVECTOR3 pos;						//ディスクの現在の位置
 	D3DXVECTOR3 lastPos;					//ディスクの前回の位置
 	D3DXVECTOR3 move;						//ディスクの移動量
+	D3DXVECTOR3 acc;						//ディスクの加速
 	float fSize;							//ディスクの大きさ
 	bool bUse;								//使用されているかどうか
 }Disk;
@@ -27,6 +28,6 @@ void InitDisk(void);
 void UninitDisk(void);
 void UpdateDisk(void);
 void DrawDisk(void);
-void SetDisk(D3DXVECTOR3 pos, D3DXVECTOR3 move, float size);
+void SetDisk(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 acc, float size);
 
 #endif

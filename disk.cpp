@@ -74,7 +74,7 @@ void InitDisk(void)
 	//頂点バッファをアンロックする
 	g_pVtxBuffDisk->Unlock();
 
-	SetDisk(D3DXVECTOR3(600.0f, 300.0f, 0.0f), D3DXVECTOR3(2.0f, 0.0f, 0.0f), 20.0f);
+	SetDisk(D3DXVECTOR3(0.0f, 600.0f, 0.0f), D3DXVECTOR3(5.0f, -3.0f, 0.0f), D3DXVECTOR3(0.0f, -0.0f, 0.0f), 20.0f);
 }
 
 //====================================
@@ -106,11 +106,15 @@ void UpdateDisk(void)
 	{
 		if (g_aDisk[nCntDisk].bUse == true)
 		{
-			g_aDisk[nCntDisk].pos += g_aDisk[nCntDisk].move;
+			g_aDisk[nCntDisk].pos += g_aDisk[nCntDisk].move;				//現在位置の更新
+			g_aDisk[nCntDisk].move += g_aDisk[nCntDisk].acc;				//移動量の更新
 
-			WallBounce(&g_aDisk[nCntDisk].pos, &g_aDisk[nCntDisk].lastPos, &g_aDisk[nCntDisk].move, 20.0f, nCntDisk);
+			//壁との当たり判定
+			WallBounce(&g_aDisk[nCntDisk].pos, &g_aDisk[nCntDisk].lastPos, &g_aDisk[nCntDisk].move, 10.0f);
 
-			VERTEX_2D *pVtx = NULL;
+			g_aDisk[nCntDisk].lastPos = g_aDisk[nCntDisk].pos;				//前回の位置の更新
+
+			VERTEX_2D *pVtx = NULL;					//頂点情報へのポインタ
 
 			//頂点バッファをロックし、頂点情報へのポインタを取得
 			g_pVtxBuffDisk->Lock(0, 0, (void**)&pVtx, 0);
@@ -155,7 +159,7 @@ void DrawDisk(void)
 //====================================
 //ディスクの設定処理
 //====================================
-void SetDisk(D3DXVECTOR3 pos, D3DXVECTOR3 move, float size)
+void SetDisk(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 acc, float size)
 {
 	VERTEX_2D *pVtx = NULL;
 
@@ -170,6 +174,7 @@ void SetDisk(D3DXVECTOR3 pos, D3DXVECTOR3 move, float size)
 			g_aDisk[nCntDisk].lastPos = pos - move;		//ディスクの前回の位置の設定
 			g_aDisk[nCntDisk].move = move;				//ディスクの移動量の設定
 			g_aDisk[nCntDisk].fSize = size;				//ディスクの大きさの設定
+			g_aDisk[nCntDisk].acc = acc;				//ディスクの加速の設定
 
 			//頂点座標の設定
 			pVtx[(nCntDisk * 4) + 0].pos = D3DXVECTOR3(pos.x - (size * 0.5f), pos.y - (size * 0.5f), 0.0f);
