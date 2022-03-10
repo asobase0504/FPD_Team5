@@ -3,7 +3,7 @@
 // ゴール(ヘッダーファイル)
 // Author Tanimoto_Kosuke
 //
-// Update 22/03/09
+// Update 22/03/10
 // 
 //=========================================
 #ifndef _GOAL_H_
@@ -14,9 +14,9 @@
 //****************************************************************************
 //マクロ定義
 //****************************************************************************
-#define GOAL_WIDTH				(230)	//ゴールの横サイズ
-#define STRIKE_GOAL_WIDTH		(60)	//真ん中ゴールの横サイズ
-#define GOAL_HEIGHT				(50)	//ゴールの縦サイズ
+#define GOAL_WIDTH				(100)	//ゴールの横サイズ
+#define GOAL_HEIGHT				(230)	//ゴールの縦サイズ
+#define STRIKE_GOAL_HEIGHT		(60)	//真ん中ゴールの横サイズ
 #define MAX_GOAL				(6)		//ゴールの最大数
 #define MAX_IMAGE_GOAL			(2)		//ゴール画像の最大数
 
@@ -63,8 +63,7 @@ void UninitGoal(void);
 void UpdateGoal(void);
 void DrawGoal(void);
 
-void ColisionGoal(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVECTOR3 *pMove, D3DXVECTOR3 *pNor,float fWidth, float fHeight);
+void ColisionGoal(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pLastPos, float fWidth, float fHeight);
 GOAL *GetGoal(void);
-
 
 #endif

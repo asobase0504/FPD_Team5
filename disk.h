@@ -2,6 +2,7 @@
 //								  //
 //       ディスクのヘッダー		  //
 //       Author: Ricci Alex		  //
+//       Author: tanimoto		  //
 //								  //
 //================================//
 #ifndef _DISK_H_		//このマクロが定義されてなかったら
@@ -29,5 +30,7 @@ void UninitDisk(void);
 void UpdateDisk(void);
 void DrawDisk(void);
 void SetDisk(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 acc, float size);
+
+Disk *GetDisk(void);
 
 #endif

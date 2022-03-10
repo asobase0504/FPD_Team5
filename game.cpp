@@ -30,10 +30,10 @@
 //=========================================
 void InitGame(void)
 {
-	InitStage();
 	InitPlayer();
 	InitWall();
 	InitDisk();
+	InitStage();
 }
 
 //=========================================
@@ -41,10 +41,10 @@ void InitGame(void)
 //=========================================
 void UninitGame(void)
 {
-	UninitStage();
 	UninitPlayer();
 	UninitWall();
 	UninitDisk();
+	UninitStage();
 }
 
 //=========================================
@@ -63,8 +63,8 @@ void UpdateGame(void)
 //=========================================
 void DrawGame()
 {
-	DrawStage();
 	DrawPlayer();
 	DrawWall();
 	DrawDisk();
+	DrawStage();
 }

@@ -2,6 +2,7 @@
 //								  //
 //       ディスクのファイル		  //
 //       Author: Ricci Alex		  //
+//       Author: tanimoto		  //
 //								  //
 //================================//
 
@@ -10,6 +11,7 @@
 //====================================
 #include "disk.h"
 #include "wall.h"
+#include "goal.h"
 
 //====================================
 //グローバル変数
@@ -74,7 +76,7 @@ void InitDisk(void)
 	//頂点バッファをアンロックする
 	g_pVtxBuffDisk->Unlock();
 
-	SetDisk(D3DXVECTOR3(0.0f, 600.0f, 0.0f), D3DXVECTOR3(5.0f, -3.0f, 0.0f), D3DXVECTOR3(0.0f, -0.0f, 0.0f), 20.0f);
+	SetDisk(D3DXVECTOR3(200.0f, 300.0f, 0.0f), D3DXVECTOR3(5.0f, -3.0f, 0.0f), D3DXVECTOR3(0.0f, -0.0f, 0.0f), 20.0f);
 }
 
 //====================================
@@ -112,8 +114,12 @@ void UpdateDisk(void)
 			//壁との当たり判定
 			WallBounce(&g_aDisk[nCntDisk].pos, &g_aDisk[nCntDisk].lastPos, &g_aDisk[nCntDisk].move, 10.0f);
 
+
 			g_aDisk[nCntDisk].lastPos = g_aDisk[nCntDisk].pos;				//前回の位置の更新
 
+			//ゴールとの当たり判定(pos, lastPos, fWidth, fHeight)
+			ColisionGoal(&g_aDisk[nCntDisk].pos, &g_aDisk[nCntDisk].lastPos, 10.0f, 10.0f);
+	
 			VERTEX_2D *pVtx = NULL;					//頂点情報へのポインタ
 
 			//頂点バッファをロックし、頂点情報へのポインタを取得
@@ -148,11 +154,14 @@ void DrawDisk(void)
 
 	for (int nCntDisk = 0; nCntDisk < MAX_DISK; nCntDisk++)
 	{
-		//テクスチャの設定
-		pDevice->SetTexture(0, g_apTexDisk);
+		if (g_aDisk[nCntDisk].bUse == true)
+		{
+			//テクスチャの設定
+			pDevice->SetTexture(0, g_apTexDisk);
 
-		//ディスクを描画する
-		pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, nCntDisk * 4, 2);
+			//ディスクを描画する
+			pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, nCntDisk * 4, 2);
+		}
 	}
 }
 
@@ -196,4 +205,12 @@ void SetDisk(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 acc, float size)
 
 	//頂点バッファをアンロックする
 	g_pVtxBuffDisk->Unlock();
+}
+
+//============================================================================
+//ディスクの取得処理
+//============================================================================
+Disk *GetDisk(void)
+{
+	return g_aDisk;	//ディスク情報の先頭アドレスを返す
 }

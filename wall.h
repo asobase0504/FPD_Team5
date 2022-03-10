@@ -10,7 +10,7 @@
 #include "main.h" 
 
 //マクロ定義
-#define MAX_WALL			(32)			//壁の最大数
+#define MAX_WALL			(2)			//壁の最大数
 
 //構造体の定義
 typedef struct

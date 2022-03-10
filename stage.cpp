@@ -3,7 +3,7 @@
 // ステージ処理
 // Author Tanimoto_Kosuke
 //
-// Update 22/03/09
+// Update 22/03/10
 // 
 //=========================================
 //------------------------------------
@@ -13,6 +13,7 @@
 #include "main.h"
 #include <stdio.h>
 #include "goal.h"
+#include "wall.h"
 
 //------------------------------------
 // スタティック変数
@@ -20,7 +21,7 @@
 static LPDIRECT3DTEXTURE9		s_pTextureStage[MAX_IMAGE_STAGE] = {};	//テクスチャへのポインタ
 static LPDIRECT3DVERTEXBUFFER9	s_pVtxBuffStage = NULL;	//頂点バッファへのポインタ
 static STAGE s_aStage[MAX_STAGE];									//ステージの情報
-static bool s_bPause;	// ポーズ中かどうか
+static bool s_bFell;	// 落ちた判定
 
 //=========================================
 // ステージの初期化処理
@@ -45,22 +46,62 @@ void InitStage(void)
 		&s_pTextureStage[STAGE_TYPE_BACK]
 	);
 
-	//構造体の初期化処理
-	s_aStage[STAGE_TYPE_FRONT].pos = D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f);
-	s_aStage[STAGE_TYPE_FRONT].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	s_aStage[STAGE_TYPE_FRONT].nor = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	s_aStage[STAGE_TYPE_FRONT].col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
-	s_aStage[STAGE_TYPE_FRONT].fAngle = atan2f(STAGE_WIDTH, STAGE_HEIGHT);
-	s_aStage[STAGE_TYPE_FRONT].fLength = sqrtf((STAGE_WIDTH * STAGE_WIDTH) + (STAGE_HEIGHT * STAGE_HEIGHT)) / 2.0f;
-	s_aStage[STAGE_TYPE_FRONT].type = STAGE_TYPE_FRONT;
+	//テクスチャーの読み込み
+	D3DXCreateTextureFromFile
+	(
+		pDevice,
+		"data\\tanimoto\\TEXTURE\\block005.jpg",	//テクスチャのファイル名
+		&s_pTextureStage[STAGE_TYPE_NET]
+	);
 
-	s_aStage[STAGE_TYPE_BACK].pos = D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.1f);
-	s_aStage[STAGE_TYPE_BACK].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	s_aStage[STAGE_TYPE_BACK].nor = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	s_aStage[STAGE_TYPE_BACK].col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
-	s_aStage[STAGE_TYPE_BACK].fAngle = atan2f(SCREEN_WIDTH, SCREEN_HEIGHT);
-	s_aStage[STAGE_TYPE_BACK].fLength = sqrtf((SCREEN_WIDTH * SCREEN_WIDTH) + (SCREEN_HEIGHT * SCREEN_HEIGHT)) / 2.0f;
-	s_aStage[STAGE_TYPE_BACK].type = STAGE_TYPE_BACK;
+	//テクスチャーの読み込み
+	D3DXCreateTextureFromFile
+	(
+		pDevice,
+		"data\\tanimoto\\TEXTURE\\block004.jpg",	//テクスチャのファイル名
+		&s_pTextureStage[STAGE_TYPE_GOALNET]
+	);
+
+	//構造体の初期化処理
+	s_aStage[0].pos = D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.3f);
+	s_aStage[0].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	s_aStage[0].nor = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	s_aStage[0].col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
+	s_aStage[0].fAngle = atan2f(STAGE_WIDTH, STAGE_HEIGHT);
+	s_aStage[0].fLength = sqrtf((STAGE_WIDTH * STAGE_WIDTH) + (STAGE_HEIGHT * STAGE_HEIGHT)) / 2.0f;
+	s_aStage[0].type = STAGE_TYPE_FRONT;
+
+	s_aStage[1].pos = D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.4f);
+	s_aStage[1].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	s_aStage[1].nor = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	s_aStage[1].col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
+	s_aStage[1].fAngle = atan2f(SCREEN_WIDTH, SCREEN_HEIGHT);
+	s_aStage[1].fLength = sqrtf((SCREEN_WIDTH * SCREEN_WIDTH) + (SCREEN_HEIGHT * SCREEN_HEIGHT)) / 2.0f;
+	s_aStage[1].type = STAGE_TYPE_BACK;
+
+	s_aStage[2].pos = D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.1f);
+	s_aStage[2].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	s_aStage[2].nor = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	s_aStage[2].col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
+	s_aStage[2].fAngle = atan2f(STAGE_NET_WIDTH, STAGE_NET_HEIGHT);
+	s_aStage[2].fLength = sqrtf((STAGE_NET_WIDTH * STAGE_NET_WIDTH) + (STAGE_NET_HEIGHT * STAGE_NET_HEIGHT)) / 2.0f;
+	s_aStage[2].type = STAGE_TYPE_NET;
+
+	s_aStage[3].pos = D3DXVECTOR3(80, SCREEN_HEIGHT / 2, 0.0f);
+	s_aStage[3].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	s_aStage[3].nor = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	s_aStage[3].col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
+	s_aStage[3].fAngle = atan2f(STAGE_NET_WIDTH, STAGE_NET_HEIGHT);
+	s_aStage[3].fLength = sqrtf((STAGE_NET_WIDTH * STAGE_NET_WIDTH) + (STAGE_NET_HEIGHT * STAGE_NET_HEIGHT)) / 2.0f;
+	s_aStage[3].type = STAGE_TYPE_GOALNET;
+
+	s_aStage[4].pos = D3DXVECTOR3(SCREEN_WIDTH - 80, SCREEN_HEIGHT / 2, 0.0f);
+	s_aStage[4].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	s_aStage[4].nor = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	s_aStage[4].col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
+	s_aStage[4].fAngle = atan2f(STAGE_NET_WIDTH, STAGE_NET_HEIGHT);
+	s_aStage[4].fLength = sqrtf((STAGE_NET_WIDTH * STAGE_NET_WIDTH) + (STAGE_NET_HEIGHT * STAGE_NET_HEIGHT)) / 2.0f;
+	s_aStage[4].type = STAGE_TYPE_GOALNET;
 	
 	//頂点バッファの生成
 	pDevice->CreateVertexBuffer
@@ -120,6 +161,9 @@ void InitStage(void)
 	//頂点バッファをアンロックする
 	s_pVtxBuffStage->Unlock();
 
+	SetWall(D3DXVECTOR3(SCREEN_WIDTH / 2, 100.0f, 0.0f), STAGE_WIDTH, 10.0f, 0.0f);					//壁(上側)
+	SetWall(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT - 100.0f, 0.0f), STAGE_WIDTH, 10.0f, D3DX_PI);	//壁(下側)
+
 	InitGoal();
 }
 
@@ -151,9 +195,7 @@ void UninitStage(void)
 // ステージの初期化処理
 //=========================================
 void UpdateStage(void)
-{
-	LPDIRECT3DDEVICE9 pDevice = GetDevice();	//デバイスへのポインタ
-	
+{	
 	VERTEX_2D *pVtx;				//頂点情報へのポインタ
 
 	//頂点バッファをロックし、頂点情報へのポインタを取得
