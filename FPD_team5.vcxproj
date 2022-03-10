@@ -78,7 +78,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x64;$(LibraryPath)</LibraryPath>
+    <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -152,12 +152,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="disk.cpp" />
     <ClCompile Include="fade.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="goal.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="menu.cpp" />
+    <ClCompile Include="mode.cpp" />
+    <ClCompile Include="player.cpp" />
     <ClCompile Include="result.cpp" />
     <ClCompile Include="score.cpp" />
     <ClCompile Include="option.cpp" />
@@ -165,14 +168,18 @@
     <ClCompile Include="stage.cpp" />
     <ClCompile Include="time.cpp" />
     <ClCompile Include="title.cpp" />
+    <ClCompile Include="wall.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="disk.h" />
     <ClInclude Include="fade.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="goal.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="menu.h" />
+    <ClInclude Include="mode.h" />
+    <ClInclude Include="player.h" />
     <ClInclude Include="result.h" />
     <ClInclude Include="score.h" />
     <ClInclude Include="option.h" />
@@ -180,6 +187,7 @@
     <ClInclude Include="stage.h" />
     <ClInclude Include="time.h" />
     <ClInclude Include="title.h" />
+    <ClInclude Include="wall.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

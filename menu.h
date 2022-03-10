@@ -20,7 +20,7 @@
 
 typedef struct
 {
-	LPDIRECT3DTEXTURE9		*pTexture[MAX_OPTION];		// テクスチャ
+	LPDIRECT3DTEXTURE9		pTexture[MAX_OPTION];		// テクスチャ
 	int						nNumUse;					// 使用数
 	float					fLeft;						// 左端
 	float					fRight;						// 右端
@@ -35,7 +35,7 @@ typedef struct
 
 typedef struct
 {
-	LPDIRECT3DTEXTURE9		*pTexture;		// テクスチャ
+	LPDIRECT3DTEXTURE9		pTexture;		// テクスチャ
 	D3DXCOLOR				col;			// 色
 	bool					bUse;			// 枠がいるかどうか [ true : いる false : いらない ]
 }FrameArgument;

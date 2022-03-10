@@ -33,18 +33,6 @@
 #define FVF_VERTEX_2D	(D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_TEX1)
 
 //------------------------------------
-// 画面(モード)の種類
-//------------------------------------
-typedef enum
-{
-	MODE_TITLE = 0,	// タイトル画面
-	MODE_GAME,		// ゲーム画面
-	MODE_RESULT,	// リザルト画面
-	MODE_MAX,
-	MODE_NONE
-}MODE;
-
-//------------------------------------
 // 頂点情報[2D]の構造体を定義
 //------------------------------------
 typedef struct
@@ -60,6 +48,5 @@ typedef struct
 //------------------------------------
 LPDIRECT3DDEVICE9 GetDevice(void);
 void SetMode(void);
-MODE GetMode(void);
 void ExitExe(void);
 #endif	// !_MAIN_H_
