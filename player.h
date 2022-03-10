@@ -46,6 +46,8 @@ typedef enum
 //------------------------------------
 typedef struct
 {
+	LPDIRECT3DTEXTURE9 pTexture;		// テクスチャへのポインタ
+	LPDIRECT3DVERTEXBUFFER9 pVtxBuff;	// 頂点バッファへのポインタ
 	D3DXVECTOR3 pos;			// 位置
 	D3DXVECTOR3 posOld;			// 位置
 	D3DXVECTOR3 move;			// 移動量

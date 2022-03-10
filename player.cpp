@@ -15,18 +15,21 @@
 #include <assert.h>
 
 //-----------------------------------------
+// マクロ定義
+//-----------------------------------------
+#define NUM_PLAYER	(2)
+
+//-----------------------------------------
 // スタティック変数
 //-----------------------------------------
-static LPDIRECT3DTEXTURE9 s_pTexture = NULL;		// テクスチャへのポインタ
-static LPDIRECT3DVERTEXBUFFER9 s_pVtxBuff = NULL;	// 頂点バッファへのポインタ
-static Player s_player[2] = {};
+static Player s_player[NUM_PLAYER] = {};
 
 //-----------------------------------------
 // プロトタイプ宣言
 //-----------------------------------------
-static void MovePlayer(void);
-static void JumpPlayer(void);
-static void ThrowPlayer(void);
+static void MovePlayer(int nIdxPlayer);
+static void JumpPlayer(Player* pPlayer);
+static void ThrowPlayer(Player* pPlayer);
 
 //=========================================
 // プレイヤーの初期化処理
@@ -36,57 +39,60 @@ void InitPlayer(void)
 	LPDIRECT3DDEVICE9 pDevice = GetDevice();	// デバイスへのポイント
 	Player *pPlayer = s_player;
 
-	// テクスチャの読込
-	D3DXCreateTextureFromFile(pDevice,PLAYER_TEX,&s_pTexture);
+	for (int i = 0; i < NUM_PLAYER; i++, pPlayer++)
+	{
+		// テクスチャの読込
+		D3DXCreateTextureFromFile(pDevice, PLAYER_TEX, &pPlayer->pTexture);
 
-	pPlayer->pos = D3DXVECTOR3(600.0f, SCREEN_HEIGHT - 50.0f, 0.0f);	// 位置を初期化
-	pPlayer->move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);						// 移動量を初期化
-	pPlayer->rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);						// 向きを初期化
-	pPlayer->fWidth = PLAYER_WIDTH;										// プレイヤーの幅
-	pPlayer->fHeigth = PLAYER_HEIGTH;									// プレイヤーの高さ
-	pPlayer->bUse = true;												// プレイヤーの表示の有無
-	pPlayer->state = PLAYERSTATE_APPEAR;								// プレイヤーのステータス
-	pPlayer->RevivalInterval = 0;										// 復活のインターバル
+		pPlayer->pos = D3DXVECTOR3(SCREEN_WIDTH * 0.5f + i * 200.0f, SCREEN_HEIGHT * 0.5f, 0.0f);	// 位置を初期化
+		pPlayer->move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);						// 移動量を初期化
+		pPlayer->rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);						// 向きを初期化
+		pPlayer->fWidth = PLAYER_WIDTH;										// プレイヤーの幅
+		pPlayer->fHeigth = PLAYER_HEIGTH;									// プレイヤーの高さ
+		pPlayer->bUse = true;												// プレイヤーの表示の有無
+		pPlayer->state = PLAYERSTATE_APPEAR;								// プレイヤーのステータス
+		pPlayer->RevivalInterval = 0;										// 復活のインターバル
 
-	// 頂点バッファの生成
-	pDevice->CreateVertexBuffer(sizeof(VERTEX_2D) * 4,
-		D3DUSAGE_WRITEONLY,
-		FVF_VERTEX_2D,
-		D3DPOOL_MANAGED,
-		&s_pVtxBuff,
-		NULL);
+		// 頂点バッファの生成
+		pDevice->CreateVertexBuffer(sizeof(VERTEX_2D) * 4,
+			D3DUSAGE_WRITEONLY,
+			FVF_VERTEX_2D,
+			D3DPOOL_MANAGED,
+			&pPlayer->pVtxBuff,
+			NULL);
 
-	VERTEX_2D *pVtx;		// 頂点情報へのポインタ
+		VERTEX_2D *pVtx;		// 頂点情報へのポインタ
 
-	// 頂点バッファをロックし、頂点情報へのポインタを取得
-	s_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+		// 頂点バッファをロックし、頂点情報へのポインタを取得
+		pPlayer->pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
-	// 頂点座標の設定
-	pVtx[0].pos = D3DXVECTOR3(pPlayer->pos.x - pPlayer->fWidth, pPlayer->pos.y - pPlayer->fHeigth, 0.0f);
-	pVtx[1].pos = D3DXVECTOR3(pPlayer->pos.x + pPlayer->fWidth, pPlayer->pos.y - pPlayer->fHeigth, 0.0f);
-	pVtx[2].pos = D3DXVECTOR3(pPlayer->pos.x - pPlayer->fWidth, pPlayer->pos.y + pPlayer->fHeigth, 0.0f);
-	pVtx[3].pos = D3DXVECTOR3(pPlayer->pos.x + pPlayer->fWidth, pPlayer->pos.y + pPlayer->fHeigth, 0.0f);
+		// 頂点座標の設定
+		pVtx[0].pos = D3DXVECTOR3(pPlayer->pos.x - pPlayer->fWidth, pPlayer->pos.y - pPlayer->fHeigth, 0.0f);
+		pVtx[1].pos = D3DXVECTOR3(pPlayer->pos.x + pPlayer->fWidth, pPlayer->pos.y - pPlayer->fHeigth, 0.0f);
+		pVtx[2].pos = D3DXVECTOR3(pPlayer->pos.x - pPlayer->fWidth, pPlayer->pos.y + pPlayer->fHeigth, 0.0f);
+		pVtx[3].pos = D3DXVECTOR3(pPlayer->pos.x + pPlayer->fWidth, pPlayer->pos.y + pPlayer->fHeigth, 0.0f);
 
-	// 頂点カラーの設定
-	pVtx[0].col = D3DXCOLOR(0.4f, 0.71f, 0.63f, 1.0f);
-	pVtx[1].col = D3DXCOLOR(0.4f, 0.71f, 0.63f, 1.0f);
-	pVtx[2].col = D3DXCOLOR(0.4f, 0.71f, 0.63f, 1.0f);
-	pVtx[3].col = D3DXCOLOR(0.4f, 0.71f, 0.63f, 1.0f);
+		// 頂点カラーの設定
+		pVtx[0].col = D3DXCOLOR(0.4f, 0.71f, 0.63f, 1.0f);
+		pVtx[1].col = D3DXCOLOR(0.4f, 0.71f, 0.63f, 1.0f);
+		pVtx[2].col = D3DXCOLOR(0.4f, 0.71f, 0.63f, 1.0f);
+		pVtx[3].col = D3DXCOLOR(0.4f, 0.71f, 0.63f, 1.0f);
 
-	// rhwの設定
-	pVtx[0].rhw	= 1.0f;
-	pVtx[1].rhw = 1.0f;
-	pVtx[2].rhw = 1.0f;
-	pVtx[3].rhw = 1.0f;
+		// rhwの設定
+		pVtx[0].rhw = 1.0f;
+		pVtx[1].rhw = 1.0f;
+		pVtx[2].rhw = 1.0f;
+		pVtx[3].rhw = 1.0f;
 
-	// テクスチャ座標の設定
-	pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
-	pVtx[1].tex = D3DXVECTOR2(1.0f, 0.0f);
-	pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);
-	pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);
+		// テクスチャ座標の設定
+		pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
+		pVtx[1].tex = D3DXVECTOR2(1.0f, 0.0f);
+		pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);
+		pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);
 
-	// 頂点バッファをアンロックする
-	s_pVtxBuff->Unlock();
+		// 頂点バッファをアンロックする
+		pPlayer->pVtxBuff->Unlock();
+	}
 }
 
 //=========================================
@@ -94,18 +100,23 @@ void InitPlayer(void)
 //=========================================
 void UninitPlayer(void)
 {
-	// テクスチャの破棄
-	if (s_pTexture != NULL)
-	{
-		s_pTexture->Release();
-		s_pTexture = NULL;
-	}
+	Player *pPlayer = s_player;
 
-	// 頂点バッファの破棄
-	if (s_pVtxBuff != NULL)
+	for (int i = 0; i < NUM_PLAYER; i++, pPlayer++)
 	{
-		s_pVtxBuff->Release();
-		s_pVtxBuff = NULL;
+		// テクスチャの破棄
+		if (pPlayer->pTexture != NULL)
+		{
+			pPlayer->pTexture->Release();
+			pPlayer->pTexture = NULL;
+		}
+
+		// 頂点バッファの破棄
+		if (pPlayer->pVtxBuff != NULL)
+		{
+			pPlayer->pVtxBuff->Release();
+			pPlayer->pVtxBuff = NULL;
+		}
 	}
 }
 
@@ -114,47 +125,48 @@ void UninitPlayer(void)
 //=========================================
 void UpdatePlayer(void)
 {
-	VERTEX_2D *pVtx;		// 頂点情報へのポインタ
 	Player *pPlayer = s_player;
 
-	pPlayer->pos += pPlayer->move;
 
-	pPlayer->move *= 0.8f;
-
-	switch (pPlayer->state)
+	for (int i = 0; i < NUM_PLAYER; i++, pPlayer++)
 	{
-	case PLAYERSTATE_APPEAR:	// プレイヤーが出現中
-		pPlayer->state = PLAYERSTATE_NORMAL;
-		pPlayer->bUse = true;
-		pPlayer->move.y = 0.0f;
-		pPlayer->rot.z = 0.0f;
-		pPlayer->pos = D3DXVECTOR3(600.0f, SCREEN_HEIGHT - 50.0f, 0.0f);	// 位置を初期化
-		break;
-	case PLAYERSTATE_NORMAL:	// プレイヤーが活動中
-		// 前回の座標を更新
-		pPlayer->posOld = pPlayer->pos;
+		pPlayer->pos += pPlayer->move;
 
-		JumpPlayer();	// 跳躍
-		MovePlayer();	// 移動
-		ThrowPlayer();	// 投げる
+		switch (pPlayer->state)
+		{
+		case PLAYERSTATE_APPEAR:	// プレイヤーが出現中
+			pPlayer->state = PLAYERSTATE_NORMAL;
+			pPlayer->bUse = true;
+			pPlayer->rot.z = 0.0f;
+			break;
+		case PLAYERSTATE_NORMAL:	// プレイヤーが活動中
+			// 前回の座標を更新
+			pPlayer->posOld = pPlayer->pos;
 
-		break;
-	default:
-		assert(false);
-		break;
+			JumpPlayer(pPlayer);	// 跳躍
+			MovePlayer(i);			// 移動
+			ThrowPlayer(pPlayer);	// 投げる
+
+			break;
+		default:
+			assert(false);
+			break;
+		}
+
+		VERTEX_2D *pVtx;		// 頂点情報へのポインタ
+
+		// 頂点バッファをロックし、頂点情報へのポインタを取得
+		pPlayer->pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+	
+		// 頂点座標の設定
+		pVtx[0].pos = D3DXVECTOR3(pPlayer->pos.x - pPlayer->fWidth, pPlayer->pos.y - pPlayer->fHeigth, 0.0f);
+		pVtx[1].pos = D3DXVECTOR3(pPlayer->pos.x + pPlayer->fWidth, pPlayer->pos.y - pPlayer->fHeigth, 0.0f);
+		pVtx[2].pos = D3DXVECTOR3(pPlayer->pos.x - pPlayer->fWidth, pPlayer->pos.y + pPlayer->fHeigth, 0.0f);
+		pVtx[3].pos = D3DXVECTOR3(pPlayer->pos.x + pPlayer->fWidth, pPlayer->pos.y + pPlayer->fHeigth, 0.0f);
+		
+		// 頂点バッファをアンロックする
+		pPlayer->pVtxBuff->Unlock();
 	}
-
-	// 頂点バッファをロックし、頂点情報へのポインタを取得
-	s_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
-
-	// 頂点座標の設定
-	pVtx[0].pos = D3DXVECTOR3(pPlayer->pos.x - pPlayer->fWidth, pPlayer->pos.y - pPlayer->fHeigth, 0.0f);
-	pVtx[1].pos = D3DXVECTOR3(pPlayer->pos.x + pPlayer->fWidth, pPlayer->pos.y - pPlayer->fHeigth, 0.0f);
-	pVtx[2].pos = D3DXVECTOR3(pPlayer->pos.x - pPlayer->fWidth, pPlayer->pos.y + pPlayer->fHeigth, 0.0f);
-	pVtx[3].pos = D3DXVECTOR3(pPlayer->pos.x + pPlayer->fWidth, pPlayer->pos.y + pPlayer->fHeigth, 0.0f);
-
-	// 頂点バッファをアンロックする
-	s_pVtxBuff->Unlock();
 }
 
 //=========================================
@@ -168,65 +180,92 @@ void DrawPlayer(void)
 	// デバイスの取得
 	pDevice = GetDevice();
 
-	// 頂点バッファをデータストリーム設定
-	pDevice->SetStreamSource(0, s_pVtxBuff, 0, sizeof(VERTEX_2D));
-
-	// 頂点フォーマットの設定
-	pDevice->SetFVF(FVF_VERTEX_2D);
-
-	if (pPlayer->bUse)
+	for (int i = 0; i < NUM_PLAYER; i++, pPlayer++)
 	{
-		// テクスチャの設定
-		pDevice->SetTexture(0, s_pTexture);
+		// 頂点バッファをデータストリーム設定
+		pDevice->SetStreamSource(0, pPlayer->pVtxBuff, 0, sizeof(VERTEX_2D));
 
-		// ポリゴンの描画
-		pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, 2);
+		// 頂点フォーマットの設定
+		pDevice->SetFVF(FVF_VERTEX_2D);
+
+		if (pPlayer->bUse)
+		{
+			// テクスチャの設定
+			pDevice->SetTexture(0, pPlayer->pTexture);
+
+			// ポリゴンの描画
+			pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, 2);
+		}
 	}
 }
 
 //=========================================
 // プレイヤーの移動処理
 //=========================================
-void MovePlayer(void)
+void MovePlayer(int nIdxPlayer)
 {
-	Player *pPlayer = s_player;
+	D3DXVECTOR3 inputMove(0.0f,0.0f,0.0f);
+	float moveLength = 0.0f;
+	Player *pPlayer = &s_player[nIdxPlayer];
 
-	if (GetKeyboardPress(DIK_W))
+	if (IsJoyPadUse(nIdxPlayer))
 	{
-		pPlayer->move.y -= 1.0f;
+		inputMove = GetJoypadStick(JOYKEY_LEFT_STICK, nIdxPlayer);
+
+		if (inputMove.x != 0.0f || inputMove.y != 0.0f)
+		{
+			moveLength = D3DXVec3Length(&inputMove);
+
+			if (moveLength > 1.0f)
+			{
+				moveLength = 1.0f;
+			}
+		}
 	}
-	if (GetKeyboardPress(DIK_A))
+	else
 	{
-		pPlayer->move.x -= 1.0f;
-	}
-	if (GetKeyboardPress(DIK_S))
-	{
-		pPlayer->move.y += 1.0f;
-	}
-	if (GetKeyboardPress(DIK_D))
-	{
-		pPlayer->move.x += 1.0f;
+		if (GetKeyboardPress(DIK_W))
+		{
+			pPlayer->move.y -= 1.0f;
+		}
+		if (GetKeyboardPress(DIK_A))
+		{
+			pPlayer->move.x -= 1.0f;
+		}
+		if (GetKeyboardPress(DIK_S))
+		{
+			pPlayer->move.y += 1.0f;
+		}
+		if (GetKeyboardPress(DIK_D))
+		{
+			pPlayer->move.x += 1.0f;
+		}
 	}
 
-//	D3DXVec3Normalize(&pPlayer->move, &pPlayer->move);
+	if (moveLength > 0.0f)
+	{
+		D3DXVec3Normalize(&inputMove, &inputMove);
+	}
+
+	pPlayer->move = inputMove * 0.9f * 5.0f;
 }
 
 //=========================================
 // プレイヤーのジャンプ処理
 //=========================================
-void JumpPlayer(void)
+void JumpPlayer(Player* pPlayer)
 {
-	Player *pPlayer = s_player;
 }
 
 //=========================================
 // プレイヤーの投げる処理
 //=========================================
-void ThrowPlayer(void)
+void ThrowPlayer(Player* pPlayer)
 {
-	Player *pPlayer = s_player;
 
-	D3DXVECTOR3 vec(1.0f,0.0f,0.0f);
+	D3DXVECTOR3 vec(2.0f,0.0f,0.0f);
+
+	vec += GetJoypadStick(JOYKEY_LEFT_STICK,0);
 
 	if (GetKeyboardPress(DIK_W))
 	{
