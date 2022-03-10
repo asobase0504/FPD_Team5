@@ -18,8 +18,6 @@
 #define PLAYER_TEX		"data/TEXTURE/player00.png"		// プレイヤーのテクスチャ
 #define PLAYER_WIDTH	(35.0f)							// プレイヤーの幅
 #define PLAYER_HEIGTH	(35.0f)							// プレイヤーの高さ
-#define PLAYER_JUMPMOVE	(25.0f)							// プレイヤーの跳躍量
-#define WOARD_GRAVITY	(1.0f)							// 世界の重力
 
 //------------------------------------
 // プレイヤーの状態
@@ -71,6 +69,7 @@ void InitPlayer(void);
 void UninitPlayer(void);
 void UpdatePlayer(void);
 void DrawPlayer(void);
+void SetPlayer(D3DXVECTOR3* pos);
 Player* GetPlayer(void);
 
 #endif // !_PLAYER_H_

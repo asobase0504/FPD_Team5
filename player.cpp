@@ -11,6 +11,7 @@
 #include "main.h"
 #include "input.h"
 #include "player.h"
+#include "disk.h"
 #include <assert.h>
 
 //-----------------------------------------
@@ -25,6 +26,7 @@ static Player s_player[2] = {};
 //-----------------------------------------
 static void MovePlayer(void);
 static void JumpPlayer(void);
+static void ThrowPlayer(void);
 
 //=========================================
 // プレイヤーの初期化処理
@@ -115,6 +117,8 @@ void UpdatePlayer(void)
 	VERTEX_2D *pVtx;		// 頂点情報へのポインタ
 	Player *pPlayer = s_player;
 
+	pPlayer->pos = pPlayer->move;
+
 	switch (pPlayer->state)
 	{
 	case PLAYERSTATE_APPEAR:	// プレイヤーが出現中
@@ -125,14 +129,12 @@ void UpdatePlayer(void)
 		pPlayer->pos = D3DXVECTOR3(600.0f, SCREEN_HEIGHT - 50.0f, 0.0f);	// 位置を初期化
 		break;
 	case PLAYERSTATE_NORMAL:	// プレイヤーが活動中
-		// 重力の加算
-		pPlayer->move.y += WOARD_GRAVITY;
-
 		// 前回の座標を更新
 		pPlayer->posOld = pPlayer->pos;
 
-		JumpPlayer();
-		MovePlayer();
+		JumpPlayer();	// 跳躍
+		MovePlayer();	// 移動
+		ThrowPlayer();	// 投げる
 
 		break;
 	default:
@@ -144,6 +146,10 @@ void UpdatePlayer(void)
 	s_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
 	// 頂点座標の設定
+	pVtx[0].pos = D3DXVECTOR3(pPlayer->pos.x - pPlayer->fWidth, pPlayer->pos.y - pPlayer->fHeigth, 0.0f);
+	pVtx[1].pos = D3DXVECTOR3(pPlayer->pos.x + pPlayer->fWidth, pPlayer->pos.y - pPlayer->fHeigth, 0.0f);
+	pVtx[2].pos = D3DXVECTOR3(pPlayer->pos.x - pPlayer->fWidth, pPlayer->pos.y + pPlayer->fHeigth, 0.0f);
+	pVtx[3].pos = D3DXVECTOR3(pPlayer->pos.x + pPlayer->fWidth, pPlayer->pos.y + pPlayer->fHeigth, 0.0f);
 
 	// 頂点バッファをアンロックする
 	s_pVtxBuff->Unlock();
@@ -182,6 +188,25 @@ void DrawPlayer(void)
 void MovePlayer(void)
 {
 	Player *pPlayer = s_player;
+
+	if (GetKeyboardPress(DIK_W))
+	{
+		pPlayer->move.y -= 1.0f;
+	}
+	if (GetKeyboardPress(DIK_A))
+	{
+		pPlayer->move.x -= 1.0f;
+	}
+	if (GetKeyboardPress(DIK_S))
+	{
+		pPlayer->move.y += 1.0f;
+	}
+	if (GetKeyboardPress(DIK_D))
+	{
+		pPlayer->move.x += 1.0f;
+	}
+
+//	D3DXVec3Normalize(&pPlayer->move, &pPlayer->move);
 }
 
 //=========================================
@@ -190,6 +215,26 @@ void MovePlayer(void)
 void JumpPlayer(void)
 {
 	Player *pPlayer = s_player;
+}
+
+//=========================================
+// プレイヤーの投げる処理
+//=========================================
+void ThrowPlayer(void)
+{
+	Player *pPlayer = s_player;
+
+	if (GetKeyboardPress(DIK_RETURN))
+	{
+		SetDisk(pPlayer->pos, D3DXVECTOR3(5.0f,0.0f,0.0f), D3DXVECTOR3(0.0f,0.0f,0.0f),20.0f);
+	}
+}
+
+//=========================================
+// 設定
+//=========================================
+void SetPlayer(void)
+{
 }
 
 //=========================================
