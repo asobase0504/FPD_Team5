@@ -24,18 +24,6 @@
 //------------------------------------
 typedef enum
 {
-	PLAYERSTATE_APPEAR = 0,	// 出現状態(点滅)
-	PLAYERSTATE_NORMAL,		// 通常状態
-	PLAYERSTATE_DEATH,		// 死亡状態
-	PLAYERSTATE_REVIVAL,	// 復活状態
-	PLAYERSTATE_MAX
-}PLAYRSTATE;
-
-//------------------------------------
-// プレイヤーの状態
-//------------------------------------
-typedef enum
-{
 	JUMP_NONE = 0,
 	JUMP_NOW,
 	JUMP_MAX
@@ -57,7 +45,6 @@ typedef struct
 	float fMove;				// 移動量
 	JUMPSTATE jumpstate;		// 跳躍の状態
 	int nDirectionMove;			// 向き
-	PLAYRSTATE state;			// ステータス
 	int RevivalInterval;		// 復活タイミング
 	int nCntAnim;				// アニメーションのカウンター
 	int nPatternAnim;			// アニメーションのパターン番号

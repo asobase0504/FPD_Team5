@@ -28,8 +28,8 @@ static Player s_player[NUM_PLAYER] = {};
 // プロトタイプ宣言
 //-----------------------------------------
 static void MovePlayer(int nIdxPlayer);
-static void JumpPlayer(Player* pPlayer);
-static void ThrowPlayer(Player* pPlayer);
+static void JumpPlayer(int nIdxPlayer);
+static void ThrowPlayer(int nIdxPlayer);
 
 //=========================================
 // プレイヤーの初期化処理
@@ -50,7 +50,6 @@ void InitPlayer(void)
 		pPlayer->fWidth = PLAYER_WIDTH;										// プレイヤーの幅
 		pPlayer->fHeigth = PLAYER_HEIGTH;									// プレイヤーの高さ
 		pPlayer->bUse = true;												// プレイヤーの表示の有無
-		pPlayer->state = PLAYERSTATE_APPEAR;								// プレイヤーのステータス
 		pPlayer->RevivalInterval = 0;										// 復活のインターバル
 
 		// 頂点バッファの生成
@@ -127,43 +126,28 @@ void UpdatePlayer(void)
 {
 	Player *pPlayer = s_player;
 
-
-	for (int i = 0; i < NUM_PLAYER; i++, pPlayer++)
+	for (int nIdxPlayer = 0; nIdxPlayer < NUM_PLAYER; nIdxPlayer++, pPlayer++)
 	{
 		pPlayer->pos += pPlayer->move;
 
-		switch (pPlayer->state)
-		{
-		case PLAYERSTATE_APPEAR:	// プレイヤーが出現中
-			pPlayer->state = PLAYERSTATE_NORMAL;
-			pPlayer->bUse = true;
-			pPlayer->rot.z = 0.0f;
-			break;
-		case PLAYERSTATE_NORMAL:	// プレイヤーが活動中
-			// 前回の座標を更新
-			pPlayer->posOld = pPlayer->pos;
+		// 前回の座標を更新
+		pPlayer->posOld = pPlayer->pos;
 
-			JumpPlayer(pPlayer);	// 跳躍
-			MovePlayer(i);			// 移動
-			ThrowPlayer(pPlayer);	// 投げる
-
-			break;
-		default:
-			assert(false);
-			break;
-		}
+		JumpPlayer(nIdxPlayer);		// 跳躍
+		MovePlayer(nIdxPlayer);		// 移動
+		ThrowPlayer(nIdxPlayer);	// 投げる
 
 		VERTEX_2D *pVtx;		// 頂点情報へのポインタ
 
 		// 頂点バッファをロックし、頂点情報へのポインタを取得
 		pPlayer->pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
-	
+
 		// 頂点座標の設定
 		pVtx[0].pos = D3DXVECTOR3(pPlayer->pos.x - pPlayer->fWidth, pPlayer->pos.y - pPlayer->fHeigth, 0.0f);
 		pVtx[1].pos = D3DXVECTOR3(pPlayer->pos.x + pPlayer->fWidth, pPlayer->pos.y - pPlayer->fHeigth, 0.0f);
 		pVtx[2].pos = D3DXVECTOR3(pPlayer->pos.x - pPlayer->fWidth, pPlayer->pos.y + pPlayer->fHeigth, 0.0f);
 		pVtx[3].pos = D3DXVECTOR3(pPlayer->pos.x + pPlayer->fWidth, pPlayer->pos.y + pPlayer->fHeigth, 0.0f);
-		
+
 		// 頂点バッファをアンロックする
 		pPlayer->pVtxBuff->Unlock();
 	}
@@ -253,44 +237,62 @@ void MovePlayer(int nIdxPlayer)
 //=========================================
 // プレイヤーのジャンプ処理
 //=========================================
-void JumpPlayer(Player* pPlayer)
+void JumpPlayer(int nIdxPlayer)
 {
+	Player *pPlayer = &s_player[nIdxPlayer];
+
 }
 
 //=========================================
 // プレイヤーの投げる処理
 //=========================================
-void ThrowPlayer(Player* pPlayer)
+void ThrowPlayer(int nIdxPlayer)
 {
+	Player *pPlayer = &s_player[nIdxPlayer];
 
 	D3DXVECTOR3 vec(2.0f,0.0f,0.0f);
 
-	vec += GetJoypadStick(JOYKEY_LEFT_STICK,0);
 
-	if (GetKeyboardPress(DIK_W))
+	if (IsJoyPadUse(nIdxPlayer))
 	{
-		vec.y -= 1.0f;
-	}
-	if (GetKeyboardPress(DIK_A))
-	{
-		vec.x -= 1.0f;
-	}
-	if (GetKeyboardPress(DIK_S))
-	{
-		vec.y += 1.0f;
-	}
-	if (GetKeyboardPress(DIK_D))
-	{
-		vec.x += 1.0f;
-	}
+		vec = GetJoypadStick(JOYKEY_LEFT_STICK, nIdxPlayer);
 
-	if (GetKeyboardPress(DIK_RETURN))
-	{
-		SetDisk(pPlayer->pos, vec, D3DXVECTOR3(0.0f, 0.0f, 0.0f), DISK_TYPE_NORMAL, 40.0f);
+		if (GetJoypadTrigger(JOYKEY_B, nIdxPlayer))
+		{
+			SetDisk(pPlayer->pos, vec, D3DXVECTOR3(0.0f, 0.0f, 0.0f), DISK_TYPE_NORMAL, 40.0f);
+		}
+		if (GetJoypadTrigger(JOYKEY_A, nIdxPlayer))
+		{
+			SetDisk(pPlayer->pos, vec, D3DXVECTOR3(0.0f, 0.0f, 0.0f), DISK_TYPE_LOB, 40.0f);
+		}
 	}
-	if (GetKeyboardPress(DIK_SPACE))
+	else
 	{
-		SetDisk(pPlayer->pos, vec, D3DXVECTOR3(0.0f, 0.0f, 0.0f), DISK_TYPE_LOB, 40.0f);
+		if (GetKeyboardPress(DIK_W))
+		{
+			vec.y -= 1.0f;
+		}
+		if (GetKeyboardPress(DIK_A))
+		{
+			vec.x -= 1.0f;
+		}
+		if (GetKeyboardPress(DIK_S))
+		{
+			vec.y += 1.0f;
+		}
+		if (GetKeyboardPress(DIK_D))
+		{
+			vec.x += 1.0f;
+		}
+
+		if (GetKeyboardPress(DIK_RETURN))
+		{
+			SetDisk(pPlayer->pos, vec, D3DXVECTOR3(0.0f, 0.0f, 0.0f), DISK_TYPE_NORMAL, 40.0f);
+		}
+		if (GetKeyboardPress(DIK_SPACE))
+		{
+			SetDisk(pPlayer->pos, vec, D3DXVECTOR3(0.0f, 0.0f, 0.0f), DISK_TYPE_LOB, 40.0f);
+		}
 	}
 }
 
