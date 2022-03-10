@@ -238,14 +238,7 @@ void DrawMenu(void)
 			pDevice->SetFVF(FVF_VERTEX_2D);
 
 			// テクスチャの設定
-			if (pMenu->pTexture != NULL)
-			{// テクスチャがある
-				pDevice->SetTexture(0, pMenu->pTexture);
-			}
-			else
-			{// テクスチャがない
-				pDevice->SetTexture(0, NULL);
-			}	
+			pDevice->SetTexture(0, pMenu->pTexture);
 
 			// ポリゴンの描画
 			pDevice->DrawPrimitive(
@@ -316,7 +309,7 @@ int SetMenu(const MenuArgument &menu, const FrameArgument &Frame)
 		}
 
 		pMenu->fBlinkSpeed = NORMAL_BLINK_SPEED;
-		
+		pMenu->pTexture = Frame.pTexture;
 		pMenu->bFrame = Frame.bUse;
 
 		pMenu->bUse = true;
@@ -324,14 +317,6 @@ int SetMenu(const MenuArgument &menu, const FrameArgument &Frame)
 		s_nIdxMenu = nIdx;
 		s_nIdxOption = 0;
 
-		if (Frame.pTexture != NULL)
-		{// テクスチャがある
-			pMenu->pTexture = *Frame.pTexture;
-		}
-		else
-		{// テクスチャがない
-			pMenu->pTexture = NULL;
-		}
 
 		if (Frame.bUse)
 		{// 枠がいる
@@ -379,7 +364,7 @@ int SetMenu(const MenuArgument &menu, const FrameArgument &Frame)
 		pOption->col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 		pOption->fWidth = menu.fWidth;
 		pOption->fHeight = menu.fHeight;
-		//pOption->pTexture = *menu.pTexture[j];
+		pOption->pTexture = menu.pTexture[j];
 
 		// 頂点情報をロックし、頂点情報へのポインタを取得
 		s_pVtxBuffOption->Lock(0, 0, (void**)&pVtx, 0);
@@ -470,7 +455,7 @@ static void ChangeColor(Menu *pMenu)
 	float fCurve = cosf((s_nAlphaTime * pMenu->fBlinkSpeed) * (D3DX_PI * 2.0f));
 	float fAlpha = (fCurve * (1.0f - MIN_ALPHA)) + MIN_ALPHA;
 
-	pOption->col = D3DXCOLOR(1.0f, 0.0f, 0.0f, fAlpha);
+	pOption->col = D3DXCOLOR(0.0f, 1.0f, 0.0f, fAlpha);
 
 	VERTEX_2D *pVtx = NULL;		// 頂点情報へのポインタ
 
