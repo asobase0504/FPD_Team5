@@ -14,14 +14,16 @@
 #include <stdio.h>
 #include "goal.h"
 #include "wall.h"
+#include "disk.h"
 
 //------------------------------------
 // スタティック変数
 //------------------------------------
 static LPDIRECT3DTEXTURE9		s_pTextureStage[MAX_IMAGE_STAGE] = {};	//テクスチャへのポインタ
-static LPDIRECT3DVERTEXBUFFER9	s_pVtxBuffStage = NULL;	//頂点バッファへのポインタ
-static STAGE s_aStage[MAX_STAGE];									//ステージの情報
-static bool s_bFell;	// 落ちた判定
+static LPDIRECT3DVERTEXBUFFER9	s_pVtxBuffStage = NULL;					//頂点バッファへのポインタ
+static STAGE s_aStage[MAX_STAGE];										//ステージの情報
+static bool s_bFell;		//落ちた判定
+static float s_fFellCounter;	//落ちた時間
 
 //=========================================
 // ステージの初期化処理
@@ -161,7 +163,10 @@ void InitStage(void)
 	//頂点バッファをアンロックする
 	s_pVtxBuffStage->Unlock();
 
-	SetWall(D3DXVECTOR3(SCREEN_WIDTH / 2, 100.0f, 0.0f), STAGE_WIDTH, 10.0f, 0.0f);					//壁(上側)
+	s_bFell = false;
+	s_fFellCounter = 0;
+
+	SetWall(D3DXVECTOR3(SCREEN_WIDTH / 2, 100.0f, 0.0f), STAGE_WIDTH, 10.0f, 0.0f);						//壁(上側)
 	SetWall(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT - 100.0f, 0.0f), STAGE_WIDTH, 10.0f, D3DX_PI);	//壁(下側)
 
 	InitGoal();
@@ -198,6 +203,8 @@ void UpdateStage(void)
 {	
 	VERTEX_2D *pVtx;				//頂点情報へのポインタ
 
+	Disk *pDisk = GetDisk();
+
 	//頂点バッファをロックし、頂点情報へのポインタを取得
 	s_pVtxBuffStage->Lock(0, 0, (void**)&pVtx, 0);
 
@@ -222,6 +229,21 @@ void UpdateStage(void)
 	}
 	//頂点バッファをアンロックする
 	s_pVtxBuffStage->Unlock();
+
+	if (pDisk->move.x == 0.0f && pDisk->move.y == 0.0f)
+	{
+		s_bFell = true;
+	}
+
+	//ディスクが落ちた場合
+	if (s_bFell == true)
+	{
+		s_fFellCounter++;
+	}
+	else
+	{
+		s_fFellCounter = 0;
+	}
 
 	UpdateGoal();
 }
