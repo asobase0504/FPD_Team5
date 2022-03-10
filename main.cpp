@@ -14,6 +14,7 @@
 #include "title.h"
 #include "game.h"
 #include "result.h"
+#include "mode.h"
 #include "input.h"
 #include <stdio.h>
 
@@ -322,9 +323,7 @@ void Uninit(void)
 	UninitInput();
 	UninitSound();		// 音楽
 	UninitFade();		// フェード
-	UninitTitle();		// タイトル
-	UninitGame();		// ゲーム
-	UninitResult();		// リザルト
+	UninitMode();		// モードの終了
 
 	// デバッグ表示用フォントの破棄
 	if (g_pFont != NULL)
@@ -354,23 +353,12 @@ void Update(void)
 {	
 	UpdateInput();
 
-	switch (s_mode)
-	{
-	case MODE_TITLE:
-		UpdateTitle();
-		break;
-	case MODE_GAME:
-		UpdateGame();
-		break;
-	case MODE_RESULT:
-		UpdateResult();
-		break;
-	default:
-		break;
-	}
+	// モードの更新
+	UpdateMode();
 
 	UpdateFade();	// フェード
 
+	// モードの設定
 	SetMode();
 }
 
@@ -393,20 +381,8 @@ void Draw(void)
 		DrawFPS();
 #endif // _DEBUG
 
-		switch (s_mode)
-		{
-		case MODE_TITLE:
-			DrawTitle();
-			break;
-		case MODE_GAME:
-			DrawGame();
-			break;
-		case MODE_RESULT:
-			DrawResult();
-			break;
-		default:
-			break;
-		}
+		// モードの描画
+		DrawMode();
 
 		DrawFade();		// フェード処理
 
@@ -431,80 +407,4 @@ LPDIRECT3DDEVICE9 GetDevice(void)
 //=========================================
 void DrawFPS(void)
 {
-}
-
-//=========================================
-// モードの設定
-//=========================================
-void SetMode(void)
-{
-	if (s_modeNext == MODE_NONE)
-	{// 次のモードが決まってない
-		return;
-	}
-
-	if (GetFade() == FADE_NONE)
-	{// 何もしていない状態なら
-		StartFadeOut();
-	}
-
-	if (GetFade() != FADE_IN)
-	{// フェードイン状態じゃない
-		return;
-	}
-
-	// 現在の画面(モード)の終了処理
-	switch (s_mode)
-	{
-	case MODE_TITLE:	// タイトル画面
-		UninitTitle();
-		break;
-	case MODE_GAME:		// ゲーム画面
-		UninitGame();
-		break;
-	case MODE_RESULT:
-		UninitResult();
-		break;
-	}
-
-	// 新しい画面(モード)の初期化処理
-	switch (s_modeNext)
-	{
-	case MODE_TITLE:	// タイトル画面
-		InitTitle();
-		break;
-	case MODE_GAME:		// ゲーム画面
-		InitGame();
-		break;
-	case MODE_RESULT:
-		InitResult();
-		break;
-	}
-
-	s_mode = s_modeNext;	// 現在の画面(モード)を切り替える
-	s_modeNext = MODE_NONE;
-}
-
-//=========================================
-// モードの取得
-//=========================================
-MODE GetMode(void)
-{
-	return s_mode;
-}
-
-//=========================================
-// 終了処理
-//=========================================
-void ExitExe(void)
-{
-	s_bExit = true;
-}
-
-//=========================================
-// モードの変更
-//=========================================
-void ChangeMode(MODE mode)
-{
-	s_modeNext = mode;
 }

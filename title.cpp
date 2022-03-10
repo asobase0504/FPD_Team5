@@ -9,6 +9,7 @@
 #include "menu.h"
 #include "fade.h"
 #include "input.h"
+#include "mode.h"
 
 #include <assert.h>
 
@@ -220,7 +221,7 @@ static void SelectMenu(void)
 		{
 		case MENU_GAMESTART:	//ゲーム開始
 
-			//SetFade(MODE_GAME);		//ゲーム画面へ
+			ChangeMode(MODE_GAME);
 
 			break;
 
