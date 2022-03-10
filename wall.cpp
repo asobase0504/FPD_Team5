@@ -73,7 +73,8 @@ void InitWall(void)
 	//頂点バッファをアンロックする
 	g_pVtxBuffWall->Unlock();
 
-	SetWall(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f), SCREEN_WIDTH , 10.0f, D3DX_PI * 0.15f);
+	SetWall(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.2f, 0.0f), SCREEN_WIDTH , 10.0f, 0.0f);
+	SetWall(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.8f, 0.0f), SCREEN_WIDTH, 10.0f, D3DX_PI);
 }
 
 //====================================
@@ -200,11 +201,10 @@ void SetWall(D3DXVECTOR3 pos, float width, float height, float angle)
 }
 
 //壁に当たったら、反射する処理
-void WallBounce(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pLastPos, D3DXVECTOR3 *pMove, float fRadius)
+void WallBounce(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pLastPos, D3DXVECTOR3 *pMove, D3DXVECTOR3 *pAcc, float fRadius)
 {
 		VERTEX_2D *pVtx = NULL;													//頂点情報へのポインタ
 		D3DXVECTOR3 edge, position, lastPosition, result1, result2, point;		//計算用のベクトル
-		D3DXMATRIX mtxRot, mtxTrans, mtxOut;									//計算用のマトリックス
 
 		//頂点バッファをロックし、頂点情報へのポインタを取得
 		g_pVtxBuffWall->Lock(0, 0, (void**)&pVtx, 0);
@@ -284,9 +284,76 @@ void WallBounce(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pLastPos, D3DXVECTOR3 *pMove, fl
 
 					*(pPos) = finalPos;							//弾の新しい位置の設定
 					*(pMove) = fmove * bounceDir;				//弾の新しい移動量の設定
+					*(pAcc) = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 				}
 			}
 		}
+
+	//頂点バッファをアンロックする
+	g_pVtxBuffWall->Unlock();
+}
+
+//==============================================
+//必殺技用の当たり判定
+//==============================================
+bool SpecialWallBounce(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pLastPos, D3DXVECTOR3 *pMove, float fRadius)
+{
+	VERTEX_2D *pVtx = NULL;													//頂点情報へのポインタ
+	D3DXVECTOR3 edge, position, lastPosition, result1, result2, point;		//計算用のベクトル
+	bool bImpact = false;													//当たったかどうか
+
+	//頂点バッファをロックし、頂点情報へのポインタを取得
+	g_pVtxBuffWall->Lock(0, 0, (void**)&pVtx, 0);
+
+	for (int nIdx = 0; nIdx < MAX_WALL; nIdx++)
+	{
+		if (g_aWall[nIdx].bUse == true)
+		{
+			D3DXVECTOR3 Vtx1, Vtx2;
+
+			//弾の一番近い点を求める
+			point.x = pPos->x + (-g_aWall[nIdx].nor.x * fRadius);
+			point.y = pPos->y + (-g_aWall[nIdx].nor.y * fRadius);
+			point.z = 0.0f;
+
+			edge = pVtx[(nIdx * 4) + 3].pos - pVtx[(nIdx * 4) + 2].pos;		//壁の辺のベクトル
+			position = pVtx[(nIdx * 4) + 2].pos - point;					//現在の位置から壁の頂点までのベクトル
+			lastPosition = pVtx[(nIdx * 4) + 2].pos - *(pLastPos);			//前回の位置から壁の頂点までのベクトル
+
+			//外積を計算する。結果の符号が違う場合、弾は壁に当たった
+			D3DXVec3Cross(&result1, &edge, &position);
+			D3DXVec3Cross(&result2, &edge, &lastPosition);
+
+			if (result1.z * result2.z <= 0)
+			{//当たった場合
+
+			 //衝突点の座標の計算=======================================================================================
+
+				D3DXVECTOR3 impact, newPosition;
+				float fAngle, fAngleV;
+
+				position = point - *(pLastPos);						//前回の位置から現在の位置までのベクトル
+
+																	//前回の位置から衝突点までの距離を計算する
+				D3DXVec3Cross(&result1, &lastPosition, &edge);
+				D3DXVec3Cross(&result2, &position, &edge);
+
+				float fLenght = (result1.z / result2.z) - 0.1f;		//前回の位置から衝突点までの距離
+
+				D3DXVec3Normalize(&position, &position);			//前回の位置から現在の位置までのベクトルの向き
+
+				impact = *(pLastPos)+(fLenght * position);			//衝突点
+
+				lastPosition = *(pLastPos)-impact;					//前回の位置から衝突点までのベクトル
+				////=========================================================================================================
+
+				*(pPos) = impact /*+ (g_aWall[nIdx].nor * fRadius)*/;	//
+				bImpact = true;										//
+			}
+		}
+	}
+
+	return bImpact;
 
 	//頂点バッファをアンロックする
 	g_pVtxBuffWall->Unlock();
