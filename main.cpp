@@ -14,6 +14,7 @@
 #include "title.h"
 #include "game.h"
 #include "result.h"
+#include "input.h"
 #include <stdio.h>
 
 //-----------------------------------------
@@ -295,12 +296,18 @@ HRESULT Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 
 	s_bExit = false;
 
+	//キーボードの初期化処理
+	if (FAILED(InitInput(hInstance, hWnd)))
+	{
+		return E_FAIL;
+	}
+
 	InitSound(hWnd);
 
 	InitFade();
 
 	// モードの設定
-	ChangeMode(MODE_GAME);
+	ChangeMode(MODE_TITLE);
 
 	return S_OK;
 }
@@ -312,6 +319,7 @@ void Uninit(void)
 {
 	StopSound();		// 音楽の停止
 
+	UninitInput();
 	UninitSound();		// 音楽
 	UninitFade();		// フェード
 	UninitTitle();		// タイトル
@@ -344,6 +352,7 @@ void Uninit(void)
 //=========================================
 void Update(void)
 {	
+	UpdateInput();
 
 	switch (s_mode)
 	{

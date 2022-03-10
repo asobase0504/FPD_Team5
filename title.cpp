@@ -8,15 +8,16 @@
 #include "title.h"
 #include "menu.h"
 #include "fade.h"
-//#include "input,h"
+#include "input.h"
 
 #include <assert.h>
 
 //**************************************************
 // マクロ定義
 //**************************************************
-#define MENU_WIDTH		(500.0f)	//メニューの幅
-#define MENU_HEIGHT		(60.0f)		//メニューの高さ
+#define MAX_TEXTURE		(3)			//使用するテクスチャの最大数
+#define MENU_WIDTH		(400.0f)	//メニューの幅
+#define MENU_HEIGHT		(140.0f)	//メニューの高さ
 
 //**************************************************
 //タイトルメニューの列挙型
@@ -32,9 +33,10 @@ typedef enum
 //**************************************************
 //スタティック変数
 //**************************************************
-static LPDIRECT3DTEXTURE9		s_pTexture = NULL;		//テクスチャへのポインタ
-static LPDIRECT3DVERTEXBUFFER9	s_pVtxBuff = NULL;		//頂点バッファへのポインタ
-static int						s_nSelectMenu;			//選ばれているメニュー
+static LPDIRECT3DTEXTURE9		s_pTexture = NULL;				//テクスチャへのポインタ(タイトル背景)
+static LPDIRECT3DTEXTURE9		s_apTextureMenu[MAX_TEXTURE];	//テクスチャへのポインタ(タイトルメニュー)
+static LPDIRECT3DVERTEXBUFFER9	s_pVtxBuff = NULL;				//頂点バッファへのポインタ
+static int						s_nSelectMenu;					//選ばれているメニュー
 
 //**************************************************
 //プロトタイプ宣言
@@ -50,12 +52,24 @@ void InitTitle(void)
 	VERTEX_2D *pVtx;							//頂点情報へのポインタ
 
 	//テクスチャポインタの初期化
-	//memset(s_pTexture, NULL, sizeof(s_pTexture));
+	memset(s_apTextureMenu, NULL, sizeof(s_apTextureMenu));
 
 	//テクスチャの読み込み
 	D3DXCreateTextureFromFile(pDevice,
-								"data/TEXTURE/後でなんか入れる.png",
+								"data/TEXTURE/仮タイトル.png",
 								&s_pTexture);
+
+	D3DXCreateTextureFromFile(pDevice,
+								"data/TEXTURE/GameStart.png",
+								&s_apTextureMenu[MENU_GAMESTART]);
+
+	D3DXCreateTextureFromFile(pDevice,
+								"data/TEXTURE/Tutorial.png",
+								&s_apTextureMenu[MENU_OPTION]);
+
+	D3DXCreateTextureFromFile(pDevice,
+								"data/TEXTURE/GameEnd.png",
+								&s_apTextureMenu[MENU_EXIT]);
 
 	//頂点バッファの生成
 	pDevice->CreateVertexBuffer(sizeof(VERTEX_2D) * 4,
@@ -103,6 +117,10 @@ void InitTitle(void)
 	menu.fBottom	= SCREEN_HEIGHT;
 	menu.fWidth		= MENU_WIDTH;
 	menu.fHeight	= MENU_HEIGHT;
+	for (int i = 0; i < MENU_MAX; i++)
+	{
+		menu.pTexture[i] = s_apTextureMenu[i];
+	}
 
 	//枠の引数の情報
 	FrameArgument frame;
@@ -140,6 +158,8 @@ void UninitTitle(void)
 //==================================================
 void UpdateTitle(void)
 {
+
+	SelectMenu();
 	UpdateMenu();
 }
 
@@ -148,8 +168,6 @@ void UpdateTitle(void)
 //==================================================
 void DrawTitle(void)
 {
-	DrawMenu();
-
 	LPDIRECT3DDEVICE9 pDevice = GetDevice();	//デバイスの取得
 
 	//頂点バッファをデータストリームに設定
@@ -165,10 +183,12 @@ void DrawTitle(void)
 	pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP,		//プリミティブの種類
 							0,						//描画する最初の頂点インデックス
 							2);						//描画するプリミティブ数
+
+	DrawMenu();
 }
 
 //--------------------------------------------------
-// 入力
+// メニューの選択
 //--------------------------------------------------
 static void SelectMenu(void)
 {
@@ -177,35 +197,40 @@ static void SelectMenu(void)
 		return;
 	}
 
-	//if (GetKeyboardTrigger(DIK_W) || GetJoypadTrigger(JOYKEY_UP, 0))
-	//{// Wキーが押されたかどうか
-	//	s_nSelectMenu = ((s_nSelectMenu - 1) + MENU_MAX) % MENU_MAX;
+	if (GetKeyboardTrigger(DIK_W) || GetJoypadTrigger(JOYKEY_UP, 0))
+	{// Wキーが押されたかどうか
+		InitColorOption();
 
-	//}
-	//else if (GetKeyboardTrigger(DIK_S) || GetJoypadTrigger(JOYKEY_DOWN, 0))
-	//{// Sキーが押されたかどうか
-	//	s_nSelectMenu = ((s_nSelectMenu + 1) + MENU_MAX) % MENU_MAX;
-	//}
+		s_nSelectMenu = ((s_nSelectMenu - 1) + MENU_MAX) % MENU_MAX;
 
-	//if (GetKeyboardTrigger(DIK_RETURN) || GetJoypadTrigger(JOYKEY_START, 0))
+		ChangeOption(s_nSelectMenu);
+	}
+	else if (GetKeyboardTrigger(DIK_S) || GetJoypadTrigger(JOYKEY_DOWN, 0))
+	{// Sキーが押されたかどうか
+		InitColorOption();
+
+		s_nSelectMenu = ((s_nSelectMenu + 1) + MENU_MAX) % MENU_MAX;
+
+		ChangeOption(s_nSelectMenu);
+	}
+
+	if (GetKeyboardTrigger(DIK_RETURN) || GetJoypadTrigger(JOYKEY_START, 0))
 	{//決定キー(ENTERキー)が押されたかどうか
 		switch (s_nSelectMenu)
 		{
-		case MENU_GAMESTART:		//ゲーム開始
+		case MENU_GAMESTART:	//ゲーム開始
 
-			SetFade(MODE_GAME);		//ゲーム画面へ
+			//SetFade(MODE_GAME);		//ゲーム画面へ
 
 			break;
 
-		case MENU_OPTION:			//設定
+		case MENU_OPTION:	//設定
 
 			//SetFade(MODE_RANKING);	//設定画面へ
 
 			break;
 
-		case MENU_EXIT:				//終了
-
-									/* 書き換え、よろしくお願いいたします */
+		case MENU_EXIT:		//終了
 
 			break;
 
