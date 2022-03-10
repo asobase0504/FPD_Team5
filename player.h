@@ -15,12 +15,21 @@
 //------------------------------------
 // マクロ定義
 //------------------------------------
-#define PLAYER_TEX		"data/TEXTURE/player00.png"		// プレイヤーのテクスチャ
-#define PLAYER_WIDTH	(35.0f)							// プレイヤーの幅
-#define PLAYER_HEIGTH	(35.0f)							// プレイヤーの高さ
 
 //------------------------------------
-// プレイヤーの状態
+// プレイヤーの種別
+//------------------------------------
+typedef enum
+{
+	PLAYERTYPE_1,
+	PLAYERTYPE_2,
+	PLAYERTYPE_3,
+	PLAYERTYPE_4,
+	PLAYERTYPE_MAX,
+}PLAYERTYPE;
+
+//------------------------------------
+// 跳躍状態
 //------------------------------------
 typedef enum
 {
@@ -36,19 +45,13 @@ typedef struct
 {
 	LPDIRECT3DTEXTURE9 pTexture;		// テクスチャへのポインタ
 	LPDIRECT3DVERTEXBUFFER9 pVtxBuff;	// 頂点バッファへのポインタ
-	D3DXVECTOR3 pos;			// 位置
-	D3DXVECTOR3 posOld;			// 位置
-	D3DXVECTOR3 move;			// 移動量
-	D3DXVECTOR3 rot;			// 向き
-	float fWidth;				// 画像の幅
-	float fHeigth;				// 画像の高さ
-	float fMove;				// 移動量
-	JUMPSTATE jumpstate;		// 跳躍の状態
-	int nDirectionMove;			// 向き
-	int RevivalInterval;		// 復活タイミング
-	int nCntAnim;				// アニメーションのカウンター
-	int nPatternAnim;			// アニメーションのパターン番号
-	bool bUse;					// 表示状態
+	D3DXVECTOR3 pos;					// 位置
+	D3DXVECTOR3 move;					// 移動量
+	float fSize;						// 大きさ
+	float fSpeed;						// 移動量
+	JUMPSTATE jumpstate;				// 跳躍の状態
+	bool bHaveDisk;						// ディスクを所持しているか
+	bool bUse;							// 表示状態
 }Player;
 
 //------------------------------------
@@ -58,7 +61,7 @@ void InitPlayer(void);
 void UninitPlayer(void);
 void UpdatePlayer(void);
 void DrawPlayer(void);
-void SetPlayer(D3DXVECTOR3* pos);
+void SetPlayer(const D3DXVECTOR3& pos, PLAYERTYPE type);
 Player* GetPlayer(void);
 
 #endif // !_PLAYER_H_

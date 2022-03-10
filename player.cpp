@@ -13,16 +13,24 @@
 #include "player.h"
 #include "disk.h"
 #include <assert.h>
+#include <stdio.h>
 
 //-----------------------------------------
 // マクロ定義
 //-----------------------------------------
-#define NUM_PLAYER	(2)
+#define NUM_PLAYER		(2)								// プレイヤーの数
+#define NUM_TYPE_PLAYER	(25)							// プレイヤーの種類
+#define PLAYER_FILE		"data/player.txt"				// プレイヤー読み込みファイル
+#define PLAYER_TEX		"data/TEXTURE/player00.png"		// プレイヤーのテクスチャ
+#define PLAYER_SIZ		(35.0f)							// プレイヤーの幅
 
 //-----------------------------------------
 // スタティック変数
 //-----------------------------------------
 static Player s_player[NUM_PLAYER] = {};
+static Player s_playerType[NUM_TYPE_PLAYER] = {};
+static D3DXVECTOR3 moveCurve;
+static bool s_bCurveInput;
 
 //-----------------------------------------
 // プロトタイプ宣言
@@ -30,68 +38,24 @@ static Player s_player[NUM_PLAYER] = {};
 static void MovePlayer(int nIdxPlayer);
 static void JumpPlayer(int nIdxPlayer);
 static void ThrowPlayer(int nIdxPlayer);
+static void CatchDiscPlayer(int nIdxPlayer);
+static void LoadPlayer(void);
+static bool CollisionCircle(D3DXVECTOR3 Pos1, float fRadius1, D3DXVECTOR3 Pos2, float fRadius2);	// 円同士の読み込み処理
 
 //=========================================
 // プレイヤーの初期化処理
 //=========================================
 void InitPlayer(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = GetDevice();	// デバイスへのポイント
 	Player *pPlayer = s_player;
 
-	for (int i = 0; i < NUM_PLAYER; i++, pPlayer++)
-	{
-		// テクスチャの読込
-		D3DXCreateTextureFromFile(pDevice, PLAYER_TEX, &pPlayer->pTexture);
+	ZeroMemory(s_player, sizeof(s_player));
+	ZeroMemory(s_playerType, sizeof(s_playerType));
 
-		pPlayer->pos = D3DXVECTOR3(SCREEN_WIDTH * 0.5f + i * 200.0f, SCREEN_HEIGHT * 0.5f, 0.0f);	// 位置を初期化
-		pPlayer->move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);						// 移動量を初期化
-		pPlayer->rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);						// 向きを初期化
-		pPlayer->fWidth = PLAYER_WIDTH;										// プレイヤーの幅
-		pPlayer->fHeigth = PLAYER_HEIGTH;									// プレイヤーの高さ
-		pPlayer->bUse = true;												// プレイヤーの表示の有無
-		pPlayer->RevivalInterval = 0;										// 復活のインターバル
+	LoadPlayer();	// 読み込み
 
-		// 頂点バッファの生成
-		pDevice->CreateVertexBuffer(sizeof(VERTEX_2D) * 4,
-			D3DUSAGE_WRITEONLY,
-			FVF_VERTEX_2D,
-			D3DPOOL_MANAGED,
-			&pPlayer->pVtxBuff,
-			NULL);
-
-		VERTEX_2D *pVtx;		// 頂点情報へのポインタ
-
-		// 頂点バッファをロックし、頂点情報へのポインタを取得
-		pPlayer->pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
-
-		// 頂点座標の設定
-		pVtx[0].pos = D3DXVECTOR3(pPlayer->pos.x - pPlayer->fWidth, pPlayer->pos.y - pPlayer->fHeigth, 0.0f);
-		pVtx[1].pos = D3DXVECTOR3(pPlayer->pos.x + pPlayer->fWidth, pPlayer->pos.y - pPlayer->fHeigth, 0.0f);
-		pVtx[2].pos = D3DXVECTOR3(pPlayer->pos.x - pPlayer->fWidth, pPlayer->pos.y + pPlayer->fHeigth, 0.0f);
-		pVtx[3].pos = D3DXVECTOR3(pPlayer->pos.x + pPlayer->fWidth, pPlayer->pos.y + pPlayer->fHeigth, 0.0f);
-
-		// 頂点カラーの設定
-		pVtx[0].col = D3DXCOLOR(0.4f, 0.71f, 0.63f, 1.0f);
-		pVtx[1].col = D3DXCOLOR(0.4f, 0.71f, 0.63f, 1.0f);
-		pVtx[2].col = D3DXCOLOR(0.4f, 0.71f, 0.63f, 1.0f);
-		pVtx[3].col = D3DXCOLOR(0.4f, 0.71f, 0.63f, 1.0f);
-
-		// rhwの設定
-		pVtx[0].rhw = 1.0f;
-		pVtx[1].rhw = 1.0f;
-		pVtx[2].rhw = 1.0f;
-		pVtx[3].rhw = 1.0f;
-
-		// テクスチャ座標の設定
-		pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
-		pVtx[1].tex = D3DXVECTOR2(1.0f, 0.0f);
-		pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);
-		pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);
-
-		// 頂点バッファをアンロックする
-		pPlayer->pVtxBuff->Unlock();
-	}
+	SetPlayer(D3DXVECTOR3(200.0f, SCREEN_HEIGHT * 0.5f, 0.0f), PLAYERTYPE_1);
+	SetPlayer(D3DXVECTOR3(SCREEN_WIDTH - 200.0f, SCREEN_HEIGHT * 0.5f, 0.0f), PLAYERTYPE_2);
 }
 
 //=========================================
@@ -130,23 +94,21 @@ void UpdatePlayer(void)
 	{
 		pPlayer->pos += pPlayer->move;
 
-		// 前回の座標を更新
-		pPlayer->posOld = pPlayer->pos;
+		JumpPlayer(nIdxPlayer);			// 跳躍
+		MovePlayer(nIdxPlayer);			// 移動
+		ThrowPlayer(nIdxPlayer);		// 投げる
+		CatchDiscPlayer(nIdxPlayer);	// 受け取る
 
-		JumpPlayer(nIdxPlayer);		// 跳躍
-		MovePlayer(nIdxPlayer);		// 移動
-		ThrowPlayer(nIdxPlayer);	// 投げる
-
-		VERTEX_2D *pVtx;		// 頂点情報へのポインタ
+		VERTEX_2D *pVtx;	// 頂点情報へのポインタ
 
 		// 頂点バッファをロックし、頂点情報へのポインタを取得
 		pPlayer->pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
 		// 頂点座標の設定
-		pVtx[0].pos = D3DXVECTOR3(pPlayer->pos.x - pPlayer->fWidth, pPlayer->pos.y - pPlayer->fHeigth, 0.0f);
-		pVtx[1].pos = D3DXVECTOR3(pPlayer->pos.x + pPlayer->fWidth, pPlayer->pos.y - pPlayer->fHeigth, 0.0f);
-		pVtx[2].pos = D3DXVECTOR3(pPlayer->pos.x - pPlayer->fWidth, pPlayer->pos.y + pPlayer->fHeigth, 0.0f);
-		pVtx[3].pos = D3DXVECTOR3(pPlayer->pos.x + pPlayer->fWidth, pPlayer->pos.y + pPlayer->fHeigth, 0.0f);
+		pVtx[0].pos = D3DXVECTOR3(pPlayer->pos.x - pPlayer->fSize, pPlayer->pos.y - pPlayer->fSize, 0.0f);
+		pVtx[1].pos = D3DXVECTOR3(pPlayer->pos.x + pPlayer->fSize, pPlayer->pos.y - pPlayer->fSize, 0.0f);
+		pVtx[2].pos = D3DXVECTOR3(pPlayer->pos.x - pPlayer->fSize, pPlayer->pos.y + pPlayer->fSize, 0.0f);
+		pVtx[3].pos = D3DXVECTOR3(pPlayer->pos.x + pPlayer->fSize, pPlayer->pos.y + pPlayer->fSize, 0.0f);
 
 		// 頂点バッファをアンロックする
 		pPlayer->pVtxBuff->Unlock();
@@ -188,12 +150,12 @@ void DrawPlayer(void)
 //=========================================
 void MovePlayer(int nIdxPlayer)
 {
-	D3DXVECTOR3 inputMove(0.0f,0.0f,0.0f);
-	float moveLength = 0.0f;
 	Player *pPlayer = &s_player[nIdxPlayer];
+	D3DXVECTOR3 inputMove(0.0f, 0.0f, 0.0f);	// 入力方向
+	float moveLength = 0.0f;					// 入力の長さ
 
 	if (IsJoyPadUse(nIdxPlayer))
-	{
+	{ // JoyPad入力
 		inputMove = GetJoypadStick(JOYKEY_LEFT_STICK, nIdxPlayer);
 
 		if (inputMove.x != 0.0f || inputMove.y != 0.0f)
@@ -207,22 +169,26 @@ void MovePlayer(int nIdxPlayer)
 		}
 	}
 	else
-	{
+	{ // キーボード入力
 		if (GetKeyboardPress(DIK_W))
 		{
-			pPlayer->move.y -= 1.0f;
+			inputMove.y -= 1.0f;
+			moveLength = 1.0f;
 		}
 		if (GetKeyboardPress(DIK_A))
 		{
-			pPlayer->move.x -= 1.0f;
+			inputMove.x -= 1.0f;
+			moveLength = 1.0f;
 		}
 		if (GetKeyboardPress(DIK_S))
 		{
-			pPlayer->move.y += 1.0f;
+			inputMove.y += 1.0f;
+			moveLength = 1.0f;
 		}
 		if (GetKeyboardPress(DIK_D))
 		{
-			pPlayer->move.x += 1.0f;
+			inputMove.x += 1.0f;
+			moveLength = 1.0f;
 		}
 	}
 
@@ -231,7 +197,7 @@ void MovePlayer(int nIdxPlayer)
 		D3DXVec3Normalize(&inputMove, &inputMove);
 	}
 
-	pPlayer->move = inputMove * 0.9f * 5.0f;
+	pPlayer->move = inputMove * 0.9f * pPlayer->fSpeed;
 }
 
 //=========================================
@@ -250,57 +216,160 @@ void ThrowPlayer(int nIdxPlayer)
 {
 	Player *pPlayer = &s_player[nIdxPlayer];
 
-	D3DXVECTOR3 vec(2.0f,0.0f,0.0f);
+	if (!pPlayer->bHaveDisk)
+	{
+		return;
+	}
 
+	D3DXVECTOR3 inputVec(0.0f, 0.0f, 0.0f);	// 入力方向
+	float fVecLength = 0.0f;				// 入力の長さ
 
 	if (IsJoyPadUse(nIdxPlayer))
-	{
-		vec = GetJoypadStick(JOYKEY_LEFT_STICK, nIdxPlayer);
+	{ // JoyPad入力
+		inputVec = GetJoypadStick(JOYKEY_LEFT_STICK, nIdxPlayer);
 
 		if (GetJoypadTrigger(JOYKEY_B, nIdxPlayer))
 		{
-			SetDisk(pPlayer->pos, vec, D3DXVECTOR3(0.0f, 0.0f, 0.0f), DISK_TYPE_NORMAL, 40.0f);
+			SetDisk(pPlayer->pos, inputVec * 1.25f, moveCurve, DISK_TYPE_NORMAL, 40.0f);
+			pPlayer->bHaveDisk = false;
 		}
 		if (GetJoypadTrigger(JOYKEY_A, nIdxPlayer))
 		{
-			SetDisk(pPlayer->pos, vec, D3DXVECTOR3(0.0f, 0.0f, 0.0f), DISK_TYPE_LOB, 40.0f);
+			SetDisk(pPlayer->pos, inputVec * 1.25f, moveCurve, DISK_TYPE_LOB, 40.0f);
+			pPlayer->bHaveDisk = false;
+		}
+
+		fVecLength = D3DXVec3Length(&inputVec);
+
+		if (fVecLength >= 1.0f)
+		{
+			if (!s_bCurveInput)
+			{
+				moveCurve = inputVec * 0.01f;
+			}
+			s_bCurveInput = true;
+		}
+		else
+		{
+			moveCurve = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+			s_bCurveInput = false;
 		}
 	}
 	else
-	{
+	{ // キーボード入力
 		if (GetKeyboardPress(DIK_W))
 		{
-			vec.y -= 1.0f;
+			inputVec.y -= 1.0f;
 		}
 		if (GetKeyboardPress(DIK_A))
 		{
-			vec.x -= 1.0f;
+			inputVec.x -= 1.0f;
 		}
 		if (GetKeyboardPress(DIK_S))
 		{
-			vec.y += 1.0f;
+			inputVec.y += 1.0f;
 		}
 		if (GetKeyboardPress(DIK_D))
 		{
-			vec.x += 1.0f;
+			inputVec.x += 1.0f;
 		}
 
 		if (GetKeyboardPress(DIK_RETURN))
 		{
-			SetDisk(pPlayer->pos, vec, D3DXVECTOR3(0.0f, 0.0f, 0.0f), DISK_TYPE_NORMAL, 40.0f);
+			SetDisk(pPlayer->pos, inputVec, D3DXVECTOR3(0.0f, 0.0f, 0.0f), DISK_TYPE_NORMAL, 40.0f);
+			pPlayer->bHaveDisk = false;
 		}
 		if (GetKeyboardPress(DIK_SPACE))
 		{
-			SetDisk(pPlayer->pos, vec, D3DXVECTOR3(0.0f, 0.0f, 0.0f), DISK_TYPE_LOB, 40.0f);
+			SetDisk(pPlayer->pos, inputVec, D3DXVECTOR3(0.0f, 0.0f, 0.0f), DISK_TYPE_LOB, 40.0f);
+			pPlayer->bHaveDisk = false;
 		}
+	}
+}
+
+//=========================================
+// ディスクを受け取る処理
+//=========================================
+void CatchDiscPlayer(int nIdxPlayer)
+{
+	Player *pPlayer = &s_player[nIdxPlayer];
+	Disk* pDisk = GetDisk();
+
+	if (CollisionCircle(pPlayer->pos, pPlayer->fSize, pDisk->pos, pDisk->fSize))
+	{
+		pDisk->bUse = false;
+		pPlayer->bHaveDisk = true;
 	}
 }
 
 //=========================================
 // 設定
 //=========================================
-void SetPlayer(void)
+void SetPlayer(const D3DXVECTOR3& pos, PLAYERTYPE type)
 {
+	LPDIRECT3DDEVICE9 pDevice = GetDevice();	// デバイスへのポイント
+
+	Player *pPlayer = s_player;
+
+	for (int i = 0; i < NUM_PLAYER; i++, pPlayer++)
+	{
+		if (pPlayer->bUse)
+		{
+			continue;
+		}
+
+		// データの初期化
+		ZeroMemory(&s_player[i],sizeof(s_player[0]));
+
+		s_player[i] = s_playerType[type];
+
+		pPlayer->pos = pos; 			// 位置を初期化
+		pPlayer->fSize = PLAYER_SIZ;	// プレイヤーの大きさ
+		pPlayer->bUse = true;			// プレイヤーの表示の有無
+
+		// 頂点バッファの生成
+		pDevice->CreateVertexBuffer(sizeof(VERTEX_2D) * 4,
+			D3DUSAGE_WRITEONLY,
+			FVF_VERTEX_2D,
+			D3DPOOL_MANAGED,
+			&pPlayer->pVtxBuff,
+			NULL);
+
+		VERTEX_2D *pVtx;		// 頂点情報へのポインタ
+
+		// 頂点バッファをロックし、頂点情報へのポインタを取得
+		pPlayer->pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
+		// 頂点座標の設定
+		pVtx[0].pos = D3DXVECTOR3(pPlayer->pos.x - pPlayer->fSize, pPlayer->pos.y - pPlayer->fSize, 0.0f);
+		pVtx[1].pos = D3DXVECTOR3(pPlayer->pos.x + pPlayer->fSize, pPlayer->pos.y - pPlayer->fSize, 0.0f);
+		pVtx[2].pos = D3DXVECTOR3(pPlayer->pos.x - pPlayer->fSize, pPlayer->pos.y + pPlayer->fSize, 0.0f);
+		pVtx[3].pos = D3DXVECTOR3(pPlayer->pos.x + pPlayer->fSize, pPlayer->pos.y + pPlayer->fSize, 0.0f);
+
+		// 頂点カラーの設定
+		pVtx[0].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+		pVtx[1].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+		pVtx[2].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+		pVtx[3].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+
+		// rhwの設定
+		pVtx[0].rhw = 1.0f;
+		pVtx[1].rhw = 1.0f;
+		pVtx[2].rhw = 1.0f;
+		pVtx[3].rhw = 1.0f;
+
+		// テクスチャ座標の設定
+		pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
+		pVtx[1].tex = D3DXVECTOR2(1.0f, 0.0f);
+		pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);
+		pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);
+
+		// 頂点バッファをアンロックする
+		pPlayer->pVtxBuff->Unlock();
+
+		break;
+	}
+
 }
 
 //=========================================
@@ -309,4 +378,83 @@ void SetPlayer(void)
 Player* GetPlayer(void)
 {
 	return s_player;
+}
+
+//=========================================
+// プレイヤーの読み込み処理
+//=========================================
+void LoadPlayer(void)
+{
+	char s_aString[256];	// 読み込み用文字列
+	int NumType = 0;		// 読み込んだタイプ数
+
+	//ファイルを開く
+	FILE* pFile = fopen(PLAYER_FILE, "r");
+
+	if (pFile != NULL)
+	{//ファイルが開いた場合
+		fscanf(pFile, "%s", &s_aString);
+
+		while (strncmp(&s_aString[0], "SCRIPT", 6) != 0)
+		{//スタート来るまで空白読み込む
+			s_aString[0] = {};
+			fscanf(pFile, "%s", &s_aString[0]);
+		}
+
+		while (strncmp(&s_aString[0], "END_SCRIPT", 10) != 0)
+		{// 文字列の初期化と読み込み// 文字列の初期化と読み込み
+
+			fscanf(pFile, "%s", &s_aString[0]);
+
+			if (strncmp(&s_aString[0], "#", 1) == 0)
+			{//これのあとコメント
+				fgets(&s_aString[0], sizeof(s_aString), pFile);
+				continue;
+			}
+
+			if (strcmp(&s_aString[0], "TYPESTATE") == 0)
+			{// 文字列が一致した場合
+				while (strncmp(&s_aString[0], "ENDSTATE", 8) != 0)
+				{
+					fscanf(pFile, "%s", &s_aString[0]);// ＝読み込むやつ
+
+					if (strcmp(&s_aString[0], "TEXTURE") == 0)
+					{
+						fscanf(pFile, "%s", &s_aString[0]);	// ＝読み込むやつ
+						fscanf(pFile, "%s", &s_aString[0]);
+						//テクスチャの読み込み
+						D3DXCreateTextureFromFile(GetDevice(), &s_aString[0], &s_playerType[NumType].pTexture);
+					}
+					if (strcmp(&s_aString[0], "MOVESPEED") == 0)
+					{
+						fscanf(pFile, "%s", &s_aString[0]);	// ＝読み込むやつ
+						fscanf(pFile, "%f", &s_playerType[NumType].fSpeed);
+					}
+				}
+				NumType++;
+			}
+		}
+	}
+	//ファイルを閉じる
+	fclose(pFile);
+}
+
+
+//-----------------------------------------------------------------------------
+//円の当たり判定
+//-----------------------------------------------------------------------------
+static bool CollisionCircle(D3DXVECTOR3 Pos1, float fRadius1, D3DXVECTOR3 Pos2, float fRadius2)
+{
+	//２この物体の半径同士の和
+	float fDiff = fRadius1 + fRadius2;
+
+	//Xの差分
+	float fCalculationX = Pos1.x - Pos2.x;
+	//Yの差分
+	float fCalculationY = Pos1.y - Pos2.y;
+
+	//現在の２点の距離
+	float fLength = sqrtf(fCalculationX * fCalculationX + fCalculationY * fCalculationY);
+
+	return fDiff >= fLength;
 }
