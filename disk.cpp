@@ -13,6 +13,7 @@
 #include "wall.h"
 #include "goal.h"
 #include <time.h>
+#include "shadow.h"
 
 //====================================
 //グローバル変数
@@ -78,7 +79,8 @@ void InitDisk(void)
 	//頂点バッファをアンロックする
 	g_pVtxBuffDisk->Unlock();
 
-	SetDisk(D3DXVECTOR3(50.0f, 500.0f, 0.0f), D3DXVECTOR3(5.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), DISK_TYPE_LOB, 0, 20.0f);
+	SetDisk(D3DXVECTOR3(200.0f, 350.0f, 0.0f), D3DXVECTOR3(50.0f, -0.0f, 0.0f), D3DXVECTOR3(0.0f, -0.0f, 0.0f), DISK_TYPE_NORMAL,20.0f);
+
 }
 
 //====================================
@@ -176,6 +178,8 @@ void UpdateDisk(void)
 
 			//頂点バッファをアンロックする
 			g_pVtxBuffDisk->Unlock();
+
+			SetPositionShadow(g_aDisk[nCntDisk].nIdxShadow, g_aDisk[nCntDisk].pos);
 		}
 	}
 }
@@ -223,14 +227,15 @@ void SetDisk(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 acc, DISK_TYPE type,
 	{
 		if (g_aDisk[nCntDisk].bUse == false)
 		{
-			g_aDisk[nCntDisk].pos = pos;				//ディスクの現在の位置の設定
-			g_aDisk[nCntDisk].lastPos = pos - move;		//ディスクの前回の位置の設定
-			g_aDisk[nCntDisk].move = move;				//ディスクの移動量の設定
-			g_aDisk[nCntDisk].fSize = size;				//ディスクの大きさの設定
-			g_aDisk[nCntDisk].acc = acc;				//ディスクの加速の設定
-			g_aDisk[nCntDisk].type = type;				//ディスクの種類の設定
-			g_aDisk[nCntDisk].nCntPhase = 0;			//ディスクの必殺技用のカウンターの設定
-			g_aDisk[nCntDisk].nPlayer = nPlayer;		//ディスクを投げたプレイヤーのインデックスの設定
+			g_aDisk[nCntDisk].pos = pos;									//ディスクの現在の位置の設定
+			g_aDisk[nCntDisk].lastPos = pos - move;							//ディスクの前回の位置の設定
+			g_aDisk[nCntDisk].move = move;									//ディスクの移動量の設定
+			g_aDisk[nCntDisk].fSize = size;									//ディスクの大きさの設定
+			g_aDisk[nCntDisk].acc = acc;									//ディスクの加速の設定
+			g_aDisk[nCntDisk].type = type;									//ディスクの種類の設定
+			g_aDisk[nCntDisk].nCntPhase = 0;								//ディスクの必殺技用のカウンターの設定
+			g_aDisk[nCntDisk].nPlayer = nPlayer;							//ディスクを投げたプレイヤーのインデックスの設定
+			g_aDisk[nCntDisk].nIdxShadow = SetShadow(pos, size);			//ディスクの影のインデックス
 
 			//頂点座標の設定
 			pVtx[(nCntDisk * 4) + 0].pos = D3DXVECTOR3(pos.x - (size * 0.5f), pos.y - (size * 0.5f), 0.0f);
