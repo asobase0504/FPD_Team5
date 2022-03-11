@@ -17,6 +17,7 @@
 #include "wall.h"
 #include "disk.h"
 #include "shadow.h"
+#include "effect.h"
 
 //------------------------------------
 // É}ÉNÉçíËã`
@@ -36,6 +37,7 @@ void InitGame(void)
 	InitShadow();
 	InitDisk();
 	InitStage();
+	InitEffect();
 }
 
 //=========================================
@@ -48,6 +50,7 @@ void UninitGame(void)
 	UninitShadow();
 	UninitDisk();
 	UninitStage();
+	UninitEffect();
 }
 
 //=========================================
@@ -60,6 +63,7 @@ void UpdateGame(void)
 	UpdateWall();
 	UpdateDisk();
 	UpdateShadow();
+	UpdateEffect();
 }
 
 //=========================================
@@ -72,4 +76,5 @@ void DrawGame()
 	DrawWall();
 	DrawShadow();
 	DrawDisk();
+	DrawEffect();
 }
