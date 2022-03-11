@@ -20,6 +20,7 @@ typedef enum
 	DISK_TYPE_NORMAL = 0,			//普通
 	DISK_TYPE_LOB,					//上投げ
 	DISK_TYPE_SPECIAL_0,
+	DISK_TYPE_SPECIAL_1,
 	DISK_TYPE_MAX
 }DISK_TYPE;
 
@@ -35,6 +36,7 @@ typedef struct
 	float fHeight;							//上投げ用の高さ
 	float fVerticalSpeed;					//上投げの移動量
 	int nCntPhase;							//必殺技用のカウンター
+	int nPlayer;							//ディスクを投げたプレイヤーのインデックス
 	bool bBounce;							//壁に当たったら、反射するかどうか
 	bool bUse;								//使用されているかどうか
 }Disk;
@@ -44,7 +46,7 @@ void InitDisk(void);
 void UninitDisk(void);
 void UpdateDisk(void);
 void DrawDisk(void);
-void SetDisk(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 acc, DISK_TYPE type, float size);
+void SetDisk(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 acc, DISK_TYPE type, int nPlayer, float size);
 void UpdateSpecialDisk(int nCntDisk, int nPlayer);
 
 Disk *GetDisk(void);
