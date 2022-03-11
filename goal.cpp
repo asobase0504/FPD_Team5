@@ -3,7 +3,7 @@
 // ゴール処理
 // Author Tanimoto_Kosuke
 //
-// Update 22/03/10
+// Update 22/03/11
 // 
 //=========================================
 //------------------------------------
@@ -13,6 +13,7 @@
 #include "main.h"
 #include <stdio.h>
 #include "disk.h"
+#include "stage.h"
 
 //------------------------------------
 // スタティック変数
@@ -174,8 +175,10 @@ void UninitGoal(void)
 void UpdateGoal(void)
 {
 	LPDIRECT3DDEVICE9 pDevice = GetDevice();	//デバイスへのポインタ
-
+	
 	VERTEX_2D *pVtx;				//頂点情報へのポインタ
+
+	Disk *pDisk = GetDisk();
 
 	//頂点バッファをロックし、頂点情報へのポインタを取得
 	s_pVtxBuffGoal->Lock(0, 0, (void**)&pVtx, 0);
@@ -263,34 +266,34 @@ void ColisionGoal(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pLastPos, float fWidth, float 
 			if (s_aGoal[nCntGoal].type == GOAL_TYPE_NORMAL)
 			{//3点ゴールの場合
 				if (pPos->y > s_aGoal[nCntGoal].pos.y - (GOAL_HEIGHT / 2)
-					&& pPos->y < s_aGoal[nCntGoal].pos.y + (GOAL_HEIGHT / 2)
-					&& pPos->x + fWidth / 2 > s_aGoal[nCntGoal].pos.x 
-					&& pPos->x - fWidth / 2 < s_aGoal[nCntGoal].pos.x)
+					&& pPos->y < s_aGoal[nCntGoal].pos.y + (GOAL_HEIGHT / 2))
 				{
-					if (pPos->x + fWidth / 2 - 1 <= s_aGoal[nCntGoal].pos.x)
+					if (pPos->x + fWidth / 2 >= s_aGoal[nCntGoal].pos.x
+						&& pLastPos->x + fWidth / 2 - 1 < s_aGoal[nCntGoal].pos.x)
 					{
-						pDisk->bUse = false;
+						pDisk->move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 					}
-					else if (pPos->x - fWidth / 2 + 1 >= s_aGoal[nCntGoal].pos.x)
+					if (pPos->x - fWidth / 2 <= s_aGoal[nCntGoal].pos.x
+						&& pLastPos->x - fWidth / 2 + 1 > s_aGoal[nCntGoal].pos.x)
 					{
-						pDisk->bUse = false;
+						pDisk->move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 					}
 				}
 			}
 			if(s_aGoal[nCntGoal].type == GOAL_TYPE_STRIKE)
 			{//5点ゴールの場合
 				if (pPos->y > s_aGoal[nCntGoal].pos.y - (STRIKE_GOAL_HEIGHT / 2)
-					&& pPos->y < s_aGoal[nCntGoal].pos.y + (STRIKE_GOAL_HEIGHT / 2)
-					&& pPos->x + fWidth / 2 > s_aGoal[nCntGoal].pos.x
-					&& pPos->x - fWidth / 2 < s_aGoal[nCntGoal].pos.x)
+					&& pPos->y < s_aGoal[nCntGoal].pos.y + (STRIKE_GOAL_HEIGHT / 2))
 				{
-					if (pPos->x + fWidth / 2 - 1 <= s_aGoal[nCntGoal].pos.x)
+					if (pPos->x + fWidth / 2 >= s_aGoal[nCntGoal].pos.x 
+						&& pLastPos->x + fWidth / 2 - 1 < s_aGoal[nCntGoal].pos.x)
 					{
-						pDisk->bUse = false;
+						pDisk->move = D3DXVECTOR3(0.0f,0.0f,0.0f);
 					}
-					else if (pPos->x - fWidth / 2 + 1 >= s_aGoal[nCntGoal].pos.x)
+					if (pPos->x - fWidth / 2 <= s_aGoal[nCntGoal].pos.x
+						&& pLastPos->x - fWidth / 2 + 1 > s_aGoal[nCntGoal].pos.x)
 					{
-						pDisk->bUse = false;
+						pDisk->move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 					}
 				}
 			}
