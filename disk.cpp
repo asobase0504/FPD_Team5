@@ -446,7 +446,7 @@ D3DXVECTOR3 SetLobSpeed(D3DXVECTOR3 pos, D3DXVECTOR3 move, int nCntDisk, float f
 		D3DXVECTOR3 postImpact = endPos - pos;
 		D3DXVec3Normalize(&initialSpeedDirNor, &initialSpeedDir);
 
-		float fDot = D3DXVec3Dot(&xDir, &initialSpeedDir);
+		float fDot = D3DXVec3Dot(&xDir, &initialSpeedDirNor);
 		float fLenght = sqrtf(((postImpact.x * postImpact.x) + (postImpact.y * postImpact.y)));
 
 		newPos = endPos + (xDir * (fDot * fLenght));
