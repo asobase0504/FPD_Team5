@@ -15,6 +15,7 @@
 #include "goal.h"
 #include "wall.h"
 #include "disk.h"
+#include "shadow.h"
 
 //------------------------------------
 // スタティック変数
@@ -250,7 +251,10 @@ void UpdateStage(void)
 	//ディスクを消す時間
 	if (s_fFellCounter >= DISK_DELETE)
 	{
+		Shadow* pShadow = GetShadow();
+
 		pDisk->bUse = false;
+		pShadow[pDisk->nIdxShadow].bUse = false;
 	}
 
 	UpdateGoal();
