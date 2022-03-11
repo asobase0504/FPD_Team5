@@ -10,7 +10,6 @@
 //グローバル変数
 LPDIRECT3DTEXTURE9 g_pTextureTime = NULL;			//テクスチャヘノポインタ
 LPDIRECT3DVERTEXBUFFER9 g_pVtxBuffTime = NULL;		//頂点バッファへのポインタ
-D3DXVECTOR3 g_posTime[MAX_CNT_TIME];				//タイムの位置
 TIME g_Time;										//タイム構造体
 //static int g_nTime[MAX_TIME];						//タイムの値
 //static int g_nTime = 30;
@@ -50,7 +49,7 @@ void InitTime(void)
 
 	for (g_Time.nCntTime = 0; g_Time.nCntTime < MAX_CNT_TIME; g_Time.nCntTime++)
 	{
-		g_posTime[g_Time.nCntTime] = D3DXVECTOR3(600.0f + (20.0f + (20.0f * 2) * g_Time.nCntTime), 0.0f + 60.0f, 0.0f);
+		g_Time.pos[g_Time.nCntTime] = D3DXVECTOR3(600.0f + (20.0f + (20.0f * 2) * g_Time.nCntTime), 0.0f + 60.0f, 0.0f);
 	}
 
 	//頂点バッファをロックし、頂点情報へのポインタを取得
@@ -59,10 +58,10 @@ void InitTime(void)
 	for (g_Time.nCntTime = 0; g_Time.nCntTime < MAX_CNT_TIME; g_Time.nCntTime++)
 	{
 		//頂点座標の設定
-		pVtx[0].pos = D3DXVECTOR3(g_posTime[g_Time.nCntTime].x - 20.0f, g_posTime[g_Time.nCntTime].y - 35.0f, 0.0f);
-		pVtx[1].pos = D3DXVECTOR3(g_posTime[g_Time.nCntTime].x + 20.0f, g_posTime[g_Time.nCntTime].y - 35.0f, 0.0f);
-		pVtx[2].pos = D3DXVECTOR3(g_posTime[g_Time.nCntTime].x - 20.0f, g_posTime[g_Time.nCntTime].y + 35.0f, 0.0f);
-		pVtx[3].pos = D3DXVECTOR3(g_posTime[g_Time.nCntTime].x + 20.0f, g_posTime[g_Time.nCntTime].y + 35.0f, 0.0f);
+		pVtx[0].pos = D3DXVECTOR3(g_Time.pos[g_Time.nCntTime].x - 20.0f, g_Time.pos[g_Time.nCntTime].y - 35.0f, 0.0f);
+		pVtx[1].pos = D3DXVECTOR3(g_Time.pos[g_Time.nCntTime].x + 20.0f, g_Time.pos[g_Time.nCntTime].y - 35.0f, 0.0f);
+		pVtx[2].pos = D3DXVECTOR3(g_Time.pos[g_Time.nCntTime].x - 20.0f, g_Time.pos[g_Time.nCntTime].y + 35.0f, 0.0f);
+		pVtx[3].pos = D3DXVECTOR3(g_Time.pos[g_Time.nCntTime].x + 20.0f, g_Time.pos[g_Time.nCntTime].y + 35.0f, 0.0f);
 
 		//rhwの設定
 		pVtx[0].rhw = 1.0f;
