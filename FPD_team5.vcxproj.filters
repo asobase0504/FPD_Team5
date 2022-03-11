@@ -106,7 +106,7 @@
     </ClInclude>
     <ClInclude Include="option.h">
       <Filter>ヘッダー ファイル</Filter>
-</ClInclude>
+    </ClInclude>
     <ClInclude Include="player.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -119,7 +119,11 @@
     <ClInclude Include="mode.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-  </ItemGroup>  <ItemGroup>
+    <ClInclude Include="point.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
     <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

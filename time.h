@@ -11,12 +11,23 @@
 #include "fade.h"
 
 //マクロ定義
-#define MAX_TIME	(5)	//最大タイムカウンター数
+#define MAX_TIME		(30)							//最大タイム設定数
+#define MAX_CNT_TIME	(2)								//最大カウンター数
+
+//タイムの構造体
+typedef struct
+{
+	D3DXVECTOR3 pos;									//現在の位置
+	int nTime;											//タイムの設定数
+	int nCntTime;										//タイムのカウンター
+	bool bTimeFlag;										//タイトルの移動のフラグ
+}TIME;
 
 //プロトタイプ宣言
 void InitTime(void);
 void UninitTime(void);
 void UpdateTime(int *p_nSelectTime);
 void DrawTime(void);
+TIME *GetTime(void);
 void SetTime(void);
 #endif

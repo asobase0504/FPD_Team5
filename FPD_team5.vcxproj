@@ -180,6 +180,7 @@
     <ClInclude Include="menu.h" />
     <ClInclude Include="mode.h" />
     <ClInclude Include="player.h" />
+    <ClInclude Include="point.h" />
     <ClInclude Include="result.h" />
     <ClInclude Include="score.h" />
     <ClInclude Include="option.h" />

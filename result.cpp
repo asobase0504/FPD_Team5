@@ -35,7 +35,7 @@ void InitResult(void)
 
 	//テクスチャポインタの初期化
 	memset(s_apTexture, NULL, sizeof(s_apTexture));
-
+	
 	//テクスチャの読み込み
 	D3DXCreateTextureFromFile(pDevice,
 								"data/TEXTURE/後でなんか入れる.png",
