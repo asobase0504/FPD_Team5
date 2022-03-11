@@ -296,6 +296,17 @@ void ThrowPlayer(int nIdxPlayer)
 	{ // JoyPad“ü—Í
 		inputVec += GetJoypadStick(JOYKEY_LEFT_STICK, nIdxPlayer);
 
+		if (GetJoypadTrigger(JOYKEY_B, nIdxPlayer))
+		{
+			SetDisk(pPlayer->pos, inputVec * pPlayer->fThrowPower, moveCurve, DISK_TYPE_NORMAL, nIdxPlayer, 40.0f);
+			pPlayer->bHaveDisk = false;
+		}
+		if (GetJoypadTrigger(JOYKEY_A, nIdxPlayer))
+		{
+			SetDisk(pPlayer->pos, inputVec * pPlayer->fThrowPower, moveCurve, DISK_TYPE_LOB, nIdxPlayer, 40.0f);
+			pPlayer->bHaveDisk = false;
+		}
+
 		fVecLength = D3DXVec3Length(&inputVec);
 
 		if (fVecLength >= 3.0f)
