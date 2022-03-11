@@ -262,12 +262,12 @@ void ThrowPlayer(int nIdxPlayer)
 
 		if (GetJoypadTrigger(JOYKEY_B, nIdxPlayer))
 		{
-			SetDisk(pPlayer->pos, inputVec * pPlayer->fThrowPower, moveCurve, DISK_TYPE_NORMAL, 40.0f);
+			SetDisk(pPlayer->pos, inputVec * pPlayer->fThrowPower, moveCurve, DISK_TYPE_NORMAL, nIdxPlayer, 40.0f);
 			pPlayer->bHaveDisk = false;
 		}
 		if (GetJoypadTrigger(JOYKEY_A, nIdxPlayer))
 		{
-			SetDisk(pPlayer->pos, inputVec * pPlayer->fThrowPower, moveCurve, DISK_TYPE_LOB, 40.0f);
+			SetDisk(pPlayer->pos, inputVec * pPlayer->fThrowPower, moveCurve, DISK_TYPE_LOB, nIdxPlayer, 40.0f);
 			pPlayer->bHaveDisk = false;
 		}
 
@@ -308,12 +308,12 @@ void ThrowPlayer(int nIdxPlayer)
 
 		if (GetKeyboardPress(DIK_RETURN))
 		{
-			SetDisk(pPlayer->pos, inputVec * pPlayer->fThrowPower, D3DXVECTOR3(0.0f, 0.0f, 0.0f), DISK_TYPE_NORMAL, 40.0f);
+			SetDisk(pPlayer->pos, inputVec * pPlayer->fThrowPower, D3DXVECTOR3(0.0f, 0.0f, 0.0f), DISK_TYPE_NORMAL, nIdxPlayer, 40.0f);
 			pPlayer->bHaveDisk = false;
 		}
 		if (GetKeyboardPress(DIK_SPACE))
 		{
-			SetDisk(pPlayer->pos, inputVec * pPlayer->fThrowPower, D3DXVECTOR3(0.0f, 0.0f, 0.0f), DISK_TYPE_LOB, 40.0f);
+			SetDisk(pPlayer->pos, inputVec * pPlayer->fThrowPower, D3DXVECTOR3(0.0f, 0.0f, 0.0f), DISK_TYPE_LOB, nIdxPlayer, 40.0f);
 			pPlayer->bHaveDisk = false;
 		}
 	}
