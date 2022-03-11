@@ -37,6 +37,7 @@ typedef struct
 	float fVerticalSpeed;					//上投げの移動量
 	int nCntPhase;							//必殺技用のカウンター
 	int nPlayer;							//ディスクを投げたプレイヤーのインデックス
+	int nIdxShadow;							//ディスクの影のインデックス
 	bool bBounce;							//壁に当たったら、反射するかどうか
 	bool bUse;								//使用されているかどうか
 }Disk;
