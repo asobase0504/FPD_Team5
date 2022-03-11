@@ -282,9 +282,9 @@ void UpdateJoypad(void)
 		//ジョイパッドの状態を取得
 		if (XInputGetState(nCnt, &JoyKeyState[nCnt]) == ERROR_SUCCESS)
 		{
-			s_JoyKeyState[nCnt] = JoyKeyState[nCnt];  //プレス処理
 			s_JoyKeyStateTrigger[nCnt].Gamepad.wButtons = ~s_JoyKeyState[nCnt].Gamepad.wButtons & JoyKeyState[nCnt].Gamepad.wButtons;	//トリガー情報を保存
 			s_JoyKeyStateRelease[nCnt].Gamepad.wButtons = s_JoyKeyState[nCnt].Gamepad.wButtons & ~JoyKeyState[nCnt].Gamepad.wButtons;	//リリース情報を保存
+			s_JoyKeyState[nCnt] = JoyKeyState[nCnt];  //プレス処理
 
 			s_bUseJoyPad[nCnt] = true; // 使用状況の更新
 		}

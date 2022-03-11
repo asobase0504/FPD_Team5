@@ -1,6 +1,6 @@
 //------------------------------
 //時間設定
-//ACG000
+//
 //Author: goto yuuki
 //
 //------------------------------
@@ -10,18 +10,18 @@
 //グローバル変数
 LPDIRECT3DTEXTURE9 g_pTextureTime = NULL;			//テクスチャヘノポインタ
 LPDIRECT3DVERTEXBUFFER9 g_pVtxBuffTime = NULL;		//頂点バッファへのポインタ
-D3DXVECTOR3 g_posTime[3];							//タイムの位置
-bool bTimeFlag;										//タイトルの移動のフラグ
-static int g_nTime[MAX_TIME];						//タイムの値
-int g_nCntTime;										//タイムのカウンター
-static int s_nSelectTime;
+D3DXVECTOR3 g_posTime[MAX_CNT_TIME];				//タイムの位置
+TIME g_Time;										//タイム構造体
+//static int g_nTime[MAX_TIME];						//タイムの値
+//static int g_nTime = 30;
+//static int s_nSelectTime;
 
 //タイムの初期化処理
 void InitTime(void)
 {
 	LPDIRECT3DDEVICE9 pDevice;
-	int nCntTime;
-	s_nSelectTime = 0;
+	//int nCntTime;
+	//s_nSelectTime = 0;
 
 	//デバイスの取得
 	pDevice = GetDevice();
@@ -32,8 +32,9 @@ void InitTime(void)
 		&g_pTextureTime);
 
 	bool bTimeFlag = false;									//タイトルの移動のフラグ
-	g_nTime[MAX_TIME] =  15,30,45,90, INFINITY;				//タイムの値
-	g_nCntTime = 0;
+	//g_nTime[MAX_TIME] =  15,30,45,90, INFINITY;			//タイムの配列値
+	g_Time.nTime = 30;										//タイムの値
+	g_Time.nCntTime = 0;									//タイムカウンター値
 
 	//頂点バッファの生成
 	pDevice->CreateVertexBuffer(sizeof(VERTEX_2D) * 4 * 3,
@@ -45,21 +46,23 @@ void InitTime(void)
 
 	VERTEX_2D*pVtx;									//頂点情報へのポインタ
 
-	for (nCntTime = 0; nCntTime < 3; nCntTime++)
+	//タイムをずらして描画する設定
+
+	for (g_Time.nCntTime = 0; g_Time.nCntTime < MAX_CNT_TIME; g_Time.nCntTime++)
 	{
-		g_posTime[nCntTime] = D3DXVECTOR3(600.0f + (20.0f + (20.0f * 2) * nCntTime), 0.0f + 60.0f, 0.0f);
+		g_posTime[g_Time.nCntTime] = D3DXVECTOR3(600.0f + (20.0f + (20.0f * 2) * g_Time.nCntTime), 0.0f + 60.0f, 0.0f);
 	}
 
 	//頂点バッファをロックし、頂点情報へのポインタを取得
 	g_pVtxBuffTime->Lock(0, 0, (void**)&pVtx, 0);
 
-	for (nCntTime = 0; nCntTime < 3; nCntTime++)
+	for (g_Time.nCntTime = 0; g_Time.nCntTime < MAX_CNT_TIME; g_Time.nCntTime++)
 	{
 		//頂点座標の設定
-		pVtx[0].pos = D3DXVECTOR3(g_posTime[nCntTime].x - 20.0f, g_posTime[nCntTime].y - 35.0f, 0.0f);
-		pVtx[1].pos = D3DXVECTOR3(g_posTime[nCntTime].x + 20.0f, g_posTime[nCntTime].y - 35.0f, 0.0f);
-		pVtx[2].pos = D3DXVECTOR3(g_posTime[nCntTime].x - 20.0f, g_posTime[nCntTime].y + 35.0f, 0.0f);
-		pVtx[3].pos = D3DXVECTOR3(g_posTime[nCntTime].x + 20.0f, g_posTime[nCntTime].y + 35.0f, 0.0f);
+		pVtx[0].pos = D3DXVECTOR3(g_posTime[g_Time.nCntTime].x - 20.0f, g_posTime[g_Time.nCntTime].y - 35.0f, 0.0f);
+		pVtx[1].pos = D3DXVECTOR3(g_posTime[g_Time.nCntTime].x + 20.0f, g_posTime[g_Time.nCntTime].y - 35.0f, 0.0f);
+		pVtx[2].pos = D3DXVECTOR3(g_posTime[g_Time.nCntTime].x - 20.0f, g_posTime[g_Time.nCntTime].y + 35.0f, 0.0f);
+		pVtx[3].pos = D3DXVECTOR3(g_posTime[g_Time.nCntTime].x + 20.0f, g_posTime[g_Time.nCntTime].y + 35.0f, 0.0f);
 
 		//rhwの設定
 		pVtx[0].rhw = 1.0f;
@@ -104,30 +107,35 @@ void UninitTime(void)
 //タイムの更新処理
 void UpdateTime(int *p_nSelectTime)
 {
-	int aPosTexU[3];			//各桁の数字を格納
+	int aPosTexU[2];			//各桁の数字を格納
 
-	g_nCntTime++;				//nCntTimeが引かれていく
-	if (g_nCntTime % 60 == 0)		//nCntTimeが0より小さくなったら
+	g_Time.nCntTime++;				//nCntTimeが引かれていく
+	if (g_Time.nCntTime % 60 == 0)		//nCntTimeが0より小さくなったら
 	{
-		g_nTime[s_nSelectTime]--;				//時間が一秒ずつ減っていく
+		g_Time.nTime--;
+		//g_nTime[s_nSelectTime]--;				//時間が一秒ずつ減っていく
 	}
 
-	aPosTexU[0] = g_nTime[s_nSelectTime] % 1000 / 100;
-	aPosTexU[1] = g_nTime[s_nSelectTime] % 100 / 10;
-	aPosTexU[2] = g_nTime[s_nSelectTime] % 10;
+	aPosTexU[0] = g_Time.nTime % 1000 / 100;
+	aPosTexU[1] = g_Time.nTime % 100 / 10;
+	aPosTexU[2] = g_Time.nTime % 10;
+
+	//aPosTexU[0] = g_nTime[s_nSelectTime] % 1000 / 100;
+	//aPosTexU[1] = g_nTime[s_nSelectTime] % 100 / 10;
+	//aPosTexU[2] = g_nTime[s_nSelectTime] % 10;
 
 	VERTEX_2D*pVtx;												//頂点情報へのポインタ
 
 																//頂点バッファをロックし、頂点情報へのポインタを取得
 	g_pVtxBuffTime->Lock(0, 0, (void**)&pVtx, 0);
 
-	for (int nCntTime = 0; nCntTime < 3; nCntTime++)
+	for (g_Time.nCntTime = 0; g_Time.nCntTime < MAX_CNT_TIME; g_Time.nCntTime++)
 	{
 		//テクスチャ座標の設定
-		pVtx[0].tex = D3DXVECTOR2(0.0f + (aPosTexU[nCntTime] * 0.1f), 0.0f);
-		pVtx[1].tex = D3DXVECTOR2(0.1f + (aPosTexU[nCntTime] * 0.1f), 0.0f);
-		pVtx[2].tex = D3DXVECTOR2(0.0f + (aPosTexU[nCntTime] * 0.1f), 1.0f);
-		pVtx[3].tex = D3DXVECTOR2(0.1f + (aPosTexU[nCntTime] * 0.1f), 1.0f);
+		pVtx[0].tex = D3DXVECTOR2(0.0f + (aPosTexU[g_Time.nCntTime] * 0.1f), 0.0f);
+		pVtx[1].tex = D3DXVECTOR2(0.1f + (aPosTexU[g_Time.nCntTime] * 0.1f), 0.0f);
+		pVtx[2].tex = D3DXVECTOR2(0.0f + (aPosTexU[g_Time.nCntTime] * 0.1f), 1.0f);
+		pVtx[3].tex = D3DXVECTOR2(0.1f + (aPosTexU[g_Time.nCntTime] * 0.1f), 1.0f);
 
 		pVtx += 4;
 	}
@@ -146,7 +154,6 @@ void UpdateTime(int *p_nSelectTime)
 void DrawTime(void)
 {
 	LPDIRECT3DDEVICE9 pDevice;
-	int nCntTime;
 
 	//デバイスの取得
 	pDevice = GetDevice();
@@ -157,18 +164,23 @@ void DrawTime(void)
 	//頂点フォーマットの設定
 	pDevice->SetFVF(FVF_VERTEX_2D);
 
-	for (nCntTime = 0; nCntTime < 3; nCntTime++)
+	for (g_Time.nCntTime = 0; g_Time.nCntTime < MAX_CNT_TIME; g_Time.nCntTime++)
 	{
 		//テクスチャの設定
 		pDevice->SetTexture(0, g_pTextureTime);
 
 		//ポリゴンの描画
 		pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP,
-			4 * nCntTime,
+			4 * g_Time.nCntTime,
 			2);
 	}
 }
 void SetTime(void)
 {
 
+}
+
+TIME *GetTime(void)
+{
+	return &g_Time;		//「&」を使うのはポインタを使用してるから
 }
