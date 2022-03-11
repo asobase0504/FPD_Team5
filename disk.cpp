@@ -261,6 +261,8 @@ void SetDisk(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 acc, DISK_TYPE type,
 				g_aDisk[nCntDisk].fHeight = 15.0f;
 				g_aDisk[nCntDisk].fVerticalSpeed = LOB_STARTING_SPEED;
 				g_aDisk[nCntDisk].bBounce = true;
+				
+				g_aDisk[nCntDisk].move = SetLobSpeed(g_aDisk[nCntDisk].pos, g_aDisk[nCntDisk].move, nCntDisk, g_aDisk[nCntDisk].fHeight, g_aDisk[nCntDisk].fVerticalSpeed);
 
 				break;
 
@@ -413,4 +415,41 @@ void UpdateSpecialDisk(int nCntDisk, int nPlayer)
 Disk *GetDisk(void)
 {
 	return g_aDisk;	//ディスク情報の先頭アドレスを返す
+}
+
+
+D3DXVECTOR3 SetLobSpeed(D3DXVECTOR3 pos, D3DXVECTOR3 move, int nCntDisk, float fHeight, float fVerticalSpeed)
+{
+	D3DXVECTOR3 newSpeed = move;
+	D3DXVECTOR3 lastPos = pos;
+	D3DXVECTOR3 endPos = pos;
+	D3DXVECTOR3 initialSpeedDir = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	D3DXVECTOR3 initialSpeedDirNor;
+	int dTime = 0;
+
+	while (fHeight > 0.0f)
+	{
+		fHeight += fVerticalSpeed;
+		fVerticalSpeed -= 0.5f;
+		dTime++;
+		endPos += move;
+	}
+
+	initialSpeedDir = endPos - pos;
+
+	bool bImpact = SpecialWallBounce(&endPos, &lastPos, &newSpeed, g_aDisk[nCntDisk].fSize);
+
+	if (bImpact == true)
+	{
+		D3DXVECTOR3 xDir = D3DXVECTOR3(1.0f, 0.0f, 0.0f);
+		D3DXVECTOR3 postImpact = endPos - pos;
+		D3DXVec3Normalize(&initialSpeedDirNor, &initialSpeedDir);
+
+		float fDot = D3DXVec3Dot(&xDir, &initialSpeedDir);
+		float fLenght = sqrtf(((postImpact.x * postImpact.x) + (postImpact.y * postImpact.y)));
+
+		newSpeed = pos + (xDir * (fDot * fLenght));
+	}
+
+	return newSpeed;
 }
