@@ -184,11 +184,11 @@ void UninitKeyboard(void)
 void UpdateKeyboard(void)
 {
 	BYTE aKeyState[NUM_KEY_MAX];		//キーボードの入力情報
-	int nCntKey;
+
 	//入力デバイスからデータを取得
 	if (SUCCEEDED(s_pDevKeyboard->GetDeviceState(sizeof(aKeyState),&aKeyState[0])))
 	{
-		for (nCntKey = 0; nCntKey < NUM_KEY_MAX; nCntKey++)
+		for (int nCntKey = 0; nCntKey < NUM_KEY_MAX; nCntKey++)
 		{
 			s_aKeyStateTrigger[nCntKey] = ~s_aKeyState[nCntKey] & aKeyState[nCntKey]; //キーボードのトリガー情報を保存
 			s_aKeyStateRelease[nCntKey] = s_aKeyState[nCntKey] & ~aKeyState[nCntKey]; //キーボードのリリース情報を保存
@@ -282,9 +282,9 @@ void UpdateJoypad(void)
 		//ジョイパッドの状態を取得
 		if (XInputGetState(nCnt, &JoyKeyState[nCnt]) == ERROR_SUCCESS)
 		{
-			s_JoyKeyState[nCnt] = JoyKeyState[nCnt];  //プレス処理
 			s_JoyKeyStateTrigger[nCnt].Gamepad.wButtons = ~s_JoyKeyState[nCnt].Gamepad.wButtons & JoyKeyState[nCnt].Gamepad.wButtons;	//トリガー情報を保存
 			s_JoyKeyStateRelease[nCnt].Gamepad.wButtons = s_JoyKeyState[nCnt].Gamepad.wButtons & ~JoyKeyState[nCnt].Gamepad.wButtons;	//リリース情報を保存
+			s_JoyKeyState[nCnt] = JoyKeyState[nCnt];  //プレス処理
 
 			s_bUseJoyPad[nCnt] = true; // 使用状況の更新
 		}

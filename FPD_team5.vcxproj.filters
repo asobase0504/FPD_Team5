@@ -51,7 +51,7 @@
     <ClCompile Include="score.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="setting.cpp">
+    <ClCompile Include="option.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="player.cpp">
@@ -104,7 +104,7 @@
     <ClInclude Include="score.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="setting.h">
+    <ClInclude Include="option.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="player.h">
@@ -117,6 +117,9 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="mode.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="point.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

@@ -15,26 +15,21 @@
 //------------------------------------
 // マクロ定義
 //------------------------------------
-#define PLAYER_TEX		"data/TEXTURE/player00.png"		// プレイヤーのテクスチャ
-#define PLAYER_WIDTH	(35.0f)							// プレイヤーの幅
-#define PLAYER_HEIGTH	(35.0f)							// プレイヤーの高さ
-#define PLAYER_JUMPMOVE	(25.0f)							// プレイヤーの跳躍量
-#define WOARD_GRAVITY	(1.0f)							// 世界の重力
 
 //------------------------------------
-// プレイヤーの状態
+// プレイヤーの種別
 //------------------------------------
 typedef enum
 {
-	PLAYERSTATE_APPEAR = 0,	// 出現状態(点滅)
-	PLAYERSTATE_NORMAL,		// 通常状態
-	PLAYERSTATE_DEATH,		// 死亡状態
-	PLAYERSTATE_REVIVAL,	// 復活状態
-	PLAYERSTATE_MAX
-}PLAYRSTATE;
+	PLAYERTYPE_1,
+	PLAYERTYPE_2,
+	PLAYERTYPE_3,
+	PLAYERTYPE_4,
+	PLAYERTYPE_MAX,
+}PLAYERTYPE;
 
 //------------------------------------
-// プレイヤーの状態
+// 跳躍状態
 //------------------------------------
 typedef enum
 {
@@ -48,20 +43,17 @@ typedef enum
 //------------------------------------
 typedef struct
 {
-	D3DXVECTOR3 pos;			// 位置
-	D3DXVECTOR3 posOld;			// 位置
-	D3DXVECTOR3 move;			// 移動量
-	D3DXVECTOR3 rot;			// 向き
-	float fWidth;				// 画像の幅
-	float fHeigth;				// 画像の高さ
-	float fMove;				// 移動量
-	JUMPSTATE jumpstate;		// 跳躍の状態
-	int nDirectionMove;			// 向き
-	PLAYRSTATE state;			// ステータス
-	int RevivalInterval;		// 復活タイミング
-	int nCntAnim;				// アニメーションのカウンター
-	int nPatternAnim;			// アニメーションのパターン番号
-	bool bUse;					// 表示状態
+	LPDIRECT3DTEXTURE9 pTexture;		// テクスチャへのポインタ
+	LPDIRECT3DVERTEXBUFFER9 pVtxBuff;	// 頂点バッファへのポインタ
+	D3DXVECTOR3 pos;					// 位置
+	D3DXVECTOR3 move;					// 移動量
+	float fSize;						// 大きさ
+	float fThrowPower;					// 投げる力
+	float fMoveSpeed;					// 移動量
+	float fAttenuationMoveSpead;		// 減衰値
+	JUMPSTATE jumpstate;				// 跳躍の状態
+	bool bHaveDisk;						// ディスクを所持しているか
+	bool bUse;							// 表示状態
 }Player;
 
 //------------------------------------
@@ -71,6 +63,7 @@ void InitPlayer(void);
 void UninitPlayer(void);
 void UpdatePlayer(void);
 void DrawPlayer(void);
+void SetPlayer(const D3DXVECTOR3& pos, PLAYERTYPE type);
 Player* GetPlayer(void);
 
 #endif // !_PLAYER_H_
