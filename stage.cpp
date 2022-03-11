@@ -57,6 +57,7 @@ void InitStage(void)
 		&s_pTextureStage[STAGE_TYPE_NET]
 	);
 
+
 	//テクスチャーの読み込み
 	D3DXCreateTextureFromFile
 	(
