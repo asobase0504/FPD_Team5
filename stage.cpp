@@ -15,6 +15,7 @@
 #include "goal.h"
 #include "wall.h"
 #include "disk.h"
+#include "shadow.h"
 
 //------------------------------------
 // スタティック変数
@@ -55,6 +56,7 @@ void InitStage(void)
 		"data\\TEXTURE\\stage\\block005.jpg",	//テクスチャのファイル名
 		&s_pTextureStage[STAGE_TYPE_NET]
 	);
+
 
 	//テクスチャーの読み込み
 	D3DXCreateTextureFromFile
@@ -250,7 +252,10 @@ void UpdateStage(void)
 	//ディスクを消す時間
 	if (s_fFellCounter >= DISK_DELETE)
 	{
+		Shadow* pShadow = GetShadow();
+
 		pDisk->bUse = false;
+		pShadow[pDisk->nIdxShadow].bUse = false;
 	}
 
 	UpdateGoal();

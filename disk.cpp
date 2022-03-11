@@ -261,6 +261,8 @@ void SetDisk(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 acc, DISK_TYPE type,
 				g_aDisk[nCntDisk].fHeight = 15.0f;
 				g_aDisk[nCntDisk].fVerticalSpeed = LOB_STARTING_SPEED;
 				g_aDisk[nCntDisk].bBounce = true;
+				
+				g_aDisk[nCntDisk].move = SetLobSpeed(g_aDisk[nCntDisk].pos, g_aDisk[nCntDisk].move, nCntDisk, g_aDisk[nCntDisk].fHeight, g_aDisk[nCntDisk].fVerticalSpeed);
 
 				break;
 
@@ -283,7 +285,7 @@ void SetDisk(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 acc, DISK_TYPE type,
 	g_pVtxBuffDisk->Unlock();
 }
 
-//必殺技(DISK_TYPE_SPECIAL_0)
+//必殺技
 void UpdateSpecialDisk(int nCntDisk, int nPlayer)
 {
 	float fChangePoint;
@@ -413,4 +415,88 @@ void UpdateSpecialDisk(int nCntDisk, int nPlayer)
 Disk *GetDisk(void)
 {
 	return g_aDisk;	//ディスク情報の先頭アドレスを返す
+}
+
+//============================================================================
+//上投げの移動量の設定処理
+//============================================================================
+D3DXVECTOR3 SetLobSpeed(D3DXVECTOR3 pos, D3DXVECTOR3 move, int nCntDisk, float fHeight, float fVerticalSpeed)
+{
+	D3DXVECTOR3 newSpeed = move;										//新しい移動量
+	D3DXVECTOR3 lastPos = pos;											//最初の位置
+	D3DXVECTOR3 endPos = pos;											//落ちた後の位置
+	D3DXVECTOR3 newPos;													//新しい位置
+	D3DXVECTOR3 initialSpeedDir = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//最初の移動量
+	D3DXVECTOR3 initialSpeedDirNor;										//最初の移動量の向き
+	float height, vSpeed;
+	height = fHeight;
+	vSpeed = fVerticalSpeed;
+
+	while (height > 0.0f)
+	{//ディスクが落ちた時の位置を計算する
+		height += vSpeed;
+		vSpeed -= 0.05f;
+		endPos += move;
+	}
+	newPos = endPos;
+	height = fHeight;
+	vSpeed = fVerticalSpeed;
+
+	initialSpeedDir = endPos - pos;			//最初の移動量ベクトル
+
+	//壁との当たり判定
+	bool bImpact = SpecialWallBounce(&endPos, &lastPos, &newSpeed, g_aDisk[nCntDisk].fSize);	
+
+	float fLenght;							//ベクトルの長さ
+
+	if (bImpact == true)
+	{//壁と当たらないようにする処理
+		D3DXVECTOR3 xDir = D3DXVECTOR3(1.0f, 0.0f, 0.0f);				//X軸に平行ベクトル
+		D3DXVECTOR3 postImpact = endPos - pos;							//衝突点を超えたベクトルの部分
+		D3DXVec3Normalize(&initialSpeedDirNor, &initialSpeedDir);		//ベクトルの正規化
+
+		float fDot = D3DXVec3Dot(&xDir, &initialSpeedDirNor);									//X軸とはじめの移動量の間の角度のコサインを計算する
+		fLenght = sqrtf(((postImpact.x * postImpact.x) + (postImpact.y * postImpact.y)));		//衝突点を超えたベクトルの部分の長さを計算する
+
+		newPos = endPos + (xDir * (fDot * fLenght));							//新しい位置
+
+		//新しい移動量の向きの計算
+		newSpeed = newPos - lastPos;											
+		D3DXVec3Normalize(&newSpeed, &newSpeed);
+
+		fLenght = sqrtf(((move.x * move.x) + (move.y * move.y)));				//はじめの移動量のベクトルの長さを計算する
+		newSpeed *= fLenght;													//新しい移動量
+	}
+
+	{//エリアを出ないようにする処理
+		D3DXVECTOR3 secondTerm;
+		float coefficient;
+
+		endPos = lastPos;
+
+		while (height > 0.0f)
+		{//ディスクが落ちた時の位置を計算する
+			height += vSpeed;
+			vSpeed -= 0.05f;
+			endPos += newSpeed;
+		}
+		newPos = endPos;
+
+		if (newPos.x > SCREEN_WIDTH - 150.0f && newSpeed.x > 0.0f)
+		{//画面の右側を出る場合
+			secondTerm = newPos;
+			secondTerm.x = SCREEN_WIDTH - 150.0f;
+			coefficient = (secondTerm.x - lastPos.x) / (newPos.x - lastPos.x);
+			newSpeed.x *= coefficient;
+		}
+		else if (newPos.x < 150.0f && newSpeed.x < 0.0f)
+		{//画面の左側を出る場合
+			secondTerm = newPos;
+			secondTerm.x = 150.0f;
+			coefficient = (secondTerm.x - lastPos.x) / (newPos.x - lastPos.x);
+			newSpeed.x *= coefficient;
+		}
+	}
+
+	return newSpeed;				//新しい移動量を返す
 }
