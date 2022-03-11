@@ -14,6 +14,7 @@
 #include "disk.h"
 #include <assert.h>
 #include <stdio.h>
+#include "shadow.h"
 
 //-----------------------------------------
 // ƒ}ƒNƒ’è‹`
@@ -364,10 +365,12 @@ void CatchDiscPlayer(int nIdxPlayer)
 {
 	Player *pPlayer = &s_player[nIdxPlayer];
 	Disk* pDisk = GetDisk();
+	Shadow *pShadow = GetShadow();
 
 	if (CollisionCircle(pPlayer->pos, pPlayer->fSize, pDisk->pos, pDisk->fSize) && pDisk->nPlayer != nIdxPlayer)
 	{
 		pDisk->bUse = false;
+		pShadow[pDisk->nIdxShadow].bUse = false;
 		pPlayer->bHaveDisk = true;
 	}
 }
