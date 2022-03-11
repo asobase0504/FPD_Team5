@@ -14,11 +14,11 @@
 LPDIRECT3DTEXTURE9 g_pTextureScore = NULL;				//テクスチャへのポインタ
 LPDIRECT3DVERTEXBUFFER9 g_pVtxBuffScore = NULL;			//頂点バッファへのポインタ
 D3DXVECTOR3 g_posScore;		//スコアの位置
-int g_nScore;				//スコアの値
+SCORE g_nScore;				//スコアの値
 
-							//------------------------------
-							//スコアの初期化処理
-							//------------------------------
+//------------------------------
+//スコアの初期化処理
+//------------------------------
 void InitScore(void)
 {
 	LPDIRECT3DDEVICE9 pDevice;		//デバイスへのポインタ
@@ -32,7 +32,7 @@ void InitScore(void)
 		&g_pTextureScore);
 
 	g_posScore = D3DXVECTOR3(900.0f, 30.0f, 0.0f);			//位置を初期化する
-	g_nScore = 0;											//値を初期化する
+	g_nScore.nScore = 0;											//値を初期化する
 	int nCntScore;
 
 	//頂点バッファの生成
@@ -111,7 +111,7 @@ void UninitScore(void)
 //------------------------------
 void UpdateScore(void)
 {
-	SetScore(g_nScore);
+	SetScore(g_nScore.nScore);
 }
 
 //------------------------------
@@ -152,16 +152,16 @@ void SetScore(int nScore)
 	int nCntScore;
 	int aPosTexU[8];	//各桁の数字を格納
 
-	g_nScore = nScore;
+	g_nScore.nScore = nScore;
 
-	aPosTexU[0] = g_nScore / 10000000;
-	aPosTexU[1] = (g_nScore % 10000000) / 1000000;
-	aPosTexU[2] = (g_nScore % 1000000) / 100000;
-	aPosTexU[3] = (g_nScore % 100000) / 10000;
-	aPosTexU[4] = (g_nScore % 10000) / 1000;
-	aPosTexU[5] = (g_nScore % 1000) / 100;
-	aPosTexU[6] = (g_nScore % 100) / 10;
-	aPosTexU[7] = (g_nScore % 10) / 1;
+	aPosTexU[0] = g_nScore.nScore / 10000000;
+	aPosTexU[1] = (g_nScore.nScore % 10000000) / 1000000;
+	aPosTexU[2] = (g_nScore.nScore % 1000000) / 100000;
+	aPosTexU[3] = (g_nScore.nScore % 100000) / 10000;
+	aPosTexU[4] = (g_nScore.nScore % 10000) / 1000;
+	aPosTexU[5] = (g_nScore.nScore % 1000) / 100;
+	aPosTexU[6] = (g_nScore.nScore % 100) / 10;
+	aPosTexU[7] = (g_nScore.nScore % 10) / 1;
 
 	VERTEX_2D*pVtx; //頂点へのポインタ	
 
@@ -195,16 +195,16 @@ void AddScore(int nValse)
 	int nCntScore;
 	int aPosTexU[8]; //各桁の数字を格納
 
-	g_nScore += nValse;
+	g_nScore.nScore += nValse;
 
-	aPosTexU[0] = g_nScore / 10000000;
-	aPosTexU[1] = (g_nScore % 10000000) / 1000000;
-	aPosTexU[2] = (g_nScore % 1000000) / 100000;
-	aPosTexU[3] = (g_nScore % 100000) / 10000;
-	aPosTexU[4] = (g_nScore % 10000) / 1000;
-	aPosTexU[5] = (g_nScore % 1000) / 100;
-	aPosTexU[6] = (g_nScore % 100) / 10;
-	aPosTexU[7] = (g_nScore % 10) / 1;
+	aPosTexU[0] = g_nScore.nScore / 10000000;
+	aPosTexU[1] = (g_nScore.nScore % 10000000) / 1000000;
+	aPosTexU[2] = (g_nScore.nScore % 1000000) / 100000;
+	aPosTexU[3] = (g_nScore.nScore % 100000) / 10000;
+	aPosTexU[4] = (g_nScore.nScore % 10000) / 1000;
+	aPosTexU[5] = (g_nScore.nScore % 1000) / 100;
+	aPosTexU[6] = (g_nScore.nScore % 100) / 10;
+	aPosTexU[7] = (g_nScore.nScore % 10) / 1;
 
 	VERTEX_2D*pVtx; //頂点へのポインタ
 
@@ -229,7 +229,7 @@ void AddScore(int nValse)
 }
 
 //スコアの取得
-int GetScore(void)
+SCORE GetScore(void)
 {
 	return g_nScore;
 }
