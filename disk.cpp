@@ -151,10 +151,10 @@ void UpdateDisk(void)
 				WallBounce(&g_aDisk[nCntDisk].pos, &g_aDisk[nCntDisk].lastPos, &g_aDisk[nCntDisk].move, &g_aDisk[nCntDisk].acc, 10.0f);
 			}
 
-			g_aDisk[nCntDisk].lastPos = g_aDisk[nCntDisk].pos;				//前回の位置の更新
-
 			//ゴールとの当たり判定(pos, lastPos, fWidth, fHeight)
 			ColisionGoal(&g_aDisk[nCntDisk].pos, &g_aDisk[nCntDisk].lastPos, 10.0f, 10.0f);
+
+			g_aDisk[nCntDisk].lastPos = g_aDisk[nCntDisk].pos;				//前回の位置の更新
 	
 			VERTEX_2D *pVtx = NULL;					//頂点情報へのポインタ
 
