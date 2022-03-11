@@ -37,7 +37,7 @@ void InitStage(void)
 	D3DXCreateTextureFromFile
 	(
 		pDevice,
-		"data\\tanimoto\\TEXTURE\\block004.jpg",	//テクスチャのファイル名
+		"data\\TEXTURE\\stage\\block004.jpg",	//テクスチャのファイル名
 		&s_pTextureStage[STAGE_TYPE_FRONT]
 	);
 
@@ -45,7 +45,7 @@ void InitStage(void)
 	D3DXCreateTextureFromFile
 	(
 		pDevice,
-		"data\\tanimoto\\TEXTURE\\block005.jpg",	//テクスチャのファイル名
+		"data\\TEXTURE\\stage\\block005.jpg",	//テクスチャのファイル名
 		&s_pTextureStage[STAGE_TYPE_BACK]
 	);
 
@@ -53,7 +53,7 @@ void InitStage(void)
 	D3DXCreateTextureFromFile
 	(
 		pDevice,
-		"data\\tanimoto\\TEXTURE\\block005.jpg",	//テクスチャのファイル名
+		"data\\TEXTURE\\stage\\block005.jpg",	//テクスチャのファイル名
 		&s_pTextureStage[STAGE_TYPE_NET]
 	);
 
