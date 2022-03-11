@@ -96,7 +96,7 @@ void UpdatePlayer(void)
 		JumpPlayer(nIdxPlayer);			// 跳躍
 		MovePlayer(nIdxPlayer);			// 移動
 		ThrowPlayer(nIdxPlayer);		// 投げる
-//		CatchDiscPlayer(nIdxPlayer);	// 受け取る
+		CatchDiscPlayer(nIdxPlayer);	// 受け取る
 
 		VERTEX_2D *pVtx;	// 頂点情報へのポインタ
 
@@ -150,6 +150,7 @@ void MovePlayer(int nIdxPlayer)
 
 	if (pPlayer->bHaveDisk)
 	{
+		pPlayer->move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 		return;
 	}
 
@@ -248,10 +249,10 @@ void ThrowPlayer(int nIdxPlayer)
 {
 	Player *pPlayer = &s_player[nIdxPlayer];
 
-	//if (!pPlayer->bHaveDisk)
-	//{
-	//	return;
-	//}
+	if (!pPlayer->bHaveDisk)
+	{
+		return;
+	}
 
 	D3DXVECTOR3 inputVec(0.0f, 0.0f, 0.0f);	// 入力方向
 	float fVecLength = 0.0f;				// 入力の長さ
@@ -289,21 +290,46 @@ void ThrowPlayer(int nIdxPlayer)
 	}
 	else
 	{ // キーボード入力
-		if (GetKeyboardPress(DIK_W))
+		switch (nIdxPlayer)
 		{
-			inputVec.y -= 1.0f;
-		}
-		if (GetKeyboardPress(DIK_A))
-		{
-			inputVec.x -= 1.0f;
-		}
-		if (GetKeyboardPress(DIK_S))
-		{
-			inputVec.y += 1.0f;
-		}
-		if (GetKeyboardPress(DIK_D))
-		{
-			inputVec.x += 1.0f;
+		case 0:
+			if (GetKeyboardPress(DIK_W))
+			{
+				inputVec.y -= 1.0f;
+			}
+			if (GetKeyboardPress(DIK_A))
+			{
+				inputVec.x -= 1.0f;
+			}
+			if (GetKeyboardPress(DIK_S))
+			{
+				inputVec.y += 1.0f;
+			}
+			if (GetKeyboardPress(DIK_D))
+			{
+				inputVec.x += 1.0f;
+			}
+			break;
+		case 1:
+			if (GetKeyboardPress(DIK_UP))
+			{
+				inputVec.y -= 1.0f;
+			}
+			if (GetKeyboardPress(DIK_LEFT))
+			{
+				inputVec.x -= 1.0f;
+			}
+			if (GetKeyboardPress(DIK_DOWN))
+			{
+				inputVec.y += 1.0f;
+			}
+			if (GetKeyboardPress(DIK_RIGHT))
+			{
+				inputVec.x += 1.0f;
+			}
+			break;
+		default:
+			break;
 		}
 
 		if (GetKeyboardPress(DIK_RETURN))
@@ -327,7 +353,7 @@ void CatchDiscPlayer(int nIdxPlayer)
 	Player *pPlayer = &s_player[nIdxPlayer];
 	Disk* pDisk = GetDisk();
 
-	if (CollisionCircle(pPlayer->pos, pPlayer->fSize, pDisk->pos, pDisk->fSize))
+	if (CollisionCircle(pPlayer->pos, pPlayer->fSize, pDisk->pos, pDisk->fSize) && pDisk->nPlayer != nIdxPlayer)
 	{
 		pDisk->bUse = false;
 		pPlayer->bHaveDisk = true;
@@ -354,6 +380,11 @@ void SetPlayer(const D3DXVECTOR3& pos, PLAYERTYPE type)
 		ZeroMemory(&s_player[i],sizeof(s_player[0]));
 
 		s_player[i] = s_playerType[type];
+
+		if (i == 0)
+		{
+			pPlayer->bHaveDisk = true;
+		}
 
 		pPlayer->pos = pos; 			// 位置を初期化
 		pPlayer->fSize = PLAYER_SIZ;	// プレイヤーの大きさ
