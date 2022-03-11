@@ -22,7 +22,7 @@
 static LPDIRECT3DTEXTURE9		s_pTextureStage[MAX_IMAGE_STAGE] = {};	//テクスチャへのポインタ
 static LPDIRECT3DVERTEXBUFFER9	s_pVtxBuffStage = NULL;					//頂点バッファへのポインタ
 static STAGE s_aStage[MAX_STAGE];										//ステージの情報
-static bool s_bFell;		//落ちた判定
+static bool s_bFell;			//落ちた判定
 static float s_fFellCounter;	//落ちた時間
 
 //=========================================
@@ -163,9 +163,6 @@ void InitStage(void)
 	//頂点バッファをアンロックする
 	s_pVtxBuffStage->Unlock();
 
-	s_bFell = false;
-	s_fFellCounter = 0;
-
 	SetWall(D3DXVECTOR3(SCREEN_WIDTH / 2, 100.0f, 0.0f), STAGE_WIDTH, 10.0f, 0.0f);						//壁(上側)
 	SetWall(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT - 100.0f, 0.0f), STAGE_WIDTH, 10.0f, D3DX_PI);	//壁(下側)
 
@@ -250,7 +247,8 @@ void UpdateStage(void)
 		s_fFellCounter = 0;
 	}
 
-	if (s_fFellCounter >= FALL_DISK_DELETE)
+	//ディスクを消す時間
+	if (s_fFellCounter >= DISK_DELETE)
 	{
 		pDisk->bUse = false;
 	}
