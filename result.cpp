@@ -12,8 +12,8 @@
 //マクロ定義
 //**************************************************
 #define MAX_WIN_LOSE		(2)			//「勝利」「敗北」
-#define WIN_LOSE_WIDTH		(100.0f)	//勝敗UIの幅
-#define WIN_LOSE_HEIGHT		(70.0f)		//勝敗UIの高さ
+#define WIN_LOSE_WIDTH		(160.0f)	//勝敗UIの幅
+#define WIN_LOSE_HEIGHT		(90.0f)		//勝敗UIの高さ
 #define LEFTSIDE_POS_X		(300.0f)	//左側のUIのX座標
 #define LEFTSIDE_POS_Y		(100.0f)	//左側のUIのY座標
 #define RIGHTSIDE_POS_X		(900.0f)	//右側のUIのX座標
@@ -46,7 +46,7 @@ void InitResult(void)
 								&s_apTexture[1]);
 
 	//頂点バッファの生成
-	pDevice->CreateVertexBuffer(sizeof(VERTEX_2D) * 4 * 2,
+	pDevice->CreateVertexBuffer(sizeof(VERTEX_2D) * 4 * MAX_WIN_LOSE,
 								D3DUSAGE_WRITEONLY,
 								FVF_VERTEX_2D,
 								D3DPOOL_MANAGED,
@@ -68,6 +68,7 @@ void InitResult(void)
 		{//2P側(右)
 			posWinLose = D3DXVECTOR3(RIGHTSIDE_POS_X, RIGHTSIDE_POS_Y, 0.0f);
 		}
+
 		//頂点座標の設定
 		float fLeft		= (posWinLose.x - WIN_LOSE_WIDTH);
 		float fRight	= (posWinLose.x + WIN_LOSE_WIDTH);
