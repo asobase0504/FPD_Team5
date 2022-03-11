@@ -22,7 +22,7 @@
 #define NUM_PLAYER		(2)								// プレイヤーの数
 #define PLAYER_FILE		"data/player.txt"				// プレイヤー読み込みファイル
 #define PLAYER_TEX		"data/TEXTURE/player00.png"		// プレイヤーのテクスチャ
-#define PLAYER_SIZ		(35.0f)							// プレイヤーの幅
+#define PLAYER_SIZ		(45.0f)							// プレイヤーの大きさ
 #define ZERO_VECTOR		(D3DXVECTOR3(0.0f, 0.0f, 0.0f))
 
 //-----------------------------------------
@@ -174,6 +174,11 @@ void MovePlayer(int nIdxPlayer)
 				moveLength = 1.0f;
 			}
 		}
+
+		if (GetJoypadTrigger(JOYKEY_A))
+		{
+			pPlayer->bUseSliding = true;
+		}
 	}
 	else
 	{ // キーボード入力
@@ -228,13 +233,35 @@ void MovePlayer(int nIdxPlayer)
 		}
 	}
 
-	if (moveLength > 0.0f)
-	{
-		pPlayer->move = inputMove * pPlayer->fMoveSpeed;
-		D3DXVec3Normalize(&inputMove, &inputMove);	// 長さの正規化
+	if (pPlayer->bUseSliding)
+	{	// スライディング
+		if (pPlayer->fSlidingRigorCnt == 0)
+		{
+			D3DXVec3Normalize(&inputMove, &inputMove);	// 長さの正規化
+			pPlayer->move = inputMove * pPlayer->fSlidingVolume;
+			pPlayer->fSlidingRigorCnt++;
+		}
+		else if (pPlayer->fSlidingRigorCnt >= pPlayer->fSlidingRigorMax)
+		{
+			pPlayer->fSlidingRigorCnt = 0;
+			pPlayer->bUseSliding = false;
+		}
+		else
+		{
+			pPlayer->move -= pPlayer->move * 0.55f;
+			pPlayer->fSlidingRigorCnt++;
+		}
 	}
+	else
+	{
+		if (moveLength > 0.0f)
+		{
+			pPlayer->move = inputMove * pPlayer->fMoveSpeed;
+			D3DXVec3Normalize(&inputMove, &inputMove);	// 長さの正規化
+		}
 
-	pPlayer->move = pPlayer->move * pPlayer->fAttenuationMoveSpead;
+		pPlayer->move = pPlayer->move * pPlayer->fAttenuationMoveSpead;
+	}
 }
 
 //=========================================
@@ -271,11 +298,11 @@ void ThrowPlayer(int nIdxPlayer)
 
 		fVecLength = D3DXVec3Length(&inputVec);
 
-		if (fVecLength >= 2.0f)
+		if (fVecLength >= 3.0f)
 		{
 			if (!s_bCurveInput)
 			{
-				moveCurve.y = inputVec.y * 1.075f;
+				moveCurve.y = -inputVec.y * pPlayer->fThrowCurvePower;
 			}
 			s_bCurveInput = true;
 		}
@@ -509,10 +536,25 @@ void LoadPlayer(void)
 						fscanf(pFile, "%s", s_aString);	// =の読み込み
 						fscanf(pFile, "%f", &s_playerType[nNumType].fAttenuationMoveSpead);
 					}
-					else if (strcmp(s_aString, "POWER") == 0)
+					else if (strcmp(s_aString, "THROW_POWER") == 0)
 					{
 						fscanf(pFile, "%s", s_aString);	// =の読み込み
 						fscanf(pFile, "%f", &s_playerType[nNumType].fThrowPower);
+					}
+					else if (strcmp(s_aString, "THROW_CURVE") == 0)
+					{
+						fscanf(pFile, "%s", s_aString);	// =の読み込み
+						fscanf(pFile, "%f", &s_playerType[nNumType].fThrowCurvePower);
+					}
+					else if (strcmp(s_aString, "SLIDING_VOLUME") == 0)
+					{
+						fscanf(pFile, "%s", s_aString);	// =の読み込み
+						fscanf(pFile, "%f", &s_playerType[nNumType].fSlidingVolume);
+					}
+					else if (strcmp(s_aString, "SLIDING_RIGOR") == 0)
+					{
+						fscanf(pFile, "%s", s_aString);	// =の読み込み
+						fscanf(pFile, "%f", &s_playerType[nNumType].fSlidingRigorMax);
 					}
 				}
 
