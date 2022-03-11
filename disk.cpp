@@ -10,6 +10,7 @@
 //====================================
 #include "disk.h"
 #include "wall.h"
+#include <time.h>
 
 //====================================
 //グローバル変数
@@ -25,6 +26,7 @@ void InitDisk(void)
 {
 	LPDIRECT3DDEVICE9 pDevice = GetDevice();		//デバイス情報の取得
 	VERTEX_2D*pVtx;									//頂点情報へのポインタ
+	srand((unsigned)time(NULL));
 
 	//テクスチャの読み込み
 	D3DXCreateTextureFromFile(pDevice,
@@ -74,7 +76,7 @@ void InitDisk(void)
 	//頂点バッファをアンロックする
 	g_pVtxBuffDisk->Unlock();
 
-	SetDisk(D3DXVECTOR3(0.0f, 500.0f, 0.0f), D3DXVECTOR3(7.0f, -7.0f, 0.0f), D3DXVECTOR3(0.0f, -0.2f, 0.0f), DISK_TYPE_SPECIAL_0, 20.0f);
+	SetDisk(D3DXVECTOR3(0.0f, 500.0f, 0.0f), D3DXVECTOR3(5.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), DISK_TYPE_LOB, 0, 20.0f);
 }
 
 //====================================
@@ -134,6 +136,12 @@ void UpdateDisk(void)
 				UpdateSpecialDisk(nCntDisk, 0);
 
 				break;
+
+			case DISK_TYPE_SPECIAL_1:
+
+				UpdateSpecialDisk(nCntDisk, 0);
+
+				break;
 			}
 
 			if (g_aDisk[nCntDisk].bBounce == true)
@@ -189,7 +197,7 @@ void DrawDisk(void)
 //====================================
 //ディスクの設定処理
 //====================================
-void SetDisk(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 acc, DISK_TYPE type, float size)
+void SetDisk(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 acc, DISK_TYPE type, int nPlayer, float size)
 {
 	VERTEX_2D *pVtx = NULL;
 
@@ -207,6 +215,7 @@ void SetDisk(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 acc, DISK_TYPE type,
 			g_aDisk[nCntDisk].acc = acc;				//ディスクの加速の設定
 			g_aDisk[nCntDisk].type = type;				//ディスクの種類の設定
 			g_aDisk[nCntDisk].nCntPhase = 0;			//ディスクの必殺技用のカウンターの設定
+			g_aDisk[nCntDisk].nPlayer = nPlayer;		//ディスクを投げたプレイヤーのインデックスの設定
 
 			//頂点座標の設定
 			pVtx[(nCntDisk * 4) + 0].pos = D3DXVECTOR3(pos.x - (size * 0.5f), pos.y - (size * 0.5f), 0.0f);
@@ -265,46 +274,118 @@ void UpdateSpecialDisk(int nCntDisk, int nPlayer)
 
 	fChangePoint = SCREEN_WIDTH * (0.7f);
 
-	switch (g_aDisk[nCntDisk].nCntPhase)
+	switch (g_aDisk[nCntDisk].type)
 	{
-	default:
-		break;
+	//====================================================================================================================================
+	case DISK_TYPE_SPECIAL_0:
 
-	case 0:
-
-		bImpact = SpecialWallBounce(&g_aDisk[nCntDisk].pos, &g_aDisk[nCntDisk].lastPos, &g_aDisk[nCntDisk].move, 10.0f);
-
-		if (bImpact == true)
+		switch (g_aDisk[nCntDisk].nCntPhase)
 		{
-			g_aDisk[nCntDisk].nCntPhase++;
-			g_aDisk[nCntDisk].move = D3DXVECTOR3(15.0f, 0.0f, 0.0f);
-			g_aDisk[nCntDisk].acc = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		default:
+			break;
+
+		case 0:
+
+			bImpact = SpecialWallBounce(&g_aDisk[nCntDisk].pos, &g_aDisk[nCntDisk].lastPos, &g_aDisk[nCntDisk].move, 10.0f);
+
+			if (bImpact == true)
+			{
+				g_aDisk[nCntDisk].nCntPhase++;
+				g_aDisk[nCntDisk].move = D3DXVECTOR3(15.0f, 0.0f, 0.0f);
+				g_aDisk[nCntDisk].acc = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+			}
+
+			break;
+
+		case 1:
+
+			fChangePoint = SCREEN_WIDTH * (0.7f);
+
+			if (g_aDisk[nCntDisk].pos.x >= fChangePoint)
+			{
+				g_aDisk[nCntDisk].nCntPhase++;
+				g_aDisk[nCntDisk].move = D3DXVECTOR3(-0.5f, 15.0f, 0.0f);
+				g_aDisk[nCntDisk].acc = D3DXVECTOR3(0.3f, 0.0f, 0.0f);
+			}
+
+			break;
+
+		case 2:
+
+			bImpact = SpecialWallBounce(&g_aDisk[nCntDisk].pos, &g_aDisk[nCntDisk].lastPos, &g_aDisk[nCntDisk].move, 10.0f);
+
+			if (bImpact == true)
+			{
+				g_aDisk[nCntDisk].nCntPhase++;
+				g_aDisk[nCntDisk].move = D3DXVECTOR3(15.0f, -6.0f, 0.0f);
+				g_aDisk[nCntDisk].acc = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+			}
+
+			break;
 		}
 
 		break;
+		//====================================================================================================================================
 
-	case 1:
+	case DISK_TYPE_SPECIAL_1:
 
-		if (g_aDisk[nCntDisk].pos.x >= fChangePoint)
+		switch (g_aDisk[nCntDisk].nCntPhase)
 		{
-			g_aDisk[nCntDisk].nCntPhase++;
-			g_aDisk[nCntDisk].move = D3DXVECTOR3(-0.5f, 15.0f, 0.0f);
-			g_aDisk[nCntDisk].acc = D3DXVECTOR3(0.3f, 0.0f, 0.0f);
+		case 0:
+
+			fChangePoint = SCREEN_WIDTH * (0.3f);
+
+			if (g_aDisk[nCntDisk].pos.x >= fChangePoint)
+			{
+				g_aDisk[nCntDisk].nCntPhase++;
+				g_aDisk[nCntDisk].move = D3DXVECTOR3(0.0f, -15.0f, 0.0f);
+				g_aDisk[nCntDisk].acc = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+			}
+
+			break;
+
+		case 1:
+
+			bImpact = SpecialWallBounce(&g_aDisk[nCntDisk].pos, &g_aDisk[nCntDisk].lastPos, &g_aDisk[nCntDisk].move, 10.0f);
+
+			if (bImpact == true)
+			{
+				g_aDisk[nCntDisk].nCntPhase++;
+				g_aDisk[nCntDisk].move = D3DXVECTOR3(15.0f, 0.0f, 0.0f);
+				g_aDisk[nCntDisk].acc = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+				int a = 0;
+			}
+
+			break;
+
+		case 2:
+
+			fChangePoint = SCREEN_WIDTH * (0.7f);
+
+			if (g_aDisk[nCntDisk].pos.x >= fChangePoint)
+			{
+				g_aDisk[nCntDisk].nCntPhase++;
+				g_aDisk[nCntDisk].move = D3DXVECTOR3(0.0f, 10.0f, 0.0f);
+				g_aDisk[nCntDisk].acc = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+			}
+
+			break;
+
+		case 3:
+
+			fChangePoint = 400.0f + (rand() % 201);
+
+			if (g_aDisk[nCntDisk].pos.y >= fChangePoint)
+			{
+				g_aDisk[nCntDisk].nCntPhase++;
+				g_aDisk[nCntDisk].move = D3DXVECTOR3(15.0f, 00.0f, 0.0f);
+				g_aDisk[nCntDisk].acc = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+			}
+
+			break;
 		}
 
 		break;
-
-	case 2:
-
-		bImpact = SpecialWallBounce(&g_aDisk[nCntDisk].pos, &g_aDisk[nCntDisk].lastPos, &g_aDisk[nCntDisk].move, 10.0f);
-
-		if (bImpact == true)
-		{
-			g_aDisk[nCntDisk].nCntPhase++;
-			g_aDisk[nCntDisk].move = D3DXVECTOR3(15.0f, -6.0f, 0.0f);
-			g_aDisk[nCntDisk].acc = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-		}
-
-		break;
+		//====================================================================================================================================
 	}
 }
