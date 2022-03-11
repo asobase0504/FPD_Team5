@@ -29,5 +29,6 @@ void UpdateShadow(void);
 void DrawShadow(void);
 int SetShadow(D3DXVECTOR3 pos, float size);
 void SetPositionShadow(int nIdxShadow, D3DXVECTOR3 pos);
+Shadow *GetShadow(void);
 
 #endif#pragma once
