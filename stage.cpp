@@ -15,6 +15,7 @@
 #include "goal.h"
 #include "wall.h"
 #include "disk.h"
+#include "shadow.h"
 
 //------------------------------------
 // スタティック変数
@@ -22,7 +23,7 @@
 static LPDIRECT3DTEXTURE9		s_pTextureStage[MAX_IMAGE_STAGE] = {};	//テクスチャへのポインタ
 static LPDIRECT3DVERTEXBUFFER9	s_pVtxBuffStage = NULL;					//頂点バッファへのポインタ
 static STAGE s_aStage[MAX_STAGE];										//ステージの情報
-static bool s_bFell;		//落ちた判定
+static bool s_bFell;			//落ちた判定
 static float s_fFellCounter;	//落ちた時間
 
 //=========================================
@@ -36,7 +37,7 @@ void InitStage(void)
 	D3DXCreateTextureFromFile
 	(
 		pDevice,
-		"data\\tanimoto\\TEXTURE\\block004.jpg",	//テクスチャのファイル名
+		"data\\TEXTURE\\stage\\block004.jpg",	//テクスチャのファイル名
 		&s_pTextureStage[STAGE_TYPE_FRONT]
 	);
 
@@ -44,7 +45,7 @@ void InitStage(void)
 	D3DXCreateTextureFromFile
 	(
 		pDevice,
-		"data\\tanimoto\\TEXTURE\\block005.jpg",	//テクスチャのファイル名
+		"data\\TEXTURE\\stage\\block005.jpg",	//テクスチャのファイル名
 		&s_pTextureStage[STAGE_TYPE_BACK]
 	);
 
@@ -52,9 +53,10 @@ void InitStage(void)
 	D3DXCreateTextureFromFile
 	(
 		pDevice,
-		"data\\tanimoto\\TEXTURE\\block005.jpg",	//テクスチャのファイル名
+		"data\\TEXTURE\\stage\\block005.jpg",	//テクスチャのファイル名
 		&s_pTextureStage[STAGE_TYPE_NET]
 	);
+
 
 	//テクスチャーの読み込み
 	D3DXCreateTextureFromFile
@@ -163,9 +165,6 @@ void InitStage(void)
 	//頂点バッファをアンロックする
 	s_pVtxBuffStage->Unlock();
 
-	s_bFell = false;
-	s_fFellCounter = 0;
-
 	SetWall(D3DXVECTOR3(SCREEN_WIDTH / 2, 100.0f, 0.0f), STAGE_WIDTH, 10.0f, 0.0f);						//壁(上側)
 	SetWall(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT - 100.0f, 0.0f), STAGE_WIDTH, 10.0f, D3DX_PI);	//壁(下側)
 
@@ -230,9 +229,14 @@ void UpdateStage(void)
 	//頂点バッファをアンロックする
 	s_pVtxBuffStage->Unlock();
 
+	//ディスクが動かない場合
 	if (pDisk->move.x == 0.0f && pDisk->move.y == 0.0f)
 	{
 		s_bFell = true;
+	}
+	else
+	{
+		s_bFell = false;
 	}
 
 	//ディスクが落ちた場合
@@ -243,6 +247,15 @@ void UpdateStage(void)
 	else
 	{
 		s_fFellCounter = 0;
+	}
+
+	//ディスクを消す時間
+	if (s_fFellCounter >= DISK_DELETE)
+	{
+		Shadow* pShadow = GetShadow();
+
+		pDisk->bUse = false;
+		pShadow[pDisk->nIdxShadow].bUse = false;
 	}
 
 	UpdateGoal();

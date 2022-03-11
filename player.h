@@ -48,11 +48,16 @@ typedef struct
 	D3DXVECTOR3 pos;					// 位置
 	D3DXVECTOR3 move;					// 移動量
 	float fSize;						// 大きさ
+	float fThrowCurvePower;				// 曲げて投げる力
 	float fThrowPower;					// 投げる力
 	float fMoveSpeed;					// 移動量
+	float fSlidingVolume;				// スライディング量
+	float fSlidingRigorCnt;				// スライディングの硬直時間のカウント
+	float fSlidingRigorMax;				// スライディングの硬直時間
 	float fAttenuationMoveSpead;		// 減衰値
 	JUMPSTATE jumpstate;				// 跳躍の状態
 	bool bHaveDisk;						// ディスクを所持しているか
+	bool bUseSliding;					// スライディング状態
 	bool bUse;							// 表示状態
 }Player;
 

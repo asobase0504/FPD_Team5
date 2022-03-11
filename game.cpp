@@ -16,6 +16,7 @@
 #include <stdio.h>
 #include "wall.h"
 #include "disk.h"
+#include "shadow.h"
 
 //------------------------------------
 // É}ÉNÉçíËã`
@@ -32,6 +33,7 @@ void InitGame(void)
 {
 	InitPlayer();
 	InitWall();
+	InitShadow();
 	InitDisk();
 	InitStage();
 }
@@ -43,6 +45,7 @@ void UninitGame(void)
 {
 	UninitPlayer();
 	UninitWall();
+	UninitShadow();
 	UninitDisk();
 	UninitStage();
 }
@@ -56,6 +59,7 @@ void UpdateGame(void)
 	UpdatePlayer();
 	UpdateWall();
 	UpdateDisk();
+	UpdateShadow();
 }
 
 //=========================================
@@ -63,8 +67,9 @@ void UpdateGame(void)
 //=========================================
 void DrawGame()
 {
+	DrawStage();
 	DrawPlayer();
 	DrawWall();
+	DrawShadow();
 	DrawDisk();
-	DrawStage();
 }

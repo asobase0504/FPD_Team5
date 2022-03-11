@@ -3,7 +3,7 @@
 // ゴール処理
 // Author Tanimoto_Kosuke
 //
-// Update 22/03/10
+// Update 22/03/11
 // 
 //=========================================
 //------------------------------------
@@ -13,6 +13,7 @@
 #include "main.h"
 #include <stdio.h>
 #include "disk.h"
+#include "stage.h"
 
 //------------------------------------
 // スタティック変数
@@ -33,14 +34,14 @@ void InitGoal(void)
 	D3DXCreateTextureFromFile
 	(
 		pDevice,
-		"data\\tanimoto\\TEXTURE\\block000.jpg",	//テクスチャのファイル名
+		"data\\TEXTURE\\goal\\block000.jpg",	//テクスチャのファイル名
 		&s_pTextureGoal[GOAL_TYPE_NORMAL]
 	);
 
 	D3DXCreateTextureFromFile
 	(
 		pDevice,
-		"data\\tanimoto\\TEXTURE\\block001.jpg",	//テクスチャのファイル名
+		"data\\TEXTURE\\goal\\block001.jpg",	//テクスチャのファイル名
 		&s_pTextureGoal[GOAL_TYPE_STRIKE]
 	);
 
@@ -174,8 +175,10 @@ void UninitGoal(void)
 void UpdateGoal(void)
 {
 	LPDIRECT3DDEVICE9 pDevice = GetDevice();	//デバイスへのポインタ
-
+	
 	VERTEX_2D *pVtx;				//頂点情報へのポインタ
+
+	Disk *pDisk = GetDisk();
 
 	//頂点バッファをロックし、頂点情報へのポインタを取得
 	s_pVtxBuffGoal->Lock(0, 0, (void**)&pVtx, 0);
@@ -262,42 +265,80 @@ void ColisionGoal(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pLastPos, float fWidth, float 
 		{
 			if (s_aGoal[nCntGoal].type == GOAL_TYPE_NORMAL)
 			{//3点ゴールの場合
-				if (pPos->y > s_aGoal[nCntGoal].pos.y - (GOAL_HEIGHT / 2)
-					&& pPos->y < s_aGoal[nCntGoal].pos.y + (GOAL_HEIGHT / 2)
-					&& pPos->x + fWidth / 2 > s_aGoal[nCntGoal].pos.x 
-					&& pPos->x - fWidth / 2 < s_aGoal[nCntGoal].pos.x)
+				//D3DXVECTOR3 &seg1Start, D3DXVECTOR3 &seg1Vec, D3DXVECTOR3 &seg2Start, D3DXVECTOR3 &seg2Vec
+				if (ColSegmentsGoal(*pPos, *pPos - *pLastPos,
+					s_aGoal[nCntGoal].pos - D3DXVECTOR3(0.0f, (GOAL_HEIGHT / 2), 0.0f),
+					(s_aGoal[nCntGoal].pos + D3DXVECTOR3(0.0f, (GOAL_HEIGHT / 2), 0.0f)) - (s_aGoal[nCntGoal].pos - D3DXVECTOR3(0.0f, (GOAL_HEIGHT / 2), 0.0f))) == true)
 				{
-					if (pPos->x + fWidth / 2 - 1 <= s_aGoal[nCntGoal].pos.x)
-					{
-						pDisk->bUse = false;
-					}
-					else if (pPos->x - fWidth / 2 + 1 >= s_aGoal[nCntGoal].pos.x)
-					{
-						pDisk->bUse = false;
-					}
+					pDisk->move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 				}
 			}
 			if(s_aGoal[nCntGoal].type == GOAL_TYPE_STRIKE)
 			{//5点ゴールの場合
-				if (pPos->y > s_aGoal[nCntGoal].pos.y - (STRIKE_GOAL_HEIGHT / 2)
-					&& pPos->y < s_aGoal[nCntGoal].pos.y + (STRIKE_GOAL_HEIGHT / 2)
-					&& pPos->x + fWidth / 2 > s_aGoal[nCntGoal].pos.x
-					&& pPos->x - fWidth / 2 < s_aGoal[nCntGoal].pos.x)
+
+				if (ColSegmentsGoal(*pPos, *pPos - *pLastPos,
+					s_aGoal[nCntGoal].pos - D3DXVECTOR3(0.0f, (STRIKE_GOAL_HEIGHT / 2), 0.0f),
+					(s_aGoal[nCntGoal].pos + D3DXVECTOR3(0.0f, (STRIKE_GOAL_HEIGHT / 2), 0.0f)) - (s_aGoal[nCntGoal].pos - D3DXVECTOR3(0.0f, (STRIKE_GOAL_HEIGHT / 2), 0.0f))) == true)
 				{
-					if (pPos->x + fWidth / 2 - 1 <= s_aGoal[nCntGoal].pos.x)
-					{
-						pDisk->bUse = false;
-					}
-					else if (pPos->x - fWidth / 2 + 1 >= s_aGoal[nCntGoal].pos.x)
-					{
-						pDisk->bUse = false;
-					}
+					pDisk->move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 				}
+
+				//if (pPos->y > s_aGoal[nCntGoal].pos.y - (STRIKE_GOAL_HEIGHT / 2)
+				//	&& pPos->y < s_aGoal[nCntGoal].pos.y + (STRIKE_GOAL_HEIGHT / 2))
+				//{
+				//	if (pPos->x + fWidth / 2 >= s_aGoal[nCntGoal].pos.x 
+				//		&& pLastPos->x + fWidth / 2 - 1 < s_aGoal[nCntGoal].pos.x)
+				//	{
+				//		pDisk->move = D3DXVECTOR3(0.0f,0.0f,0.0f);
+				//	}
+				//	if (pPos->x - fWidth / 2 <= s_aGoal[nCntGoal].pos.x
+				//		&& pLastPos->x - fWidth / 2 + 1 > s_aGoal[nCntGoal].pos.x)
+				//	{
+				//		pDisk->move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+				//	}
+				//}
 			}
 		}
 	}
 	//頂点バッファをアンロックする
 	s_pVtxBuffGoal->Unlock();
+}
+
+//============================================================================
+//ゴールの外積処理
+//============================================================================
+bool ColSegmentsGoal(D3DXVECTOR3 &seg1Start, D3DXVECTOR3 &seg1Vec, D3DXVECTOR3 &seg2Start, D3DXVECTOR3 &seg2Vec)
+{
+	D3DXVECTOR3 vec = seg2Start - seg1Start;
+	float Crs_v1_v2 = Vec3CrossGoal(&seg1Vec, &seg2Vec);
+
+	if (Crs_v1_v2 == 0.0f) {
+		// 平行状態
+		return false;
+	}
+
+	float Crs_v_v1 = Vec3CrossGoal(&vec, &seg1Vec);
+	float Crs_v_v2 = Vec3CrossGoal(&vec, &seg2Vec);
+
+	float t1 = Crs_v_v2 / Crs_v1_v2;
+	float t2 = Crs_v_v1 / Crs_v1_v2;
+
+	float eps = 0.00001f;
+
+	if (t1 + eps < 0 || t1 - eps > 1 || t2 + eps < 0 || t2 - eps > 1) {
+		// 交差していない
+		return false;
+	}
+
+	return true;
+}
+
+//============================================================================
+//ゴールの外積処理
+//============================================================================
+float Vec3CrossGoal(D3DXVECTOR3* vec1, D3DXVECTOR3* vec2) 
+{
+	return (vec1->x * vec2->y) - (vec1->y * vec2->x);
 }
 
 //============================================================================

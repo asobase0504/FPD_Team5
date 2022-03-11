@@ -37,6 +37,7 @@ typedef struct
 	float fVerticalSpeed;					//上投げの移動量
 	int nCntPhase;							//必殺技用のカウンター
 	int nPlayer;							//ディスクを投げたプレイヤーのインデックス
+	int nIdxShadow;							//ディスクの影のインデックス
 	bool bBounce;							//壁に当たったら、反射するかどうか
 	bool bUse;								//使用されているかどうか
 }Disk;
@@ -48,6 +49,7 @@ void UpdateDisk(void);
 void DrawDisk(void);
 void SetDisk(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 acc, DISK_TYPE type, int nPlayer, float size);
 void UpdateSpecialDisk(int nCntDisk, int nPlayer);
+D3DXVECTOR3 SetLobSpeed(D3DXVECTOR3 pos, D3DXVECTOR3 move, int nCntDisk, float fHeight, float fVerticalSpeed);
 
 Disk *GetDisk(void);
 
