@@ -423,6 +423,7 @@ D3DXVECTOR3 SetLobSpeed(D3DXVECTOR3 pos, D3DXVECTOR3 move, int nCntDisk, float f
 	D3DXVECTOR3 newSpeed = move;
 	D3DXVECTOR3 lastPos = pos;
 	D3DXVECTOR3 endPos = pos;
+	D3DXVECTOR3 newPos;
 	D3DXVECTOR3 initialSpeedDir = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	D3DXVECTOR3 initialSpeedDirNor;
 	int dTime = 0;
@@ -430,7 +431,7 @@ D3DXVECTOR3 SetLobSpeed(D3DXVECTOR3 pos, D3DXVECTOR3 move, int nCntDisk, float f
 	while (fHeight > 0.0f)
 	{
 		fHeight += fVerticalSpeed;
-		fVerticalSpeed -= 0.5f;
+		fVerticalSpeed -= 0.05f;
 		dTime++;
 		endPos += move;
 	}
@@ -448,7 +449,13 @@ D3DXVECTOR3 SetLobSpeed(D3DXVECTOR3 pos, D3DXVECTOR3 move, int nCntDisk, float f
 		float fDot = D3DXVec3Dot(&xDir, &initialSpeedDir);
 		float fLenght = sqrtf(((postImpact.x * postImpact.x) + (postImpact.y * postImpact.y)));
 
-		newSpeed = pos + (xDir * (fDot * fLenght));
+		newPos = endPos + (xDir * (fDot * fLenght));
+		newSpeed = newPos - lastPos;
+
+		D3DXVec3Normalize(&newSpeed, &newSpeed);
+
+		fLenght = sqrtf(((move.x * move.x) + (move.y * move.y)));
+		newSpeed *= fLenght;
 	}
 
 	return newSpeed;
