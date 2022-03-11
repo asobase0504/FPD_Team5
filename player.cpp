@@ -19,7 +19,6 @@
 // マクロ定義
 //-----------------------------------------
 #define NUM_PLAYER		(2)								// プレイヤーの数
-#define NUM_TYPE_PLAYER	(25)							// プレイヤーの種類
 #define PLAYER_FILE		"data/player.txt"				// プレイヤー読み込みファイル
 #define PLAYER_TEX		"data/TEXTURE/player00.png"		// プレイヤーのテクスチャ
 #define PLAYER_SIZ		(35.0f)							// プレイヤーの幅
@@ -28,7 +27,7 @@
 // スタティック変数
 //-----------------------------------------
 static Player s_player[NUM_PLAYER] = {};
-static Player s_playerType[NUM_TYPE_PLAYER] = {};
+static Player s_playerType[PLAYERTYPE_MAX] = {};
 static D3DXVECTOR3 moveCurve;
 static bool s_bCurveInput;
 
@@ -97,7 +96,7 @@ void UpdatePlayer(void)
 		JumpPlayer(nIdxPlayer);			// 跳躍
 		MovePlayer(nIdxPlayer);			// 移動
 		ThrowPlayer(nIdxPlayer);		// 投げる
-		CatchDiscPlayer(nIdxPlayer);	// 受け取る
+//		CatchDiscPlayer(nIdxPlayer);	// 受け取る
 
 		VERTEX_2D *pVtx;	// 頂点情報へのポインタ
 
@@ -120,11 +119,8 @@ void UpdatePlayer(void)
 //=========================================
 void DrawPlayer(void)
 {
-	LPDIRECT3DDEVICE9 pDevice;	// デバイスへのポイント
+	LPDIRECT3DDEVICE9 pDevice = GetDevice();;	// デバイスへのポイント
 	Player *pPlayer = GetPlayer();
-
-	// デバイスの取得
-	pDevice = GetDevice();
 
 	for (int i = 0; i < NUM_PLAYER; i++, pPlayer++)
 	{
@@ -151,6 +147,12 @@ void DrawPlayer(void)
 void MovePlayer(int nIdxPlayer)
 {
 	Player *pPlayer = &s_player[nIdxPlayer];
+
+	if (pPlayer->bHaveDisk)
+	{
+		return;
+	}
+
 	D3DXVECTOR3 inputMove(0.0f, 0.0f, 0.0f);	// 入力方向
 	float moveLength = 0.0f;					// 入力の長さ
 
@@ -170,34 +172,64 @@ void MovePlayer(int nIdxPlayer)
 	}
 	else
 	{ // キーボード入力
-		if (GetKeyboardPress(DIK_W))
+		switch (nIdxPlayer)
 		{
-			inputMove.y -= 1.0f;
-			moveLength = 1.0f;
-		}
-		if (GetKeyboardPress(DIK_A))
-		{
-			inputMove.x -= 1.0f;
-			moveLength = 1.0f;
-		}
-		if (GetKeyboardPress(DIK_S))
-		{
-			inputMove.y += 1.0f;
-			moveLength = 1.0f;
-		}
-		if (GetKeyboardPress(DIK_D))
-		{
-			inputMove.x += 1.0f;
-			moveLength = 1.0f;
+		case 0:
+			if (GetKeyboardPress(DIK_W))
+			{
+				inputMove.y -= 1.0f;
+				moveLength = 1.0f;
+			}
+			if (GetKeyboardPress(DIK_A))
+			{
+				inputMove.x -= 1.0f;
+				moveLength = 1.0f;
+			}
+			if (GetKeyboardPress(DIK_S))
+			{
+				inputMove.y += 1.0f;
+				moveLength = 1.0f;
+			}
+			if (GetKeyboardPress(DIK_D))
+			{
+				inputMove.x += 1.0f;
+				moveLength = 1.0f;
+			}
+			break;
+		case 1:
+			if (GetKeyboardPress(DIK_UP))
+			{
+				inputMove.y -= 1.0f;
+				moveLength = 1.0f;
+			}
+			if (GetKeyboardPress(DIK_LEFT))
+			{
+				inputMove.x -= 1.0f;
+				moveLength = 1.0f;
+			}
+			if (GetKeyboardPress(DIK_DOWN))
+			{
+				inputMove.y += 1.0f;
+				moveLength = 1.0f;
+			}
+			if (GetKeyboardPress(DIK_RIGHT))
+			{
+				inputMove.x += 1.0f;
+				moveLength = 1.0f;
+			}
+			break;
+		default:
+			break;
 		}
 	}
 
 	if (moveLength > 0.0f)
 	{
-		D3DXVec3Normalize(&inputMove, &inputMove);
+		pPlayer->move = inputMove * pPlayer->fMoveSpeed;
+		D3DXVec3Normalize(&inputMove, &inputMove);	// 長さの正規化
 	}
 
-	pPlayer->move = inputMove * 0.9f * pPlayer->fSpeed;
+	pPlayer->move = pPlayer->move * pPlayer->fAttenuationMoveSpead;
 }
 
 //=========================================
@@ -216,10 +248,10 @@ void ThrowPlayer(int nIdxPlayer)
 {
 	Player *pPlayer = &s_player[nIdxPlayer];
 
-	if (!pPlayer->bHaveDisk)
-	{
-		return;
-	}
+	//if (!pPlayer->bHaveDisk)
+	//{
+	//	return;
+	//}
 
 	D3DXVECTOR3 inputVec(0.0f, 0.0f, 0.0f);	// 入力方向
 	float fVecLength = 0.0f;				// 入力の長さ
@@ -230,12 +262,12 @@ void ThrowPlayer(int nIdxPlayer)
 
 		if (GetJoypadTrigger(JOYKEY_B, nIdxPlayer))
 		{
-			SetDisk(pPlayer->pos, inputVec * 1.25f, moveCurve, DISK_TYPE_NORMAL, 40.0f);
+			SetDisk(pPlayer->pos, inputVec * pPlayer->fThrowPower, moveCurve, DISK_TYPE_NORMAL, 40.0f);
 			pPlayer->bHaveDisk = false;
 		}
 		if (GetJoypadTrigger(JOYKEY_A, nIdxPlayer))
 		{
-			SetDisk(pPlayer->pos, inputVec * 1.25f, moveCurve, DISK_TYPE_LOB, 40.0f);
+			SetDisk(pPlayer->pos, inputVec * pPlayer->fThrowPower, moveCurve, DISK_TYPE_LOB, 40.0f);
 			pPlayer->bHaveDisk = false;
 		}
 
@@ -245,7 +277,7 @@ void ThrowPlayer(int nIdxPlayer)
 		{
 			if (!s_bCurveInput)
 			{
-				moveCurve = inputVec * 0.01f;
+				moveCurve.y = inputVec.y * 0.1f;
 			}
 			s_bCurveInput = true;
 		}
@@ -276,12 +308,12 @@ void ThrowPlayer(int nIdxPlayer)
 
 		if (GetKeyboardPress(DIK_RETURN))
 		{
-			SetDisk(pPlayer->pos, inputVec, D3DXVECTOR3(0.0f, 0.0f, 0.0f), DISK_TYPE_NORMAL, 40.0f);
+			SetDisk(pPlayer->pos, inputVec * pPlayer->fThrowPower, D3DXVECTOR3(0.0f, 0.0f, 0.0f), DISK_TYPE_NORMAL, 40.0f);
 			pPlayer->bHaveDisk = false;
 		}
 		if (GetKeyboardPress(DIK_SPACE))
 		{
-			SetDisk(pPlayer->pos, inputVec, D3DXVECTOR3(0.0f, 0.0f, 0.0f), DISK_TYPE_LOB, 40.0f);
+			SetDisk(pPlayer->pos, inputVec * pPlayer->fThrowPower, D3DXVECTOR3(0.0f, 0.0f, 0.0f), DISK_TYPE_LOB, 40.0f);
 			pPlayer->bHaveDisk = false;
 		}
 	}
@@ -373,65 +405,72 @@ void SetPlayer(const D3DXVECTOR3& pos, PLAYERTYPE type)
 }
 
 //=========================================
-// プレイヤーの取得処理
-//=========================================
-Player* GetPlayer(void)
-{
-	return s_player;
-}
-
-//=========================================
 // プレイヤーの読み込み処理
 //=========================================
 void LoadPlayer(void)
 {
 	char s_aString[256];	// 読み込み用文字列
-	int NumType = 0;		// 読み込んだタイプ数
+	int nNumType = 0;		// 読み込んだタイプ数
 
 	//ファイルを開く
 	FILE* pFile = fopen(PLAYER_FILE, "r");
 
 	if (pFile != NULL)
 	{//ファイルが開いた場合
-		fscanf(pFile, "%s", &s_aString);
+		fscanf(pFile, "%s", s_aString);
 
-		while (strncmp(&s_aString[0], "SCRIPT", 6) != 0)
+		while (strncmp(s_aString, "SCRIPT", 6) != 0)
 		{//スタート来るまで空白読み込む
 			s_aString[0] = {};
-			fscanf(pFile, "%s", &s_aString[0]);
+			fscanf(pFile, "%s", s_aString);
 		}
 
-		while (strncmp(&s_aString[0], "END_SCRIPT", 10) != 0)
-		{// 文字列の初期化と読み込み// 文字列の初期化と読み込み
+		while (strncmp(s_aString, "END_SCRIPT", 10) != 0)
+		{// 文字列の初期化と読み込み
 
-			fscanf(pFile, "%s", &s_aString[0]);
+			fscanf(pFile, "%s", s_aString);
 
-			if (strncmp(&s_aString[0], "#", 1) == 0)
+			if (strncmp(s_aString, "#", 1) == 0)
 			{//これのあとコメント
-				fgets(&s_aString[0], sizeof(s_aString), pFile);
+				fgets(s_aString, sizeof(s_aString), pFile);
 				continue;
 			}
 
-			if (strcmp(&s_aString[0], "TYPESTATE") == 0)
+			if (strcmp(s_aString, "TYPESTATE") == 0)
 			{// 文字列が一致した場合
-				while (strncmp(&s_aString[0], "ENDSTATE", 8) != 0)
-				{
-					fscanf(pFile, "%s", &s_aString[0]);// ＝読み込むやつ
 
-					if (strcmp(&s_aString[0], "TEXTURE") == 0)
+				assert(PLAYERTYPE_MAX != nNumType);	// 想定より多いファイル読み込み
+
+				while (strncmp(s_aString, "ENDSTATE", 8) != 0)
+				{
+					fscanf(pFile, "%s", s_aString);	// =の読み込み
+
+					if (strcmp(s_aString, "TEXTURE") == 0)
 					{
-						fscanf(pFile, "%s", &s_aString[0]);	// ＝読み込むやつ
-						fscanf(pFile, "%s", &s_aString[0]);
+						fscanf(pFile, "%s", s_aString);	// =の読み込み
+						fscanf(pFile, "%s", s_aString);
+
 						//テクスチャの読み込み
-						D3DXCreateTextureFromFile(GetDevice(), &s_aString[0], &s_playerType[NumType].pTexture);
+						D3DXCreateTextureFromFile(GetDevice(), s_aString, &s_playerType[nNumType].pTexture);
 					}
-					if (strcmp(&s_aString[0], "MOVESPEED") == 0)
+					else if (strcmp(s_aString, "MOVESPEED") == 0)
 					{
-						fscanf(pFile, "%s", &s_aString[0]);	// ＝読み込むやつ
-						fscanf(pFile, "%f", &s_playerType[NumType].fSpeed);
+						fscanf(pFile, "%s", s_aString);	// =の読み込み
+						fscanf(pFile, "%f", &s_playerType[nNumType].fMoveSpeed);
+					}
+					else if (strcmp(s_aString, "MOVE_ATTENUATION") == 0)
+					{
+						fscanf(pFile, "%s", s_aString);	// =の読み込み
+						fscanf(pFile, "%f", &s_playerType[nNumType].fAttenuationMoveSpead);
+					}
+					else if (strcmp(s_aString, "POWER") == 0)
+					{
+						fscanf(pFile, "%s", s_aString);	// =の読み込み
+						fscanf(pFile, "%f", &s_playerType[nNumType].fThrowPower);
 					}
 				}
-				NumType++;
+
+				nNumType++;
 			}
 		}
 	}
@@ -445,16 +484,20 @@ void LoadPlayer(void)
 //-----------------------------------------------------------------------------
 static bool CollisionCircle(D3DXVECTOR3 Pos1, float fRadius1, D3DXVECTOR3 Pos2, float fRadius2)
 {
-	//２この物体の半径同士の和
-	float fDiff = fRadius1 + fRadius2;
-
-	//Xの差分
-	float fCalculationX = Pos1.x - Pos2.x;
-	//Yの差分
-	float fCalculationY = Pos1.y - Pos2.y;
+	float fDiff = fRadius1 + fRadius2;		//2個の物体の半径同士の和
+	float fCalculationX = Pos1.x - Pos2.x;	//Xの差分
+	float fCalculationY = Pos1.y - Pos2.y;	//Yの差分
 
 	//現在の２点の距離
 	float fLength = sqrtf(fCalculationX * fCalculationX + fCalculationY * fCalculationY);
 
 	return fDiff >= fLength;
+}
+
+//=========================================
+// プレイヤーの取得処理
+//=========================================
+Player* GetPlayer(void)
+{
+	return s_player;
 }

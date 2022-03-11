@@ -48,7 +48,9 @@ typedef struct
 	D3DXVECTOR3 pos;					// 位置
 	D3DXVECTOR3 move;					// 移動量
 	float fSize;						// 大きさ
-	float fSpeed;						// 移動量
+	float fThrowPower;					// 投げる力
+	float fMoveSpeed;					// 移動量
+	float fAttenuationMoveSpead;		// 減衰値
 	JUMPSTATE jumpstate;				// 跳躍の状態
 	bool bHaveDisk;						// ディスクを所持しているか
 	bool bUse;							// 表示状態
