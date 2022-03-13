@@ -47,6 +47,7 @@ typedef struct
 	LPDIRECT3DVERTEXBUFFER9 pVtxBuff;	// 頂点バッファへのポインタ
 	D3DXVECTOR3 pos;					// 位置
 	D3DXVECTOR3 move;					// 移動量
+	JUMPSTATE jumpstate;				// 跳躍の状態
 	float fSize;						// 大きさ
 	float fThrowCurvePower;				// 曲げて投げる力
 	float fThrowPower;					// 投げる力
@@ -55,7 +56,7 @@ typedef struct
 	float fSlidingRigorCnt;				// スライディングの硬直時間のカウント
 	float fSlidingRigorMax;				// スライディングの硬直時間
 	float fAttenuationMoveSpead;		// 減衰値
-	JUMPSTATE jumpstate;				// 跳躍の状態
+	int nIdxShadow;						// 影の使用番号
 	bool bHaveDisk;						// ディスクを所持しているか
 	bool bUseSliding;					// スライディング状態
 	bool bUse;							// 表示状態
