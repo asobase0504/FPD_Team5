@@ -23,7 +23,7 @@
 #define PLAYER_FILE		"data/player.txt"				// プレイヤー読み込みファイル
 #define PLAYER_TEX		"data/TEXTURE/player00.png"		// プレイヤーのテクスチャ
 #define PLAYER_SIZ		(45.0f)							// プレイヤーの大きさ
-#define ZERO_VECTOR		(D3DXVECTOR3(0.0f, 0.0f, 0.0f))
+#define ZERO_VECTOR		(D3DXVECTOR3(0.0f, 0.0f, 0.0f))	// ゼロベクトル
 
 //-----------------------------------------
 // スタティック変数
@@ -53,14 +53,15 @@ void InitPlayer(void)
 	ZeroMemory(s_player, sizeof(s_player));
 	ZeroMemory(s_playerType, sizeof(s_playerType));
 
+	moveCurve = ZERO_VECTOR;
 	LoadPlayer();	// 読み込み
 
 	// プレイヤーの設定
 	SetPlayer(D3DXVECTOR3(200.0f, SCREEN_HEIGHT * 0.5f, 0.0f), PLAYERTYPE_1);
-	//s_player[0].nIdxShadow = SetShadow(s_player[0].pos, PLAYER_SIZ * 3.0f);
+	s_player[0].nIdxShadow = SetShadow(s_player[0].pos, PLAYER_SIZ * 3.0f);
 
 	SetPlayer(D3DXVECTOR3(SCREEN_WIDTH - 200.0f, SCREEN_HEIGHT * 0.5f, 0.0f), PLAYERTYPE_2);
-	//s_player[1].nIdxShadow = SetShadow(s_player[1].pos, PLAYER_SIZ * 3.0f);
+	s_player[1].nIdxShadow = SetShadow(s_player[1].pos, PLAYER_SIZ * 3.0f);
 }
 
 //=========================================
@@ -98,22 +99,49 @@ void UpdatePlayer(void)
 	for (int nIdxPlayer = 0; nIdxPlayer < NUM_PLAYER; nIdxPlayer++, pPlayer++)
 	{
 		pPlayer->pos += pPlayer->move;
-		//SetPositionShadow(pPlayer->nIdxShadow, pPlayer->pos);
+		SetPositionShadow(pPlayer->nIdxShadow, pPlayer->pos);
 
 		if (pPlayer->bHaveDisk)
 		{ //ディスクを所持してる場合
 			pPlayer->move = ZERO_VECTOR;
 			// 投げる
 			ThrowPlayer(nIdxPlayer);
+
+			if (pPlayer->jumpstate == JUMP_NOW && pPlayer->fVerticalSpeed > 0.0f)
+			{
+				pPlayer->fHeight += pPlayer->fVerticalSpeed;
+				pPlayer->fVerticalSpeed -= 0.15f;
+			}
 		}
 		else
 		{
 			// 受け取る
 			CatchDiscPlayer(nIdxPlayer);
-			// 移動
-			MovePlayer(nIdxPlayer);
-			// 跳躍
-			JumpPlayer(nIdxPlayer);
+
+			switch (pPlayer->jumpstate)
+			{
+			case JUMP_NONE:
+				// 移動
+				MovePlayer(nIdxPlayer);
+				// 跳躍
+				JumpPlayer(nIdxPlayer);
+				break;
+			case JUMP_NOW:
+				pPlayer->fHeight += pPlayer->fVerticalSpeed;
+				pPlayer->fVerticalSpeed -= 0.15f;
+
+				if (pPlayer->fHeight <= 0.0f)
+				{
+					pPlayer->fVerticalSpeed = 5.0f;
+					pPlayer->fHeight = 0.0f;
+					pPlayer->jumpstate = JUMP_NONE;
+				}
+
+				break;
+			default:
+				assert(false);
+				break;
+			}
 		}
 
 		VERTEX_2D *pVtx;	// 頂点情報へのポインタ
@@ -122,22 +150,17 @@ void UpdatePlayer(void)
 		pPlayer->pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
 		// 頂点座標の設定
-		
-		pVtx[0].pos = D3DXVECTOR3(pPlayer->pos.x - (pPlayer->fSize * (1 + (pPlayer->fHeight * 0.005))),
-			pPlayer->pos.y - ((pPlayer->fHeight - 10.0f) * 0.5f) - (pPlayer->fSize * (1 + (pPlayer->fHeight * 0.005))), 0.0f);
+		pVtx[0].pos = D3DXVECTOR3(pPlayer->pos.x - (pPlayer->fSize * (1 + (pPlayer->fHeight * 0.015f))),
+			pPlayer->pos.y - ((pPlayer->fHeight - 10.0f) * 0.5f) - (pPlayer->fSize * (1 + (pPlayer->fHeight * 0.015f))), 0.0f);
 
-		pVtx[1].pos = D3DXVECTOR3(pPlayer->pos.x + (pPlayer->fSize * (1 + (pPlayer->fHeight * 0.005))),
-			pPlayer->pos.y - ((pPlayer->fHeight - 10.0f) * 0.5f) - (pPlayer->fSize * (1 + (pPlayer->fHeight * 0.005))), 0.0f);
+		pVtx[1].pos = D3DXVECTOR3(pPlayer->pos.x + (pPlayer->fSize * (1 + (pPlayer->fHeight * 0.015f))),
+			pPlayer->pos.y - ((pPlayer->fHeight - 10.0f) * 0.5f) - (pPlayer->fSize * (1 + (pPlayer->fHeight * 0.015f))), 0.0f);
 
-		pVtx[2].pos = D3DXVECTOR3(pPlayer->pos.x - (pPlayer->fSize * (1 + (pPlayer->fHeight * 0.005))),
-			pPlayer->pos.y - ((pPlayer->fHeight - 10.0f) * 0.5f) + (pPlayer->fSize * (1 + (pPlayer->fHeight * 0.005))), 0.0f);
+		pVtx[2].pos = D3DXVECTOR3(pPlayer->pos.x - (pPlayer->fSize * (1 + (pPlayer->fHeight * 0.015f))),
+			pPlayer->pos.y - ((pPlayer->fHeight - 10.0f) * 0.5f) + (pPlayer->fSize * (1 + (pPlayer->fHeight * 0.015f))), 0.0f);
 
-		pVtx[ 3].pos = D3DXVECTOR3(pPlayer->pos.x + (pPlayer->fSize * (1 + (pPlayer->fHeight * 0.005))),
-			pPlayer->pos.y - ((pPlayer->fHeight - 10.0f) * 0.5f) + (pPlayer->fSize * (1 + (pPlayer->fHeight * 0.005))), 0.0f);
-		//pVtx[0].pos = D3DXVECTOR3(pPlayer->pos.x - pPlayer->fSize, pPlayer->pos.y - pPlayer->fSize, 0.0f);
-		//pVtx[1].pos = D3DXVECTOR3(pPlayer->pos.x + pPlayer->fSize, pPlayer->pos.y - pPlayer->fSize, 0.0f);
-		//pVtx[2].pos = D3DXVECTOR3(pPlayer->pos.x - pPlayer->fSize, pPlayer->pos.y + pPlayer->fSize, 0.0f);
-		//pVtx[3].pos = D3DXVECTOR3(pPlayer->pos.x + pPlayer->fSize, pPlayer->pos.y + pPlayer->fSize, 0.0f);
+		pVtx[ 3].pos = D3DXVECTOR3(pPlayer->pos.x + (pPlayer->fSize * (1 + (pPlayer->fHeight * 0.015f))),
+			pPlayer->pos.y - ((pPlayer->fHeight - 10.0f) * 0.5f) + (pPlayer->fSize * (1 + (pPlayer->fHeight * 0.015f))), 0.0f);
 
 		// 頂点バッファをアンロックする
 		pPlayer->pVtxBuff->Unlock();
@@ -235,41 +258,11 @@ void JumpPlayer(int nIdxPlayer)
 {
 	Player *pPlayer = &s_player[nIdxPlayer];
 
-	switch (pPlayer->jumpstate)
+	if ((IsJoyPadUse(nIdxPlayer) && GetJoypadTrigger(JOYKEY_Y, nIdxPlayer))
+		|| !IsJoyPadUse(nIdxPlayer) && GetKeyboardTrigger(DIK_J))
 	{
-	case JUMP_NONE:
-		if (IsJoyPadUse(nIdxPlayer))
-		{ // JoyPad入力
-
-			if (GetJoypadTrigger(JOYKEY_Y, nIdxPlayer))
-			{
-				pPlayer->jumpstate = JUMP_NOW;
-			}
-
-		}
-		else
-		{ // キーボード入力
-			if (GetKeyboardPress(DIK_J))
-			{
-				pPlayer->jumpstate = JUMP_NOW;
-			}
-		}
-		break;
-	case JUMP_NOW:
-		pPlayer->fHeight += pPlayer->fVerticalSpeed;
-		pPlayer->fVerticalSpeed -= 0.05f;
-
-		if (pPlayer->fHeight <= 0.0f)
-		{
-			pPlayer->fVerticalSpeed = 5.0f;
-			pPlayer->fHeight = 0.0f;
-			pPlayer->jumpstate = JUMP_NONE;
-		}
-
-		break;
-	default:
-		assert(false);
-		break;
+		pPlayer->jumpstate = JUMP_NOW;
+		pPlayer->move = ZERO_VECTOR;
 	}
 }
 
@@ -318,9 +311,14 @@ void ThrowPlayer(int nIdxPlayer)
 			SetDisk(pPlayer->pos, inputVec * pPlayer->fThrowPower, moveCurve, DISK_TYPE_NORMAL, nIdxPlayer, 40.0f);
 			pPlayer->bHaveDisk = false;
 		}
-		if (GetJoypadTrigger(JOYKEY_A, nIdxPlayer))
+		else if (GetJoypadTrigger(JOYKEY_A, nIdxPlayer))
 		{
-			SetDisk(pPlayer->pos, inputVec * pPlayer->fThrowPower, moveCurve, DISK_TYPE_LOB, nIdxPlayer, 40.0f);
+			SetDisk(pPlayer->pos, inputVec * pPlayer->fThrowPower, ZERO_VECTOR, DISK_TYPE_LOB, nIdxPlayer, 40.0f);
+			pPlayer->bHaveDisk = false;
+		}
+		else if (GetJoypadTrigger(JOYKEY_X, nIdxPlayer))
+		{
+			SetDisk(pPlayer->pos, inputVec * pPlayer->fThrowPower, ZERO_VECTOR, DISK_TYPE_SPECIAL_0, nIdxPlayer, 40.0f);
 			pPlayer->bHaveDisk = false;
 		}
 
@@ -329,10 +327,15 @@ void ThrowPlayer(int nIdxPlayer)
 	{ // キーボード入力
 		if (GetKeyboardPress(DIK_RETURN))
 		{
-			SetDisk(pPlayer->pos, inputVec * pPlayer->fThrowPower, ZERO_VECTOR, DISK_TYPE_NORMAL, nIdxPlayer, 40.0f);
+			SetDisk(pPlayer->pos, inputVec * pPlayer->fThrowPower, moveCurve, DISK_TYPE_NORMAL, nIdxPlayer, 40.0f);
 			pPlayer->bHaveDisk = false;
 		}
-		if (GetKeyboardPress(DIK_SPACE))
+		else if (GetKeyboardPress(DIK_SPACE))
+		{
+			SetDisk(pPlayer->pos, inputVec * pPlayer->fThrowPower, ZERO_VECTOR, DISK_TYPE_LOB, nIdxPlayer, 40.0f);
+			pPlayer->bHaveDisk = false;
+		}
+		else if (GetKeyboardPress(DIK_M))
 		{
 			SetDisk(pPlayer->pos, inputVec * pPlayer->fThrowPower, ZERO_VECTOR, DISK_TYPE_LOB, nIdxPlayer, 40.0f);
 			pPlayer->bHaveDisk = false;
@@ -349,9 +352,15 @@ void CatchDiscPlayer(int nIdxPlayer)
 	Disk* pDisk = GetDisk();
 	Shadow *pShadow = GetShadow();
 
-	if ((CollisionCircle(pPlayer->pos, pPlayer->fSize, pDisk->pos, pDisk->fSize)) && (pDisk->nPlayer != nIdxPlayer))
+	if ((CollisionCircle(pPlayer->pos, pPlayer->fSize * (1 + (pPlayer->fHeight * 0.005)), pDisk->pos, pDisk->fSize)) && (pDisk->nPlayer != nIdxPlayer))
 	{
-		if (pDisk->type != DISK_TYPE_LOB || (pDisk->type == DISK_TYPE_LOB && pDisk->fHeight <= 0.0f))
+		if ((pDisk->type != DISK_TYPE_LOB || (pDisk->type == DISK_TYPE_LOB && pDisk->fHeight <= 0.0f)) && pPlayer->jumpstate == JUMP_NONE)
+		{
+			DestroyDisk();	// ディスクの破棄
+			pPlayer->bHaveDisk = true;
+		}
+
+		if (pDisk->type == DISK_TYPE_LOB && pPlayer->jumpstate == JUMP_NOW)
 		{
 			DestroyDisk();	// ディスクの破棄
 			pPlayer->bHaveDisk = true;

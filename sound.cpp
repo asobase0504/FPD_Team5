@@ -33,6 +33,7 @@ DWORD g_aSizeAudio[SOUND_LABEL_MAX] = {};					// オーディオデータサイズ
 // 各音素材のパラメータ
 SOUNDPARAM g_aParam[SOUND_LABEL_MAX] =
 {
+	{ "data/BGM/Title.wav", -1 },			// BGM0
 };
 
 //=============================================================================
