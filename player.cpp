@@ -49,17 +49,18 @@ static D3DXVECTOR3 InputMovePlayer(int nIdxPlayer);
 //=========================================
 void InitPlayer(void)
 {
-	Player *pPlayer = s_player;
-
+	//初期化
 	ZeroMemory(s_player, sizeof(s_player));
 	ZeroMemory(s_playerType, sizeof(s_playerType));
 
 	LoadPlayer();	// 読み込み
 
+	// プレイヤーの設定
 	SetPlayer(D3DXVECTOR3(200.0f, SCREEN_HEIGHT * 0.5f, 0.0f), PLAYERTYPE_1);
+	//s_player[0].nIdxShadow = SetShadow(s_player[0].pos, PLAYER_SIZ * 3.0f);
+
 	SetPlayer(D3DXVECTOR3(SCREEN_WIDTH - 200.0f, SCREEN_HEIGHT * 0.5f, 0.0f), PLAYERTYPE_2);
-	pPlayer[0].nIdxShadow = SetShadow(pPlayer[0].pos, PLAYER_SIZ * 3.0f);
-	pPlayer[1].nIdxShadow = SetShadow(pPlayer[1].pos, PLAYER_SIZ * 3.0f);
+	//s_player[1].nIdxShadow = SetShadow(s_player[1].pos, PLAYER_SIZ * 3.0f);
 }
 
 //=========================================
@@ -97,10 +98,10 @@ void UpdatePlayer(void)
 	for (int nIdxPlayer = 0; nIdxPlayer < NUM_PLAYER; nIdxPlayer++, pPlayer++)
 	{
 		pPlayer->pos += pPlayer->move;
-		SetPositionShadow(pPlayer->nIdxShadow, pPlayer->pos);
+		//SetPositionShadow(pPlayer->nIdxShadow, pPlayer->pos);
 
 		if (pPlayer->bHaveDisk)
-		{//ディスクを所持してる場合
+		{ //ディスクを所持してる場合
 			pPlayer->move = ZERO_VECTOR;
 			// 投げる
 			ThrowPlayer(nIdxPlayer);
@@ -121,10 +122,22 @@ void UpdatePlayer(void)
 		pPlayer->pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
 		// 頂点座標の設定
-		pVtx[0].pos = D3DXVECTOR3(pPlayer->pos.x - pPlayer->fSize, pPlayer->pos.y - pPlayer->fSize, 0.0f);
-		pVtx[1].pos = D3DXVECTOR3(pPlayer->pos.x + pPlayer->fSize, pPlayer->pos.y - pPlayer->fSize, 0.0f);
-		pVtx[2].pos = D3DXVECTOR3(pPlayer->pos.x - pPlayer->fSize, pPlayer->pos.y + pPlayer->fSize, 0.0f);
-		pVtx[3].pos = D3DXVECTOR3(pPlayer->pos.x + pPlayer->fSize, pPlayer->pos.y + pPlayer->fSize, 0.0f);
+		
+		pVtx[0].pos = D3DXVECTOR3(pPlayer->pos.x - (pPlayer->fSize * (1 + (pPlayer->fHeight * 0.005))),
+			pPlayer->pos.y - ((pPlayer->fHeight - 10.0f) * 0.5f) - (pPlayer->fSize * (1 + (pPlayer->fHeight * 0.005))), 0.0f);
+
+		pVtx[1].pos = D3DXVECTOR3(pPlayer->pos.x + (pPlayer->fSize * (1 + (pPlayer->fHeight * 0.005))),
+			pPlayer->pos.y - ((pPlayer->fHeight - 10.0f) * 0.5f) - (pPlayer->fSize * (1 + (pPlayer->fHeight * 0.005))), 0.0f);
+
+		pVtx[2].pos = D3DXVECTOR3(pPlayer->pos.x - (pPlayer->fSize * (1 + (pPlayer->fHeight * 0.005))),
+			pPlayer->pos.y - ((pPlayer->fHeight - 10.0f) * 0.5f) + (pPlayer->fSize * (1 + (pPlayer->fHeight * 0.005))), 0.0f);
+
+		pVtx[ 3].pos = D3DXVECTOR3(pPlayer->pos.x + (pPlayer->fSize * (1 + (pPlayer->fHeight * 0.005))),
+			pPlayer->pos.y - ((pPlayer->fHeight - 10.0f) * 0.5f) + (pPlayer->fSize * (1 + (pPlayer->fHeight * 0.005))), 0.0f);
+		//pVtx[0].pos = D3DXVECTOR3(pPlayer->pos.x - pPlayer->fSize, pPlayer->pos.y - pPlayer->fSize, 0.0f);
+		//pVtx[1].pos = D3DXVECTOR3(pPlayer->pos.x + pPlayer->fSize, pPlayer->pos.y - pPlayer->fSize, 0.0f);
+		//pVtx[2].pos = D3DXVECTOR3(pPlayer->pos.x - pPlayer->fSize, pPlayer->pos.y + pPlayer->fSize, 0.0f);
+		//pVtx[3].pos = D3DXVECTOR3(pPlayer->pos.x + pPlayer->fSize, pPlayer->pos.y + pPlayer->fSize, 0.0f);
 
 		// 頂点バッファをアンロックする
 		pPlayer->pVtxBuff->Unlock();
@@ -171,35 +184,35 @@ void MovePlayer(int nIdxPlayer)
 	if (IsJoyPadUse(nIdxPlayer))
 	{ // JoyPadの有無
 		if (GetJoypadTrigger(JOYKEY_A))
-		{
+		{ //スライディングの使用
 			pPlayer->bUseSliding = true;
 		}
 	}
 	else
 	{
 		if (GetKeyboardTrigger(DIK_B))
-		{
+		{ //スライディングの使用
 			pPlayer->bUseSliding = true;
 		}
 	}
 
 	if (pPlayer->bUseSliding)
-	{	// スライディング
-		if (pPlayer->fSlidingRigorCnt == 0)
+	{ // スライディング
+		if (pPlayer->nSlidingRigorCnt == 0)
 		{
 			D3DXVec3Normalize(&inputMove, &inputMove);	// 長さの正規化
 			pPlayer->move = inputMove * pPlayer->fSlidingVolume;
-			pPlayer->fSlidingRigorCnt++;
+			pPlayer->nSlidingRigorCnt++;
 		}
-		else if (pPlayer->fSlidingRigorCnt >= pPlayer->fSlidingRigorMax)
+		else if (pPlayer->nSlidingRigorCnt >= pPlayer->nSlidingRigorMax)
 		{
-			pPlayer->fSlidingRigorCnt = 0;
+			pPlayer->nSlidingRigorCnt = 0;
 			pPlayer->bUseSliding = false;
 		}
 		else
 		{
-			pPlayer->move -= pPlayer->move * 0.55f;
-			pPlayer->fSlidingRigorCnt++;
+			pPlayer->move -= pPlayer->move * pPlayer->fAttenuationSlidingSpead;
+			pPlayer->nSlidingRigorCnt++;
 		}
 	}
 	else
@@ -211,7 +224,7 @@ void MovePlayer(int nIdxPlayer)
 		}
 
 		// 減衰処理
-		pPlayer->move = pPlayer->move * pPlayer->fAttenuationMoveSpead;
+		pPlayer->move -= pPlayer->move * pPlayer->fAttenuationMoveSpead;
 	}
 }
 
@@ -222,6 +235,42 @@ void JumpPlayer(int nIdxPlayer)
 {
 	Player *pPlayer = &s_player[nIdxPlayer];
 
+	switch (pPlayer->jumpstate)
+	{
+	case JUMP_NONE:
+		if (IsJoyPadUse(nIdxPlayer))
+		{ // JoyPad入力
+
+			if (GetJoypadTrigger(JOYKEY_Y, nIdxPlayer))
+			{
+				pPlayer->jumpstate = JUMP_NOW;
+			}
+
+		}
+		else
+		{ // キーボード入力
+			if (GetKeyboardPress(DIK_J))
+			{
+				pPlayer->jumpstate = JUMP_NOW;
+			}
+		}
+		break;
+	case JUMP_NOW:
+		pPlayer->fHeight += pPlayer->fVerticalSpeed;
+		pPlayer->fVerticalSpeed -= 0.05f;
+
+		if (pPlayer->fHeight <= 0.0f)
+		{
+			pPlayer->fVerticalSpeed = 5.0f;
+			pPlayer->fHeight = 0.0f;
+			pPlayer->jumpstate = JUMP_NONE;
+		}
+
+		break;
+	default:
+		assert(false);
+		break;
+	}
 }
 
 //=========================================
@@ -302,9 +351,11 @@ void CatchDiscPlayer(int nIdxPlayer)
 
 	if ((CollisionCircle(pPlayer->pos, pPlayer->fSize, pDisk->pos, pDisk->fSize)) && (pDisk->nPlayer != nIdxPlayer))
 	{
-		pDisk->bUse = false;
-		pShadow[pDisk->nIdxShadow].bUse = false;
-		pPlayer->bHaveDisk = true;
+		if (pDisk->type != DISK_TYPE_LOB || (pDisk->type == DISK_TYPE_LOB && pDisk->fHeight <= 0.0f))
+		{
+			DestroyDisk();	// ディスクの破棄
+			pPlayer->bHaveDisk = true;
+		}
 	}
 }
 
@@ -442,6 +493,11 @@ void LoadPlayer(void)
 						fscanf(pFile, "%s", s_aString);	// =の読み込み
 						fscanf(pFile, "%f", &s_playerType[nNumType].fAttenuationMoveSpead);
 					}
+					else if (strcmp(s_aString, "SLIDING_ATTENUATION") == 0)
+					{
+						fscanf(pFile, "%s", s_aString);	// =の読み込み
+						fscanf(pFile, "%f", &s_playerType[nNumType].fAttenuationSlidingSpead);
+					}
 					else if (strcmp(s_aString, "THROW_POWER") == 0)
 					{
 						fscanf(pFile, "%s", s_aString);	// =の読み込み
@@ -460,7 +516,7 @@ void LoadPlayer(void)
 					else if (strcmp(s_aString, "SLIDING_RIGOR") == 0)
 					{
 						fscanf(pFile, "%s", s_aString);	// =の読み込み
-						fscanf(pFile, "%f", &s_playerType[nNumType].fSlidingRigorMax);
+						fscanf(pFile, "%d", &s_playerType[nNumType].nSlidingRigorMax);
 					}
 				}
 
