@@ -8,31 +8,26 @@
 #define _SCORE_H_
 
 //マクロ定義
-#define NUM_SCORE		(2)								//桁数
+#define NUM_SCORE		(4)								//桁数
 #define MAX_CNT_SCORE	(2)								//最大カウンター数
 
 //スコアの構造体
 typedef struct
 {
-	D3DXVECTOR3 posScore[MAX_CNT_SCORE];				//現在の位置
+	LPDIRECT3DVERTEXBUFFER9 pVtxBuff;			//頂点バッファへのポインタ
+	D3DXVECTOR3 pos;				//現在の位置
+	D3DXVECTOR3 aPosTexU[MAX_CNT_SCORE];
 	int nScore;											//スコアの値
 	int nCnt;										//スコアのカウンター
 }SCORE;
-
-typedef struct
-{
-	D3DXVECTOR3 c_posScore[MAX_CNT_SCORE];				//現在の位置
-	int cScore;											//スコアの値
-	int cCnt;										//スコアのカウンター
-}SCORE2;
 
 //プロトタイプ宣言
 void InitScore(void);
 void UninitScore(void);
 void UpdateScore(void);
 void DrawScore(void);
-void SetScore(int nScore,int cScore);
-void AddScore(int nValse,int cValse);
+void SetScore(int nScore);
+void AddScore(int nValse);
 SCORE GetScore(void);
 
 #endif

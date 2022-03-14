@@ -17,6 +17,7 @@
 #include "wall.h"
 #include "disk.h"
 #include "shadow.h"
+#include"score.h"
 
 //------------------------------------
 // É}ÉNÉçíËã`
@@ -36,6 +37,7 @@ void InitGame(void)
 	InitShadow();
 	InitDisk();
 	InitStage();
+	InitScore();
 }
 
 //=========================================
@@ -48,6 +50,7 @@ void UninitGame(void)
 	UninitShadow();
 	UninitDisk();
 	UninitStage();
+	UninitScore();
 }
 
 //=========================================
@@ -60,6 +63,7 @@ void UpdateGame(void)
 	UpdateWall();
 	UpdateDisk();
 	UpdateShadow();
+	UpdateScore();
 }
 
 //=========================================
@@ -72,4 +76,5 @@ void DrawGame()
 	DrawWall();
 	DrawShadow();
 	DrawDisk();
+	DrawScore();
 }
