@@ -71,6 +71,7 @@ void InitStage(void)
 	//p1のステージ長さ
 	s_p1.min = D3DXVECTOR3(MIN_WIDTH, MIN_HEIGHT, 0.0f);
 	s_p1.max = D3DXVECTOR3((SCREEN_WIDTH / 2) - (STAGE_NET_WIDTH / 2), MAX_HEIGHT, 0.0f);
+
 	//p2のステージ長さ
 	s_p2.min = D3DXVECTOR3((SCREEN_WIDTH / 2) + (STAGE_NET_WIDTH / 2), MIN_HEIGHT, 0.0f);
 	s_p2.max = D3DXVECTOR3(MAX_WIDTH, MAX_HEIGHT, 0.0f);
