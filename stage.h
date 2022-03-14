@@ -14,13 +14,18 @@
 //****************************************************************************
 //マクロ定義
 //****************************************************************************
-#define STAGE_WIDTH			(SCREEN_WIDTH - 50)		//ステージの横サイズ
-#define STAGE_HEIGHT		(SCREEN_HEIGHT - 200)	//ステージの縦サイズ
-#define STAGE_NET_WIDTH		(10)					//網の横サイズ
-#define STAGE_NET_HEIGHT	(SCREEN_HEIGHT - 200)	//網の縦サイズ
-#define MAX_STAGE			(5)						//ステージオブジェクトの最大数
-#define MAX_IMAGE_STAGE		(4)						//ステージ画像の最大数
-#define DISK_DELETE	(30)							//落ちたディスクが消える時間
+#define STAGE_WIDTH			(SCREEN_WIDTH - 50)				//ステージの横サイズ
+#define STAGE_HEIGHT		(SCREEN_HEIGHT - 200)			//ステージの縦サイズ
+#define STAGE_NET_WIDTH		(10)							//網の横サイズ
+#define STAGE_NET_HEIGHT	(SCREEN_HEIGHT - 200)			//網の縦サイズ
+#define MAX_STAGE			(5)								//ステージオブジェクトの最大数
+#define MAX_IMAGE_STAGE		(4)								//ステージ画像の最大数
+#define DISK_DELETE			(30)							//落ちたディスクが消える時間
+
+#define MIN_WIDTH			(80)							//横最小値
+#define MIN_HEIGHT			(100)							//縦最小値
+#define MAX_WIDTH			(SCREEN_WIDTH - MIN_WIDTH)		//横最大値
+#define MAX_HEIGHT			(SCREEN_HEIGHT -  MIN_HEIGHT)	//縦最大値
 
 //****************************************************************************
 //ステージの種類
@@ -33,6 +38,15 @@ typedef enum
 	STAGE_TYPE_GOALNET,		//網(ゴール)
 	STAGE_TYPE_MAX
 }STAGE_TYPE;
+
+//****************************************************************************
+//ステージの長さ
+//****************************************************************************
+typedef struct
+{
+	D3DXVECTOR3 min;	//最小値
+	D3DXVECTOR3 max;	//最大値
+}STAGE_LENGTH;
 
 //****************************************************************************
 //構造体の定義
