@@ -261,8 +261,8 @@ void JumpPlayer(int nIdxPlayer)
 	if ((IsJoyPadUse(nIdxPlayer) && GetJoypadTrigger(JOYKEY_Y, nIdxPlayer))
 		|| !IsJoyPadUse(nIdxPlayer) && GetKeyboardTrigger(DIK_J))
 	{
-		pPlayer->jumpstate = JUMP_NOW;
 		pPlayer->move = ZERO_VECTOR;
+		pPlayer->jumpstate = JUMP_NOW;
 	}
 }
 

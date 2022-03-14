@@ -25,6 +25,8 @@ static LPDIRECT3DVERTEXBUFFER9	s_pVtxBuffStage = NULL;					//í∏ì_ÉoÉbÉtÉ@Ç÷ÇÃÉ|É
 static STAGE s_aStage[MAX_STAGE];										//ÉXÉeÅ[ÉWÇÃèÓïÒ
 static bool s_bFell;			//óéÇøÇΩîªíË
 static float s_fFellCounter;	//óéÇøÇΩéûä‘
+static STAGE_LENGTH s_p1;		//ÉvÉåÉCÉÑÅ[1ÉXÉeÅ[ÉWí∑Ç≥
+static STAGE_LENGTH s_p2;		//ÉvÉåÉCÉÑÅ[2ÉXÉeÅ[ÉWí∑Ç≥
 
 //=========================================
 // ÉXÉeÅ[ÉWÇÃèâä˙âªèàóù
@@ -66,6 +68,14 @@ void InitStage(void)
 		&s_pTextureStage[STAGE_TYPE_GOALNET]
 	);
 
+	//p1ÇÃÉXÉeÅ[ÉWí∑Ç≥
+	s_p1.min = D3DXVECTOR3(MIN_WIDTH, MIN_HEIGHT, 0.0f);
+	s_p1.max = D3DXVECTOR3((SCREEN_WIDTH / 2) - (STAGE_NET_WIDTH / 2), MAX_HEIGHT, 0.0f);
+
+	//p2ÇÃÉXÉeÅ[ÉWí∑Ç≥
+	s_p2.min = D3DXVECTOR3((SCREEN_WIDTH / 2) + (STAGE_NET_WIDTH / 2), MIN_HEIGHT, 0.0f);
+	s_p2.max = D3DXVECTOR3(MAX_WIDTH, MAX_HEIGHT, 0.0f);
+
 	//ç\ë¢ëÃÇÃèâä˙âªèàóù
 	s_aStage[0].pos = D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.3f);
 	s_aStage[0].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -91,7 +101,7 @@ void InitStage(void)
 	s_aStage[2].fLength = sqrtf((STAGE_NET_WIDTH * STAGE_NET_WIDTH) + (STAGE_NET_HEIGHT * STAGE_NET_HEIGHT)) / 2.0f;
 	s_aStage[2].type = STAGE_TYPE_NET;
 
-	s_aStage[3].pos = D3DXVECTOR3(80, SCREEN_HEIGHT / 2, 0.0f);
+	s_aStage[3].pos = D3DXVECTOR3(MIN_WIDTH, SCREEN_HEIGHT / 2, 0.0f);
 	s_aStage[3].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	s_aStage[3].nor = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	s_aStage[3].col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
@@ -99,7 +109,7 @@ void InitStage(void)
 	s_aStage[3].fLength = sqrtf((STAGE_NET_WIDTH * STAGE_NET_WIDTH) + (STAGE_NET_HEIGHT * STAGE_NET_HEIGHT)) / 2.0f;
 	s_aStage[3].type = STAGE_TYPE_GOALNET;
 
-	s_aStage[4].pos = D3DXVECTOR3(SCREEN_WIDTH - 80, SCREEN_HEIGHT / 2, 0.0f);
+	s_aStage[4].pos = D3DXVECTOR3(MAX_WIDTH, SCREEN_HEIGHT / 2, 0.0f);
 	s_aStage[4].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	s_aStage[4].nor = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	s_aStage[4].col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
@@ -165,8 +175,8 @@ void InitStage(void)
 	//í∏ì_ÉoÉbÉtÉ@ÇÉAÉìÉçÉbÉNÇ∑ÇÈ
 	s_pVtxBuffStage->Unlock();
 
-	SetWall(D3DXVECTOR3(SCREEN_WIDTH / 2, 100.0f, 0.0f), STAGE_WIDTH, 10.0f, 0.0f);						//ï«(è„ë§)
-	SetWall(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT - 100.0f, 0.0f), STAGE_WIDTH, 10.0f, D3DX_PI);	//ï«(â∫ë§)
+	SetWall(D3DXVECTOR3(SCREEN_WIDTH / 2, MIN_HEIGHT, 0.0f), STAGE_WIDTH, 10.0f, 0.0f);		//ï«(è„ë§)
+	SetWall(D3DXVECTOR3(SCREEN_WIDTH / 2, MAX_HEIGHT, 0.0f), STAGE_WIDTH, 10.0f, D3DX_PI);	//ï«(â∫ë§)
 
 	InitGoal();
 }
