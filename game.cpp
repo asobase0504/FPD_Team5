@@ -18,6 +18,8 @@
 #include "disk.h"
 #include "shadow.h"
 //#include "effect.h"
+#include"score.h"
+#include "time.h"
 
 //------------------------------------
 // マクロ定義
@@ -32,12 +34,14 @@
 //=========================================
 void InitGame(void)
 {
-	InitShadow();	// 影
 	InitWall();		// 壁
 	InitDisk();		// ディスク
+	InitShadow();	// 影
 	InitPlayer();	// プレイヤー
 	InitStage();	// ステージ
 	//InitEffect();
+	InitScore();
+	//InitTime();
 }
 
 //=========================================
@@ -45,12 +49,14 @@ void InitGame(void)
 //=========================================
 void UninitGame(void)
 {
-	UninitShadow();	// 影
 	UninitPlayer();	// プレイヤー
 	UninitWall();	// 壁
+	UninitShadow();	// 影
 	UninitDisk();	// ディスク
 	UninitStage();	// ステージ
 //	UninitEffect();
+	UninitScore();
+	//UninitTime();
 }
 
 //=========================================
@@ -64,6 +70,8 @@ void UpdateGame(void)
 	UpdateDisk();	// ディスク
 	UpdateShadow();	// 影
 //	UpdateEffect();
+	UpdateScore();
+	//UpdateTime();
 }
 
 //=========================================
@@ -77,4 +85,6 @@ void DrawGame()
 	DrawPlayer();	// プレイヤー
 	DrawDisk();		// ディスク
 //	DrawEffect();
+	DrawScore();
+	//DrawTime();
 }

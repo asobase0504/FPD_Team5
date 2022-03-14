@@ -104,7 +104,7 @@ void UninitTime(void)
 	}
 }
 //タイムの更新処理
-void UpdateTime(int *p_nSelectTime)
+void UpdateTime(void)
 {
 	int aPosTexU[2];			//各桁の数字を格納
 
