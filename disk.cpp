@@ -14,6 +14,8 @@
 #include "goal.h"
 #include <time.h>
 #include "shadow.h"
+#include "stage.h"
+#include "player.h"
 
 //====================================
 //グローバル変数
@@ -148,7 +150,7 @@ void UpdateDisk(void)
 			if (g_aDisk[nCntDisk].bBounce == true)
 			{
 				//壁との当たり判定
-				WallBounce(&g_aDisk[nCntDisk].pos, &g_aDisk[nCntDisk].lastPos, &g_aDisk[nCntDisk].move, &g_aDisk[nCntDisk].acc, 10.0f);
+				WallBounce(&g_aDisk[nCntDisk].pos, &g_aDisk[nCntDisk].lastPos, &g_aDisk[nCntDisk].move, &g_aDisk[nCntDisk].acc, g_aDisk[nCntDisk].fSize);
 			}
 
 			//ゴールとの当たり判定(pos, lastPos, fWidth, fHeight)
@@ -273,7 +275,7 @@ void SetDisk(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 acc, DISK_TYPE type,
 				g_aDisk[nCntDisk].fVerticalSpeed = JUMP_MAX_HEIGHT / JUMP_ATTACK_TIME;
 				g_aDisk[nCntDisk].bBounce = false;
 
-				g_aDisk[nCntDisk].move = SetLobSpeed(g_aDisk[nCntDisk].pos, g_aDisk[nCntDisk].move, nCntDisk, g_aDisk[nCntDisk].fHeight, g_aDisk[nCntDisk].fVerticalSpeed);
+				g_aDisk[nCntDisk].move = SetJumpAttackSpeed(g_aDisk[nCntDisk].pos);
 
 				break;
 
@@ -438,83 +440,113 @@ Disk *GetDisk(void)
 //============================================================================
 D3DXVECTOR3 SetLobSpeed(D3DXVECTOR3 pos, D3DXVECTOR3 move, int nCntDisk, float fHeight, float fVerticalSpeed)
 {
+	STAGE_LENGTH *pArea1 = GetP1StgLng();								//プレイヤー１のエリア情報へのポインタ
+	STAGE_LENGTH *pArea2 = GetP2StgLng();								//プレイヤー２のエリア情報へのポインタ
 	D3DXVECTOR3 newSpeed = move;										//新しい移動量
 	D3DXVECTOR3 lastPos = pos;											//最初の位置
 	D3DXVECTOR3 endPos = pos;											//落ちた後の位置
 	D3DXVECTOR3 newPos;													//新しい位置
-	D3DXVECTOR3 initialSpeedDir = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//最初の移動量
-	D3DXVECTOR3 initialSpeedDirNor;										//最初の移動量の向き
-	float height, vSpeed;
+	float fTime = 0.0f;													//ディスクが落ちるまでの必要なフレーム
+	float height, vSpeed;												//ディスクが落ちるまでの必要なフレームを計算する用の変数
 	height = fHeight;
 	vSpeed = fVerticalSpeed;
 
 	while (height > 0.0f)
-	{//ディスクが落ちた時の位置を計算する
+	{//ディスクが落ちた時の位置と必要な時間を計算する
 		height += vSpeed;
 		vSpeed -= 0.05f;
 		endPos += move;
+		fTime += 1.0f;
 	}
-	newPos = endPos;
-	height = fHeight;
-	vSpeed = fVerticalSpeed;
+	newPos = endPos;						//目的の位置
 
-	initialSpeedDir = endPos - pos;			//最初の移動量ベクトル
+	//相手のエリアを出ないようにする処理
+	if (pos.x < SCREEN_WIDTH * 0.5f)
+	{//投げるプレイヤーはプレイヤー１だったら
+		if (newPos.y < pArea2->min.y + g_aDisk[nCntDisk].fSize)
+		{//エリアの上側を出ないようにする
+			newPos.y = pArea2->min.y + g_aDisk[nCntDisk].fSize;
+		}
+		else if (newPos.y > pArea2->max.y - g_aDisk[nCntDisk].fSize)
+		{//エリアの下側を出ないようにする
+			newPos.y = pArea2->max.y - g_aDisk[nCntDisk].fSize;
+		}
 
-	//壁との当たり判定
-	bool bImpact = SpecialWallBounce(&endPos, &lastPos, &newSpeed, g_aDisk[nCntDisk].fSize);	
-
-	float fLenght;							//ベクトルの長さ
-
-	if (bImpact == true)
-	{//壁と当たらないようにする処理
-		D3DXVECTOR3 xDir = D3DXVECTOR3(1.0f, 0.0f, 0.0f);				//X軸に平行ベクトル
-		D3DXVECTOR3 postImpact = endPos - pos;							//衝突点を超えたベクトルの部分
-		D3DXVec3Normalize(&initialSpeedDirNor, &initialSpeedDir);		//ベクトルの正規化
-
-		float fDot = D3DXVec3Dot(&xDir, &initialSpeedDirNor);									//X軸とはじめの移動量の間の角度のコサインを計算する
-		fLenght = sqrtf(((postImpact.x * postImpact.x) + (postImpact.y * postImpact.y)));		//衝突点を超えたベクトルの部分の長さを計算する
-
-		newPos = endPos + (xDir * (fDot * fLenght));							//新しい位置
-
-		//新しい移動量の向きの計算
-		newSpeed = newPos - lastPos;											
-		D3DXVec3Normalize(&newSpeed, &newSpeed);
-
-		fLenght = sqrtf(((move.x * move.x) + (move.y * move.y)));				//はじめの移動量のベクトルの長さを計算する
-		newSpeed *= fLenght;													//新しい移動量
+		if (newPos.x < pArea2->min.x + g_aDisk[nCntDisk].fSize)
+		{//エリアの左側を出ないようにする
+			newPos.x = pArea2->min.x + g_aDisk[nCntDisk].fSize;
+		}
+		else if (newPos.x > pArea2->max.x - g_aDisk[nCntDisk].fSize)
+		{//エリアの右側を出ないようにする
+			newPos.x = pArea2->max.x - g_aDisk[nCntDisk].fSize;
+		}
 	}
-
-	{//エリアを出ないようにする処理
-		D3DXVECTOR3 secondTerm;
-		float coefficient;
-
-		endPos = lastPos;
-
-		while (height > 0.0f)
-		{//ディスクが落ちた時の位置を計算する
-			height += vSpeed;
-			vSpeed -= 0.05f;
-			endPos += newSpeed;
+	else
+	{//投げるプレイヤーはプレイヤー２だったら
+		if (newPos.y < pArea1->min.y + g_aDisk[nCntDisk].fSize)
+		{//エリアの上側を出ないようにする
+			newPos.y = pArea1->min.y + g_aDisk[nCntDisk].fSize;
 		}
-		newPos = endPos;
-
-		if (newPos.x > SCREEN_WIDTH - 150.0f && newSpeed.x > 0.0f)
-		{//画面の右側を出る場合
-			secondTerm = newPos;
-			secondTerm.x = SCREEN_WIDTH - 150.0f;
-			coefficient = (secondTerm.x - lastPos.x) / (newPos.x - lastPos.x);
-			newSpeed.x *= coefficient;
+		else if (newPos.y > pArea1->max.y - g_aDisk[nCntDisk].fSize)
+		{//エリアの下側を出ないようにする
+			newPos.y = pArea1->max.y - g_aDisk[nCntDisk].fSize;
 		}
-		else if (newPos.x < 150.0f && newSpeed.x < 0.0f)
-		{//画面の左側を出る場合
-			secondTerm = newPos;
-			secondTerm.x = 150.0f;
-			coefficient = (secondTerm.x - lastPos.x) / (newPos.x - lastPos.x);
-			newSpeed.x *= coefficient;
+
+		if (newPos.x < pArea1->min.x + g_aDisk[nCntDisk].fSize)
+		{//エリアの左側を出ないようにする
+			newPos.x = pArea1->min.x + g_aDisk[nCntDisk].fSize;
+		}
+		else if (newPos.x > pArea1->max.x - g_aDisk[nCntDisk].fSize)
+		{//エリアの右側を出ないようにする
+			newPos.x = pArea1->max.x - g_aDisk[nCntDisk].fSize;
 		}
 	}
 
-	return newSpeed;				//新しい移動量を返す
+	newSpeed = (newPos - pos) / fTime;						//新しい移動量を計算する
+
+	return newSpeed;										//新しい移動量を返す
+}
+
+//============================================================================
+//ジャンプ投げの移動量の設定処理
+//============================================================================
+D3DXVECTOR3 SetJumpAttackSpeed(D3DXVECTOR3 pos)
+{
+	STAGE_LENGTH *pArea1 = GetP1StgLng();					//プレイヤー１のエリア情報へのポインタ
+	STAGE_LENGTH *pArea2 = GetP2StgLng();					//プレイヤー２のエリア情報へのポインタ
+	Player *pPlayer = GetPlayer();							//プレイヤー情報へのポインタ
+
+	D3DXVECTOR3 endPos, speed;								//目的の位置と移動量のローカル変数
+
+	int nPlayer;											//ディスクを投げたプレイヤー
+
+	if (pos.x < SCREEN_WIDTH * 0.5f)
+	{//プレイヤー１
+		nPlayer = 0;
+	}
+	else
+	{//プレイヤー２
+		nPlayer = 1;
+	}
+
+	if (nPlayer == 0)
+	{//プレイヤー１だったら
+		endPos.x = pArea2->min.x + 50.0f + (pPlayer->fThrowPower * 5.0f);			//目的の位置のX座標を設定する
+		endPos.y = pos.y;															//目的の位置のY座標を設定する
+		endPos.z = 0.0f;															//目的の位置のZ座標を0にする
+	}
+	else
+	{//プレイヤー２だったら
+		endPos.x = pArea1->max.x - 50.0f - (pPlayer->fThrowPower * 5.0f);			//目的の位置のX座標を設定する
+		endPos.y = pos.y;															//目的の位置のY座標を設定する
+		endPos.z = 0.0f;															//目的の位置のZ座標を0にする
+	}																				
+		
+	//新しい移動量を計算する
+	speed = endPos - pos;															
+	speed.x / JUMP_ATTACK_TIME;
+
+	return speed;																	//新しい移動量を返す
 }
 
 //======================================

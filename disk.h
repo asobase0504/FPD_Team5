@@ -55,6 +55,7 @@ void DrawDisk(void);
 void SetDisk(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 acc, DISK_TYPE type, int nPlayer, float size);
 void UpdateSpecialDisk(int nCntDisk, int nPlayer);
 D3DXVECTOR3 SetLobSpeed(D3DXVECTOR3 pos, D3DXVECTOR3 move, int nCntDisk, float fHeight, float fVerticalSpeed);
+D3DXVECTOR3 SetJumpAttackSpeed(D3DXVECTOR3 pos);
 void DestroyDisk(void);
 
 Disk *GetDisk(void);
