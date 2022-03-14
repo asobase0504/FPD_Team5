@@ -22,6 +22,7 @@
 static LPDIRECT3DTEXTURE9		s_pTextureGoal[MAX_IMAGE_GOAL] = {};	//テクスチャへのポインタ
 static LPDIRECT3DVERTEXBUFFER9	s_pVtxBuffGoal = NULL;	//頂点バッファへのポインタ
 static GOAL s_aGoal[MAX_GOAL];							//ゴールの情報
+static float s_fPopCounter;
 static bool s_bPause;	// ポーズ中かどうか
 
 //=========================================
@@ -44,6 +45,20 @@ void InitGoal(void)
 		pDevice,
 		"data\\TEXTURE\\goal\\block001.jpg",	//テクスチャのファイル名
 		&s_pTextureGoal[GOAL_TYPE_STRIKE]
+	);
+
+	D3DXCreateTextureFromFile
+	(
+		pDevice,
+		"data\\TEXTURE\\goal\\Arrow.png",	//テクスチャのファイル名
+		&s_pTextureGoal[GOAL_TYPE_NORMAL_POP]
+	);
+
+	D3DXCreateTextureFromFile
+	(
+		pDevice,
+		"data\\TEXTURE\\goal\\Arrow.png",	//テクスチャのファイル名
+		&s_pTextureGoal[GOAL_TYPE_STRIKE_POP]
 	);
 
 	//ゴールの位置
@@ -82,6 +97,43 @@ void InitGoal(void)
 	s_aGoal[5].fAngle = atan2f(GOAL_WIDTH, GOAL_HEIGHT);
 	s_aGoal[5].fLength = sqrtf((GOAL_WIDTH * GOAL_WIDTH) + (GOAL_HEIGHT * GOAL_HEIGHT)) / 2.0f;
 	s_aGoal[5].type = GOAL_TYPE_NORMAL;
+
+	//ゴールポップの位置
+	s_aGoal[6].pos = D3DXVECTOR3(GOAL_WIDTH / 2 + 25, 215.0f, 0.1f);
+	s_aGoal[6].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	s_aGoal[6].fAngle = atan2f(GOAL_POP_WIDTH, GOAL_POP_HEIGHT);
+	s_aGoal[6].fLength = sqrtf((GOAL_POP_WIDTH * GOAL_POP_WIDTH) + (GOAL_POP_HEIGHT * GOAL_POP_HEIGHT)) / 2.0f;
+	s_aGoal[6].type = GOAL_TYPE_NORMAL_POP;
+
+	s_aGoal[7].pos = D3DXVECTOR3(GOAL_WIDTH / 2 + 25, SCREEN_HEIGHT / 2, 0.1f);
+	s_aGoal[7].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	s_aGoal[7].fAngle = atan2f(GOAL_POP_WIDTH, GOAL_POP_HEIGHT);
+	s_aGoal[7].fLength = sqrtf((GOAL_POP_WIDTH * GOAL_POP_WIDTH) + (GOAL_POP_HEIGHT * GOAL_POP_HEIGHT)) / 2.0f;
+	s_aGoal[7].type = GOAL_TYPE_STRIKE_POP;
+
+	s_aGoal[8].pos = D3DXVECTOR3(GOAL_WIDTH / 2 + 25, SCREEN_HEIGHT - 215.0f, 0.1f);
+	s_aGoal[8].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	s_aGoal[8].fAngle = atan2f(GOAL_POP_WIDTH, GOAL_POP_HEIGHT);
+	s_aGoal[8].fLength = sqrtf((GOAL_POP_WIDTH * GOAL_POP_WIDTH) + (GOAL_POP_HEIGHT * GOAL_POP_HEIGHT)) / 2.0f;
+	s_aGoal[8].type = GOAL_TYPE_NORMAL_POP;
+
+	s_aGoal[9].pos = D3DXVECTOR3(SCREEN_WIDTH - GOAL_WIDTH / 2 - 25, 215.0f, 0.1f);
+	s_aGoal[9].rot = D3DXVECTOR3(D3DX_PI, D3DX_PI, 0.0f);
+	s_aGoal[9].fAngle = atan2f(GOAL_POP_WIDTH, GOAL_POP_HEIGHT);
+	s_aGoal[9].fLength = sqrtf((GOAL_POP_WIDTH * GOAL_POP_WIDTH) + (GOAL_POP_HEIGHT * GOAL_POP_HEIGHT)) / 2.0f;
+	s_aGoal[9].type = GOAL_TYPE_NORMAL_POP;
+
+	s_aGoal[10].pos = D3DXVECTOR3(SCREEN_WIDTH - GOAL_WIDTH / 2 - 25, SCREEN_HEIGHT / 2, 0.1f);
+	s_aGoal[10].rot = D3DXVECTOR3(D3DX_PI, D3DX_PI, 0.0f);
+	s_aGoal[10].fAngle = atan2f(GOAL_POP_WIDTH, GOAL_POP_HEIGHT);
+	s_aGoal[10].fLength = sqrtf((GOAL_POP_WIDTH * GOAL_POP_WIDTH) + (GOAL_POP_HEIGHT * GOAL_POP_HEIGHT)) / 2.0f;
+	s_aGoal[10].type = GOAL_TYPE_STRIKE_POP;
+
+	s_aGoal[11].pos = D3DXVECTOR3(SCREEN_WIDTH - GOAL_WIDTH / 2 - 25, SCREEN_HEIGHT - 215.0f, 0.1f);
+	s_aGoal[11].rot = D3DXVECTOR3(D3DX_PI, D3DX_PI, 0.0f);
+	s_aGoal[11].fAngle = atan2f(GOAL_POP_WIDTH, GOAL_POP_HEIGHT);
+	s_aGoal[11].fLength = sqrtf((GOAL_POP_WIDTH * GOAL_POP_WIDTH) + (GOAL_POP_HEIGHT * GOAL_POP_HEIGHT)) / 2.0f;
+	s_aGoal[11].type = GOAL_TYPE_NORMAL_POP;
 
 	//頂点バッファの生成
 	pDevice->CreateVertexBuffer
@@ -145,6 +197,8 @@ void InitGoal(void)
 
 	//頂点バッファをアンロックする
 	s_pVtxBuffGoal->Unlock();
+
+	s_fPopCounter = 0;
 }
 
 //=========================================
@@ -188,6 +242,39 @@ void UpdateGoal(void)
 	{
 		if (s_aGoal[nCntGoal].bUse == true)
 		{
+			if (s_aGoal[nCntGoal].type == GOAL_TYPE_NORMAL_POP ||
+				s_aGoal[nCntGoal].type == GOAL_TYPE_STRIKE_POP)
+			{
+				//ポップ時間
+				if (s_fPopCounter >= 400)
+				{
+					if (s_aGoal[nCntGoal].rot.x == 0.0f)
+					{
+						s_aGoal[nCntGoal].move.x = -4.0f;
+					}
+					else
+					{
+						s_aGoal[nCntGoal].move.x = 4.0f;
+					}
+				}
+				if (s_fPopCounter >= 600)
+				{
+					s_aGoal[nCntGoal].bUse = false;
+				}
+				if (s_fPopCounter > 800)
+				{
+					s_fPopCounter = 0;
+				}
+				else
+				{
+					s_fPopCounter++;
+				}
+			}
+
+			s_aGoal[nCntGoal].pos += s_aGoal[nCntGoal].move;
+
+			s_aGoal[nCntGoal].move *= 0.9;
+
 			//頂点座標の設定 = (配置位置 ± 正弦(対角線の角度 ± 向き) * 対角線の長さ)
 			pVtx[0].pos.x = s_aGoal[nCntGoal].pos.x - sinf(s_aGoal[nCntGoal].fAngle + s_aGoal[nCntGoal].rot.x) * s_aGoal[nCntGoal].fLength;
 			pVtx[0].pos.y = s_aGoal[nCntGoal].pos.y - cosf(s_aGoal[nCntGoal].fAngle + s_aGoal[nCntGoal].rot.y) * s_aGoal[nCntGoal].fLength;
@@ -325,6 +412,20 @@ bool ColSegmentsGoal(D3DXVECTOR3 &seg1Start, D3DXVECTOR3 &seg1Vec, D3DXVECTOR3 &
 float Vec3CrossGoal(D3DXVECTOR3* vec1, D3DXVECTOR3* vec2) 
 {
 	return (vec1->x * vec2->y) - (vec1->y * vec2->x);
+}
+
+//============================================================================
+//ポップの設定処理
+//============================================================================
+void SetGoalPop(void)
+{
+	//for (int nCntGoal = 0; nCntGoal < MAX_GOAL; nCntGoal++)
+	//{
+	//	if (s_aGoal[nCntGoal].type == GOAL_TYPE_NORMAL_POP || s_aGoal[nCntGoal].type == GOAL_TYPE_STRIKE_POP)
+	//	{
+
+	//	}
+	//}
 }
 
 //============================================================================

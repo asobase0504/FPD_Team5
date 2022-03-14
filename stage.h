@@ -3,7 +3,7 @@
 // ステージ(ヘッダーファイル)
 // Author Tanimoto_Kosuke
 //
-// Update 22/03/10
+// Update 22/03/14
 // 
 //=========================================
 #ifndef _STAGE_H_
@@ -34,7 +34,7 @@ typedef enum
 {
 	STAGE_TYPE_FRONT = 0,	//ステージ前側
 	STAGE_TYPE_BACK,		//ステージ後ろ側
-	STAGE_TYPE_NET,		//網
+	STAGE_TYPE_NET,			//網
 	STAGE_TYPE_GOALNET,		//網(ゴール)
 	STAGE_TYPE_MAX
 }STAGE_TYPE;
@@ -55,8 +55,6 @@ typedef struct
 {
 	D3DXVECTOR3 pos;	//位置
 	D3DXVECTOR3 rot;	//回転
-	D3DXVECTOR3 nor;	//法線
-	D3DXCOLOR	col;	//色
 	STAGE_TYPE type;	//種類
 	float fAngle;		//角度(アークタンジェント)
 	float fLength;		//長さ(スクウェアルート)
