@@ -22,8 +22,8 @@
 #define NUM_PLAYER		(2)								// プレイヤーの数
 #define PLAYER_FILE		"data/player.txt"				// プレイヤー読み込みファイル
 #define PLAYER_TEX		"data/TEXTURE/player00.png"		// プレイヤーのテクスチャ
-#define PLAYER_SIZ		(35.0f)							// プレイヤーの幅
-#define ZERO_VECTOR		(D3DXVECTOR3(0.0f, 0.0f, 0.0f))
+#define PLAYER_SIZ		(45.0f)							// プレイヤーの大きさ
+#define ZERO_VECTOR		(D3DXVECTOR3(0.0f, 0.0f, 0.0f))	// ゼロベクトル
 
 //-----------------------------------------
 // スタティック変数
@@ -42,21 +42,26 @@ static void ThrowPlayer(int nIdxPlayer);
 static void CatchDiscPlayer(int nIdxPlayer);
 static void LoadPlayer(void);
 static bool CollisionCircle(D3DXVECTOR3 Pos1, float fRadius1, D3DXVECTOR3 Pos2, float fRadius2);	// 円同士の読み込み処理
+static D3DXVECTOR3 InputMovePlayer(int nIdxPlayer);
 
 //=========================================
 // プレイヤーの初期化処理
 //=========================================
 void InitPlayer(void)
 {
-	Player *pPlayer = s_player;
-
+	//初期化
 	ZeroMemory(s_player, sizeof(s_player));
 	ZeroMemory(s_playerType, sizeof(s_playerType));
 
+	moveCurve = ZERO_VECTOR;
 	LoadPlayer();	// 読み込み
 
+	// プレイヤーの設定
 	SetPlayer(D3DXVECTOR3(200.0f, SCREEN_HEIGHT * 0.5f, 0.0f), PLAYERTYPE_1);
+	s_player[0].nIdxShadow = SetShadow(s_player[0].pos, PLAYER_SIZ * 3.0f);
+
 	SetPlayer(D3DXVECTOR3(SCREEN_WIDTH - 200.0f, SCREEN_HEIGHT * 0.5f, 0.0f), PLAYERTYPE_2);
+	s_player[1].nIdxShadow = SetShadow(s_player[1].pos, PLAYER_SIZ * 3.0f);
 }
 
 //=========================================
@@ -94,18 +99,49 @@ void UpdatePlayer(void)
 	for (int nIdxPlayer = 0; nIdxPlayer < NUM_PLAYER; nIdxPlayer++, pPlayer++)
 	{
 		pPlayer->pos += pPlayer->move;
-
-		CatchDiscPlayer(nIdxPlayer);	// 受け取る
+		SetPositionShadow(pPlayer->nIdxShadow, pPlayer->pos);
 
 		if (pPlayer->bHaveDisk)
-		{
+		{ //ディスクを所持してる場合
 			pPlayer->move = ZERO_VECTOR;
-			ThrowPlayer(nIdxPlayer);		// 投げる
+			// 投げる
+			ThrowPlayer(nIdxPlayer);
+
+			if (pPlayer->jumpstate == JUMP_NOW && pPlayer->fVerticalSpeed > 0.0f)
+			{
+				pPlayer->fHeight += pPlayer->fVerticalSpeed;
+				pPlayer->fVerticalSpeed -= 0.15f;
+			}
 		}
 		else
 		{
-			MovePlayer(nIdxPlayer);			// 移動
-			JumpPlayer(nIdxPlayer);			// 跳躍
+			// 受け取る
+			CatchDiscPlayer(nIdxPlayer);
+
+			switch (pPlayer->jumpstate)
+			{
+			case JUMP_NONE:
+				// 移動
+				MovePlayer(nIdxPlayer);
+				// 跳躍
+				JumpPlayer(nIdxPlayer);
+				break;
+			case JUMP_NOW:
+				pPlayer->fHeight += pPlayer->fVerticalSpeed;
+				pPlayer->fVerticalSpeed -= 0.15f;
+
+				if (pPlayer->fHeight <= 0.0f)
+				{
+					pPlayer->fVerticalSpeed = 5.0f;
+					pPlayer->fHeight = 0.0f;
+					pPlayer->jumpstate = JUMP_NONE;
+				}
+
+				break;
+			default:
+				assert(false);
+				break;
+			}
 		}
 
 		VERTEX_2D *pVtx;	// 頂点情報へのポインタ
@@ -114,10 +150,17 @@ void UpdatePlayer(void)
 		pPlayer->pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
 		// 頂点座標の設定
-		pVtx[0].pos = D3DXVECTOR3(pPlayer->pos.x - pPlayer->fSize, pPlayer->pos.y - pPlayer->fSize, 0.0f);
-		pVtx[1].pos = D3DXVECTOR3(pPlayer->pos.x + pPlayer->fSize, pPlayer->pos.y - pPlayer->fSize, 0.0f);
-		pVtx[2].pos = D3DXVECTOR3(pPlayer->pos.x - pPlayer->fSize, pPlayer->pos.y + pPlayer->fSize, 0.0f);
-		pVtx[3].pos = D3DXVECTOR3(pPlayer->pos.x + pPlayer->fSize, pPlayer->pos.y + pPlayer->fSize, 0.0f);
+		pVtx[0].pos = D3DXVECTOR3(pPlayer->pos.x - (pPlayer->fSize * (1 + (pPlayer->fHeight * 0.015f))),
+			pPlayer->pos.y - ((pPlayer->fHeight - 10.0f) * 0.5f) - (pPlayer->fSize * (1 + (pPlayer->fHeight * 0.015f))), 0.0f);
+
+		pVtx[1].pos = D3DXVECTOR3(pPlayer->pos.x + (pPlayer->fSize * (1 + (pPlayer->fHeight * 0.015f))),
+			pPlayer->pos.y - ((pPlayer->fHeight - 10.0f) * 0.5f) - (pPlayer->fSize * (1 + (pPlayer->fHeight * 0.015f))), 0.0f);
+
+		pVtx[2].pos = D3DXVECTOR3(pPlayer->pos.x - (pPlayer->fSize * (1 + (pPlayer->fHeight * 0.015f))),
+			pPlayer->pos.y - ((pPlayer->fHeight - 10.0f) * 0.5f) + (pPlayer->fSize * (1 + (pPlayer->fHeight * 0.015f))), 0.0f);
+
+		pVtx[ 3].pos = D3DXVECTOR3(pPlayer->pos.x + (pPlayer->fSize * (1 + (pPlayer->fHeight * 0.015f))),
+			pPlayer->pos.y - ((pPlayer->fHeight - 10.0f) * 0.5f) + (pPlayer->fSize * (1 + (pPlayer->fHeight * 0.015f))), 0.0f);
 
 		// 頂点バッファをアンロックする
 		pPlayer->pVtxBuff->Unlock();
@@ -158,83 +201,54 @@ void MovePlayer(int nIdxPlayer)
 {
 	Player *pPlayer = &s_player[nIdxPlayer];
 
-	D3DXVECTOR3 inputMove(0.0f, 0.0f, 0.0f);	// 入力方向
-	float moveLength = 0.0f;					// 入力の長さ
+	// 方向入力処理
+	D3DXVECTOR3 inputMove = InputMovePlayer(nIdxPlayer);
 
 	if (IsJoyPadUse(nIdxPlayer))
-	{ // JoyPad入力
-		inputMove = GetJoypadStick(JOYKEY_LEFT_STICK, nIdxPlayer);
-
-		if (inputMove.x != 0.0f || inputMove.y != 0.0f)
-		{
-			moveLength = D3DXVec3Length(&inputMove);
-
-			if (moveLength > 1.0f)
-			{
-				moveLength = 1.0f;
-			}
+	{ // JoyPadの有無
+		if (GetJoypadTrigger(JOYKEY_A))
+		{ //スライディングの使用
+			pPlayer->bUseSliding = true;
 		}
 	}
 	else
-	{ // キーボード入力
-		switch (nIdxPlayer)
-		{
-		case 0:
-			if (GetKeyboardPress(DIK_W))
-			{
-				inputMove.y -= 1.0f;
-				moveLength = 1.0f;
-			}
-			if (GetKeyboardPress(DIK_A))
-			{
-				inputMove.x -= 1.0f;
-				moveLength = 1.0f;
-			}
-			if (GetKeyboardPress(DIK_S))
-			{
-				inputMove.y += 1.0f;
-				moveLength = 1.0f;
-			}
-			if (GetKeyboardPress(DIK_D))
-			{
-				inputMove.x += 1.0f;
-				moveLength = 1.0f;
-			}
-			break;
-		case 1:
-			if (GetKeyboardPress(DIK_UP))
-			{
-				inputMove.y -= 1.0f;
-				moveLength = 1.0f;
-			}
-			if (GetKeyboardPress(DIK_LEFT))
-			{
-				inputMove.x -= 1.0f;
-				moveLength = 1.0f;
-			}
-			if (GetKeyboardPress(DIK_DOWN))
-			{
-				inputMove.y += 1.0f;
-				moveLength = 1.0f;
-			}
-			if (GetKeyboardPress(DIK_RIGHT))
-			{
-				inputMove.x += 1.0f;
-				moveLength = 1.0f;
-			}
-			break;
-		default:
-			break;
+	{
+		if (GetKeyboardTrigger(DIK_B))
+		{ //スライディングの使用
+			pPlayer->bUseSliding = true;
 		}
 	}
 
-	if (moveLength > 0.0f)
-	{
-		pPlayer->move = inputMove * pPlayer->fMoveSpeed;
-		D3DXVec3Normalize(&inputMove, &inputMove);	// 長さの正規化
+	if (pPlayer->bUseSliding)
+	{ // スライディング
+		if (pPlayer->nSlidingRigorCnt == 0)
+		{
+			D3DXVec3Normalize(&inputMove, &inputMove);	// 長さの正規化
+			pPlayer->move = inputMove * pPlayer->fSlidingVolume;
+			pPlayer->nSlidingRigorCnt++;
+		}
+		else if (pPlayer->nSlidingRigorCnt >= pPlayer->nSlidingRigorMax)
+		{
+			pPlayer->nSlidingRigorCnt = 0;
+			pPlayer->bUseSliding = false;
+		}
+		else
+		{
+			pPlayer->move -= pPlayer->move * pPlayer->fAttenuationSlidingSpead;
+			pPlayer->nSlidingRigorCnt++;
+		}
 	}
+	else
+	{
+		if (D3DXVec3Length(&inputMove) > 0.0f)
+		{
+			pPlayer->move = inputMove * pPlayer->fMoveSpeed;
+			D3DXVec3Normalize(&inputMove, &inputMove);	// 長さの正規化
+		}
 
-	pPlayer->move = pPlayer->move * pPlayer->fAttenuationMoveSpead;
+		// 減衰処理
+		pPlayer->move -= pPlayer->move * pPlayer->fAttenuationMoveSpead;
+	}
 }
 
 //=========================================
@@ -244,6 +258,12 @@ void JumpPlayer(int nIdxPlayer)
 {
 	Player *pPlayer = &s_player[nIdxPlayer];
 
+	if ((IsJoyPadUse(nIdxPlayer) && GetJoypadTrigger(JOYKEY_Y, nIdxPlayer))
+		|| !IsJoyPadUse(nIdxPlayer) && GetKeyboardTrigger(DIK_J))
+	{
+		pPlayer->move = ZERO_VECTOR;
+		pPlayer->jumpstate = JUMP_NOW;
+	}
 }
 
 //=========================================
@@ -263,19 +283,20 @@ void ThrowPlayer(int nIdxPlayer)
 		inputVec = D3DXVECTOR3(-2.0f, 0.0f, 0.0f);	// 入力方向
 	}
 
-	float fVecLength = 0.0f;				// 入力の長さ
+	// 方向入力処理
+	inputVec += InputMovePlayer(nIdxPlayer);
 
 	if (IsJoyPadUse(nIdxPlayer))
 	{ // JoyPad入力
-		inputVec += GetJoypadStick(JOYKEY_LEFT_STICK, nIdxPlayer);
 
-		fVecLength = D3DXVec3Length(&inputVec);
+		float fVecLength = D3DXVec3Length(&inputVec);
 
-		if (fVecLength >= 2.0f)
+		if (fVecLength >= 3.0f)
 		{
 			if (!s_bCurveInput)
 			{
-				moveCurve.y = inputVec.y * 1.075f;
+				// どれくらい曲がるかの入力
+				moveCurve.y = -inputVec.y * pPlayer->fThrowCurvePower;
 			}
 			s_bCurveInput = true;
 		}
@@ -285,72 +306,36 @@ void ThrowPlayer(int nIdxPlayer)
 			s_bCurveInput = false;
 		}
 
-		D3DXVec3Normalize(&inputVec, &inputVec);
-
 		if (GetJoypadTrigger(JOYKEY_B, nIdxPlayer))
 		{
 			SetDisk(pPlayer->pos, inputVec * pPlayer->fThrowPower, moveCurve, DISK_TYPE_NORMAL, nIdxPlayer, 40.0f);
 			pPlayer->bHaveDisk = false;
 		}
-		if (GetJoypadTrigger(JOYKEY_A, nIdxPlayer))
+		else if (GetJoypadTrigger(JOYKEY_A, nIdxPlayer))
 		{
-			SetDisk(pPlayer->pos, inputVec * pPlayer->fThrowPower, moveCurve, DISK_TYPE_LOB, nIdxPlayer, 40.0f);
+			SetDisk(pPlayer->pos, inputVec * pPlayer->fThrowPower, ZERO_VECTOR, DISK_TYPE_LOB, nIdxPlayer, 40.0f);
+			pPlayer->bHaveDisk = false;
+		}
+		else if (GetJoypadTrigger(JOYKEY_X, nIdxPlayer))
+		{
+			SetDisk(pPlayer->pos, inputVec * pPlayer->fThrowPower, ZERO_VECTOR, DISK_TYPE_SPECIAL_0, nIdxPlayer, 40.0f);
 			pPlayer->bHaveDisk = false;
 		}
 
 	}
 	else
 	{ // キーボード入力
-		switch (nIdxPlayer)
-		{
-		case 0:
-			if (GetKeyboardPress(DIK_W))
-			{
-				inputVec.y -= 1.0f;
-			}
-			if (GetKeyboardPress(DIK_A))
-			{
-				inputVec.x -= 1.0f;
-			}
-			if (GetKeyboardPress(DIK_S))
-			{
-				inputVec.y += 1.0f;
-			}
-			if (GetKeyboardPress(DIK_D))
-			{
-				inputVec.x += 1.0f;
-			}
-			break;
-		case 1:
-			if (GetKeyboardPress(DIK_UP))
-			{
-				inputVec.y -= 1.0f;
-			}
-			if (GetKeyboardPress(DIK_LEFT))
-			{
-				inputVec.x -= 1.0f;
-			}
-			if (GetKeyboardPress(DIK_DOWN))
-			{
-				inputVec.y += 1.0f;
-			}
-			if (GetKeyboardPress(DIK_RIGHT))
-			{
-				inputVec.x += 1.0f;
-			}
-			break;
-		default:
-			break;
-		}
-
-		D3DXVec3Normalize(&inputVec, &inputVec);
-
 		if (GetKeyboardPress(DIK_RETURN))
 		{
-			SetDisk(pPlayer->pos, inputVec * pPlayer->fThrowPower, ZERO_VECTOR, DISK_TYPE_NORMAL, nIdxPlayer, 40.0f);
+			SetDisk(pPlayer->pos, inputVec * pPlayer->fThrowPower, moveCurve, DISK_TYPE_NORMAL, nIdxPlayer, 40.0f);
 			pPlayer->bHaveDisk = false;
 		}
-		if (GetKeyboardPress(DIK_SPACE))
+		else if (GetKeyboardPress(DIK_SPACE))
+		{
+			SetDisk(pPlayer->pos, inputVec * pPlayer->fThrowPower, ZERO_VECTOR, DISK_TYPE_LOB, nIdxPlayer, 40.0f);
+			pPlayer->bHaveDisk = false;
+		}
+		else if (GetKeyboardPress(DIK_M))
 		{
 			SetDisk(pPlayer->pos, inputVec * pPlayer->fThrowPower, ZERO_VECTOR, DISK_TYPE_LOB, nIdxPlayer, 40.0f);
 			pPlayer->bHaveDisk = false;
@@ -367,11 +352,19 @@ void CatchDiscPlayer(int nIdxPlayer)
 	Disk* pDisk = GetDisk();
 	Shadow *pShadow = GetShadow();
 
-	if (CollisionCircle(pPlayer->pos, pPlayer->fSize, pDisk->pos, pDisk->fSize) && pDisk->nPlayer != nIdxPlayer)
+	if ((CollisionCircle(pPlayer->pos, pPlayer->fSize * (1 + (pPlayer->fHeight * 0.005)), pDisk->pos, pDisk->fSize)) && (pDisk->nPlayer != nIdxPlayer))
 	{
-		pDisk->bUse = false;
-		pShadow[pDisk->nIdxShadow].bUse = false;
-		pPlayer->bHaveDisk = true;
+		if ((pDisk->type != DISK_TYPE_LOB || (pDisk->type == DISK_TYPE_LOB && pDisk->fHeight <= 0.0f)) && pPlayer->jumpstate == JUMP_NONE)
+		{
+			DestroyDisk();	// ディスクの破棄
+			pPlayer->bHaveDisk = true;
+		}
+
+		if (pDisk->type == DISK_TYPE_LOB && pPlayer->jumpstate == JUMP_NOW)
+		{
+			DestroyDisk();	// ディスクの破棄
+			pPlayer->bHaveDisk = true;
+		}
 	}
 }
 
@@ -380,8 +373,6 @@ void CatchDiscPlayer(int nIdxPlayer)
 //=========================================
 void SetPlayer(const D3DXVECTOR3& pos, PLAYERTYPE type)
 {
-	LPDIRECT3DDEVICE9 pDevice = GetDevice();	// デバイスへのポイント
-
 	Player *pPlayer = s_player;
 
 	for (int i = 0; i < NUM_PLAYER; i++, pPlayer++)
@@ -394,8 +385,10 @@ void SetPlayer(const D3DXVECTOR3& pos, PLAYERTYPE type)
 		// データの初期化
 		ZeroMemory(&s_player[i],sizeof(s_player[0]));
 
+		// 種類別のデータの代入
 		s_player[i] = s_playerType[type];
 
+		// 最初のディスクの保持を決定
 		if (i == 0)
 		{
 			pPlayer->bHaveDisk = true;
@@ -406,7 +399,7 @@ void SetPlayer(const D3DXVECTOR3& pos, PLAYERTYPE type)
 		pPlayer->bUse = true;			// プレイヤーの表示の有無
 
 		// 頂点バッファの生成
-		pDevice->CreateVertexBuffer(sizeof(VERTEX_2D) * 4,
+		GetDevice()->CreateVertexBuffer(sizeof(VERTEX_2D) * 4,
 			D3DUSAGE_WRITEONLY,
 			FVF_VERTEX_2D,
 			D3DPOOL_MANAGED,
@@ -509,10 +502,30 @@ void LoadPlayer(void)
 						fscanf(pFile, "%s", s_aString);	// =の読み込み
 						fscanf(pFile, "%f", &s_playerType[nNumType].fAttenuationMoveSpead);
 					}
-					else if (strcmp(s_aString, "POWER") == 0)
+					else if (strcmp(s_aString, "SLIDING_ATTENUATION") == 0)
+					{
+						fscanf(pFile, "%s", s_aString);	// =の読み込み
+						fscanf(pFile, "%f", &s_playerType[nNumType].fAttenuationSlidingSpead);
+					}
+					else if (strcmp(s_aString, "THROW_POWER") == 0)
 					{
 						fscanf(pFile, "%s", s_aString);	// =の読み込み
 						fscanf(pFile, "%f", &s_playerType[nNumType].fThrowPower);
+					}
+					else if (strcmp(s_aString, "THROW_CURVE") == 0)
+					{
+						fscanf(pFile, "%s", s_aString);	// =の読み込み
+						fscanf(pFile, "%f", &s_playerType[nNumType].fThrowCurvePower);
+					}
+					else if (strcmp(s_aString, "SLIDING_VOLUME") == 0)
+					{
+						fscanf(pFile, "%s", s_aString);	// =の読み込み
+						fscanf(pFile, "%f", &s_playerType[nNumType].fSlidingVolume);
+					}
+					else if (strcmp(s_aString, "SLIDING_RIGOR") == 0)
+					{
+						fscanf(pFile, "%s", s_aString);	// =の読み込み
+						fscanf(pFile, "%d", &s_playerType[nNumType].nSlidingRigorMax);
 					}
 				}
 
@@ -523,7 +536,6 @@ void LoadPlayer(void)
 	//ファイルを閉じる
 	fclose(pFile);
 }
-
 
 //-----------------------------------------------------------------------------
 //円の当たり判定
@@ -538,6 +550,68 @@ static bool CollisionCircle(D3DXVECTOR3 Pos1, float fRadius1, D3DXVECTOR3 Pos2, 
 	float fLength = sqrtf(fCalculationX * fCalculationX + fCalculationY * fCalculationY);
 
 	return fDiff >= fLength;
+}
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+D3DXVECTOR3 InputMovePlayer(int nIdxPlayer)
+{
+	D3DXVECTOR3 inputVec = ZERO_VECTOR;
+
+	if (IsJoyPadUse(nIdxPlayer))
+	{ // JoyPad入力
+		inputVec = GetJoypadStick(JOYKEY_LEFT_STICK, nIdxPlayer);
+	}
+	else
+	{ // キーボード入力
+		switch (nIdxPlayer)
+		{
+		case 0:
+			if (GetKeyboardPress(DIK_W))
+			{
+				inputVec.y -= 1.0f;
+			}
+			if (GetKeyboardPress(DIK_A))
+			{
+				inputVec.x -= 1.0f;
+			}
+			if (GetKeyboardPress(DIK_S))
+			{
+				inputVec.y += 1.0f;
+			}
+			if (GetKeyboardPress(DIK_D))
+			{
+				inputVec.x += 1.0f;
+			}
+			break;
+		case 1:
+			if (GetKeyboardPress(DIK_UP))
+			{
+				inputVec.y -= 1.0f;
+			}
+			if (GetKeyboardPress(DIK_LEFT))
+			{
+				inputVec.x -= 1.0f;
+			}
+			if (GetKeyboardPress(DIK_DOWN))
+			{
+				inputVec.y += 1.0f;
+			}
+			if (GetKeyboardPress(DIK_RIGHT))
+			{
+				inputVec.x += 1.0f;
+			}
+			break;
+		default:
+			break;
+		}
+
+		D3DXVec3Normalize(&inputVec, &inputVec);
+
+	}
+
+	return inputVec;
 }
 
 //=========================================

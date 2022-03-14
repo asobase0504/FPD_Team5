@@ -14,6 +14,8 @@
 #include "goal.h"
 #include <time.h>
 #include "shadow.h"
+#include "stage.h"
+#include "player.h"
 
 //====================================
 //グローバル変数
@@ -148,35 +150,35 @@ void UpdateDisk(void)
 			if (g_aDisk[nCntDisk].bBounce == true)
 			{
 				//壁との当たり判定
-				WallBounce(&g_aDisk[nCntDisk].pos, &g_aDisk[nCntDisk].lastPos, &g_aDisk[nCntDisk].move, &g_aDisk[nCntDisk].acc, 10.0f);
+				WallBounce(&g_aDisk[nCntDisk].pos, &g_aDisk[nCntDisk].lastPos, &g_aDisk[nCntDisk].move, &g_aDisk[nCntDisk].acc, g_aDisk[nCntDisk].fSize);
 			}
-
-			g_aDisk[nCntDisk].lastPos = g_aDisk[nCntDisk].pos;				//前回の位置の更新
 
 			//ゴールとの当たり判定(pos, lastPos, fWidth, fHeight)
 			ColisionGoal(&g_aDisk[nCntDisk].pos, &g_aDisk[nCntDisk].lastPos, 10.0f, 10.0f);
+
+			g_aDisk[nCntDisk].lastPos = g_aDisk[nCntDisk].pos;							//前回の位置の更新
 	
 			VERTEX_2D *pVtx = NULL;					//頂点情報へのポインタ
 
 			//頂点バッファをロックし、頂点情報へのポインタを取得
 			g_pVtxBuffDisk->Lock(0, 0, (void**)&pVtx, 0);
 
-			pVtx[(nCntDisk * 4) + 0].pos = D3DXVECTOR3(g_aDisk[nCntDisk].pos.x - (g_aDisk[nCntDisk].fSize * 0.5f * (1 + (g_aDisk[nCntDisk].fHeight * 0.005))), 
-				g_aDisk[nCntDisk].pos.y - ((g_aDisk[nCntDisk].fHeight - 10.0f) * 0.5f) - (g_aDisk[nCntDisk].fSize * 0.5f * (1 + (g_aDisk[nCntDisk].fHeight * 0.005))), 0.0f);
+			pVtx[(nCntDisk * 4) + 0].pos = D3DXVECTOR3(g_aDisk[nCntDisk].pos.x - (g_aDisk[nCntDisk].fSize * 0.5f * (1 + (g_aDisk[nCntDisk].fHeight * 0.005f))), 
+				g_aDisk[nCntDisk].pos.y - ((g_aDisk[nCntDisk].fHeight - 10.0f) * 0.5f) - (g_aDisk[nCntDisk].fSize * 0.5f * (1 + (g_aDisk[nCntDisk].fHeight * 0.005f))), 0.0f);
 
-			pVtx[(nCntDisk * 4) + 1].pos = D3DXVECTOR3(g_aDisk[nCntDisk].pos.x + (g_aDisk[nCntDisk].fSize * 0.5f * (1 + (g_aDisk[nCntDisk].fHeight * 0.005))),
-				g_aDisk[nCntDisk].pos.y - ((g_aDisk[nCntDisk].fHeight - 10.0f) * 0.5f) - (g_aDisk[nCntDisk].fSize * 0.5f * (1 + (g_aDisk[nCntDisk].fHeight * 0.005))), 0.0f);
+			pVtx[(nCntDisk * 4) + 1].pos = D3DXVECTOR3(g_aDisk[nCntDisk].pos.x + (g_aDisk[nCntDisk].fSize * 0.5f * (1 + (g_aDisk[nCntDisk].fHeight * 0.005f))),
+				g_aDisk[nCntDisk].pos.y - ((g_aDisk[nCntDisk].fHeight - 10.0f) * 0.5f) - (g_aDisk[nCntDisk].fSize * 0.5f * (1 + (g_aDisk[nCntDisk].fHeight * 0.005f))), 0.0f);
 
-			pVtx[(nCntDisk * 4) + 2].pos = D3DXVECTOR3(g_aDisk[nCntDisk].pos.x - (g_aDisk[nCntDisk].fSize * 0.5f * (1 + (g_aDisk[nCntDisk].fHeight * 0.005))),
-				g_aDisk[nCntDisk].pos.y - ((g_aDisk[nCntDisk].fHeight - 10.0f) * 0.5f) + (g_aDisk[nCntDisk].fSize * 0.5f * (1 + (g_aDisk[nCntDisk].fHeight * 0.005))), 0.0f);
+			pVtx[(nCntDisk * 4) + 2].pos = D3DXVECTOR3(g_aDisk[nCntDisk].pos.x - (g_aDisk[nCntDisk].fSize * 0.5f * (1 + (g_aDisk[nCntDisk].fHeight * 0.005f))),
+				g_aDisk[nCntDisk].pos.y - ((g_aDisk[nCntDisk].fHeight - 10.0f) * 0.5f) + (g_aDisk[nCntDisk].fSize * 0.5f * (1 + (g_aDisk[nCntDisk].fHeight * 0.005f))), 0.0f);
 
-			pVtx[(nCntDisk * 4) + 3].pos = D3DXVECTOR3(g_aDisk[nCntDisk].pos.x + (g_aDisk[nCntDisk].fSize * 0.5f * (1 + (g_aDisk[nCntDisk].fHeight * 0.005))), 
-				g_aDisk[nCntDisk].pos.y - ((g_aDisk[nCntDisk].fHeight - 10.0f) * 0.5f) + (g_aDisk[nCntDisk].fSize * 0.5f * (1 + (g_aDisk[nCntDisk].fHeight * 0.005))), 0.0f);
+			pVtx[(nCntDisk * 4) + 3].pos = D3DXVECTOR3(g_aDisk[nCntDisk].pos.x + (g_aDisk[nCntDisk].fSize * 0.5f * (1 + (g_aDisk[nCntDisk].fHeight * 0.005f))), 
+				g_aDisk[nCntDisk].pos.y - ((g_aDisk[nCntDisk].fHeight - 10.0f) * 0.5f) + (g_aDisk[nCntDisk].fSize * 0.5f * (1 + (g_aDisk[nCntDisk].fHeight * 0.005f))), 0.0f);
 
 			//頂点バッファをアンロックする
 			g_pVtxBuffDisk->Unlock();
 
-			SetPositionShadow(g_aDisk[nCntDisk].nIdxShadow, g_aDisk[nCntDisk].pos);
+			SetPositionShadow(g_aDisk[nCntDisk].nIdxShadow, g_aDisk[nCntDisk].pos);		//影の位置の更新
 		}
 	}
 }
@@ -233,6 +235,7 @@ void SetDisk(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 acc, DISK_TYPE type,
 			g_aDisk[nCntDisk].nCntPhase = 0;								//ディスクの必殺技用のカウンターの設定
 			g_aDisk[nCntDisk].nPlayer = nPlayer;							//ディスクを投げたプレイヤーのインデックスの設定
 			g_aDisk[nCntDisk].nIdxShadow = SetShadow(pos, size);			//ディスクの影のインデックス
+			g_aDisk[nCntDisk].bUse = true;									//使用されている状態にする
 
 			//頂点座標の設定
 			pVtx[(nCntDisk * 4) + 0].pos = D3DXVECTOR3(pos.x - (size * 0.5f), pos.y - (size * 0.5f), 0.0f);
@@ -250,15 +253,15 @@ void SetDisk(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 acc, DISK_TYPE type,
 			{
 			default:
 
-				g_aDisk[nCntDisk].fHeight = 10.0f;
-				g_aDisk[nCntDisk].fVerticalSpeed = 0.0f;
+				g_aDisk[nCntDisk].fHeight = NORMAL_DISK_HEIGHT;
+				g_aDisk[nCntDisk].fVerticalSpeed = NORMAL_VERTICAL_SPEED;
 				g_aDisk[nCntDisk].bBounce = true;
 
 				break;
 
 			case DISK_TYPE_LOB:
 
-				g_aDisk[nCntDisk].fHeight = 15.0f;
+				g_aDisk[nCntDisk].fHeight = NORMAL_DISK_HEIGHT;
 				g_aDisk[nCntDisk].fVerticalSpeed = LOB_STARTING_SPEED;
 				g_aDisk[nCntDisk].bBounce = true;
 				
@@ -266,16 +269,32 @@ void SetDisk(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 acc, DISK_TYPE type,
 
 				break;
 
+			case DISK_TYPE_JUMP:
+
+				g_aDisk[nCntDisk].fHeight = JUMP_MAX_HEIGHT;
+				g_aDisk[nCntDisk].fVerticalSpeed = JUMP_MAX_HEIGHT / JUMP_ATTACK_TIME;
+				g_aDisk[nCntDisk].bBounce = false;
+
+				g_aDisk[nCntDisk].move = SetJumpAttackSpeed(g_aDisk[nCntDisk].pos);
+
+				break;
+
 			case DISK_TYPE_SPECIAL_0:
 
-				g_aDisk[nCntDisk].fHeight = 10.0f;
-				g_aDisk[nCntDisk].fVerticalSpeed = 0.0f;
+				g_aDisk[nCntDisk].fHeight = NORMAL_DISK_HEIGHT;
+				g_aDisk[nCntDisk].fVerticalSpeed = NORMAL_VERTICAL_SPEED;
+				g_aDisk[nCntDisk].bBounce = false;
+
+				break;
+
+			case DISK_TYPE_SPECIAL_1:
+
+				g_aDisk[nCntDisk].fHeight = NORMAL_DISK_HEIGHT;
+				g_aDisk[nCntDisk].fVerticalSpeed = NORMAL_VERTICAL_SPEED;
 				g_aDisk[nCntDisk].bBounce = false;
 
 				break;
 			}
-
-			g_aDisk[nCntDisk].bUse = true;			//使用されている状態にする
 
 			break;
 		}
@@ -285,7 +304,7 @@ void SetDisk(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 acc, DISK_TYPE type,
 	g_pVtxBuffDisk->Unlock();
 }
 
-//必殺技(DISK_TYPE_SPECIAL_0)
+//必殺技
 void UpdateSpecialDisk(int nCntDisk, int nPlayer)
 {
 	float fChangePoint;
@@ -372,7 +391,6 @@ void UpdateSpecialDisk(int nCntDisk, int nPlayer)
 				g_aDisk[nCntDisk].nCntPhase++;
 				g_aDisk[nCntDisk].move = D3DXVECTOR3(15.0f, 0.0f, 0.0f);
 				g_aDisk[nCntDisk].acc = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-				int a = 0;
 			}
 
 			break;
@@ -417,46 +435,127 @@ Disk *GetDisk(void)
 	return g_aDisk;	//ディスク情報の先頭アドレスを返す
 }
 
-
+//============================================================================
+//上投げの移動量の設定処理
+//============================================================================
 D3DXVECTOR3 SetLobSpeed(D3DXVECTOR3 pos, D3DXVECTOR3 move, int nCntDisk, float fHeight, float fVerticalSpeed)
 {
-	D3DXVECTOR3 newSpeed = move;
-	D3DXVECTOR3 lastPos = pos;
-	D3DXVECTOR3 endPos = pos;
-	D3DXVECTOR3 newPos;
-	D3DXVECTOR3 initialSpeedDir = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	D3DXVECTOR3 initialSpeedDirNor;
-	int dTime = 0;
+	STAGE_LENGTH *pArea1 = GetP1StgLng();								//プレイヤー１のエリア情報へのポインタ
+	STAGE_LENGTH *pArea2 = GetP2StgLng();								//プレイヤー２のエリア情報へのポインタ
+	D3DXVECTOR3 newSpeed = move;										//新しい移動量
+	D3DXVECTOR3 lastPos = pos;											//最初の位置
+	D3DXVECTOR3 endPos = pos;											//落ちた後の位置
+	D3DXVECTOR3 newPos;													//新しい位置
+	float fTime = 0.0f;													//ディスクが落ちるまでの必要なフレーム
+	float height, vSpeed;												//ディスクが落ちるまでの必要なフレームを計算する用の変数
+	height = fHeight;
+	vSpeed = fVerticalSpeed;
 
-	while (fHeight > 0.0f)
-	{
-		fHeight += fVerticalSpeed;
-		fVerticalSpeed -= 0.05f;
-		dTime++;
+	while (height > 0.0f)
+	{//ディスクが落ちた時の位置と必要な時間を計算する
+		height += vSpeed;
+		vSpeed -= 0.05f;
 		endPos += move;
+		fTime += 1.0f;
+	}
+	newPos = endPos;						//目的の位置
+
+	//相手のエリアを出ないようにする処理
+	if (pos.x < SCREEN_WIDTH * 0.5f)
+	{//投げるプレイヤーはプレイヤー１だったら
+		if (newPos.y < pArea2->min.y + g_aDisk[nCntDisk].fSize)
+		{//エリアの上側を出ないようにする
+			newPos.y = pArea2->min.y + g_aDisk[nCntDisk].fSize;
+		}
+		else if (newPos.y > pArea2->max.y - g_aDisk[nCntDisk].fSize)
+		{//エリアの下側を出ないようにする
+			newPos.y = pArea2->max.y - g_aDisk[nCntDisk].fSize;
+		}
+
+		if (newPos.x < pArea2->min.x + g_aDisk[nCntDisk].fSize)
+		{//エリアの左側を出ないようにする
+			newPos.x = pArea2->min.x + g_aDisk[nCntDisk].fSize;
+		}
+		else if (newPos.x > pArea2->max.x - g_aDisk[nCntDisk].fSize)
+		{//エリアの右側を出ないようにする
+			newPos.x = pArea2->max.x - g_aDisk[nCntDisk].fSize;
+		}
+	}
+	else
+	{//投げるプレイヤーはプレイヤー２だったら
+		if (newPos.y < pArea1->min.y + g_aDisk[nCntDisk].fSize)
+		{//エリアの上側を出ないようにする
+			newPos.y = pArea1->min.y + g_aDisk[nCntDisk].fSize;
+		}
+		else if (newPos.y > pArea1->max.y - g_aDisk[nCntDisk].fSize)
+		{//エリアの下側を出ないようにする
+			newPos.y = pArea1->max.y - g_aDisk[nCntDisk].fSize;
+		}
+
+		if (newPos.x < pArea1->min.x + g_aDisk[nCntDisk].fSize)
+		{//エリアの左側を出ないようにする
+			newPos.x = pArea1->min.x + g_aDisk[nCntDisk].fSize;
+		}
+		else if (newPos.x > pArea1->max.x - g_aDisk[nCntDisk].fSize)
+		{//エリアの右側を出ないようにする
+			newPos.x = pArea1->max.x - g_aDisk[nCntDisk].fSize;
+		}
 	}
 
-	initialSpeedDir = endPos - pos;
+	newSpeed = (newPos - pos) / fTime;						//新しい移動量を計算する
 
-	bool bImpact = SpecialWallBounce(&endPos, &lastPos, &newSpeed, g_aDisk[nCntDisk].fSize);
+	return newSpeed;										//新しい移動量を返す
+}
 
-	if (bImpact == true)
-	{
-		D3DXVECTOR3 xDir = D3DXVECTOR3(1.0f, 0.0f, 0.0f);
-		D3DXVECTOR3 postImpact = endPos - pos;
-		D3DXVec3Normalize(&initialSpeedDirNor, &initialSpeedDir);
+//============================================================================
+//ジャンプ投げの移動量の設定処理
+//============================================================================
+D3DXVECTOR3 SetJumpAttackSpeed(D3DXVECTOR3 pos)
+{
+	STAGE_LENGTH *pArea1 = GetP1StgLng();					//プレイヤー１のエリア情報へのポインタ
+	STAGE_LENGTH *pArea2 = GetP2StgLng();					//プレイヤー２のエリア情報へのポインタ
+	Player *pPlayer = GetPlayer();							//プレイヤー情報へのポインタ
 
-		float fDot = D3DXVec3Dot(&xDir, &initialSpeedDirNor);
-		float fLenght = sqrtf(((postImpact.x * postImpact.x) + (postImpact.y * postImpact.y)));
+	D3DXVECTOR3 endPos, speed;								//目的の位置と移動量のローカル変数
 
-		newPos = endPos + (xDir * (fDot * fLenght));
-		newSpeed = newPos - lastPos;
+	int nPlayer;											//ディスクを投げたプレイヤー
 
-		D3DXVec3Normalize(&newSpeed, &newSpeed);
-
-		fLenght = sqrtf(((move.x * move.x) + (move.y * move.y)));
-		newSpeed *= fLenght;
+	if (pos.x < SCREEN_WIDTH * 0.5f)
+	{//プレイヤー１
+		nPlayer = 0;
+	}
+	else
+	{//プレイヤー２
+		nPlayer = 1;
 	}
 
-	return newSpeed;
+	if (nPlayer == 0)
+	{//プレイヤー１だったら
+		endPos.x = pArea2->min.x + 50.0f + (pPlayer->fThrowPower * 5.0f);			//目的の位置のX座標を設定する
+		endPos.y = pos.y;															//目的の位置のY座標を設定する
+		endPos.z = 0.0f;															//目的の位置のZ座標を0にする
+	}
+	else
+	{//プレイヤー２だったら
+		endPos.x = pArea1->max.x - 50.0f - (pPlayer->fThrowPower * 5.0f);			//目的の位置のX座標を設定する
+		endPos.y = pos.y;															//目的の位置のY座標を設定する
+		endPos.z = 0.0f;															//目的の位置のZ座標を0にする
+	}																				
+		
+	//新しい移動量を計算する
+	speed = endPos - pos;															
+	speed.x / JUMP_ATTACK_TIME;
+
+	return speed;																	//新しい移動量を返す
+}
+
+//======================================
+//ディスクの破棄
+//======================================
+void DestroyDisk(void)
+{
+	Shadow *pShadow = GetShadow();						//影の情報へのポインタ
+
+	g_aDisk[0].bUse = false;							//ディスクを使用されていない状態にする
+	pShadow[g_aDisk[0].nIdxShadow].bUse = false;		//影を使用されていない状態にする
 }

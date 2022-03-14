@@ -72,6 +72,9 @@ void InitTitle(void)
 								"data/TEXTURE/GameEnd.png",
 								&s_apTextureMenu[MENU_EXIT]);
 
+	//変数の初期化
+	s_nSelectMenu = 0;
+
 	//頂点バッファの生成
 	pDevice->CreateVertexBuffer(sizeof(VERTEX_2D) * 4,
 								D3DUSAGE_WRITEONLY,
@@ -121,6 +124,7 @@ void InitTitle(void)
 	menu.fBottom	= SCREEN_HEIGHT;
 	menu.fWidth		= MENU_WIDTH;
 	menu.fHeight	= MENU_HEIGHT;
+
 	for (int i = 0; i < MENU_MAX; i++)
 	{
 		menu.pTexture[i] = s_apTextureMenu[i];
@@ -142,7 +146,7 @@ void InitTitle(void)
 //==================================================
 void UninitTitle(void)
 {
-	UninitMenu();
+	UninitMenu();	//メニュー
 
 	if (s_pTexture != NULL)
 	{//テクスチャの破棄
@@ -162,9 +166,8 @@ void UninitTitle(void)
 //==================================================
 void UpdateTitle(void)
 {
-
-	SelectMenu();
-	UpdateMenu();
+	SelectMenu();	//メニュー選択
+	UpdateMenu();	//メニュー更新
 }
 
 //==================================================
@@ -188,7 +191,7 @@ void DrawTitle(void)
 							0,						//描画する最初の頂点インデックス
 							2);						//描画するプリミティブ数
 
-	DrawMenu();
+	DrawMenu();		//メニュー描画
 }
 
 //--------------------------------------------------

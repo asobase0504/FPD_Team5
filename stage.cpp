@@ -25,6 +25,8 @@ static LPDIRECT3DVERTEXBUFFER9	s_pVtxBuffStage = NULL;					//’¸“_ƒoƒbƒtƒ@‚Ö‚Ìƒ|ƒ
 static STAGE s_aStage[MAX_STAGE];										//ƒXƒe[ƒW‚Ìî•ñ
 static bool s_bFell;			//—Ž‚¿‚½”»’è
 static float s_fFellCounter;	//—Ž‚¿‚½ŽžŠÔ
+static STAGE_LENGTH s_p1;		//ƒvƒŒƒCƒ„[1ƒXƒe[ƒW’·‚³
+static STAGE_LENGTH s_p2;		//ƒvƒŒƒCƒ„[2ƒXƒe[ƒW’·‚³
 
 //=========================================
 // ƒXƒe[ƒW‚Ì‰Šú‰»ˆ—
@@ -37,7 +39,7 @@ void InitStage(void)
 	D3DXCreateTextureFromFile
 	(
 		pDevice,
-		"data\\tanimoto\\TEXTURE\\block004.jpg",	//ƒeƒNƒXƒ`ƒƒ‚Ìƒtƒ@ƒCƒ‹–¼
+		"data\\TEXTURE\\stage\\block004.jpg",	//ƒeƒNƒXƒ`ƒƒ‚Ìƒtƒ@ƒCƒ‹–¼
 		&s_pTextureStage[STAGE_TYPE_FRONT]
 	);
 
@@ -45,7 +47,7 @@ void InitStage(void)
 	D3DXCreateTextureFromFile
 	(
 		pDevice,
-		"data\\tanimoto\\TEXTURE\\block005.jpg",	//ƒeƒNƒXƒ`ƒƒ‚Ìƒtƒ@ƒCƒ‹–¼
+		"data\\TEXTURE\\stage\\block005.jpg",	//ƒeƒNƒXƒ`ƒƒ‚Ìƒtƒ@ƒCƒ‹–¼
 		&s_pTextureStage[STAGE_TYPE_BACK]
 	);
 
@@ -53,9 +55,10 @@ void InitStage(void)
 	D3DXCreateTextureFromFile
 	(
 		pDevice,
-		"data\\tanimoto\\TEXTURE\\block005.jpg",	//ƒeƒNƒXƒ`ƒƒ‚Ìƒtƒ@ƒCƒ‹–¼
+		"data\\TEXTURE\\stage\\block005.jpg",	//ƒeƒNƒXƒ`ƒƒ‚Ìƒtƒ@ƒCƒ‹–¼
 		&s_pTextureStage[STAGE_TYPE_NET]
 	);
+
 
 	//ƒeƒNƒXƒ`ƒƒ[‚Ì“Ç‚Ýž‚Ý
 	D3DXCreateTextureFromFile
@@ -64,6 +67,14 @@ void InitStage(void)
 		"data\\tanimoto\\TEXTURE\\block004.jpg",	//ƒeƒNƒXƒ`ƒƒ‚Ìƒtƒ@ƒCƒ‹–¼
 		&s_pTextureStage[STAGE_TYPE_GOALNET]
 	);
+
+	//p1‚ÌƒXƒe[ƒW’·‚³
+	s_p1.min = D3DXVECTOR3(MIN_WIDTH, MIN_HEIGHT, 0.0f);
+	s_p1.max = D3DXVECTOR3((SCREEN_WIDTH / 2) - (STAGE_NET_WIDTH / 2), MAX_HEIGHT, 0.0f);
+
+	//p2‚ÌƒXƒe[ƒW’·‚³
+	s_p2.min = D3DXVECTOR3((SCREEN_WIDTH / 2) + (STAGE_NET_WIDTH / 2), MIN_HEIGHT, 0.0f);
+	s_p2.max = D3DXVECTOR3(MAX_WIDTH, MAX_HEIGHT, 0.0f);
 
 	//\‘¢‘Ì‚Ì‰Šú‰»ˆ—
 	s_aStage[0].pos = D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.3f);
@@ -90,7 +101,7 @@ void InitStage(void)
 	s_aStage[2].fLength = sqrtf((STAGE_NET_WIDTH * STAGE_NET_WIDTH) + (STAGE_NET_HEIGHT * STAGE_NET_HEIGHT)) / 2.0f;
 	s_aStage[2].type = STAGE_TYPE_NET;
 
-	s_aStage[3].pos = D3DXVECTOR3(80, SCREEN_HEIGHT / 2, 0.0f);
+	s_aStage[3].pos = D3DXVECTOR3(MIN_WIDTH, SCREEN_HEIGHT / 2, 0.0f);
 	s_aStage[3].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	s_aStage[3].nor = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	s_aStage[3].col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
@@ -98,7 +109,7 @@ void InitStage(void)
 	s_aStage[3].fLength = sqrtf((STAGE_NET_WIDTH * STAGE_NET_WIDTH) + (STAGE_NET_HEIGHT * STAGE_NET_HEIGHT)) / 2.0f;
 	s_aStage[3].type = STAGE_TYPE_GOALNET;
 
-	s_aStage[4].pos = D3DXVECTOR3(SCREEN_WIDTH - 80, SCREEN_HEIGHT / 2, 0.0f);
+	s_aStage[4].pos = D3DXVECTOR3(MAX_WIDTH, SCREEN_HEIGHT / 2, 0.0f);
 	s_aStage[4].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	s_aStage[4].nor = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	s_aStage[4].col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
@@ -164,8 +175,8 @@ void InitStage(void)
 	//’¸“_ƒoƒbƒtƒ@‚ðƒAƒ“ƒƒbƒN‚·‚é
 	s_pVtxBuffStage->Unlock();
 
-	SetWall(D3DXVECTOR3(SCREEN_WIDTH / 2, 100.0f, 0.0f), STAGE_WIDTH, 10.0f, 0.0f);						//•Ç(ã‘¤)
-	SetWall(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT - 100.0f, 0.0f), STAGE_WIDTH, 10.0f, D3DX_PI);	//•Ç(‰º‘¤)
+	SetWall(D3DXVECTOR3(SCREEN_WIDTH / 2, MIN_HEIGHT, 0.0f), STAGE_WIDTH, 10.0f, 0.0f);		//•Ç(ã‘¤)
+	SetWall(D3DXVECTOR3(SCREEN_WIDTH / 2, MAX_HEIGHT, 0.0f), STAGE_WIDTH, 10.0f, D3DX_PI);	//•Ç(‰º‘¤)
 
 	InitGoal();
 }
@@ -294,4 +305,17 @@ void DrawStage()
 	}
 
 	DrawGoal();
+}
+
+//============================================================================
+//ƒXƒe[ƒW’·‚³‚ÌŽæ“¾ˆ—
+//============================================================================
+STAGE_LENGTH *GetP1StgLng(void)
+{
+	return &s_p1;	//p1ƒXƒe[ƒW’·‚³‚Ìî•ñ‚Ìæ“ªƒAƒhƒŒƒX‚ð•Ô‚·
+}
+
+STAGE_LENGTH *GetP2StgLng(void)
+{
+	return &s_p2;	//p2ƒXƒe[ƒW’·‚³‚Ìæ“ªƒAƒhƒŒƒX‚ð•Ô‚·
 }

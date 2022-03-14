@@ -232,7 +232,6 @@ void WallBounce(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pLastPos, D3DXVECTOR3 *pMove, D3
 					//衝突点の座標の計算=======================================================================================
 
 					D3DXVECTOR3 impact, newPosition;
-					float fAngle, fAngleV;
 
 					position = point - *(pLastPos);						//前回の位置から現在の位置までのベクトル
 
@@ -328,7 +327,6 @@ bool SpecialWallBounce(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pLastPos, D3DXVECTOR3 *pM
 			 //衝突点の座標の計算=======================================================================================
 
 				D3DXVECTOR3 impact, newPosition;
-				float fAngle, fAngleV;
 
 				position = point - *(pLastPos);						//前回の位置から現在の位置までのベクトル
 
