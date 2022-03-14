@@ -70,4 +70,7 @@ void UninitStage(void);
 void UpdateStage(void);
 void DrawStage(void);
 
+STAGE_LENGTH *GetP1StgLng(void);
+STAGE_LENGTH *GetP2StgLng(void);
+
 #endif
