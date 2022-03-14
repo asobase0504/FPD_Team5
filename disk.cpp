@@ -251,15 +251,15 @@ void SetDisk(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 acc, DISK_TYPE type,
 			{
 			default:
 
-				g_aDisk[nCntDisk].fHeight = 10.0f;
-				g_aDisk[nCntDisk].fVerticalSpeed = 0.0f;
+				g_aDisk[nCntDisk].fHeight = NORMAL_DISK_HEIGHT;
+				g_aDisk[nCntDisk].fVerticalSpeed = NORMAL_VERTICAL_SPEED;
 				g_aDisk[nCntDisk].bBounce = true;
 
 				break;
 
 			case DISK_TYPE_LOB:
 
-				g_aDisk[nCntDisk].fHeight = 15.0f;
+				g_aDisk[nCntDisk].fHeight = NORMAL_DISK_HEIGHT;
 				g_aDisk[nCntDisk].fVerticalSpeed = LOB_STARTING_SPEED;
 				g_aDisk[nCntDisk].bBounce = true;
 				
@@ -279,16 +279,16 @@ void SetDisk(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 acc, DISK_TYPE type,
 
 			case DISK_TYPE_SPECIAL_0:
 
-				g_aDisk[nCntDisk].fHeight = 10.0f;
-				g_aDisk[nCntDisk].fVerticalSpeed = 0.0f;
+				g_aDisk[nCntDisk].fHeight = NORMAL_DISK_HEIGHT;
+				g_aDisk[nCntDisk].fVerticalSpeed = NORMAL_VERTICAL_SPEED;
 				g_aDisk[nCntDisk].bBounce = false;
 
 				break;
 
 			case DISK_TYPE_SPECIAL_1:
 
-				g_aDisk[nCntDisk].fHeight = 10.0f;
-				g_aDisk[nCntDisk].fVerticalSpeed = 0.0f;
+				g_aDisk[nCntDisk].fHeight = NORMAL_DISK_HEIGHT;
+				g_aDisk[nCntDisk].fVerticalSpeed = NORMAL_VERTICAL_SPEED;
 				g_aDisk[nCntDisk].bBounce = false;
 
 				break;
