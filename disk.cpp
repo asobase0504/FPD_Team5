@@ -36,7 +36,7 @@ void InitDisk(void)
 
 	//テクスチャの読み込み
 	D3DXCreateTextureFromFile(pDevice,
-		"data\\TEXTURE\\PlayerSpriteSheet.png",
+		"data\\TEXTURE\\disc.png",
 		&g_apTexDisk);
 
 	//頂点バッファの生成

@@ -20,28 +20,22 @@
 //#include "effect.h"
 #include"score.h"
 #include "time.h"
-
-//------------------------------------
-// マクロ定義
-//------------------------------------
-
-//------------------------------------
-// スタティック変数
-//------------------------------------
+#include "referee.h"
 
 //=========================================
 // 初期化
 //=========================================
 void InitGame(void)
 {
-	InitShadow();	// 影
 	InitWall();		// 壁
 	InitDisk();		// ディスク
+	InitShadow();	// 影
 	InitPlayer();	// プレイヤー
 	InitStage();	// ステージ
 	//InitEffect();
 	InitScore();
 	//InitTime();
+	InitRef();
 }
 
 //=========================================
@@ -49,14 +43,15 @@ void InitGame(void)
 //=========================================
 void UninitGame(void)
 {
-	UninitShadow();	// 影
 	UninitPlayer();	// プレイヤー
 	UninitWall();	// 壁
+	UninitShadow();	// 影
 	UninitDisk();	// ディスク
 	UninitStage();	// ステージ
 //	UninitEffect();
 	UninitScore();
 	//UninitTime();
+	UninitRef();
 }
 
 //=========================================
@@ -72,6 +67,7 @@ void UpdateGame(void)
 //	UpdateEffect();
 	UpdateScore();
 	//UpdateTime();
+	UpdateRef();
 }
 
 //=========================================
@@ -87,4 +83,5 @@ void DrawGame()
 //	DrawEffect();
 	DrawScore();
 	//DrawTime();
+	DrawRef();
 }

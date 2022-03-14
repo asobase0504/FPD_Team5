@@ -3,7 +3,7 @@
 // ゴール処理
 // Author Tanimoto_Kosuke
 //
-// Update 22/03/11
+// Update 22/03/14
 // 
 //=========================================
 //------------------------------------
@@ -14,6 +14,7 @@
 #include <stdio.h>
 #include "disk.h"
 #include "stage.h"
+#include "score.h"
 
 //------------------------------------
 // スタティック変数
@@ -170,7 +171,7 @@ void UninitGoal(void)
 }
 
 //=========================================
-// ゴールの初期化処理
+// ゴールの更新処理
 //=========================================
 void UpdateGoal(void)
 {
@@ -211,7 +212,7 @@ void UpdateGoal(void)
 }
 
 //=========================================
-// ゴールの初期化処理
+// ゴールの描画処理
 //=========================================
 void DrawGoal()
 {
@@ -265,38 +266,23 @@ void ColisionGoal(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pLastPos, float fWidth, float 
 		{
 			if (s_aGoal[nCntGoal].type == GOAL_TYPE_NORMAL)
 			{//3点ゴールの場合
-				//D3DXVECTOR3 &seg1Start, D3DXVECTOR3 &seg1Vec, D3DXVECTOR3 &seg2Start, D3DXVECTOR3 &seg2Vec
 				if (ColSegmentsGoal(*pPos, *pPos - *pLastPos,
 					s_aGoal[nCntGoal].pos - D3DXVECTOR3(0.0f, (GOAL_HEIGHT / 2), 0.0f),
 					(s_aGoal[nCntGoal].pos + D3DXVECTOR3(0.0f, (GOAL_HEIGHT / 2), 0.0f)) - (s_aGoal[nCntGoal].pos - D3DXVECTOR3(0.0f, (GOAL_HEIGHT / 2), 0.0f))) == true)
 				{
 					pDisk->move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+					AddScore(3);
 				}
 			}
 			if(s_aGoal[nCntGoal].type == GOAL_TYPE_STRIKE)
 			{//5点ゴールの場合
-
 				if (ColSegmentsGoal(*pPos, *pPos - *pLastPos,
 					s_aGoal[nCntGoal].pos - D3DXVECTOR3(0.0f, (STRIKE_GOAL_HEIGHT / 2), 0.0f),
 					(s_aGoal[nCntGoal].pos + D3DXVECTOR3(0.0f, (STRIKE_GOAL_HEIGHT / 2), 0.0f)) - (s_aGoal[nCntGoal].pos - D3DXVECTOR3(0.0f, (STRIKE_GOAL_HEIGHT / 2), 0.0f))) == true)
 				{
 					pDisk->move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+					AddScore(5);
 				}
-
-				//if (pPos->y > s_aGoal[nCntGoal].pos.y - (STRIKE_GOAL_HEIGHT / 2)
-				//	&& pPos->y < s_aGoal[nCntGoal].pos.y + (STRIKE_GOAL_HEIGHT / 2))
-				//{
-				//	if (pPos->x + fWidth / 2 >= s_aGoal[nCntGoal].pos.x 
-				//		&& pLastPos->x + fWidth / 2 - 1 < s_aGoal[nCntGoal].pos.x)
-				//	{
-				//		pDisk->move = D3DXVECTOR3(0.0f,0.0f,0.0f);
-				//	}
-				//	if (pPos->x - fWidth / 2 <= s_aGoal[nCntGoal].pos.x
-				//		&& pLastPos->x - fWidth / 2 + 1 > s_aGoal[nCntGoal].pos.x)
-				//	{
-				//		pDisk->move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-				//	}
-				//}
 			}
 		}
 	}
@@ -334,7 +320,7 @@ bool ColSegmentsGoal(D3DXVECTOR3 &seg1Start, D3DXVECTOR3 &seg1Vec, D3DXVECTOR3 &
 }
 
 //============================================================================
-//ゴールの外積処理
+//ゴールの内積処理
 //============================================================================
 float Vec3CrossGoal(D3DXVECTOR3* vec1, D3DXVECTOR3* vec2) 
 {

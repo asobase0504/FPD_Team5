@@ -162,6 +162,7 @@
     <ClCompile Include="menu.cpp" />
     <ClCompile Include="mode.cpp" />
     <ClCompile Include="player.cpp" />
+    <ClCompile Include="Referee.cpp" />
     <ClCompile Include="result.cpp" />
     <ClCompile Include="score.cpp" />
     <ClCompile Include="option.cpp" />
@@ -183,6 +184,7 @@
     <ClInclude Include="menu.h" />
     <ClInclude Include="mode.h" />
     <ClInclude Include="player.h" />
+    <ClInclude Include="referee.h" />
     <ClInclude Include="result.h" />
     <ClInclude Include="score.h" />
     <ClInclude Include="option.h" />
