@@ -33,9 +33,9 @@
 //=========================================
 void InitGame(void)
 {
-	InitShadow();	// 影
 	InitWall();		// 壁
 	InitDisk();		// ディスク
+	InitShadow();	// 影
 	InitPlayer();	// プレイヤー
 	InitStage();	// ステージ
 	//InitEffect();
@@ -47,9 +47,9 @@ void InitGame(void)
 //=========================================
 void UninitGame(void)
 {
-	UninitShadow();	// 影
 	UninitPlayer();	// プレイヤー
 	UninitWall();	// 壁
+	UninitShadow();	// 影
 	UninitDisk();	// ディスク
 	UninitStage();	// ステージ
 //	UninitEffect();

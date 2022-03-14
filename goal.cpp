@@ -334,7 +334,7 @@ bool ColSegmentsGoal(D3DXVECTOR3 &seg1Start, D3DXVECTOR3 &seg1Vec, D3DXVECTOR3 &
 }
 
 //============================================================================
-//ƒS[ƒ‹‚ÌŠOÏˆ—
+//ƒS[ƒ‹‚Ì“àÏˆ—
 //============================================================================
 float Vec3CrossGoal(D3DXVECTOR3* vec1, D3DXVECTOR3* vec2) 
 {
