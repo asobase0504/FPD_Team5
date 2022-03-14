@@ -19,6 +19,7 @@
 #include "shadow.h"
 //#include "effect.h"
 #include"score.h"
+#include "time.h"
 
 //------------------------------------
 // マクロ定義
@@ -40,6 +41,7 @@ void InitGame(void)
 	InitStage();	// ステージ
 	//InitEffect();
 	InitScore();
+	//InitTime();
 }
 
 //=========================================
@@ -54,6 +56,7 @@ void UninitGame(void)
 	UninitStage();	// ステージ
 //	UninitEffect();
 	UninitScore();
+	//UninitTime();
 }
 
 //=========================================
@@ -68,6 +71,7 @@ void UpdateGame(void)
 	UpdateShadow();	// 影
 //	UpdateEffect();
 	UpdateScore();
+	//UpdateTime();
 }
 
 //=========================================
@@ -82,4 +86,5 @@ void DrawGame()
 	DrawDisk();		// ディスク
 //	DrawEffect();
 	DrawScore();
+	//DrawTime();
 }
