@@ -13,12 +13,15 @@
 //マクロ定義
 #define MAX_DISK			(1)				//ディスクの最大数
 #define LOB_STARTING_SPEED	(5.0f)			//上投げのはじめの上下移動量
+#define JUMP_MAX_HEIGHT		(260.0f)		//ジャンプした後の最大高さ
+#define JUMP_ATTACK_TIME	(30.0f)			//ジャンプ投げの時、ディスクが落ちるまでの時間
 
 //ディスクの種類
 typedef enum
 {
 	DISK_TYPE_NORMAL = 0,			//普通
 	DISK_TYPE_LOB,					//上投げ
+	DISK_TYPE_JUMP,
 	DISK_TYPE_SPECIAL_0,
 	DISK_TYPE_SPECIAL_1,
 	DISK_TYPE_MAX

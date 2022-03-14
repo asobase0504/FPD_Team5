@@ -161,17 +161,17 @@ void UpdateDisk(void)
 			//頂点バッファをロックし、頂点情報へのポインタを取得
 			g_pVtxBuffDisk->Lock(0, 0, (void**)&pVtx, 0);
 
-			pVtx[(nCntDisk * 4) + 0].pos = D3DXVECTOR3(g_aDisk[nCntDisk].pos.x - (g_aDisk[nCntDisk].fSize * 0.5f * (1 + (g_aDisk[nCntDisk].fHeight * 0.005))), 
-				g_aDisk[nCntDisk].pos.y - ((g_aDisk[nCntDisk].fHeight - 10.0f) * 0.5f) - (g_aDisk[nCntDisk].fSize * 0.5f * (1 + (g_aDisk[nCntDisk].fHeight * 0.005))), 0.0f);
+			pVtx[(nCntDisk * 4) + 0].pos = D3DXVECTOR3(g_aDisk[nCntDisk].pos.x - (g_aDisk[nCntDisk].fSize * 0.5f * (1 + (g_aDisk[nCntDisk].fHeight * 0.005f))), 
+				g_aDisk[nCntDisk].pos.y - ((g_aDisk[nCntDisk].fHeight - 10.0f) * 0.5f) - (g_aDisk[nCntDisk].fSize * 0.5f * (1 + (g_aDisk[nCntDisk].fHeight * 0.005f))), 0.0f);
 
-			pVtx[(nCntDisk * 4) + 1].pos = D3DXVECTOR3(g_aDisk[nCntDisk].pos.x + (g_aDisk[nCntDisk].fSize * 0.5f * (1 + (g_aDisk[nCntDisk].fHeight * 0.005))),
-				g_aDisk[nCntDisk].pos.y - ((g_aDisk[nCntDisk].fHeight - 10.0f) * 0.5f) - (g_aDisk[nCntDisk].fSize * 0.5f * (1 + (g_aDisk[nCntDisk].fHeight * 0.005))), 0.0f);
+			pVtx[(nCntDisk * 4) + 1].pos = D3DXVECTOR3(g_aDisk[nCntDisk].pos.x + (g_aDisk[nCntDisk].fSize * 0.5f * (1 + (g_aDisk[nCntDisk].fHeight * 0.005f))),
+				g_aDisk[nCntDisk].pos.y - ((g_aDisk[nCntDisk].fHeight - 10.0f) * 0.5f) - (g_aDisk[nCntDisk].fSize * 0.5f * (1 + (g_aDisk[nCntDisk].fHeight * 0.005f))), 0.0f);
 
-			pVtx[(nCntDisk * 4) + 2].pos = D3DXVECTOR3(g_aDisk[nCntDisk].pos.x - (g_aDisk[nCntDisk].fSize * 0.5f * (1 + (g_aDisk[nCntDisk].fHeight * 0.005))),
-				g_aDisk[nCntDisk].pos.y - ((g_aDisk[nCntDisk].fHeight - 10.0f) * 0.5f) + (g_aDisk[nCntDisk].fSize * 0.5f * (1 + (g_aDisk[nCntDisk].fHeight * 0.005))), 0.0f);
+			pVtx[(nCntDisk * 4) + 2].pos = D3DXVECTOR3(g_aDisk[nCntDisk].pos.x - (g_aDisk[nCntDisk].fSize * 0.5f * (1 + (g_aDisk[nCntDisk].fHeight * 0.005f))),
+				g_aDisk[nCntDisk].pos.y - ((g_aDisk[nCntDisk].fHeight - 10.0f) * 0.5f) + (g_aDisk[nCntDisk].fSize * 0.5f * (1 + (g_aDisk[nCntDisk].fHeight * 0.005f))), 0.0f);
 
-			pVtx[(nCntDisk * 4) + 3].pos = D3DXVECTOR3(g_aDisk[nCntDisk].pos.x + (g_aDisk[nCntDisk].fSize * 0.5f * (1 + (g_aDisk[nCntDisk].fHeight * 0.005))), 
-				g_aDisk[nCntDisk].pos.y - ((g_aDisk[nCntDisk].fHeight - 10.0f) * 0.5f) + (g_aDisk[nCntDisk].fSize * 0.5f * (1 + (g_aDisk[nCntDisk].fHeight * 0.005))), 0.0f);
+			pVtx[(nCntDisk * 4) + 3].pos = D3DXVECTOR3(g_aDisk[nCntDisk].pos.x + (g_aDisk[nCntDisk].fSize * 0.5f * (1 + (g_aDisk[nCntDisk].fHeight * 0.005f))), 
+				g_aDisk[nCntDisk].pos.y - ((g_aDisk[nCntDisk].fHeight - 10.0f) * 0.5f) + (g_aDisk[nCntDisk].fSize * 0.5f * (1 + (g_aDisk[nCntDisk].fHeight * 0.005f))), 0.0f);
 
 			//頂点バッファをアンロックする
 			g_pVtxBuffDisk->Unlock();
@@ -233,6 +233,7 @@ void SetDisk(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 acc, DISK_TYPE type,
 			g_aDisk[nCntDisk].nCntPhase = 0;								//ディスクの必殺技用のカウンターの設定
 			g_aDisk[nCntDisk].nPlayer = nPlayer;							//ディスクを投げたプレイヤーのインデックスの設定
 			g_aDisk[nCntDisk].nIdxShadow = SetShadow(pos, size);			//ディスクの影のインデックス
+			g_aDisk[nCntDisk].bUse = true;									//使用されている状態にする
 
 			//頂点座標の設定
 			pVtx[(nCntDisk * 4) + 0].pos = D3DXVECTOR3(pos.x - (size * 0.5f), pos.y - (size * 0.5f), 0.0f);
@@ -266,6 +267,16 @@ void SetDisk(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 acc, DISK_TYPE type,
 
 				break;
 
+			case DISK_TYPE_JUMP:
+
+				g_aDisk[nCntDisk].fHeight = JUMP_MAX_HEIGHT;
+				g_aDisk[nCntDisk].fVerticalSpeed = JUMP_MAX_HEIGHT / JUMP_ATTACK_TIME;
+				g_aDisk[nCntDisk].bBounce = false;
+
+				g_aDisk[nCntDisk].move = SetLobSpeed(g_aDisk[nCntDisk].pos, g_aDisk[nCntDisk].move, nCntDisk, g_aDisk[nCntDisk].fHeight, g_aDisk[nCntDisk].fVerticalSpeed);
+
+				break;
+
 			case DISK_TYPE_SPECIAL_0:
 
 				g_aDisk[nCntDisk].fHeight = 10.0f;
@@ -273,9 +284,15 @@ void SetDisk(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 acc, DISK_TYPE type,
 				g_aDisk[nCntDisk].bBounce = false;
 
 				break;
-			}
 
-			g_aDisk[nCntDisk].bUse = true;			//使用されている状態にする
+			case DISK_TYPE_SPECIAL_1:
+
+				g_aDisk[nCntDisk].fHeight = 10.0f;
+				g_aDisk[nCntDisk].fVerticalSpeed = 0.0f;
+				g_aDisk[nCntDisk].bBounce = false;
+
+				break;
+			}
 
 			break;
 		}
@@ -372,7 +389,6 @@ void UpdateSpecialDisk(int nCntDisk, int nPlayer)
 				g_aDisk[nCntDisk].nCntPhase++;
 				g_aDisk[nCntDisk].move = D3DXVECTOR3(15.0f, 0.0f, 0.0f);
 				g_aDisk[nCntDisk].acc = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-				int a = 0;
 			}
 
 			break;
