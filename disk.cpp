@@ -154,7 +154,7 @@ void UpdateDisk(void)
 			//ゴールとの当たり判定(pos, lastPos, fWidth, fHeight)
 			ColisionGoal(&g_aDisk[nCntDisk].pos, &g_aDisk[nCntDisk].lastPos, 10.0f, 10.0f);
 
-			g_aDisk[nCntDisk].lastPos = g_aDisk[nCntDisk].pos;				//前回の位置の更新
+			g_aDisk[nCntDisk].lastPos = g_aDisk[nCntDisk].pos;							//前回の位置の更新
 	
 			VERTEX_2D *pVtx = NULL;					//頂点情報へのポインタ
 
@@ -176,7 +176,7 @@ void UpdateDisk(void)
 			//頂点バッファをアンロックする
 			g_pVtxBuffDisk->Unlock();
 
-			SetPositionShadow(g_aDisk[nCntDisk].nIdxShadow, g_aDisk[nCntDisk].pos);
+			SetPositionShadow(g_aDisk[nCntDisk].nIdxShadow, g_aDisk[nCntDisk].pos);		//影の位置の更新
 		}
 	}
 }
@@ -499,4 +499,15 @@ D3DXVECTOR3 SetLobSpeed(D3DXVECTOR3 pos, D3DXVECTOR3 move, int nCntDisk, float f
 	}
 
 	return newSpeed;				//新しい移動量を返す
+}
+
+//======================================
+//ディスクの破棄
+//======================================
+void DestroyDisk(void)
+{
+	Shadow *pShadow = GetShadow();						//影の情報へのポインタ
+
+	g_aDisk[0].bUse = false;							//ディスクを使用されていない状態にする
+	pShadow[g_aDisk[0].nIdxShadow].bUse = false;		//影を使用されていない状態にする
 }

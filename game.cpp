@@ -17,6 +17,7 @@
 #include "wall.h"
 #include "disk.h"
 #include "shadow.h"
+//#include "effect.h"
 
 //------------------------------------
 // マクロ定義
@@ -31,11 +32,12 @@
 //=========================================
 void InitGame(void)
 {
-	InitPlayer();
-	InitWall();
-	InitShadow();
-	InitDisk();
-	InitStage();
+	InitShadow();	// 影
+	InitWall();		// 壁
+	InitDisk();		// ディスク
+	InitPlayer();	// プレイヤー
+	InitStage();	// ステージ
+	//InitEffect();
 }
 
 //=========================================
@@ -43,11 +45,12 @@ void InitGame(void)
 //=========================================
 void UninitGame(void)
 {
-	UninitPlayer();
-	UninitWall();
-	UninitShadow();
-	UninitDisk();
-	UninitStage();
+	UninitShadow();	// 影
+	UninitPlayer();	// プレイヤー
+	UninitWall();	// 壁
+	UninitDisk();	// ディスク
+	UninitStage();	// ステージ
+//	UninitEffect();
 }
 
 //=========================================
@@ -55,11 +58,12 @@ void UninitGame(void)
 //=========================================
 void UpdateGame(void)
 {
-	UpdateStage();
-	UpdatePlayer();
-	UpdateWall();
-	UpdateDisk();
-	UpdateShadow();
+	UpdateStage();	// ステージ
+	UpdatePlayer();	// プレイヤー
+	UpdateWall();	// 壁
+	UpdateDisk();	// ディスク
+	UpdateShadow();	// 影
+//	UpdateEffect();
 }
 
 //=========================================
@@ -67,9 +71,10 @@ void UpdateGame(void)
 //=========================================
 void DrawGame()
 {
-	DrawStage();
-	DrawPlayer();
-	DrawWall();
-	DrawShadow();
-	DrawDisk();
+	DrawStage();	// ステージ
+	DrawWall();		// 壁
+	DrawShadow();	// 影
+	DrawPlayer();	// プレイヤー
+	DrawDisk();		// ディスク
+//	DrawEffect();
 }
