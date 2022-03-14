@@ -234,7 +234,7 @@ void SetDisk(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 acc, DISK_TYPE type,
 			g_aDisk[nCntDisk].type = type;									//ディスクの種類の設定
 			g_aDisk[nCntDisk].nCntPhase = 0;								//ディスクの必殺技用のカウンターの設定
 			g_aDisk[nCntDisk].nPlayer = nPlayer;							//ディスクを投げたプレイヤーのインデックスの設定
-			g_aDisk[nCntDisk].nIdxShadow = SetShadow(pos, size);			//ディスクの影のインデックス
+			g_aDisk[nCntDisk].nIdxShadow = SetShadow(pos, size * 1.25f);	//ディスクの影のインデックス
 			g_aDisk[nCntDisk].bUse = true;									//使用されている状態にする
 
 			//頂点座標の設定
