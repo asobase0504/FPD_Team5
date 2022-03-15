@@ -30,5 +30,5 @@ void UninitTime(void);
 void UpdateTime(void);
 void DrawTime(void);
 TIME *GetTime(void);
-void SetTime(void);
+void SetTime(int nTime);
 #endif
