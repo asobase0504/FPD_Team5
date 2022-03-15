@@ -88,8 +88,8 @@ void DrawGame()
 	DrawWall();		// 壁
 	DrawShadow();	// 影
 	DrawLandingMark();
-	DrawPlayer();	// プレイヤー
 	DrawDisk();		// ディスク
+	DrawPlayer();	// プレイヤー
 //	DrawEffect();
 	DrawScore();
 	DrawTime();
