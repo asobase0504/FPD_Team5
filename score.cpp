@@ -10,7 +10,7 @@
 //グローバル変数
 static LPDIRECT3DTEXTURE9 g_pTextureScore = NULL;				//テクスチャへのポインタ
 static SCORE	g_nScore[2];									//スコアの構造体
-//static int nPlayerIdx;
+static int nPlayerIdx;
 
 //------------------------------
 //スコアの初期化処理
@@ -116,7 +116,7 @@ void UninitScore(void)
 //------------------------------
 void UpdateScore(void)
 {
-	AddScore(g_nScore[0].nScore[0]);//,nPlayerIdx);
+	AddScore(g_nScore[0].nScore[0],nPlayerIdx);
 }
 
 //------------------------------
@@ -191,30 +191,18 @@ void SetScore(int nScore)//,int nPlayerIdx)
 //------------------------------
 //スコアの加算処理
 //------------------------------
-void AddScore(int nValse)//,int nPlayerIdx)
+void AddScore(int nValse,int nPlayerIdx)
 {
 	int nCntScore;
 	int aPosTexU[4]; //各桁の数字を格納
 
 	g_nScore[2].nScore[2] += nValse;
 
-	if (GetKeyboardTrigger(DIK_F) == true)
-	{
-		g_nScore[0].nScore[1] += 1;
-		if ((g_nScore[0].nScore[1] % 10 / 1) == 0)
+		g_nScore[nPlayerIdx].nScore[1] += 1;
+		if ((g_nScore[nPlayerIdx].nScore[1] % 10 / 1) == 0)
 		{
-			g_nScore[0].nScore[0] += 10;
+			g_nScore[nPlayerIdx].nScore[0] += 10;
 		}
-	}
-
-	if (GetKeyboardTrigger(DIK_H) == true)
-	{
-		g_nScore[1].nScore[1] += 1;
-		if ((g_nScore[1].nScore[1] % 10 / 1) == 0)
-		{
-			g_nScore[1].nScore[0] += 10;
-		}
-	}
 
 	aPosTexU[0] = (g_nScore[0].nScore[0] % 100) / 10;
 	aPosTexU[1] = (g_nScore[0].nScore[1] % 10) / 1;

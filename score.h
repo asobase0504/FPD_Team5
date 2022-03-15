@@ -27,7 +27,7 @@ void UninitScore(void);
 void UpdateScore(void);
 void DrawScore(void);
 void SetScore(int nScore);//,int nPlayerIdx);
-void AddScore(int nValse);//,int nPlayerIdx);
+void AddScore(int nValse,int nPlayerIdx);
 SCORE GetScore(void);
 
 #endif
