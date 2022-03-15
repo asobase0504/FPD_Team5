@@ -11,13 +11,14 @@
 #include "main.h" 
 
 //マクロ定義
-#define MAX_DISK					(1)				//ディスクの最大数
-#define LOB_STARTING_SPEED			(5.0f)			//上投げのはじめの上下移動量
-#define NORMAL_VERTICAL_SPEED		(0.0f)			//ディスクの普通の上下移動量
-#define NORMAL_DISK_HEIGHT			(15.0f)			//ディスクの普通高さ
-#define JUMP_MAX_HEIGHT				(260.0f)		//ジャンプした後の最大高さ
-#define JUMP_ATTACK_TIME			(30.0f)			//ジャンプ投げの時、ディスクが落ちるまでの時間
+#define MAX_DISK					(1)					//ディスクの最大数
+#define LOB_STARTING_SPEED			(5.0f)				//上投げのはじめの上下移動量
+#define NORMAL_VERTICAL_SPEED		(0.0f)				//ディスクの普通の上下移動量
+#define NORMAL_DISK_HEIGHT			(15.0f)				//ディスクの普通高さ
+#define JUMP_MAX_HEIGHT				(260.0f)			//ジャンプした後の最大高さ
+#define JUMP_ATTACK_TIME			(30.0f)				//ジャンプ投げの時、ディスクが落ちるまでの時間
 #define GRAVITY_ACCELERATION_LOB	(-0.05f)			//重量の加速
+#define BASE_ROTATION_SPEED			(-D3DX_PI * 0.01f)	//ベースの回転スピード
 
 //ディスクの種類
 typedef enum
@@ -44,10 +45,11 @@ typedef struct
 	float fSize;							//ディスクの大きさ
 	float fHeight;							//上投げ用の高さ
 	float fVerticalSpeed;					//上投げの移動量
-	float fAngle;
-	float fLenght;
-	float fVertexLenght;
-	float rot;
+	float fAngle;							//回転用の角度
+	float fLenght;							//ディスクの半径
+	float fVertexLenght;					//回転アニメーション用の長さ
+	float rot;								//回転角度
+	float fRotSpeed;						//回転スピード
 	int nCntPhase;							//必殺技用のカウンター
 	int nPlayer;							//ディスクを投げたプレイヤーのインデックス
 	int nCntAnim;							//アニメーションカウンター
