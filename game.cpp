@@ -18,29 +18,26 @@
 #include "disk.h"
 #include "shadow.h"
 //#include "effect.h"
-#include"score.h"
-#include "time.h"
 #include "referee.h"
 #include "landingPoint.h"
-#include "pop.h"
+#include "ui.h"
 
 //=========================================
 // 初期化
 //=========================================
 void InitGame(void)
 {
-	InitWall();		// 壁
-	InitDisk();		// ディスク
-	InitShadow();	// 影
-	InitPlayer();	// プレイヤー
-	InitStage();	// ステージ
-	InitLandingMark();
-	//InitEffect();
-	InitScore();
-	InitTime();
-	InitReferee();
+	InitWall();			// 壁
+	InitDisk();			// ディスク
+	InitShadow();		// 影
+	InitPlayer();		// プレイヤー
+	InitStage();		// ステージ
+	InitLandingMark();	// ディスクの落下地点
+	//InitEffect();		// エフェクト
+	InitReferee();		// レフェリー
+	InitUI();			// UI
+
 	GetReferee()->bThrow = true;
-	InitPop();
 }
 
 //=========================================
@@ -48,17 +45,15 @@ void InitGame(void)
 //=========================================
 void UninitGame(void)
 {
-	UninitPlayer();	// プレイヤー
-	UninitWall();	// 壁
-	UninitShadow();	// 影
-	UninitDisk();	// ディスク
-	UninitStage();	// ステージ
-	UninitLandingMark();
-//	UninitEffect();
-	UninitScore();
-	UninitTime();
-	UninitReferee();
-	UninitPop();
+	UninitPlayer();			// プレイヤー
+	UninitWall();			// 壁
+	UninitShadow();			// 影
+	UninitDisk();			// ディスク
+	UninitStage();			// ステージ
+	UninitLandingMark();	// ディスクの落下地点
+//	UninitEffect();			// エフェクト
+	UninitReferee();		// レフェリー
+	UninitUI();				// UI
 }
 
 //=========================================
@@ -66,17 +61,15 @@ void UninitGame(void)
 //=========================================
 void UpdateGame(void)
 {
-	UpdateStage();	// ステージ
-	UpdatePlayer();	// プレイヤー
-	UpdateWall();	// 壁
-	UpdateDisk();	// ディスク
-	UpdateLandingMark();
-	UpdateShadow();	// 影
-//	UpdateEffect();
-	UpdateScore();
-	UpdateTime();
-	UpdateReferee();
-	UpdatePop();
+	UpdateStage();			// ステージ
+	UpdatePlayer();			// プレイヤー
+	UpdateWall();			// 壁
+	UpdateDisk();			// ディスク
+	UpdateLandingMark();	// ディスクの落下地点
+	UpdateShadow();			// 影
+//	UpdateEffect();			// エフェクト
+	UpdateReferee();		// レフェリー
+	UpdateUI();				// UI
 }
 
 //=========================================
@@ -84,15 +77,13 @@ void UpdateGame(void)
 //=========================================
 void DrawGame()
 {
-	DrawStage();	// ステージ
-	DrawWall();		// 壁
-	DrawShadow();	// 影
-	DrawLandingMark();
-	DrawDisk();		// ディスク
-	DrawPlayer();	// プレイヤー
-//	DrawEffect();
-	DrawScore();
-	DrawTime();
-	DrawReferee();
-	DrawPop();
+	DrawStage();		// ステージ
+	DrawWall();			// 壁
+	DrawShadow();		// 影
+	DrawLandingMark();	// ディスクの落下地点
+	DrawDisk();			// ディスク
+	DrawPlayer();		// プレイヤー
+//	DrawEffect();		// エフェクト
+	DrawReferee();		// レフェリー
+	DrawUI();			// UI
 }

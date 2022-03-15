@@ -15,4 +15,4 @@ void UninitGame(void);	// I—¹ˆ—
 void UpdateGame(void);	// XVˆ—
 void DrawGame(void);	// •`‰æˆ—
 
-#endif // !_COMMON_H_
+#endif // !_GAME_H_
