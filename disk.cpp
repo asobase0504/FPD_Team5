@@ -501,6 +501,87 @@ void UpdateSpecialDisk(int nCntDisk)
 
 		break;
 		//====================================================================================================================================
+
+		case DISK_TYPE_SPECIAL_2:
+
+			switch (g_aDisk[nCntDisk].nCntPhase)
+			{
+			case 0:
+
+				fChangePoint = SCREEN_WIDTH * (0.25f + (0.5f * g_aDisk[nCntDisk].nPlayer));
+
+				if (g_aDisk[nCntDisk].pos.x < SCREEN_WIDTH * 0.5f)
+				{
+					g_aDisk[nCntDisk].move = D3DXVECTOR3(7.5f, 0.0f, 0.0f);
+				}
+				else
+				{
+					g_aDisk[nCntDisk].move = D3DXVECTOR3(-7.5f, 0.0f, 0.0f);
+				}
+
+				if (g_aDisk[nCntDisk].pos.x >= fChangePoint && g_aDisk[nCntDisk].move > 0)
+				{
+					g_aDisk[nCntDisk].nCntPhase++;
+
+					if (g_aDisk[nCntDisk].pos.y <= SCREEN_HEIGHT * 0.5f)
+					{
+						g_aDisk[nCntDisk].pos.y = 200.0f;
+					}
+					else
+					{
+						g_aDisk[nCntDisk].pos.y = SCREEN_HEIGHT - 200.0f;
+					}
+				}
+
+				break;
+
+			case 1:
+
+				fChangePoint = SCREEN_HEIGHT * 0.5f;
+
+				if (g_aDisk[nCntDisk].move.x > 0.0f && g_aDisk[nCntDisk].pos.x > fChangePoint)
+				{
+					g_aDisk[nCntDisk].nCntPhase++;
+
+					if (g_aDisk[nCntDisk].pos.y <= SCREEN_HEIGHT * 0.5f)
+					{
+						g_aDisk[nCntDisk].pos.y = 200.0f;
+					}
+					else
+					{
+						g_aDisk[nCntDisk].pos.y = SCREEN_HEIGHT - 200.0f;
+					}
+				}
+				else if (g_aDisk[nCntDisk].move.x < 0.0f && g_aDisk[nCntDisk].pos.x < fChangePoint)
+				{
+					g_aDisk[nCntDisk].nCntPhase++;
+
+					if (g_aDisk[nCntDisk].pos.y <= SCREEN_HEIGHT * 0.5f)
+					{
+						g_aDisk[nCntDisk].pos.y = 200.0f;
+					}
+					else
+					{
+						g_aDisk[nCntDisk].pos.y = SCREEN_HEIGHT - 200.0f;
+					}
+				}
+				break;
+
+			case 2:
+
+				fChangePoint = SCREEN_WIDTH * (0.75f - (0.5f * g_aDisk[nCntDisk].nPlayer));
+
+				if (g_aDisk[nCntDisk].move.x > 0.0f && g_aDisk[nCntDisk].pos.x >= fChangePoint)
+				{
+					g_aDisk[nCntDisk].pos.y = SCREEN_HEIGHT * 0.5f + ((rand() % 200) - 100);
+				}
+				else if (g_aDisk[nCntDisk].move.x < 0.0f && g_aDisk[nCntDisk].pos.x <= fChangePoint)
+				{
+					g_aDisk[nCntDisk].pos.y = SCREEN_HEIGHT * 0.5f + ((rand() % 200) - 100);
+				}
+				break;
+			}
+			break;
 	}
 }
 
