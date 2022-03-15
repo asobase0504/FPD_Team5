@@ -11,21 +11,25 @@
 #include "main.h" 
 
 //マクロ定義
-#define MAX_DISK				(1)				//ディスクの最大数
-#define LOB_STARTING_SPEED		(5.0f)			//上投げのはじめの上下移動量
-#define NORMAL_VERTICAL_SPEED	(0.0f)			//ディスクの普通の上下移動量
-#define NORMAL_DISK_HEIGHT		(15.0f)			//ディスクの普通高さ
-#define JUMP_MAX_HEIGHT			(260.0f)		//ジャンプした後の最大高さ
-#define JUMP_ATTACK_TIME		(30.0f)			//ジャンプ投げの時、ディスクが落ちるまでの時間
+#define MAX_DISK					(1)				//ディスクの最大数
+#define LOB_STARTING_SPEED			(5.0f)			//上投げのはじめの上下移動量
+#define NORMAL_VERTICAL_SPEED		(0.0f)			//ディスクの普通の上下移動量
+#define NORMAL_DISK_HEIGHT			(15.0f)			//ディスクの普通高さ
+#define JUMP_MAX_HEIGHT				(260.0f)		//ジャンプした後の最大高さ
+#define JUMP_ATTACK_TIME			(30.0f)			//ジャンプ投げの時、ディスクが落ちるまでの時間
+#define GRAVITY_ACCELERATION_LOB	(-0.05f)			//重量の加速
 
 //ディスクの種類
 typedef enum
 {
 	DISK_TYPE_NORMAL = 0,			//普通
 	DISK_TYPE_LOB,					//上投げ
-	DISK_TYPE_JUMP,
-	DISK_TYPE_SPECIAL_0,
-	DISK_TYPE_SPECIAL_1,
+	DISK_TYPE_JUMP,					//ジャンプ投げ
+	DISK_TYPE_SPECIAL_0,			//必殺技0
+	DISK_TYPE_SPECIAL_1,			//必殺技1
+	DISK_TYPE_SPECIAL_2,			//必殺技2
+	DISK_TYPE_SPECIAL_3,			//必殺技3
+	DISK_TYPE_SPECIAL_4,			//必殺技4
 	DISK_TYPE_MAX
 }DISK_TYPE;
 
@@ -40,8 +44,14 @@ typedef struct
 	float fSize;							//ディスクの大きさ
 	float fHeight;							//上投げ用の高さ
 	float fVerticalSpeed;					//上投げの移動量
+	float fAngle;
+	float fLenght;
+	float fVertexLenght;
+	float rot;
 	int nCntPhase;							//必殺技用のカウンター
 	int nPlayer;							//ディスクを投げたプレイヤーのインデックス
+	int nCntAnim;							//アニメーションカウンター
+	int nAnimPattern;						//アニメーションのパターン番号
 	int nIdxShadow;							//ディスクの影のインデックス
 	bool bBounce;							//壁に当たったら、反射するかどうか
 	bool bUse;								//使用されているかどうか

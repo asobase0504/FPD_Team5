@@ -21,6 +21,7 @@
 #include"score.h"
 #include "time.h"
 #include "referee.h"
+#include "landingPoint.h"
 #include "pop.h"
 
 //=========================================
@@ -33,6 +34,7 @@ void InitGame(void)
 	InitShadow();	// 影
 	InitPlayer();	// プレイヤー
 	InitStage();	// ステージ
+	InitLandingMark();
 	//InitEffect();
 	InitScore();
 	InitTime();
@@ -51,6 +53,7 @@ void UninitGame(void)
 	UninitShadow();	// 影
 	UninitDisk();	// ディスク
 	UninitStage();	// ステージ
+	UninitLandingMark();
 //	UninitEffect();
 	UninitScore();
 	UninitTime();
@@ -67,6 +70,7 @@ void UpdateGame(void)
 	UpdatePlayer();	// プレイヤー
 	UpdateWall();	// 壁
 	UpdateDisk();	// ディスク
+	UpdateLandingMark();
 	UpdateShadow();	// 影
 //	UpdateEffect();
 	UpdateScore();
@@ -83,6 +87,7 @@ void DrawGame()
 	DrawStage();	// ステージ
 	DrawWall();		// 壁
 	DrawShadow();	// 影
+	DrawLandingMark();
 	DrawPlayer();	// プレイヤー
 	DrawDisk();		// ディスク
 //	DrawEffect();
