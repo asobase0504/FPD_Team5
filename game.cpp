@@ -21,6 +21,7 @@
 #include"score.h"
 #include "time.h"
 #include "referee.h"
+#include "pop.h"
 
 //=========================================
 // èâä˙âª
@@ -36,6 +37,7 @@ void InitGame(void)
 	InitScore();
 	//InitTime();
 	InitRef();
+	InitPop();
 }
 
 //=========================================
@@ -52,6 +54,7 @@ void UninitGame(void)
 	UninitScore();
 	//UninitTime();
 	UninitRef();
+	UninitPop();
 }
 
 //=========================================
@@ -68,6 +71,7 @@ void UpdateGame(void)
 	UpdateScore();
 	//UpdateTime();
 	UpdateRef();
+	UpdatePop();
 }
 
 //=========================================
@@ -84,4 +88,5 @@ void DrawGame()
 	DrawScore();
 	//DrawTime();
 	DrawRef();
+	DrawPop();
 }
