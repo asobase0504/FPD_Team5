@@ -2,16 +2,19 @@
 //
 // FPD制作 ( mode.cpp )
 // Author  : katsuki mizuki
+// Author:Kishimoto Eiji
 //
 //==================================================
 
 //--------------------------------------------------
 // インクルード
 //--------------------------------------------------
-#include "fade.h"
-#include "game.h"
 #include "mode.h"
+#include "fade.h"
 #include "title.h"
+//#include "tutorial.h"
+#include "option.h"
+#include "game.h"
 
 #include <assert.h>
 
@@ -44,6 +47,14 @@ void UpdateMode(void)
 		UpdateTitle();
 		break;
 
+	case MODE_TUTORIAL:		// チュートリアル
+		//UpdateTutorial();
+		break;
+
+	case MODE_OPTION:		// オプション
+		UpdateOption();
+		break;
+
 	case MODE_GAME:			// ゲーム
 		UpdateGame();
 		break;
@@ -67,6 +78,14 @@ void DrawMode(void)
 	{// どのモード？
 	case MODE_TITLE:		// タイトル
 		DrawTitle();
+		break;
+
+	case MODE_TUTORIAL:		// チュートリアル
+		//DrawTutorial();
+		break;
+
+	case MODE_OPTION:		// オプション
+		DrawOption();
 		break;
 
 	case MODE_GAME:			// ゲーム
@@ -109,6 +128,14 @@ void SetMode(void)
 		UninitTitle();
 		break;
 
+	case MODE_TUTORIAL:		// チュートリアル
+		//UninitTutorial();
+		break;
+
+	case MODE_OPTION:		// オプション
+		UninitOption();
+		break;
+
 	case MODE_GAME:			// ゲーム
 		UninitGame();
 		break;
@@ -126,6 +153,14 @@ void SetMode(void)
 	{// 次のモードの初期化
 	case MODE_TITLE:		// タイトル
 		InitTitle();
+		break;
+
+	case MODE_TUTORIAL:		// チュートリアル
+		//InitTutorial();
+		break;
+
+	case MODE_OPTION:		// オプション
+		InitOption();
 		break;
 
 	case MODE_GAME:			// ゲーム

@@ -98,7 +98,7 @@ void UninitScore(void)
 		g_pTextureScore = NULL;
 	}
 
-	for (int nScoreCnt = 0; nScoreCnt < NUM_SCORE; nScoreCnt++)
+	for (int nScoreCnt = 0; nScoreCnt < 2; nScoreCnt++)
 	{
 		//頂点バッファの破棄
 		if (g_nScore[nScoreCnt].pVtxBuff != NULL)

@@ -16,6 +16,33 @@
 // 構造体
 //--------------------------------------------------
 
+/*↓ 選択肢 ↓*/
+
+typedef struct
+{
+	D3DXVECTOR3				pos;			// 位置
+	D3DXCOLOR				col;			// 色
+	LPDIRECT3DTEXTURE9		pTexture;		// テクスチャ
+	float					fWidth;			// 幅
+	float					fHeight;		// 高さ
+}Option;
+
+/*↓ メニュー ↓*/
+
+typedef struct
+{
+	D3DXVECTOR3				pos;					// 位置
+	LPDIRECT3DTEXTURE9		pTexture;				// テクスチャ
+	Option					Option[MAX_OPTION];		// 選択肢の情報
+	int						nNumUse;				// 使用数
+	float					fWidth;					// 幅
+	float					fHeight;				// 高さ
+	float					fInterval;				// 選択肢の間隔
+	float					fBlinkSpeed;			// 点滅速度
+	bool					bFrame;					// 枠がいるかどうか [ true : いる false : いらない ]
+	bool					bUse;					// 使用しているかどうか
+}Menu;
+
 /*↓ メニューの引数 ↓*/
 
 typedef struct
@@ -52,5 +79,6 @@ void InitColorOption(void);
 void ChangeOption(int nIdx);
 void DecisionOption(void);
 void ResetMenu(int nIdx);
+Menu *GetMenu(void);
 
 #endif // !_MENU_H_

@@ -10,6 +10,7 @@
 #include "fade.h"
 #include "input.h"
 #include "menu.h"
+#include "mode.h"
 
 #include <assert.h>
 
@@ -116,8 +117,8 @@ void InitOption(void)
 	menu.nNumUse = OPTION_MAX;
 	menu.fLeft = 0.0f;
 	menu.fRight = SCREEN_WIDTH;
-	menu.fTop = SCREEN_HEIGHT * 0.5f;
-	menu.fBottom = SCREEN_HEIGHT;
+	menu.fTop = SCREEN_HEIGHT * 0.25f;
+	menu.fBottom = SCREEN_HEIGHT * 0.75f;
 	menu.fWidth = MENU_WIDTH;
 	menu.fHeight = MENU_HEIGHT;
 
@@ -135,6 +136,8 @@ void InitOption(void)
 	//メニューのセット
 	InitMenu();
 	SetMenu(menu, frame);
+
+	InitSelect();
 }
 
 //============================================
@@ -156,6 +159,8 @@ void UninitOption(void)
 		s_pVtxBuff->Release();
 		s_pVtxBuff = NULL;
 	}
+
+	UninitSelect();
 }
 
 //============================================
@@ -165,6 +170,7 @@ void UpdateOption(void)
 {
 	SelectMenu();	//メニュー選択
 	UpdateMenu();	//メニュー更新
+	UpdateSelect();
 }
 
 //============================================
@@ -189,6 +195,7 @@ void DrawOption(void)
 							2);					//プリミティブの数
 
 	DrawMenu();		//メニュー描画
+	DrawSelect();
 }
 
 //--------------------------------------------
@@ -252,6 +259,9 @@ static void SelectMenu(void)
 
 			<ChangeModeでゲームへ>
 			*/
+
+			ChangeMode(MODE_GAME);
+
 		}
 		break;
 

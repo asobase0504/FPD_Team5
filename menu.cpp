@@ -2,6 +2,7 @@
 // 
 // FPG制作 ( menu.cpp )
 // Author  : katsuki mizuki
+// Author:Kishimoto Eiji
 // 
 //==================================================
 
@@ -20,37 +21,6 @@
 #define NORMAL_BLINK_SPEED			(0.01f)		// 通常時の点滅速度
 #define DECISION_BLINK_SPEED		(0.1f)		// 決定時の点滅速度
 #define MIN_ALPHA					(0.6f)		// α値の最小値
-
-//--------------------------------------------------
-// 構造体
-//--------------------------------------------------
-
-/*↓ 選択肢 ↓*/
-
-typedef struct
-{
-	D3DXVECTOR3				pos;			// 位置
-	D3DXCOLOR				col;			// 色
-	LPDIRECT3DTEXTURE9		pTexture;		// テクスチャ
-	float					fWidth;			// 幅
-	float					fHeight;		// 高さ
-}Option;
-
-/*↓ メニュー ↓*/
-
-typedef struct
-{
-	D3DXVECTOR3				pos;					// 位置
-	LPDIRECT3DTEXTURE9		pTexture;				// テクスチャ
-	Option					Option[MAX_OPTION];		// 選択肢の情報
-	int						nNumUse;				// 使用数
-	float					fWidth;					// 幅
-	float					fHeight;				// 高さ
-	float					fInterval;				// 選択肢の間隔
-	float					fBlinkSpeed;			// 点滅速度
-	bool					bFrame;					// 枠がいるかどうか [ true : いる false : いらない ]
-	bool					bUse;					// 使用しているかどうか
-}Menu;
 
 //--------------------------------------------------
 // スタティック変数
@@ -472,4 +442,12 @@ static void ChangeColor(Menu *pMenu)
 
 	// 頂点バッファをアンロックする
 	s_pVtxBuffOption->Unlock();
+}
+
+//--------------------------------------------------
+// メニューの取得
+//--------------------------------------------------
+Menu *GetMenu(void)
+{
+	return &s_aMenu[0];
 }
