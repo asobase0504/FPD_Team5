@@ -12,33 +12,27 @@
 #include "main.h"
 
 //****************************************************************************
-//マクロ定義
-//****************************************************************************
-#define REFEREE_WIDTH				(100)	//レフェリーの横サイズ
-#define REFEREE_HEIGHT				(100)	//レフェリーの縦サイズ
-
-//****************************************************************************
-//構造体の定義
+// 構造体の定義
 //****************************************************************************
 typedef struct
 {
-	D3DXVECTOR3 pos;	//位置
-	D3DXVECTOR3 rot;	//回転
-	D3DXVECTOR3 nor;	//法線
-	D3DXCOLOR	col;	//色
-	float fAngle;		//角度(アークタンジェント)
-	float fLength;		//長さ(スクウェアルート)
-	bool bUse;			//使用判定
+	D3DXVECTOR3 pos;	// 位置
+	D3DXVECTOR3 rot;	// 回転
+	D3DXVECTOR3 nor;	// 法線
+	D3DXCOLOR	col;	// 色
+	float fAngle;		// 角度(アークタンジェント)
+	float fLength;		// 長さ(スクウェアルート)
+	bool bThrow;		// 投げるか否か
+	bool bUse;			// 使用判定
 }REFEREE;
 
 //****************************************************************************
-//プロトタイプ宣言
+// プロトタイプ宣言
 //****************************************************************************
-void InitRef(void);
-void UninitRef(void);
-void UpdateRef(void);
-void DrawRef(void);
-
-REFEREE *GetRef(void);
+void InitReferee(void);
+void UninitReferee(void);
+void UpdateReferee(void);
+void DrawReferee(void);
+REFEREE *GetReferee(void);
 
 #endif

@@ -35,7 +35,8 @@ void InitGame(void)
 	//InitEffect();
 	InitScore();
 	//InitTime();
-	InitRef();
+	InitReferee();
+	GetReferee()->bThrow = true;
 }
 
 //=========================================
@@ -51,7 +52,7 @@ void UninitGame(void)
 //	UninitEffect();
 	UninitScore();
 	//UninitTime();
-	UninitRef();
+	UninitReferee();
 }
 
 //=========================================
@@ -67,7 +68,7 @@ void UpdateGame(void)
 //	UpdateEffect();
 	UpdateScore();
 	//UpdateTime();
-	UpdateRef();
+	UpdateReferee();
 }
 
 //=========================================
@@ -83,5 +84,5 @@ void DrawGame()
 //	DrawEffect();
 	DrawScore();
 	//DrawTime();
-	DrawRef();
+	DrawReferee();
 }
