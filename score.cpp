@@ -8,8 +8,9 @@
 #include"score.h"
 #include"input.h"
 //グローバル変数
-LPDIRECT3DTEXTURE9 g_pTextureScore = NULL;				//テクスチャへのポインタ
-SCORE	g_nScore[2];									//スコアの構造体
+static LPDIRECT3DTEXTURE9 g_pTextureScore = NULL;				//テクスチャへのポインタ
+static SCORE	g_nScore[2];									//スコアの構造体
+//static int nPlayerIdx;
 
 //------------------------------
 //スコアの初期化処理
@@ -25,7 +26,8 @@ void InitScore(void)
 
 	for (int nScoreCnt = 0; nScoreCnt < 2; nScoreCnt++)
 	{
-		g_nScore[nScoreCnt].nScore = 30;									//値を初期化する
+		g_nScore[nScoreCnt].nScore[0] = 0;									//値を初期化する
+		g_nScore[nScoreCnt].nScore[1] = 0;									//値を初期化する
 		g_nScore[nScoreCnt].nCnt = 0;										//値を初期化する
 		g_nScore[nScoreCnt].pos = D3DXVECTOR3(500.0f, 50.0f, 0.0f);			//位置を初期化する
 
@@ -114,16 +116,7 @@ void UninitScore(void)
 //------------------------------
 void UpdateScore(void)
 {
-	SetScore(g_nScore[0].nScore);
-
-	if (GetKeyboardTrigger(DIK_SPACE) == true)
-	{
-		g_nScore[1].nScore += 1;
-		if ((g_nScore[1].nScore % 10/1) == 0)
-		{
-			g_nScore[0].nScore += 10;
-		}
-	}
+	AddScore(g_nScore[0].nScore[0]);//,nPlayerIdx);
 }
 
 //------------------------------
@@ -158,17 +151,17 @@ void DrawScore(void)
 //------------------------------
 //スコアのセット処理
 //------------------------------
-void SetScore(int nScore)
+void SetScore(int nScore)//,int nPlayerIdx)
 {
 	int nCntScore;
 	int aPosTexU[4];	//各桁の数字を格納
 
-	g_nScore[2].nScore = nScore;
+	g_nScore[2].nScore[2] = nScore;
 
-	aPosTexU[0] = (g_nScore[0].nScore % 100) / 10;
-	aPosTexU[1] = (g_nScore[1].nScore % 10) / 1;
-	aPosTexU[2] = (g_nScore[0].nScore % 100) / 10;
-	aPosTexU[3] = (g_nScore[1].nScore % 10) / 1;
+	aPosTexU[0] = (g_nScore[0].nScore[0] % 100) / 10;
+	aPosTexU[1] = (g_nScore[0].nScore[1] % 10) / 1;
+	aPosTexU[2] = (g_nScore[1].nScore[0] % 100) / 10;
+	aPosTexU[3] = (g_nScore[1].nScore[1] % 10) / 1;
 
 	//aPosTexU[0] = (g_nScore[2].nScore % 100) / 10;
 	//aPosTexU[0] = (g_nScore[3].nScore % 10) / 1;
@@ -198,17 +191,35 @@ void SetScore(int nScore)
 //------------------------------
 //スコアの加算処理
 //------------------------------
-void AddScore(int nValse)
+void AddScore(int nValse)//,int nPlayerIdx)
 {
 	int nCntScore;
 	int aPosTexU[4]; //各桁の数字を格納
 
-	g_nScore[2].nScore += nValse;
+	g_nScore[2].nScore[2] += nValse;
 
-	aPosTexU[0] = (g_nScore[0].nScore % 100) / 10;
-	aPosTexU[1] = (g_nScore[1].nScore % 10) / 1;
-	aPosTexU[2] = (g_nScore[2].nScore % 100) / 10;
-	aPosTexU[3] = (g_nScore[3].nScore % 10) / 1;
+	if (GetKeyboardTrigger(DIK_F) == true)
+	{
+		g_nScore[0].nScore[1] += 1;
+		if ((g_nScore[0].nScore[1] % 10 / 1) == 0)
+		{
+			g_nScore[0].nScore[0] += 10;
+		}
+	}
+
+	if (GetKeyboardTrigger(DIK_H) == true)
+	{
+		g_nScore[1].nScore[1] += 1;
+		if ((g_nScore[1].nScore[1] % 10 / 1) == 0)
+		{
+			g_nScore[1].nScore[0] += 10;
+		}
+	}
+
+	aPosTexU[0] = (g_nScore[0].nScore[0] % 100) / 10;
+	aPosTexU[1] = (g_nScore[0].nScore[1] % 10) / 1;
+	aPosTexU[2] = (g_nScore[1].nScore[0] % 100) / 10;
+	aPosTexU[3] = (g_nScore[1].nScore[1] % 10) / 1;
 
 	for (int nScoreCnt = 0; nScoreCnt < 2; nScoreCnt++)
 	{
