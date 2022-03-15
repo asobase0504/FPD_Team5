@@ -41,7 +41,7 @@ void InitGame(void)
 	InitStage();	// ステージ
 	//InitEffect();
 	InitScore();
-	//InitTime();
+	InitTime();
 }
 
 //=========================================
@@ -56,7 +56,7 @@ void UninitGame(void)
 	UninitStage();	// ステージ
 //	UninitEffect();
 	UninitScore();
-	//UninitTime();
+	UninitTime();
 }
 
 //=========================================
@@ -71,7 +71,7 @@ void UpdateGame(void)
 	UpdateShadow();	// 影
 //	UpdateEffect();
 	UpdateScore();
-	//UpdateTime();
+	UpdateTime();
 }
 
 //=========================================
@@ -86,5 +86,5 @@ void DrawGame()
 	DrawDisk();		// ディスク
 //	DrawEffect();
 	DrawScore();
-	//DrawTime();
+	DrawTime();
 }
