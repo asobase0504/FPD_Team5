@@ -297,13 +297,14 @@ void ColisionGoal(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pLastPos, float fWidth, float 
 					if (s_aGoal[nCntGoal].bSide == false)
 					{
 						SetPop(D3DXVECTOR3 (GOAL_POP_WIDTH / 2, pDisk->pos.y,0.0f), s_aGoal[nCntGoal].rot, s_aGoal[nCntGoal].bSide, POP_TYPE_NORMAL, nCntGoal);
+						AddScore(3, 0);
 					}
 					else
 					{
 						SetPop(D3DXVECTOR3(SCREEN_WIDTH - GOAL_POP_WIDTH / 2, pDisk->pos.y, 0.0f), s_aGoal[nCntGoal].rot, s_aGoal[nCntGoal].bSide, POP_TYPE_NORMAL, nCntGoal);
+						AddScore(3, 1);
 					}
 					pDisk->move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-					AddScore(3);
 				}
 			}
 			else if(s_aGoal[nCntGoal].type == GOAL_TYPE_STRIKE)
@@ -315,13 +316,14 @@ void ColisionGoal(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pLastPos, float fWidth, float 
 					if (s_aGoal[nCntGoal].bSide == false)
 					{
 						SetPop(D3DXVECTOR3(GOAL_POP_WIDTH / 2, pDisk->pos.y, 0.0f), s_aGoal[nCntGoal].rot, s_aGoal[nCntGoal].bSide, POP_TYPE_STRIKE, nCntGoal);
+						AddScore(5,1);
 					}
 					else
 					{
 						SetPop(D3DXVECTOR3(SCREEN_WIDTH - GOAL_POP_WIDTH / 2, pDisk->pos.y, 0.0f), s_aGoal[nCntGoal].rot, s_aGoal[nCntGoal].bSide, POP_TYPE_STRIKE, nCntGoal);
+						AddScore(5, 0);
 					}
 					pDisk->move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-					AddScore(5);
 				}
 			}
 		}
