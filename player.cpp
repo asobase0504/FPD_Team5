@@ -337,7 +337,7 @@ void ThrowPlayer(int nIdxPlayer)
 		}
 		else if (GetKeyboardPress(DIK_M))
 		{
-			SetDisk(pPlayer->pos, inputVec * pPlayer->fThrowPower, ZERO_VECTOR, DISK_TYPE_SPECIAL_2, nIdxPlayer, 40.0f);
+			SetDisk(pPlayer->pos, inputVec * pPlayer->fThrowPower, ZERO_VECTOR, DISK_TYPE_SPECIAL_4, nIdxPlayer, 40.0f);
 			pPlayer->bHaveDisk = false;
 		}
 	}
