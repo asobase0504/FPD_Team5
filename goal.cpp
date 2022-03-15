@@ -158,6 +158,7 @@ void InitGoal(void)
 		s_aGoal[nCntGoal].nor = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 		s_aGoal[nCntGoal].col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
 		s_aGoal[nCntGoal].bUse = true;
+		s_aGoal[nCntGoal].bGoal = true;
 
 		//頂点座標の設定 = (配置位置 ± 正弦(対角線の角度 ± 向き) * 対角線の長さ)
 		pVtx[0].pos.x = s_aGoal[nCntGoal].pos.x - sinf(s_aGoal[nCntGoal].fAngle + s_aGoal[nCntGoal].rot.x) * s_aGoal[nCntGoal].fLength;
@@ -242,6 +243,13 @@ void UpdateGoal(void)
 	{
 		if (s_aGoal[nCntGoal].bUse == true)
 		{
+			if (s_aGoal[nCntGoal].bGoal == true)
+			{
+				//SetGoalPop(nCntGoal);
+				s_aGoal[nCntGoal].bGoal = false;
+			}
+
+			//ポップの表示と消す処理
 			if (s_aGoal[nCntGoal].type == GOAL_TYPE_NORMAL_POP ||
 				s_aGoal[nCntGoal].type == GOAL_TYPE_STRIKE_POP)
 			{
@@ -357,6 +365,7 @@ void ColisionGoal(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pLastPos, float fWidth, float 
 					s_aGoal[nCntGoal].pos - D3DXVECTOR3(0.0f, (GOAL_HEIGHT / 2), 0.0f),
 					(s_aGoal[nCntGoal].pos + D3DXVECTOR3(0.0f, (GOAL_HEIGHT / 2), 0.0f)) - (s_aGoal[nCntGoal].pos - D3DXVECTOR3(0.0f, (GOAL_HEIGHT / 2), 0.0f))) == true)
 				{
+					s_aGoal[nCntGoal].bGoal = true;
 					pDisk->move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 					AddScore(3);
 				}
@@ -367,6 +376,7 @@ void ColisionGoal(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pLastPos, float fWidth, float 
 					s_aGoal[nCntGoal].pos - D3DXVECTOR3(0.0f, (STRIKE_GOAL_HEIGHT / 2), 0.0f),
 					(s_aGoal[nCntGoal].pos + D3DXVECTOR3(0.0f, (STRIKE_GOAL_HEIGHT / 2), 0.0f)) - (s_aGoal[nCntGoal].pos - D3DXVECTOR3(0.0f, (STRIKE_GOAL_HEIGHT / 2), 0.0f))) == true)
 				{
+					s_aGoal[nCntGoal].bGoal = true;
 					pDisk->move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 					AddScore(5);
 				}
@@ -417,15 +427,9 @@ float Vec3CrossGoal(D3DXVECTOR3* vec1, D3DXVECTOR3* vec2)
 //============================================================================
 //ポップの設定処理
 //============================================================================
-void SetGoalPop(void)
+void SetGoalPop(D3DXVECTOR3 pos, D3DXVECTOR3 rot, int nIdxGoal)
 {
-	//for (int nCntGoal = 0; nCntGoal < MAX_GOAL; nCntGoal++)
-	//{
-	//	if (s_aGoal[nCntGoal].type == GOAL_TYPE_NORMAL_POP || s_aGoal[nCntGoal].type == GOAL_TYPE_STRIKE_POP)
-	//	{
 
-	//	}
-	//}
 }
 
 //============================================================================
