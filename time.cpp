@@ -27,16 +27,17 @@ void InitTime(void)
 
 	//テクスチャの読み込み
 	D3DXCreateTextureFromFile(pDevice,
-		"TEXTURE/number000.png",
+		"data/gotou/TEXTURE/number000.png",
 		&g_pTextureTime);
 
 	bool bTimeFlag = false;									//タイトルの移動のフラグ
 	//g_nTime[MAX_TIME] =  15,30,45,90, INFINITY;			//タイムの配列値
 	g_Time.nTime = 30;										//タイムの値
 	g_Time.nCntTime = 0;									//タイムカウンター値
+	g_Time.nMinusTime =0;										//タイムを引く数
 
 	//頂点バッファの生成
-	pDevice->CreateVertexBuffer(sizeof(VERTEX_2D) * 4 * 3,
+	pDevice->CreateVertexBuffer(sizeof(VERTEX_2D) * 4 * MAX_CNT_TIME,
 		D3DUSAGE_WRITEONLY,
 		FVF_VERTEX_2D,
 		D3DPOOL_MANAGED,
@@ -85,7 +86,6 @@ void InitTime(void)
 	}
 	//頂点バッファをアンロック
 	g_pVtxBuffTime->Unlock();
-
 }
 //タイムの終了処理
 void UninitTime(void)
@@ -107,17 +107,16 @@ void UninitTime(void)
 void UpdateTime(void)
 {
 	int aPosTexU[2];			//各桁の数字を格納
-
-	g_Time.nCntTime++;				//nCntTimeが引かれていく
-	if (g_Time.nCntTime % 60 == 0)		//nCntTimeが0より小さくなったら
+	g_Time.nMinusTime++;				//nCntTimeが引かれていく
+	if (g_Time.nMinusTime % 60 == 0)		//nCntTimeが0より小さくなったら
 	{
 		g_Time.nTime--;
 		//g_nTime[s_nSelectTime]--;				//時間が一秒ずつ減っていく
 	}
 
-	aPosTexU[0] = g_Time.nTime % 1000 / 100;
-	aPosTexU[1] = g_Time.nTime % 100 / 10;
-	aPosTexU[2] = g_Time.nTime % 10;
+	aPosTexU[0] = g_Time.nTime % 100 / 10;
+	aPosTexU[1] = g_Time.nTime % 10;
+	//aPosTexU[2] = g_Time.nTime % 10;
 
 	//aPosTexU[0] = g_nTime[s_nSelectTime] % 1000 / 100;
 	//aPosTexU[1] = g_nTime[s_nSelectTime] % 100 / 10;
