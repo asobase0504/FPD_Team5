@@ -35,8 +35,9 @@ void InitGame(void)
 	InitStage();	// ステージ
 	//InitEffect();
 	InitScore();
-	//InitTime();
-	InitRef();
+	InitTime();
+	InitReferee();
+	GetReferee()->bThrow = true;
 	InitPop();
 }
 
@@ -52,8 +53,8 @@ void UninitGame(void)
 	UninitStage();	// ステージ
 //	UninitEffect();
 	UninitScore();
-	//UninitTime();
-	UninitRef();
+	UninitTime();
+	UninitReferee();
 	UninitPop();
 }
 
@@ -69,8 +70,8 @@ void UpdateGame(void)
 	UpdateShadow();	// 影
 //	UpdateEffect();
 	UpdateScore();
-	//UpdateTime();
-	UpdateRef();
+	UpdateTime();
+	UpdateReferee();
 	UpdatePop();
 }
 
@@ -86,7 +87,7 @@ void DrawGame()
 	DrawDisk();		// ディスク
 //	DrawEffect();
 	DrawScore();
-	//DrawTime();
-	DrawRef();
+	DrawTime();
+	DrawReferee();
 	DrawPop();
 }

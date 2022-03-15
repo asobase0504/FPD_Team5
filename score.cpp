@@ -6,7 +6,7 @@
 //------------------------------
 #include"main.h"
 #include"score.h"
-
+#include"input.h"
 //グローバル変数
 LPDIRECT3DTEXTURE9 g_pTextureScore = NULL;				//テクスチャへのポインタ
 SCORE	g_nScore[2];									//スコアの構造体
@@ -115,6 +115,15 @@ void UninitScore(void)
 void UpdateScore(void)
 {
 	SetScore(g_nScore[0].nScore);
+
+	if (GetKeyboardTrigger(DIK_SPACE) == true)
+	{
+		g_nScore[1].nScore += 1;
+		if ((g_nScore[1].nScore % 10/1) == 0)
+		{
+			g_nScore[0].nScore += 10;
+		}
+	}
 }
 
 //------------------------------
@@ -228,8 +237,3 @@ SCORE GetScore(void)
 {
 	return g_nScore[0];
 }
-
-//SCORE2 GetScore2(void)
-//{
-//	return g_cScore;
-//}

@@ -388,12 +388,6 @@ void SetPlayer(const D3DXVECTOR3& pos, PLAYERTYPE type)
 		// 種類別のデータの代入
 		s_player[i] = s_playerType[type];
 
-		// 最初のディスクの保持を決定
-		if (i == 0)
-		{
-			pPlayer->bHaveDisk = true;
-		}
-
 		pPlayer->pos = pos; 			// 位置を初期化
 		pPlayer->fSize = PLAYER_SIZ;	// プレイヤーの大きさ
 		pPlayer->bUse = true;			// プレイヤーの表示の有無
