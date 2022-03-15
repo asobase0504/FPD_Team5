@@ -16,13 +16,13 @@
 //マクロ定義
 //***********************************
 #define MAX_SELECT		(3)			//選択肢の最大数
-#define SELECT_SIZE		(50.0f)		//選択部分のサイズ
+#define SELECT_SIZE		(35.0f)		//選択部分のサイズ
 #define MAX_TIMELIMIT	(5)			//制限時間の選択肢の最大数
 #define MAX_POINT		(4)			//ポイント数の選択肢の最大数
 #define MAX_SETCOUNT	(4)			//セット数の選択肢の最大数
 
 #define MAX_ARROW		(6)			//矢印の最大数
-#define ARROW_SIZE		(40.0f)		//矢印のサイズ
+#define ARROW_SIZE		(25.0f)		//矢印のサイズ
 
 #define TEXTURE_TIMELIMIT	("data/TEXTURE/制限時間.png")		//制限時間のテクスチャ
 #define TEXTURE_POINT		("data/TEXTURE/ポイント数.png")		//ポイント数のテクスチャ
@@ -109,10 +109,10 @@ void InitSelect(void)
 	D3DXVECTOR3 posSelect;					//選択部分の位置設定用
 	D3DXVECTOR3 aPosArrow[MAX_SELECT];		//矢印の位置設定用
 
-	for (int i = 0; i > MAX_SELECT; i++)
+	for (int i = 0; i < MAX_SELECT; i++)
 	{
 		//メニューの位置を始点に、選択部分の位置を設定する
-		posSelect.x = (GetMenu()->Option[i].pos.x) + 100.0f;
+		posSelect.x = (GetMenu()->Option[i].pos.x) + 200.0f;
 		posSelect.y = GetMenu()->Option[i].pos.y;
 		posSelect.z = 0.0f;
 
@@ -159,7 +159,7 @@ void InitSelect(void)
 	//頂点バッファをロックし、頂点データへのポインタを取得
 	s_pVtxBuffArrow->Lock(0, 0, (void**)&pVtx, 0);
 
-	for (int i = 0; i > MAX_ARROW; i++)
+	for (int i = 0; i < MAX_ARROW; i++)
 	{
 		float fPosX, fPosY;		//位置設定用
 		
@@ -169,7 +169,7 @@ void InitSelect(void)
 			fPosX = aPosArrow[i].x - 100.0f;
 			fPosY = aPosArrow[i].y;
 		}
-		else if ((i >= (MAX_ARROW / 2)) && i < MAX_ARROW)
+		else if ((i >= (MAX_ARROW / 2)) && (i < MAX_ARROW))
 		{
 			//保存しておいた座標から、右側の矢印の位置を決める
 			fPosX = aPosArrow[i % MAX_SELECT].x + 100.0f;
@@ -195,10 +195,10 @@ void InitSelect(void)
 		pVtx[3].rhw = 1.0f;
 
 		//頂点カラーの設定
-		pVtx[0].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-		pVtx[1].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-		pVtx[2].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-		pVtx[3].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+		pVtx[0].col = D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f);
+		pVtx[1].col = D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f);
+		pVtx[2].col = D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f);
+		pVtx[3].col = D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f);
 
 		//テクスチャ座標の設定
 		pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
@@ -218,19 +218,35 @@ void InitSelect(void)
 //============================================
 void UninitSelect(void)
 {
-	for (int i = 0; i > MAX_SELECT; i++)
+	/****** テクスチャの破棄 ******/
+
+	for (int i = 0; i < MAX_SELECT; i++)
 	{
 		if (s_apTextureSelect[i] != NULL)
-		{//テクスチャの破棄
+		{//選択部分
 			s_apTextureSelect[i]->Release();
 			s_apTextureSelect[i] = NULL;
 		}
 	}
 
+	if (s_pTextureArrow != NULL)
+	{//矢印
+		s_pTextureArrow->Release();
+		s_pTextureArrow = NULL;
+	}
+
+	/****** 頂点バッファの破棄 ******/
+
 	if (s_pVtxBuffSelect != NULL)
-	{//頂点バッファの破棄
+	{//選択部分
 		s_pVtxBuffSelect->Release();
 		s_pVtxBuffSelect = NULL;
+	}
+
+	if (s_pVtxBuffArrow != NULL)
+	{//矢印
+		s_pVtxBuffArrow->Release();
+		s_pVtxBuffArrow = NULL;
 	}
 }
 
@@ -255,12 +271,29 @@ void DrawSelect(void)
 	//頂点フォーマットの設定
 	pDevice->SetFVF(FVF_VERTEX_2D);
 
-	for (int i = 0; i > MAX_SELECT; i++)
+	for (int i = 0; i < MAX_SELECT; i++)
 	{
 		//テクスチャの設定
 		pDevice->SetTexture(0, s_apTextureSelect[i]);
 
-		//ポリゴンの描画       
+		//ポリゴンの描画
+		pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP,	//ポリゴンの形
+								i * 4,				//頂点の開始場所
+								2);					//プリミティブの数
+	}
+
+	//頂点バッファをデータストリームに設定
+	pDevice->SetStreamSource(0, s_pVtxBuffArrow, 0, sizeof(VERTEX_2D));
+
+	//頂点フォーマットの設定
+	pDevice->SetFVF(FVF_VERTEX_2D);
+
+	for (int i = 0; i < MAX_ARROW; i++)
+	{
+		//テクスチャの設定
+		pDevice->SetTexture(0, s_pTextureArrow);
+
+		//ポリゴンの描画
 		pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP,	//ポリゴンの形
 								i * 4,				//頂点の開始場所
 								2);					//プリミティブの数
