@@ -26,7 +26,7 @@ typedef struct
 //プロトタイプ宣言
 void InitTime(void);
 void UninitTime(void);
-void UpdateTime(int *p_nSelectTime);
+void UpdateTime(void);
 void DrawTime(void);
 TIME *GetTime(void);
 void SetTime(void);
