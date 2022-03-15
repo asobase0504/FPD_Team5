@@ -158,10 +158,12 @@
     <ClCompile Include="game.cpp" />
     <ClCompile Include="goal.cpp" />
     <ClCompile Include="input.cpp" />
+    <ClCompile Include="landingPoint.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="menu.cpp" />
     <ClCompile Include="mode.cpp" />
     <ClCompile Include="player.cpp" />
+    <ClCompile Include="pop.cpp" />
     <ClCompile Include="Referee.cpp" />
     <ClCompile Include="result.cpp" />
     <ClCompile Include="score.cpp" />
@@ -181,10 +183,12 @@
     <ClInclude Include="game.h" />
     <ClInclude Include="goal.h" />
     <ClInclude Include="input.h" />
+    <ClInclude Include="landingPoint.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="menu.h" />
     <ClInclude Include="mode.h" />
     <ClInclude Include="player.h" />
+    <ClInclude Include="pop.h" />
     <ClInclude Include="referee.h" />
     <ClInclude Include="result.h" />
     <ClInclude Include="score.h" />

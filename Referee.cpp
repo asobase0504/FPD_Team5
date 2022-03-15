@@ -2,6 +2,7 @@
 // 
 // レフェリー処理
 // Author Tanimoto_Kosuke
+// Author Yuda Kaito
 //
 // Update 22/03/14
 // 
@@ -16,195 +17,202 @@
 #include "player.h"
 
 //------------------------------------
+// マクロ定義
+//------------------------------------
+#define REFEREE_WIDTH		(100)	// レフェリーの横サイズ
+#define REFEREE_HEIGHT		(100)	// レフェリーの縦サイズ
+#define REFEREE_TEXTURE		"data\\TEXTURE\\referee\\field000.jpg"	// テクスチャファイル
+#define THROW_POWER			(10.0f)
+
+//------------------------------------
 // スタティック変数
 //------------------------------------
-static LPDIRECT3DTEXTURE9		s_pTextureRef = NULL;	//テクスチャへのポインタ
-static LPDIRECT3DVERTEXBUFFER9	s_pVtxBuffRef = NULL;	//頂点バッファへのポインタ
-static REFEREE s_aRef;									//レフェリーの情報
-static bool s_bPause;	// ポーズ中かどうか
+static LPDIRECT3DTEXTURE9		s_pTexture = NULL;	// テクスチャへのポインタ
+static LPDIRECT3DVERTEXBUFFER9	s_pVtxBuff = NULL;	// 頂点バッファへのポインタ
+static REFEREE s_aRefree;							// レフェリーの情報
+
+//------------------------------------
+// プロトタイプ宣言
+//------------------------------------
+static void ThrowRefree(void);
 
 //=========================================
-// レフェリーの初期化処理
+// 初期化
 //=========================================
-void InitRef(void)
+void InitReferee(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = GetDevice();	//デバイスへのポインタ
+	LPDIRECT3DDEVICE9 pDevice = GetDevice();	// デバイスへのポインタ
 
-												//テクスチャーの読み込み
-	D3DXCreateTextureFromFile
-	(
-		pDevice,
-		"data\\TEXTURE\\referee\\field000.jpg",	//テクスチャのファイル名
-		&s_pTextureRef
-	);
+	// テクスチャーの読み込み
+	D3DXCreateTextureFromFile(pDevice,"data\\TEXTURE\\referee\\field000.jpg",&s_pTexture);
 
-	//ゴールの位置
-	s_aRef.pos = D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT - REFEREE_HEIGHT * 0.75, 0.0f);
-	s_aRef.rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	s_aRef.nor = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	s_aRef.col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
-	s_aRef.fAngle = atan2f(REFEREE_WIDTH, REFEREE_HEIGHT);
-	s_aRef.fLength = sqrtf((REFEREE_WIDTH * REFEREE_WIDTH) + (REFEREE_HEIGHT * REFEREE_HEIGHT)) / 2.0f;
-	s_aRef.bUse = true;
+	// ゴールの位置
+	s_aRefree.pos = D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT - REFEREE_HEIGHT * 0.75f, 0.0f);
+	s_aRefree.rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	s_aRefree.nor = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	s_aRefree.col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
+	s_aRefree.fAngle = atan2f(REFEREE_WIDTH, REFEREE_HEIGHT);
+	s_aRefree.fLength = sqrtf((REFEREE_WIDTH * REFEREE_WIDTH) + (REFEREE_HEIGHT * REFEREE_HEIGHT)) / 2.0f;
+	s_aRefree.bUse = true;
 
-	//頂点バッファの生成
-	pDevice->CreateVertexBuffer
-	(
-		sizeof(VERTEX_2D) * 4,
+	// 頂点バッファの生成
+	pDevice->CreateVertexBuffer(sizeof(VERTEX_2D) * 4,
 		D3DUSAGE_WRITEONLY,
 		FVF_VERTEX_2D,
 		D3DPOOL_MANAGED,
-		&s_pVtxBuffRef,
-		NULL
-	);
+		&s_pVtxBuff,
+		NULL);
 
-	//頂点情報へのポインタ
+	// 頂点情報へのポインタ
 	VERTEX_2D *pVtx;
 
-	//頂点バッファをロックし、頂点情報へのポインタを取得
-	s_pVtxBuffRef->Lock(0, 0, (void**)&pVtx, 0);
+	// 頂点バッファをロックし、頂点情報へのポインタを取得
+	s_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
-	//頂点座標の設定 = (配置位置 ± 正弦(対角線の角度 ± 向き) * 対角線の長さ)
-	pVtx[0].pos.x = s_aRef.pos.x - sinf(s_aRef.fAngle + s_aRef.rot.x) * s_aRef.fLength;
-	pVtx[0].pos.y = s_aRef.pos.y - cosf(s_aRef.fAngle + s_aRef.rot.y) * s_aRef.fLength;
-	pVtx[0].pos.z = s_aRef.pos.z;
+	// 頂点座標の設定 = (配置位置 ± 正弦(対角線の角度 ± 向き) * 対角線の長さ)
+	pVtx[0].pos.x = s_aRefree.pos.x - sinf(s_aRefree.fAngle + s_aRefree.rot.x) * s_aRefree.fLength;
+	pVtx[0].pos.y = s_aRefree.pos.y - cosf(s_aRefree.fAngle + s_aRefree.rot.y) * s_aRefree.fLength;
+	pVtx[0].pos.z = s_aRefree.pos.z;
 
-	pVtx[1].pos.x = s_aRef.pos.x + sinf(s_aRef.fAngle - s_aRef.rot.x) * s_aRef.fLength;
-	pVtx[1].pos.y = s_aRef.pos.y - cosf(s_aRef.fAngle - s_aRef.rot.y) * s_aRef.fLength;
-	pVtx[1].pos.z = s_aRef.pos.z;
+	pVtx[1].pos.x = s_aRefree.pos.x + sinf(s_aRefree.fAngle - s_aRefree.rot.x) * s_aRefree.fLength;
+	pVtx[1].pos.y = s_aRefree.pos.y - cosf(s_aRefree.fAngle - s_aRefree.rot.y) * s_aRefree.fLength;
+	pVtx[1].pos.z = s_aRefree.pos.z;
 
-	pVtx[2].pos.x = s_aRef.pos.x - sinf(s_aRef.fAngle - s_aRef.rot.x) * s_aRef.fLength;
-	pVtx[2].pos.y = s_aRef.pos.y + cosf(s_aRef.fAngle - s_aRef.rot.y) * s_aRef.fLength;
-	pVtx[2].pos.z = s_aRef.pos.z;
+	pVtx[2].pos.x = s_aRefree.pos.x - sinf(s_aRefree.fAngle - s_aRefree.rot.x) * s_aRefree.fLength;
+	pVtx[2].pos.y = s_aRefree.pos.y + cosf(s_aRefree.fAngle - s_aRefree.rot.y) * s_aRefree.fLength;
+	pVtx[2].pos.z = s_aRefree.pos.z;
 
-	pVtx[3].pos.x = s_aRef.pos.x + sinf(s_aRef.fAngle + s_aRef.rot.x) * s_aRef.fLength;
-	pVtx[3].pos.y = s_aRef.pos.y + cosf(s_aRef.fAngle + s_aRef.rot.y) * s_aRef.fLength;
-	pVtx[3].pos.z = s_aRef.pos.z;
+	pVtx[3].pos.x = s_aRefree.pos.x + sinf(s_aRefree.fAngle + s_aRefree.rot.x) * s_aRefree.fLength;
+	pVtx[3].pos.y = s_aRefree.pos.y + cosf(s_aRefree.fAngle + s_aRefree.rot.y) * s_aRefree.fLength;
+	pVtx[3].pos.z = s_aRefree.pos.z;
 
-	//rhwの設定
+	// rhwの設定
 	pVtx[0].rhw = 1.0f;
 	pVtx[1].rhw = 1.0f;
 	pVtx[2].rhw = 1.0f;
 	pVtx[3].rhw = 1.0f;
 
-	//頂点カラーの設定
-	pVtx[0].col = D3DCOLOR_RGBA(255, 255, 255, 255);
-	pVtx[1].col = D3DCOLOR_RGBA(255, 255, 255, 255);
-	pVtx[2].col = D3DCOLOR_RGBA(255, 255, 255, 255);
-	pVtx[3].col = D3DCOLOR_RGBA(255, 255, 255, 255);
+	// 頂点カラーの設定
+	pVtx[0].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	pVtx[1].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	pVtx[2].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	pVtx[3].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 
-	//テクスチャ座標の設定(0.0f ~ (1 / xパターン数)f)
+	// テクスチャ座標の設定
 	pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
 	pVtx[1].tex = D3DXVECTOR2(1.0f, 0.0f);
 	pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);
 	pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);
 
-	//頂点バッファをアンロックする
-	s_pVtxBuffRef->Unlock();
+	// 頂点バッファをアンロックする
+	s_pVtxBuff->Unlock();
 }
 
 //=========================================
-// レフェリーの終了処理
+// 終了
 //=========================================
-void UninitRef(void)
+void UninitReferee(void)
 {
-	//テクスチャの破棄
-	if (s_pTextureRef != NULL)
+	// テクスチャの破棄
+	if (s_pTexture != NULL)
 	{
-		s_pTextureRef->Release();
-		s_pTextureRef = NULL;
+		s_pTexture->Release();
+		s_pTexture = NULL;
 	}
-	//頂点バッファの破棄
-	if (s_pVtxBuffRef != NULL)
+	// 頂点バッファの破棄
+	if (s_pVtxBuff != NULL)
 	{
-		s_pVtxBuffRef->Release();
-		s_pVtxBuffRef = NULL;
+		s_pVtxBuff->Release();
+		s_pVtxBuff = NULL;
 	}
 }
 
 //=========================================
-// レフェリーの更新処理
+// 更新
 //=========================================
-void UpdateRef(void)
+void UpdateReferee(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = GetDevice();	//デバイスへのポインタ
-
-	VERTEX_2D *pVtx;				//頂点情報へのポインタ
-
-	Player *pPlayer = GetPlayer();
-	Disk *pDisk = GetDisk();
-
-	if (pPlayer->bHaveDisk == false && pDisk->bUse == false)
+	if (s_aRefree.bUse)
 	{
-		//pos, move, acc, type, nPlayer, size
-		//SetDisk(s_aRef.pos + D3DXVECTOR3(0.0f, -50.0f, 0.0f), D3DXVECTOR3(-10.0f, -1.0f, 0.0f) , D3DXVECTOR3(0.0f, 0.0f, 0.0f), DISK_TYPE_NORMAL, 0, 40.0f);
+		ThrowRefree();
+
+		VERTEX_2D *pVtx;	// 頂点情報へのポインタ
+
+		// 頂点バッファをロックし、頂点情報へのポインタを取得
+		s_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
+		// 頂点座標の設定 = (配置位置 ± 正弦(対角線の角度 ± 向き) * 対角線の長さ)
+		pVtx[0].pos.x = s_aRefree.pos.x - sinf(s_aRefree.fAngle + s_aRefree.rot.x) * s_aRefree.fLength;
+		pVtx[0].pos.y = s_aRefree.pos.y - cosf(s_aRefree.fAngle + s_aRefree.rot.y) * s_aRefree.fLength;
+		pVtx[0].pos.z = s_aRefree.pos.z;
+
+		pVtx[1].pos.x = s_aRefree.pos.x + sinf(s_aRefree.fAngle - s_aRefree.rot.x) * s_aRefree.fLength;
+		pVtx[1].pos.y = s_aRefree.pos.y - cosf(s_aRefree.fAngle - s_aRefree.rot.y) * s_aRefree.fLength;
+		pVtx[1].pos.z = s_aRefree.pos.z;
+
+		pVtx[2].pos.x = s_aRefree.pos.x - sinf(s_aRefree.fAngle - s_aRefree.rot.x) * s_aRefree.fLength;
+		pVtx[2].pos.y = s_aRefree.pos.y + cosf(s_aRefree.fAngle - s_aRefree.rot.y) * s_aRefree.fLength;
+		pVtx[2].pos.z = s_aRefree.pos.z;
+
+		pVtx[3].pos.x = s_aRefree.pos.x + sinf(s_aRefree.fAngle + s_aRefree.rot.x) * s_aRefree.fLength;
+		pVtx[3].pos.y = s_aRefree.pos.y + cosf(s_aRefree.fAngle + s_aRefree.rot.y) * s_aRefree.fLength;
+		pVtx[3].pos.z = s_aRefree.pos.z;
+
+		// 頂点バッファをアンロックする
+		s_pVtxBuff->Unlock();
 	}
-
-	//頂点バッファをロックし、頂点情報へのポインタを取得
-	s_pVtxBuffRef->Lock(0, 0, (void**)&pVtx, 0);
-
-	if (s_aRef.bUse == true)
-	{
-		//頂点座標の設定 = (配置位置 ± 正弦(対角線の角度 ± 向き) * 対角線の長さ)
-		pVtx[0].pos.x = s_aRef.pos.x - sinf(s_aRef.fAngle + s_aRef.rot.x) * s_aRef.fLength;
-		pVtx[0].pos.y = s_aRef.pos.y - cosf(s_aRef.fAngle + s_aRef.rot.y) * s_aRef.fLength;
-		pVtx[0].pos.z = s_aRef.pos.z;
-
-		pVtx[1].pos.x = s_aRef.pos.x + sinf(s_aRef.fAngle - s_aRef.rot.x) * s_aRef.fLength;
-		pVtx[1].pos.y = s_aRef.pos.y - cosf(s_aRef.fAngle - s_aRef.rot.y) * s_aRef.fLength;
-		pVtx[1].pos.z = s_aRef.pos.z;
-
-		pVtx[2].pos.x = s_aRef.pos.x - sinf(s_aRef.fAngle - s_aRef.rot.x) * s_aRef.fLength;
-		pVtx[2].pos.y = s_aRef.pos.y + cosf(s_aRef.fAngle - s_aRef.rot.y) * s_aRef.fLength;
-		pVtx[2].pos.z = s_aRef.pos.z;
-
-		pVtx[3].pos.x = s_aRef.pos.x + sinf(s_aRef.fAngle + s_aRef.rot.x) * s_aRef.fLength;
-		pVtx[3].pos.y = s_aRef.pos.y + cosf(s_aRef.fAngle + s_aRef.rot.y) * s_aRef.fLength;
-		pVtx[3].pos.z = s_aRef.pos.z;
-	}
-
-	//頂点バッファをアンロックする
-	s_pVtxBuffRef->Unlock();
 }
 
 //=========================================
-// レフェリーの描画処理
+// 投擲処理
 //=========================================
-void DrawRef()
+void ThrowRefree(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = GetDevice();	//デバイスへのポインタ
+	// 投げる場合
+	if (s_aRefree.bThrow)
+	{
+		s_aRefree.bThrow = false;
 
-												//頂点バッファをデータストリームに設定
-	pDevice->SetStreamSource
-	(
-		0,
-		s_pVtxBuffRef,		//頂点バッファへのポインタ
-		0,
-		sizeof(VERTEX_2D)		//頂点情報構造体のサイズ
-	);
+		D3DXVECTOR3 posThrow = s_aRefree.pos;
+		posThrow.y -= 80.0f;
 
-	//頂点フォーマットの設定
+		D3DXVECTOR3 move = GetPlayer()->pos - posThrow;
+
+		D3DXVec3Normalize(&move, &move);
+
+		// ディスク投げ
+		SetDisk(posThrow, move * THROW_POWER, D3DXVECTOR3(0.0f, 0.0f, 0.0f), DISK_TYPE_NORMAL, -1, 40.0f);
+	}
+}
+
+
+//=========================================
+// 描画
+//=========================================
+void DrawReferee()
+{
+	LPDIRECT3DDEVICE9 pDevice = GetDevice();	// デバイスへのポインタ
+
+	// 頂点バッファをデータストリームに設定
+	pDevice->SetStreamSource(0, s_pVtxBuff, 0, sizeof(VERTEX_2D));
+
+	// 頂点フォーマットの設定
 	pDevice->SetFVF(FVF_VERTEX_2D);
 
-	if (s_aRef.bUse == true)
+	if (s_aRefree.bUse)
 	{
-		//テクスチャの設定
-		pDevice->SetTexture(0, s_pTextureRef);
+		// テクスチャの設定
+		pDevice->SetTexture(0, s_pTexture);
 
-		//ポリゴンの描画
-		pDevice->DrawPrimitive
-		(
-			D3DPT_TRIANGLESTRIP,	//プリミティブの種類
-			0,						//描画する最初の頂点インデックス
-			2						//プリミティブアイコンの個数
-		);
+		// ポリゴンの描画
+		pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, 2);
 	}
 }
 
 //============================================================================
-//レフェリーの取得処理
+// 取得
 //============================================================================
-REFEREE *GetRef(void)
+REFEREE* GetReferee(void)
 {
-	return &s_aRef;	//ゴール情報の先頭アドレスを返す
+	return &s_aRefree;	// ゴール情報の先頭アドレスを返す
 }
