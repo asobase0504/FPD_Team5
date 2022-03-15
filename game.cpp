@@ -22,6 +22,7 @@
 #include "time.h"
 #include "referee.h"
 #include "landingPoint.h"
+#include "pop.h"
 
 //=========================================
 // 初期化
@@ -36,8 +37,10 @@ void InitGame(void)
 	InitLandingMark();
 	//InitEffect();
 	InitScore();
-	//InitTime();
-	InitRef();
+	InitTime();
+	InitReferee();
+	GetReferee()->bThrow = true;
+	InitPop();
 }
 
 //=========================================
@@ -53,8 +56,9 @@ void UninitGame(void)
 	UninitLandingMark();
 //	UninitEffect();
 	UninitScore();
-	//UninitTime();
-	UninitRef();
+	UninitTime();
+	UninitReferee();
+	UninitPop();
 }
 
 //=========================================
@@ -70,8 +74,9 @@ void UpdateGame(void)
 	UpdateShadow();	// 影
 //	UpdateEffect();
 	UpdateScore();
-	//UpdateTime();
-	UpdateRef();
+	UpdateTime();
+	UpdateReferee();
+	UpdatePop();
 }
 
 //=========================================
@@ -87,6 +92,7 @@ void DrawGame()
 	DrawDisk();		// ディスク
 //	DrawEffect();
 	DrawScore();
-	//DrawTime();
-	DrawRef();
+	DrawTime();
+	DrawReferee();
+	DrawPop();
 }

@@ -15,6 +15,7 @@
 #include <assert.h>
 #include <stdio.h>
 #include "shadow.h"
+#include "stage.h"
 
 //-----------------------------------------
 // マクロ定義
@@ -141,6 +142,36 @@ void UpdatePlayer(void)
 			default:
 				assert(false);
 				break;
+			}
+		}
+
+		// 移動制限
+		{
+			STAGE_LENGTH stageLength;
+			if (nIdxPlayer == 0)
+			{
+				stageLength = *GetP1StgLng();
+			}
+			else
+			{
+				stageLength = *GetP2StgLng();
+			}
+
+			if (stageLength.max.y <= pPlayer->pos.y + PLAYER_SIZ)
+			{
+				pPlayer->pos.y = stageLength.max.y - PLAYER_SIZ;
+			}
+			if (stageLength.max.x <= pPlayer->pos.x + PLAYER_SIZ)
+			{
+				pPlayer->pos.x = stageLength.max.x - PLAYER_SIZ;
+			}
+			if (stageLength.min.y >= pPlayer->pos.y - PLAYER_SIZ)
+			{
+				pPlayer->pos.y = stageLength.min.y + PLAYER_SIZ;
+			}
+			if (stageLength.min.x >= pPlayer->pos.x - PLAYER_SIZ)
+			{
+				pPlayer->pos.x = stageLength.min.x + PLAYER_SIZ;
 			}
 		}
 
@@ -352,7 +383,7 @@ void CatchDiscPlayer(int nIdxPlayer)
 	Disk* pDisk = GetDisk();
 	Shadow *pShadow = GetShadow();
 
-	if ((CollisionCircle(pPlayer->pos, pPlayer->fSize * (1 + (pPlayer->fHeight * 0.005)), pDisk->pos, pDisk->fSize)) && (pDisk->nPlayer != nIdxPlayer))
+	if ((CollisionCircle(pPlayer->pos, pPlayer->fSize * (1 + (pPlayer->fHeight * 0.005)), pDisk->pos, (pDisk->fSize * 0.5f))) && (pDisk->nPlayer != nIdxPlayer))
 	{
 		if ((pDisk->type != DISK_TYPE_LOB || (pDisk->type == DISK_TYPE_LOB && pDisk->fHeight <= 0.0f)) && pPlayer->jumpstate == JUMP_NONE)
 		{
@@ -387,12 +418,6 @@ void SetPlayer(const D3DXVECTOR3& pos, PLAYERTYPE type)
 
 		// 種類別のデータの代入
 		s_player[i] = s_playerType[type];
-
-		// 最初のディスクの保持を決定
-		if (i == 0)
-		{
-			pPlayer->bHaveDisk = true;
-		}
 
 		pPlayer->pos = pos; 			// 位置を初期化
 		pPlayer->fSize = PLAYER_SIZ;	// プレイヤーの大きさ

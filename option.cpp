@@ -6,6 +6,7 @@
 //
 //============================================
 #include "option.h"
+#include "select.h"
 #include "fade.h"
 #include "input.h"
 #include "menu.h"
@@ -20,53 +21,6 @@
 #define MENU_HEIGHT		(140.0f)	//ƒƒjƒ…[‚Ì‚‚³
 
 //***********************************
-//ƒIƒvƒVƒ‡ƒ“‚Ì—ñ‹“Œ^
-//***********************************
-typedef enum
-{
-	OPTION_TIMELIMIT = 0,	//§ŒÀŠÔ
-	OPTION_POINT,			//ƒ|ƒCƒ“ƒg”
-	OPTION_SETCOUNT,		//ƒZƒbƒg”
-	OPTION_GOTOGAME,		//ƒQ[ƒ€‚Öi‚Ş
-	OPTION_MAX
-}OPTION;
-
-//***********************************
-//§ŒÀŠÔ‚Ì—ñ‹“Œ^
-//***********************************
-typedef enum
-{
-	TIMELIMIT_15 = 0,		//15•b
-	TIMELIMIT_30,			//30•b
-	TIMELIMIT_45,			//45•b
-	TIMELIMIT_90,			//90•b
-	TIMELIMIT_INFINITY,		//–³ŒÀ(§ŒÀŠÔ‚È‚µ)
-	TIMELIMIT_MAX
-}TIMELIMIT;
-
-//***********************************
-//ƒ|ƒCƒ“ƒg”‚Ì—ñ‹“Œ^
-//***********************************
-typedef enum
-{
-	POINTCOUNT_12 = 0,	//12“_
-	POINTCOUNT_15,		//15“_
-	POINTCOUNT_21,		//21“_
-	POINTCOUNT_MAX
-}POINTCOUNT;
-
-//***********************************
-//ƒZƒbƒg”‚Ì—ñ‹“Œ^
-//***********************************
-typedef enum
-{
-	SETCOUNT_ONE = 0,	//1ƒZƒbƒg
-	SETCOUNT_TWO,		//2ƒZƒbƒg
-	SETCOUNT_THREE,		//3ƒZƒbƒg
-	SETCOUNT_MAX
-}SETCOUNT;
-
-//***********************************
 //ƒXƒ^ƒeƒBƒbƒN•Ï”
 //***********************************
 static LPDIRECT3DTEXTURE9		s_pTexture = NULL;				//ƒeƒNƒXƒ`ƒƒ‚Ö‚Ìƒ|ƒCƒ“ƒ^(”wŒi)
@@ -74,22 +28,15 @@ static LPDIRECT3DTEXTURE9		s_apTextureMenu[MAX_TEXTURE];	//ƒeƒNƒXƒ`ƒƒ‚Ö‚Ìƒ|ƒCƒ“ƒ
 static LPDIRECT3DVERTEXBUFFER9	s_pVtxBuff = NULL;				//’¸“_ƒoƒbƒtƒ@‚Ö‚Ìƒ|ƒCƒ“ƒ^
 
 static int s_nSelectMenu;		//‘I‚Î‚ê‚Ä‚¢‚éƒƒjƒ…[
-static int s_nSelectTimeLimit;	//‘I‚Î‚ê‚Ä‚¢‚é§ŒÀŠÔ
-static int s_nSelectPoint;		//‘I‚Î‚ê‚Ä‚¢‚éƒ|ƒCƒ“ƒg”
-static int s_nSelectSetCount;	//‘I‚Î‚ê‚Ä‚¢‚éƒZƒbƒg”
-
-static int s_nTimeLimit;	//§ŒÀŠÔ‚ğ•Û‘¶‚·‚é
-static int s_nPoint;		//ƒ|ƒCƒ“ƒg”‚ğ•Û‘¶‚·‚é
-static int s_nSetCount;		//ƒZƒbƒg”‚ğ•Û‘¶‚·‚é
+static int s_nSelectTimeLimit;	//‘I‘ğ‚µ‚½§ŒÀŠÔ
+static int s_nSelectPoint;		//‘I‘ğ‚µ‚½ƒ|ƒCƒ“ƒg”
+static int s_nSelectSetCount;	//‘I‘ğ‚µ‚½ƒZƒbƒg”
 
 //***********************************
 //ƒvƒƒgƒ^ƒCƒvéŒ¾
 //***********************************
 
 static void SelectMenu(void);
-static int SelectTimeLimit(void);
-static int SelectPoint(void);
-static int SelectSetCount(void);
 
 //============================================
 //ƒIƒvƒVƒ‡ƒ“‚Ì‰Šú‰»
@@ -97,9 +44,6 @@ static int SelectSetCount(void);
 void InitOption(void)
 {
 	LPDIRECT3DDEVICE9 pDevice = GetDevice();	//ƒfƒoƒCƒX‚Ìæ“¾
-
-	//ƒeƒNƒXƒ`ƒƒƒ|ƒCƒ“ƒ^‚Ì‰Šú‰»
-	memset(s_apTextureMenu, NULL, sizeof(s_apTextureMenu));
 
 	//ƒeƒNƒXƒ`ƒƒ‚Ì“Ç‚İ‚İ
 	D3DXCreateTextureFromFile(pDevice,
@@ -120,17 +64,11 @@ void InitOption(void)
 
 	D3DXCreateTextureFromFile(pDevice,
 								"data/TEXTURE/ƒ^ƒCƒgƒ‹‚Ö–ß‚é",
-								&s_apTextureMenu[2]);
+								&s_apTextureMenu[3]);
 
 	//•Ï”‚Ì‰Šú‰»
 	s_nSelectMenu = 0;
-	s_nSelectTimeLimit = 0;
-	s_nSelectPoint = 0;
-	s_nSelectSetCount = 0;
-	s_nTimeLimit = 0;
-	s_nPoint = 0;
-	s_nSetCount = 0;
-
+	
 	VERTEX_2D * pVtx = NULL;	//’¸“_î•ñ‚Ö‚Ìƒ|ƒCƒ“ƒ^
 
 	//’¸“_ƒoƒbƒtƒ@‚Ì¶¬
@@ -287,19 +225,19 @@ static void SelectMenu(void)
 	case OPTION_TIMELIMIT:	//§ŒÀŠÔ
 
 		//§ŒÀŠÔ‚Ì‘I‘ğ
-		s_nSelectTimeLimit = SelectTimeLimit();
+		s_nSelectTimeLimit = SelectTimeLimit(s_nSelectMenu);
 		break;
 
 	case OPTION_POINT:	//ƒ|ƒCƒ“ƒg”
 		
 		//ƒ|ƒCƒ“ƒg”‚Ì‘I‘ğ
-		s_nSelectPoint = SelectPoint();
+		s_nSelectPoint = SelectPoint(s_nSelectMenu);
 		break;
 
 	case OPTION_SETCOUNT:	//ƒZƒbƒg”
 
 		//ƒZƒbƒg”‚Ì‘I‘ğ
-		s_nSelectSetCount = SelectSetCount();
+		s_nSelectSetCount = SelectSetCount(s_nSelectMenu);
 		break;
 
 	case OPTION_GOTOGAME:	//ƒQ[ƒ€‚Öi‚Ş
@@ -321,138 +259,4 @@ static void SelectMenu(void)
 		assert(false);
 		break;
 	}
-}
-
-//--------------------------------------------
-// §ŒÀŠÔ‚Ì‘I‘ğ
-//--------------------------------------------
-static int SelectTimeLimit(void)
-{
-	if (GetKeyboardTrigger(DIK_A) || GetJoypadTrigger(JOYKEY_LEFT, 0))
-	{// ¶‚ğ“ü—Í( AƒL[ or \šƒL[¶ )
-
-		//‘I‘ğˆ‚ğˆê‚Â‘O(¶)‚É‚·‚é
-		s_nSelectTimeLimit = ((s_nSelectTimeLimit - 1) + TIMELIMIT_MAX) % TIMELIMIT_MAX;
-	}
-	else if (GetKeyboardTrigger(DIK_D) || GetJoypadTrigger(JOYKEY_RIGHT, 0))
-	{// ‰E‚ğ“ü—Í( DƒL[ or \šƒL[‰E )
-		
-		//‘I‘ğˆ‚ğˆê‚ÂŒã(‰E)‚É‚·‚é
-		s_nSelectTimeLimit = ((s_nSelectTimeLimit + 1) + TIMELIMIT_MAX) % TIMELIMIT_MAX;
-	}
-
-	int nTimeLimit = 0;
-
-	switch (s_nSelectTimeLimit)
-	{
-	case TIMELIMIT_15:		//15•b
-		nTimeLimit = 15;	//ˆê•Û‘¶
-		break;
-
-	case TIMELIMIT_30:		//30•b
-		nTimeLimit = 30;	//ˆê•Û‘¶
-		break;
-
-	case TIMELIMIT_45:		//45•b
-		nTimeLimit = 45;	//ˆê•Û‘¶
-		break;
-
-	case TIMELIMIT_90:		//90•b
-		nTimeLimit = 90;	//ˆê•Û‘¶
-		break;
-
-	case TIMELIMIT_INFINITY:	//–³ŒÀ(§ŒÀŠÔ‚È‚µ)
-		nTimeLimit = 99;		//ˆê•Û‘¶(‰¼‚Å‘—‚é’l)
-		break;
-
-	default:
-		assert(false);
-		break;
-	}
-
-	return nTimeLimit;	//İ’è‚µ‚½’l‚ğ•Ô‚·
-}
-
-//--------------------------------------------
-// ƒ|ƒCƒ“ƒg”‚Ì‘I‘ğ
-//--------------------------------------------
-static int SelectPoint(void)
-{
-	if (GetKeyboardTrigger(DIK_A) || GetJoypadTrigger(JOYKEY_LEFT, 0))
-	{// ¶‚ğ“ü—Í( AƒL[ or \šƒL[¶ )
-
-		//‘I‘ğˆ‚ğˆê‚Â‘O(¶)‚É‚·‚é
-		s_nSelectPoint = ((s_nSelectPoint - 1) + POINTCOUNT_MAX) % POINTCOUNT_MAX;
-	}
-	else if (GetKeyboardTrigger(DIK_D) || GetJoypadTrigger(JOYKEY_RIGHT, 0))
-	{// ‰E‚ğ“ü—Í( DƒL[ or \šƒL[‰E )
-		
-		//‘I‘ğˆ‚ğˆê‚ÂŒã(‰E)‚É‚·‚é
-		s_nSelectPoint = ((s_nSelectPoint + 1) + POINTCOUNT_MAX) % POINTCOUNT_MAX;
-	}
-
-	int nPoint = 0; 
-
-	switch (s_nSelectPoint)
-	{
-	case POINTCOUNT_12:	//12“_
-		nPoint = 12;	//ˆê•Û‘¶
-		break;
-
-	case POINTCOUNT_15:	//15“_
-		nPoint = 15;	//ˆê•Û‘¶
-		break;
-
-	case POINTCOUNT_21:	//21“_
-		nPoint = 21;	//ˆê•Û‘¶
-		break;
-
-	default:
-		assert(false);
-		break;
-	}
-
-	return nPoint;	//İ’è‚µ‚½’l‚ğ•Ô‚·
-}
-
-//--------------------------------------------
-// ƒZƒbƒg”‚Ì‘I‘ğ
-//--------------------------------------------
-static int SelectSetCount(void)
-{
-	if (GetKeyboardTrigger(DIK_A) || GetJoypadTrigger(JOYKEY_LEFT, 0))
-	{// ¶‚ğ“ü—Í( AƒL[ or \šƒL[¶ )
-
-		//‘I‘ğˆ‚ğˆê‚Â‘O(¶)‚É‚·‚é
-		s_nSelectSetCount = ((s_nSelectSetCount - 1) + SETCOUNT_MAX) % SETCOUNT_MAX;
-	}
-	else if (GetKeyboardTrigger(DIK_D) || GetJoypadTrigger(JOYKEY_RIGHT, 0))
-	{// ‰E‚ğ“ü—Í( DƒL[ or \šƒL[‰E )
-		
-		//‘I‘ğˆ‚ğˆê‚ÂŒã(‰E)‚É‚·‚é
-		s_nSelectSetCount = ((s_nSelectSetCount + 1) + SETCOUNT_MAX) % SETCOUNT_MAX;
-	}
-
-	int nSetCount = 0;
-
-	switch (s_nSelectSetCount)
-	{
-	case SETCOUNT_ONE:		//1ƒZƒbƒg
-		nSetCount = 1;		//ˆê•Û‘¶
-		break;
-
-	case SETCOUNT_TWO:		//2ƒZƒbƒg
-		nSetCount = 2;		//ˆê•Û‘¶
-		break;
-
-	case SETCOUNT_THREE:	//3ƒZƒbƒg
-		nSetCount = 3;		//ˆê•Û‘¶
-		break;
-
-	default:
-		assert(false);
-		break;
-	}
-
-	return nSetCount;	//İ’è‚µ‚½’l‚ğ•Ô‚·
 }
