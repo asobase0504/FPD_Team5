@@ -116,7 +116,6 @@ void UninitScore(void)
 //------------------------------
 void UpdateScore(void)
 {
-	AddScore(g_nScore[0].nScore[0],nPlayerIdx);
 }
 
 //------------------------------
@@ -191,18 +190,16 @@ void SetScore(int nScore)//,int nPlayerIdx)
 //------------------------------
 //ÉXÉRÉAÇÃâ¡éZèàóù
 //------------------------------
-void AddScore(int nValse,int nPlayerIdx)
+void AddScore(int nValse, int nPlayerIdx)
 {
 	int nCntScore;
 	int aPosTexU[4]; //äeåÖÇÃêîéöÇäiî[
 
-	g_nScore[2].nScore[2] += nValse;
-
-		g_nScore[nPlayerIdx].nScore[1] += 1;
-		if ((g_nScore[nPlayerIdx].nScore[1] % 10 / 1) == 0)
-		{
-			g_nScore[nPlayerIdx].nScore[0] += 10;
-		}
+	g_nScore[nPlayerIdx].nScore[1] += nValse;
+	if ((g_nScore[nPlayerIdx].nScore[1] % 10 / 1) == 0)
+	{
+		g_nScore[nPlayerIdx].nScore[0] += 10;
+	}
 
 	aPosTexU[0] = (g_nScore[0].nScore[0] % 100) / 10;
 	aPosTexU[1] = (g_nScore[0].nScore[1] % 10) / 1;
