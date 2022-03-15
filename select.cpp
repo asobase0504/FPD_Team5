@@ -19,6 +19,10 @@
 #define MAX_POINT		(4)			//ポイント数の選択肢の最大数
 #define MAX_SETCOUNT	(4)			//セット数の選択肢の最大数
 
+#define TEXTURE_TIMELIMIT	("data/TEXTURE/制限時間")		//制限時間のテクスチャ
+#define TEXTURE_POINT		("data/TEXTURE/ポイント数")		//ポイント数のテクスチャ
+#define TEXTURE_SETCOUNT	("data/TEXTURE/セット数")		//セット数のテクスチャ
+
 //***********************************
 //スタティック変数
 //***********************************
@@ -48,16 +52,16 @@ void InitSelect(void)
 
 	//テクスチャの読み込み
 	D3DXCreateTextureFromFile(pDevice,
-								"data/TEXTURE/背景",
-								&s_apTexture[0]);
+								TEXTURE_TIMELIMIT,
+								&s_apTexture[0]);	//制限時間
 
 	D3DXCreateTextureFromFile(pDevice,
-								"data/TEXTURE/タイマー",
-								&s_apTexture[1]);
+								TEXTURE_POINT,
+								&s_apTexture[1]);	//ポイント数
 
 	D3DXCreateTextureFromFile(pDevice,
-								"data/TEXTURE/ポイント数",
-								&s_apTexture[2]);
+								TEXTURE_SETCOUNT,
+								&s_apTexture[2]);	//セット数
 
 	//変数の初期化
 	s_nSelectTimeLimit = 0;
@@ -167,10 +171,10 @@ void DrawSelect(void)
 	}
 }
 
-//--------------------------------------------
+//============================================
 // 制限時間の選択
 // int nSelectMenu ---> 選択しているメニュー
-//--------------------------------------------
+//============================================
 int SelectTimeLimit(int nSelectMenu)
 {
 	if (GetKeyboardTrigger(DIK_A) || GetJoypadTrigger(JOYKEY_LEFT, 0))
@@ -186,7 +190,7 @@ int SelectTimeLimit(int nSelectMenu)
 		s_nSelectTimeLimit = ((s_nSelectTimeLimit + 1) + TIMELIMIT_MAX) % TIMELIMIT_MAX;
 	}
 
-	int nTimeLimit = 0;
+	int nTimeLimit = 0;		//値を返す用
 
 	switch (s_nSelectTimeLimit)
 	{
@@ -221,10 +225,10 @@ int SelectTimeLimit(int nSelectMenu)
 	return nTimeLimit;	//設定した値を返す
 }
 
-//--------------------------------------------
+//============================================
 // ポイント数の選択
 // int nSelectMenu ---> 選択しているメニュー
-//--------------------------------------------
+//============================================
 int SelectPoint(int nSelectMenu)
 {
 	if (GetKeyboardTrigger(DIK_A) || GetJoypadTrigger(JOYKEY_LEFT, 0))
@@ -240,7 +244,7 @@ int SelectPoint(int nSelectMenu)
 		s_nSelectPoint = ((s_nSelectPoint + 1) + POINTCOUNT_MAX) % POINTCOUNT_MAX;
 	}
 
-	int nPoint = 0; 
+	int nPoint = 0; 	//値を返す用
 
 	switch (s_nSelectPoint)
 	{
@@ -271,10 +275,10 @@ int SelectPoint(int nSelectMenu)
 	return nPoint;	//設定した値を返す
 }
 
-//--------------------------------------------
+//============================================
 // セット数の選択
 // int nSelectMenu ---> 選択しているメニュー
-//--------------------------------------------
+//============================================
 int SelectSetCount(int nSelectMenu)
 {
 	if (GetKeyboardTrigger(DIK_A) || GetJoypadTrigger(JOYKEY_LEFT, 0))
@@ -290,7 +294,7 @@ int SelectSetCount(int nSelectMenu)
 		s_nSelectSetCount = ((s_nSelectSetCount + 1) + SETCOUNT_MAX) % SETCOUNT_MAX;
 	}
 
-	int nSetCount = 0;
+	int nSetCount = 0;	//値を返す用
 
 	switch (s_nSelectSetCount)
 	{
