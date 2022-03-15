@@ -16,6 +16,7 @@
 #include "shadow.h"
 #include "stage.h"
 #include "player.h"
+#include "input.h"
 
 //====================================
 //グローバル変数
@@ -35,7 +36,7 @@ void InitDisk(void)
 
 	//テクスチャの読み込み
 	D3DXCreateTextureFromFile(pDevice,
-		"data\\TEXTURE\\PlayerSpriteSheet.png",
+		"data\\TEXTURE\\disc.png",
 		&g_apTexDisk);
 
 	//頂点バッファの生成
@@ -136,13 +137,13 @@ void UpdateDisk(void)
 
 			case DISK_TYPE_SPECIAL_0:
 
-				UpdateSpecialDisk(nCntDisk, 0);
+				UpdateSpecialDisk(nCntDisk);
 
 				break;
 
 			case DISK_TYPE_SPECIAL_1:
 
-				UpdateSpecialDisk(nCntDisk, 0);
+				UpdateSpecialDisk(nCntDisk);
 
 				break;
 			}
@@ -234,7 +235,7 @@ void SetDisk(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 acc, DISK_TYPE type,
 			g_aDisk[nCntDisk].type = type;									//ディスクの種類の設定
 			g_aDisk[nCntDisk].nCntPhase = 0;								//ディスクの必殺技用のカウンターの設定
 			g_aDisk[nCntDisk].nPlayer = nPlayer;							//ディスクを投げたプレイヤーのインデックスの設定
-			g_aDisk[nCntDisk].nIdxShadow = SetShadow(pos, size);			//ディスクの影のインデックス
+			g_aDisk[nCntDisk].nIdxShadow = SetShadow(pos, size * 1.25f);	//ディスクの影のインデックス
 			g_aDisk[nCntDisk].bUse = true;									//使用されている状態にする
 
 			//頂点座標の設定
@@ -281,6 +282,26 @@ void SetDisk(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 acc, DISK_TYPE type,
 
 			case DISK_TYPE_SPECIAL_0:
 
+				if (pos.x < SCREEN_WIDTH * 0.5f)
+				{
+					g_aDisk[nCntDisk].move.x = 7.5f;
+				}
+				else
+				{
+					g_aDisk[nCntDisk].move.x = -7.5f;
+				}
+
+				if (pos.y <= SCREEN_HEIGHT * 0.5f)
+				{
+					g_aDisk[nCntDisk].move.y = 0.0f;
+					g_aDisk[nCntDisk].acc.y = 0.5f;
+				}
+				else
+				{
+					g_aDisk[nCntDisk].move.y = 0.0f;
+					g_aDisk[nCntDisk].acc.y = -0.5f;
+				}
+
 				g_aDisk[nCntDisk].fHeight = NORMAL_DISK_HEIGHT;
 				g_aDisk[nCntDisk].fVerticalSpeed = NORMAL_VERTICAL_SPEED;
 				g_aDisk[nCntDisk].bBounce = false;
@@ -289,6 +310,16 @@ void SetDisk(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 acc, DISK_TYPE type,
 
 			case DISK_TYPE_SPECIAL_1:
 
+				if (pos.x < SCREEN_WIDTH * 0.5f)
+				{
+					g_aDisk[nCntDisk].move.x = 7.5f;
+				}
+				else
+				{
+					g_aDisk[nCntDisk].move.x = -7.5f;
+				}
+
+				g_aDisk[nCntDisk].move.y = 0.0f;
 				g_aDisk[nCntDisk].fHeight = NORMAL_DISK_HEIGHT;
 				g_aDisk[nCntDisk].fVerticalSpeed = NORMAL_VERTICAL_SPEED;
 				g_aDisk[nCntDisk].bBounce = false;
@@ -305,12 +336,12 @@ void SetDisk(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 acc, DISK_TYPE type,
 }
 
 //必殺技
-void UpdateSpecialDisk(int nCntDisk, int nPlayer)
+void UpdateSpecialDisk(int nCntDisk)
 {
 	float fChangePoint;
-	bool bImpact = false;
+	bool bImpact = false;	
 
-	fChangePoint = SCREEN_WIDTH * (0.7f);
+	fChangePoint = SCREEN_WIDTH * (0.7f - (0.4f * g_aDisk[nCntDisk].nPlayer));
 
 	switch (g_aDisk[nCntDisk].type)
 	{
@@ -329,7 +360,7 @@ void UpdateSpecialDisk(int nCntDisk, int nPlayer)
 			if (bImpact == true)
 			{
 				g_aDisk[nCntDisk].nCntPhase++;
-				g_aDisk[nCntDisk].move = D3DXVECTOR3(15.0f, 0.0f, 0.0f);
+				g_aDisk[nCntDisk].move = D3DXVECTOR3(15.0f - (30.0f * g_aDisk[nCntDisk].nPlayer), 0.0f, 0.0f);
 				g_aDisk[nCntDisk].acc = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 			}
 
@@ -337,13 +368,15 @@ void UpdateSpecialDisk(int nCntDisk, int nPlayer)
 
 		case 1:
 
-			fChangePoint = SCREEN_WIDTH * (0.7f);
+			fChangePoint = SCREEN_WIDTH * (0.7f - (0.4f * g_aDisk[nCntDisk].nPlayer));
 
 			if (g_aDisk[nCntDisk].pos.x >= fChangePoint)
 			{
+				int nDir = g_aDisk[nCntDisk].pos.y / SCREEN_HEIGHT + 1;
+
 				g_aDisk[nCntDisk].nCntPhase++;
-				g_aDisk[nCntDisk].move = D3DXVECTOR3(-0.5f, 15.0f, 0.0f);
-				g_aDisk[nCntDisk].acc = D3DXVECTOR3(0.3f, 0.0f, 0.0f);
+				g_aDisk[nCntDisk].move = D3DXVECTOR3(-2.5f + (1.0f * g_aDisk[nCntDisk].nPlayer), 15.0f - (30.0f * nDir), 0.0f);
+				g_aDisk[nCntDisk].acc = D3DXVECTOR3(0.5f - (1.0f * g_aDisk[nCntDisk].nPlayer), 0.0f, 0.0f);
 			}
 
 			break;
@@ -354,8 +387,10 @@ void UpdateSpecialDisk(int nCntDisk, int nPlayer)
 
 			if (bImpact == true)
 			{
+				int nDir = g_aDisk[nCntDisk].pos.y / SCREEN_HEIGHT + 1;
+
 				g_aDisk[nCntDisk].nCntPhase++;
-				g_aDisk[nCntDisk].move = D3DXVECTOR3(15.0f, -6.0f, 0.0f);
+				g_aDisk[nCntDisk].move = D3DXVECTOR3(15.0f - (30.0f * g_aDisk[nCntDisk].nPlayer), -6.0f + (12.0f * (nDir)), 0.0f);
 				g_aDisk[nCntDisk].acc = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 			}
 
@@ -371,13 +406,29 @@ void UpdateSpecialDisk(int nCntDisk, int nPlayer)
 		{
 		case 0:
 
-			fChangePoint = SCREEN_WIDTH * (0.3f);
+			fChangePoint = SCREEN_WIDTH * (0.3f + (0.4f * g_aDisk[nCntDisk].nPlayer));
 
-			if (g_aDisk[nCntDisk].pos.x >= fChangePoint)
+			if (g_aDisk[nCntDisk].move.x >= 0)
 			{
-				g_aDisk[nCntDisk].nCntPhase++;
-				g_aDisk[nCntDisk].move = D3DXVECTOR3(0.0f, -15.0f, 0.0f);
-				g_aDisk[nCntDisk].acc = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+				if (g_aDisk[nCntDisk].pos.x >= fChangePoint)
+				{
+					int nDir = g_aDisk[nCntDisk].pos.y / ((SCREEN_HEIGHT * 0.5f) + 1);
+
+					g_aDisk[nCntDisk].nCntPhase++;
+					g_aDisk[nCntDisk].move = D3DXVECTOR3(0.0f, -15.0f + (30.0f * nDir), 0.0f);
+					g_aDisk[nCntDisk].acc = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+				}
+			}
+			else
+			{
+				if (g_aDisk[nCntDisk].pos.x < fChangePoint)
+				{
+					int nDir = g_aDisk[nCntDisk].pos.y / ((SCREEN_HEIGHT * 0.5f) + 1);
+
+					g_aDisk[nCntDisk].nCntPhase++;
+					g_aDisk[nCntDisk].move = D3DXVECTOR3(0.0f, -15.0f + (30.0f * nDir), 0.0f);
+					g_aDisk[nCntDisk].acc = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+				}
 			}
 
 			break;
@@ -389,7 +440,7 @@ void UpdateSpecialDisk(int nCntDisk, int nPlayer)
 			if (bImpact == true)
 			{
 				g_aDisk[nCntDisk].nCntPhase++;
-				g_aDisk[nCntDisk].move = D3DXVECTOR3(15.0f, 0.0f, 0.0f);
+				g_aDisk[nCntDisk].move = D3DXVECTOR3(15.0f - (30.0f * g_aDisk[nCntDisk].nPlayer), 0.0f, 0.0f);
 				g_aDisk[nCntDisk].acc = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 			}
 
@@ -397,26 +448,52 @@ void UpdateSpecialDisk(int nCntDisk, int nPlayer)
 
 		case 2:
 
-			fChangePoint = SCREEN_WIDTH * (0.7f);
+			fChangePoint = SCREEN_WIDTH * (0.7f - (0.4f * g_aDisk[nCntDisk].nPlayer));
 
-			if (g_aDisk[nCntDisk].pos.x >= fChangePoint)
+			if (g_aDisk[nCntDisk].move.x < 0)
 			{
-				g_aDisk[nCntDisk].nCntPhase++;
-				g_aDisk[nCntDisk].move = D3DXVECTOR3(0.0f, 10.0f, 0.0f);
-				g_aDisk[nCntDisk].acc = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+				if (g_aDisk[nCntDisk].pos.x <= fChangePoint)
+				{
+					int nDir = g_aDisk[nCntDisk].pos.y / ((SCREEN_HEIGHT * 0.5f) + 1);
+					g_aDisk[nCntDisk].nCntPhase++;
+					g_aDisk[nCntDisk].move = D3DXVECTOR3(0.0f, 10.0f - (20.0f * nDir), 0.0f);
+					g_aDisk[nCntDisk].acc = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+				}
+			}
+			else
+			{
+				if (g_aDisk[nCntDisk].pos.x >= fChangePoint)
+				{
+					int nDir = g_aDisk[nCntDisk].pos.y / ((SCREEN_HEIGHT * 0.5f) + 1);
+					g_aDisk[nCntDisk].nCntPhase++;
+					g_aDisk[nCntDisk].move = D3DXVECTOR3(0.0f, 10.0f - (20.0f * nDir), 0.0f);
+					g_aDisk[nCntDisk].acc = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+				}
 			}
 
 			break;
 
 		case 3:
 
-			fChangePoint = 400.0f + (rand() % 201);
+			fChangePoint = (SCREEN_HEIGHT * 0.5f) + ((rand() % 201) - 100);
 
-			if (g_aDisk[nCntDisk].pos.y >= fChangePoint)
+			if (g_aDisk[nCntDisk].move.y > 0)
 			{
-				g_aDisk[nCntDisk].nCntPhase++;
-				g_aDisk[nCntDisk].move = D3DXVECTOR3(15.0f, 00.0f, 0.0f);
-				g_aDisk[nCntDisk].acc = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+				if (g_aDisk[nCntDisk].pos.y >= fChangePoint)
+				{
+					g_aDisk[nCntDisk].nCntPhase++;
+					g_aDisk[nCntDisk].move = D3DXVECTOR3(15.0f - (30.0f * g_aDisk[nCntDisk].nPlayer), 0.0f, 0.0f);
+					g_aDisk[nCntDisk].acc = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+				}
+			}
+			else
+			{
+				if (g_aDisk[nCntDisk].pos.y <= fChangePoint)
+				{
+					g_aDisk[nCntDisk].nCntPhase++;
+					g_aDisk[nCntDisk].move = D3DXVECTOR3(15.0f - (30.0f * g_aDisk[nCntDisk].nPlayer), 0.0f, 0.0f);
+					g_aDisk[nCntDisk].acc = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+				}
 			}
 
 			break;
@@ -544,7 +621,7 @@ D3DXVECTOR3 SetJumpAttackSpeed(D3DXVECTOR3 pos)
 		
 	//新しい移動量を計算する
 	speed = endPos - pos;															
-	speed.x / JUMP_ATTACK_TIME;
+	speed.x /= JUMP_ATTACK_TIME;
 
 	return speed;																	//新しい移動量を返す
 }
