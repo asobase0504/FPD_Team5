@@ -269,7 +269,7 @@ void SetDisk(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 acc, DISK_TYPE type,
 			g_aDisk[nCntDisk].fAngle = atan2f(g_aDisk[nCntDisk].fSize * 0.5f, g_aDisk[nCntDisk].fSize * 0.5f);
 			g_aDisk[nCntDisk].rot = 0.0f;
 			g_aDisk[nCntDisk].fVertexLenght = size * 0.5f;
-			g_aDisk[nCntDisk].fRotSpeed = BASE_ROTATION_SPEED * (sqrtf((move.x * move.x) + (move.y * move.y)) * 0.01);
+			g_aDisk[nCntDisk].fRotSpeed = BASE_ROTATION_SPEED * (sqrtf((move.x * move.x) + (move.y * move.y)) * 0.65);
 
 			//í∏ì_ç¿ïWÇÃê›íË
 			pVtx[(nCntDisk * 4) + 0].pos = D3DXVECTOR3(pos.x - (size * 0.5f), pos.y - (size * 0.5f), 0.0f);
