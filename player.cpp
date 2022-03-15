@@ -383,7 +383,7 @@ void CatchDiscPlayer(int nIdxPlayer)
 	Disk* pDisk = GetDisk();
 	Shadow *pShadow = GetShadow();
 
-	if ((CollisionCircle(pPlayer->pos, pPlayer->fSize * (1 + (pPlayer->fHeight * 0.005)), pDisk->pos, pDisk->fSize)) && (pDisk->nPlayer != nIdxPlayer))
+	if ((CollisionCircle(pPlayer->pos, pPlayer->fSize * (1 + (pPlayer->fHeight * 0.005)), pDisk->pos, (pDisk->fSize * 0.5f))) && (pDisk->nPlayer != nIdxPlayer))
 	{
 		if ((pDisk->type != DISK_TYPE_LOB || (pDisk->type == DISK_TYPE_LOB && pDisk->fHeight <= 0.0f)) && pPlayer->jumpstate == JUMP_NONE)
 		{
