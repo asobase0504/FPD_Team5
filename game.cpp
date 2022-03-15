@@ -17,7 +17,7 @@
 #include "wall.h"
 #include "disk.h"
 #include "shadow.h"
-//#include "effect.h"
+#include "effect.h"
 #include "referee.h"
 #include "landingPoint.h"
 #include "ui.h"
@@ -33,7 +33,7 @@ void InitGame(void)
 	InitPlayer();		// プレイヤー
 	InitStage();		// ステージ
 	InitLandingMark();	// ディスクの落下地点
-	//InitEffect();		// エフェクト
+	InitEffect();		// エフェクト
 	InitReferee();		// レフェリー
 	InitUI();			// UI
 
@@ -51,7 +51,7 @@ void UninitGame(void)
 	UninitDisk();			// ディスク
 	UninitStage();			// ステージ
 	UninitLandingMark();	// ディスクの落下地点
-//	UninitEffect();			// エフェクト
+	UninitEffect();			// エフェクト
 	UninitReferee();		// レフェリー
 	UninitUI();				// UI
 }
@@ -67,7 +67,7 @@ void UpdateGame(void)
 	UpdateDisk();			// ディスク
 	UpdateLandingMark();	// ディスクの落下地点
 	UpdateShadow();			// 影
-//	UpdateEffect();			// エフェクト
+	UpdateEffect();			// エフェクト
 	UpdateReferee();		// レフェリー
 	UpdateUI();				// UI
 }
@@ -81,9 +81,9 @@ void DrawGame()
 	DrawWall();			// 壁
 	DrawShadow();		// 影
 	DrawLandingMark();	// ディスクの落下地点
+	DrawEffect();		// エフェクト
 	DrawDisk();			// ディスク
 	DrawPlayer();		// プレイヤー
-//	DrawEffect();		// エフェクト
 	DrawReferee();		// レフェリー
 	DrawUI();			// UI
 }

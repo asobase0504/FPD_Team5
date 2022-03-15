@@ -17,6 +17,7 @@
 #include "shadow.h"
 #include "stage.h"
 #include "landingPoint.h"
+#include "effect.h"
 
 //-----------------------------------------
 // ƒ}ƒNƒ’è‹`
@@ -271,6 +272,14 @@ void MovePlayer(int nIdxPlayer)
 		{
 			pPlayer->move -= pPlayer->move * pPlayer->fAttenuationSlidingSpead;
 			pPlayer->nSlidingRigorCnt++;
+			for (int i = 0; i < 25; i++)
+			{
+				SetEffect(pPlayer->pos, EFFECT_TYPE_SLIDING_IMPACT_2);
+			}
+			for (int i = 0; i < 10; i++)
+			{
+				SetEffect(pPlayer->pos, EFFECT_TYPE_SLIDING_IMPACT_3);
+			}
 		}
 	}
 	else
