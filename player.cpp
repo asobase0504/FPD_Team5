@@ -15,6 +15,7 @@
 #include <assert.h>
 #include <stdio.h>
 #include "shadow.h"
+#include "stage.h"
 
 //-----------------------------------------
 // É}ÉNÉçíËã`
@@ -141,6 +142,36 @@ void UpdatePlayer(void)
 			default:
 				assert(false);
 				break;
+			}
+		}
+
+		// à⁄ìÆêßå¿
+		{
+			STAGE_LENGTH stageLength;
+			if (nIdxPlayer == 0)
+			{
+				stageLength = *GetP1StgLng();
+			}
+			else
+			{
+				stageLength = *GetP2StgLng();
+			}
+
+			if (stageLength.max.y <= pPlayer->pos.y + PLAYER_SIZ)
+			{
+				pPlayer->pos.y = stageLength.max.y - PLAYER_SIZ;
+			}
+			if (stageLength.max.x <= pPlayer->pos.x + PLAYER_SIZ)
+			{
+				pPlayer->pos.x = stageLength.max.x - PLAYER_SIZ;
+			}
+			if (stageLength.min.y >= pPlayer->pos.y - PLAYER_SIZ)
+			{
+				pPlayer->pos.y = stageLength.min.y + PLAYER_SIZ;
+			}
+			if (stageLength.min.x >= pPlayer->pos.x - PLAYER_SIZ)
+			{
+				pPlayer->pos.x = stageLength.min.x + PLAYER_SIZ;
 			}
 		}
 
