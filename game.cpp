@@ -21,6 +21,7 @@
 #include"score.h"
 #include "time.h"
 #include "referee.h"
+#include "pop.h"
 
 //=========================================
 // ‰Šú‰»
@@ -37,6 +38,7 @@ void InitGame(void)
 	InitTime();
 	InitReferee();
 	GetReferee()->bThrow = true;
+	InitPop();
 }
 
 //=========================================
@@ -53,6 +55,7 @@ void UninitGame(void)
 	UninitScore();
 	UninitTime();
 	UninitReferee();
+	UninitPop();
 }
 
 //=========================================
@@ -69,6 +72,7 @@ void UpdateGame(void)
 	UpdateScore();
 	UpdateTime();
 	UpdateReferee();
+	UpdatePop();
 }
 
 //=========================================
@@ -85,4 +89,5 @@ void DrawGame()
 	DrawScore();
 	DrawTime();
 	DrawReferee();
+	DrawPop();
 }
