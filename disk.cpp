@@ -372,7 +372,7 @@ void UpdateSpecialDisk(int nCntDisk)
 
 			if (g_aDisk[nCntDisk].pos.x >= fChangePoint)
 			{
-				int nDir = g_aDisk[nCntDisk].pos.y / SCREEN_HEIGHT + 1;
+				int nDir = (int)(g_aDisk[nCntDisk].pos.y / SCREEN_HEIGHT + 1.0f);
 
 				g_aDisk[nCntDisk].nCntPhase++;
 				g_aDisk[nCntDisk].move = D3DXVECTOR3(-2.5f + (1.0f * g_aDisk[nCntDisk].nPlayer), 15.0f - (30.0f * nDir), 0.0f);
@@ -387,7 +387,7 @@ void UpdateSpecialDisk(int nCntDisk)
 
 			if (bImpact == true)
 			{
-				int nDir = g_aDisk[nCntDisk].pos.y / SCREEN_HEIGHT + 1;
+				int nDir = (int)(g_aDisk[nCntDisk].pos.y / SCREEN_HEIGHT + 1.0f);
 
 				g_aDisk[nCntDisk].nCntPhase++;
 				g_aDisk[nCntDisk].move = D3DXVECTOR3(15.0f - (30.0f * g_aDisk[nCntDisk].nPlayer), -6.0f + (12.0f * (nDir)), 0.0f);
@@ -412,7 +412,7 @@ void UpdateSpecialDisk(int nCntDisk)
 			{
 				if (g_aDisk[nCntDisk].pos.x >= fChangePoint)
 				{
-					int nDir = g_aDisk[nCntDisk].pos.y / ((SCREEN_HEIGHT * 0.5f) + 1);
+					int nDir = (int)(g_aDisk[nCntDisk].pos.y / ((SCREEN_HEIGHT * 0.5f) + 1.0f));
 
 					g_aDisk[nCntDisk].nCntPhase++;
 					g_aDisk[nCntDisk].move = D3DXVECTOR3(0.0f, -15.0f + (30.0f * nDir), 0.0f);
@@ -423,7 +423,7 @@ void UpdateSpecialDisk(int nCntDisk)
 			{
 				if (g_aDisk[nCntDisk].pos.x < fChangePoint)
 				{
-					int nDir = g_aDisk[nCntDisk].pos.y / ((SCREEN_HEIGHT * 0.5f) + 1);
+					int nDir = (int)(g_aDisk[nCntDisk].pos.y / ((SCREEN_HEIGHT * 0.5f) + 1.0f));
 
 					g_aDisk[nCntDisk].nCntPhase++;
 					g_aDisk[nCntDisk].move = D3DXVECTOR3(0.0f, -15.0f + (30.0f * nDir), 0.0f);
@@ -454,7 +454,7 @@ void UpdateSpecialDisk(int nCntDisk)
 			{
 				if (g_aDisk[nCntDisk].pos.x <= fChangePoint)
 				{
-					int nDir = g_aDisk[nCntDisk].pos.y / ((SCREEN_HEIGHT * 0.5f) + 1);
+					int nDir = (int)(g_aDisk[nCntDisk].pos.y / ((SCREEN_HEIGHT * 0.5f) + 1.0f));
 					g_aDisk[nCntDisk].nCntPhase++;
 					g_aDisk[nCntDisk].move = D3DXVECTOR3(0.0f, 10.0f - (20.0f * nDir), 0.0f);
 					g_aDisk[nCntDisk].acc = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -464,7 +464,7 @@ void UpdateSpecialDisk(int nCntDisk)
 			{
 				if (g_aDisk[nCntDisk].pos.x >= fChangePoint)
 				{
-					int nDir = g_aDisk[nCntDisk].pos.y / ((SCREEN_HEIGHT * 0.5f) + 1);
+					int nDir = (int)(g_aDisk[nCntDisk].pos.y / ((SCREEN_HEIGHT * 0.5f) + 1.0f));
 					g_aDisk[nCntDisk].nCntPhase++;
 					g_aDisk[nCntDisk].move = D3DXVECTOR3(0.0f, 10.0f - (20.0f * nDir), 0.0f);
 					g_aDisk[nCntDisk].acc = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
