@@ -194,13 +194,19 @@ void AddScore(int nValse, int nPlayerIdx)
 {
 	int nCntScore;
 	int aPosTexU[4]; //äeåÖÇÃêîéöÇäiî[
+	int nOldScore;
 
+	nOldScore = g_nScore[nPlayerIdx].nScore[1];
 	g_nScore[nPlayerIdx].nScore[1] += nValse;
-	if ((g_nScore[nPlayerIdx].nScore[1] % 10 / 3) == 0 || (g_nScore[nPlayerIdx].nScore[1] % 10 / 5) == 0)
-	{
-		g_nScore[nPlayerIdx].nScore[0] += 10;
-	}
 
+	if (g_nScore[nPlayerIdx].nScore[1] != 0)
+	{
+		if ((nOldScore % 10 / 3) == 0 || (nOldScore % 10 / 5) == 0
+			|| (nOldScore % 10 / 2) == 0)
+		{
+			g_nScore[nPlayerIdx].nScore[0] += 10;
+		}
+	}
 	aPosTexU[0] = (g_nScore[0].nScore[0] % 100) / 10;
 	aPosTexU[1] = (g_nScore[0].nScore[1] % 10) / 1;
 	aPosTexU[2] = (g_nScore[1].nScore[0] % 100) / 10;
