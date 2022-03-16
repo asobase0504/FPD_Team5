@@ -116,6 +116,7 @@ void UninitScore(void)
 //------------------------------
 void UpdateScore(void)
 {
+
 }
 
 //------------------------------
@@ -196,7 +197,6 @@ void AddScore(int nValse, int nPlayerIdx)
 	int aPosTexU[4]; //各桁の数字を格納
 
 	g_nScore[nPlayerIdx].nScore[1] += nValse;
-
 	//0番目の配列に、1番目の配列に数字を入れる
 	g_nScore[nPlayerIdx].nScore[0] = g_nScore[nPlayerIdx].nScore[1];
 
