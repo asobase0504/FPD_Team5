@@ -3,7 +3,7 @@
 // ゴール処理
 // Author Tanimoto_Kosuke
 //
-// Update 22/03/15
+// Update 22/03/16
 // 
 //=========================================
 //------------------------------------
@@ -114,7 +114,6 @@ void InitGoal(void)
 		s_aGoal[nCntGoal].nor = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 		s_aGoal[nCntGoal].col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
 		s_aGoal[nCntGoal].bUse = true;
-
 
 		//頂点座標の設定 = (配置位置 ± 正弦(対角線の角度 ± 向き) * 対角線の長さ)
 		pVtx[0].pos.x = s_aGoal[nCntGoal].pos.x - sinf(s_aGoal[nCntGoal].fAngle + s_aGoal[nCntGoal].rot.x) * s_aGoal[nCntGoal].fLength;
@@ -229,6 +228,7 @@ void UpdateGoal(void)
 			pVtx[1].tex = D3DXVECTOR2(1.0f, 0.0f);
 			pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);
 			pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);
+
 		}
 	}
 
