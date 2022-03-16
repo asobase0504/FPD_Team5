@@ -297,12 +297,12 @@ void ColisionGoal(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pLastPos, float fWidth, float 
 					if (s_aGoal[nCntGoal].bSide == false)
 					{
 						SetPop(D3DXVECTOR3 (GOAL_POP_WIDTH / 2, pDisk->pos.y,0.0f), s_aGoal[nCntGoal].rot, s_aGoal[nCntGoal].bSide, POP_TYPE_NORMAL, nCntGoal);
-						AddScore(3, 0);
+						AddScore(3, 1);
 					}
 					else
 					{
 						SetPop(D3DXVECTOR3(SCREEN_WIDTH - GOAL_POP_WIDTH / 2, pDisk->pos.y, 0.0f), s_aGoal[nCntGoal].rot, s_aGoal[nCntGoal].bSide, POP_TYPE_NORMAL, nCntGoal);
-						AddScore(3, 1);
+						AddScore(3, 0);
 					}
 					pDisk->move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 				}
