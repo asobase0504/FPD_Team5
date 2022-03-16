@@ -49,42 +49,42 @@ void InitGoal(void)
 	);
 
 	//ゴールの位置
-	s_aGoal[0].pos = D3DXVECTOR3(GOAL_WIDTH / 2 + 25, 215.0f, 0.1f);
+	s_aGoal[0].pos = D3DXVECTOR3(GOAL_WIDTH / 2 + 25, 215.0f, 0.0f);
 	s_aGoal[0].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	s_aGoal[0].fAngle = atan2f(GOAL_WIDTH, GOAL_HEIGHT);
 	s_aGoal[0].fLength = sqrtf((GOAL_WIDTH * GOAL_WIDTH) + (GOAL_HEIGHT * GOAL_HEIGHT)) / 2.0f;
 	s_aGoal[0].type = GOAL_TYPE_NORMAL;
 	s_aGoal[0].bSide = 0;
 
-	s_aGoal[1].pos = D3DXVECTOR3(GOAL_WIDTH / 2 + 25, SCREEN_HEIGHT / 2, 0.1f);
+	s_aGoal[1].pos = D3DXVECTOR3(GOAL_WIDTH / 2 + 25, SCREEN_HEIGHT / 2, 0.0f);
 	s_aGoal[1].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	s_aGoal[1].fAngle = atan2f(GOAL_WIDTH, STRIKE_GOAL_HEIGHT);
 	s_aGoal[1].fLength = sqrtf((GOAL_WIDTH * GOAL_WIDTH) + (STRIKE_GOAL_HEIGHT * STRIKE_GOAL_HEIGHT)) / 2.0f;
 	s_aGoal[1].type = GOAL_TYPE_STRIKE;
 	s_aGoal[1].bSide = 0;
 
-	s_aGoal[2].pos = D3DXVECTOR3(GOAL_WIDTH / 2 + 25, SCREEN_HEIGHT - 215.0f, 0.1f);
+	s_aGoal[2].pos = D3DXVECTOR3(GOAL_WIDTH / 2 + 25, SCREEN_HEIGHT - 215.0f, 0.0f);
 	s_aGoal[2].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	s_aGoal[2].fAngle = atan2f(GOAL_WIDTH, GOAL_HEIGHT);
 	s_aGoal[2].fLength = sqrtf((GOAL_WIDTH * GOAL_WIDTH) + (GOAL_HEIGHT * GOAL_HEIGHT)) / 2.0f;
 	s_aGoal[2].type = GOAL_TYPE_NORMAL;
 	s_aGoal[2].bSide = 0;
 
-	s_aGoal[3].pos = D3DXVECTOR3(SCREEN_WIDTH - GOAL_WIDTH / 2 - 25, 215.0f, 0.1f);
+	s_aGoal[3].pos = D3DXVECTOR3(SCREEN_WIDTH - GOAL_WIDTH / 2 - 25, 215.0f, 0.0f);
 	s_aGoal[3].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	s_aGoal[3].fAngle = atan2f(GOAL_WIDTH, GOAL_HEIGHT);
 	s_aGoal[3].fLength = sqrtf((GOAL_WIDTH * GOAL_WIDTH) + (GOAL_HEIGHT * GOAL_HEIGHT)) / 2.0f;
 	s_aGoal[3].type = GOAL_TYPE_NORMAL;
 	s_aGoal[3].bSide = 1;
 
-	s_aGoal[4].pos = D3DXVECTOR3(SCREEN_WIDTH - GOAL_WIDTH / 2 - 25, SCREEN_HEIGHT / 2, 0.1f);
+	s_aGoal[4].pos = D3DXVECTOR3(SCREEN_WIDTH - GOAL_WIDTH / 2 - 25, SCREEN_HEIGHT / 2, 0.0f);
 	s_aGoal[4].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	s_aGoal[4].fAngle = atan2f(GOAL_WIDTH, STRIKE_GOAL_HEIGHT);
 	s_aGoal[4].fLength = sqrtf((GOAL_WIDTH * GOAL_WIDTH) + (STRIKE_GOAL_HEIGHT * STRIKE_GOAL_HEIGHT)) / 2.0f;
 	s_aGoal[4].type = GOAL_TYPE_STRIKE;
 	s_aGoal[4].bSide = 1;
 
-	s_aGoal[5].pos = D3DXVECTOR3(SCREEN_WIDTH - GOAL_WIDTH / 2 - 25, SCREEN_HEIGHT - 215.0f, 0.1f);
+	s_aGoal[5].pos = D3DXVECTOR3(SCREEN_WIDTH - GOAL_WIDTH / 2 - 25, SCREEN_HEIGHT - 215.0f, 0.0f);
 	s_aGoal[5].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	s_aGoal[5].fAngle = atan2f(GOAL_WIDTH, GOAL_HEIGHT);
 	s_aGoal[5].fLength = sqrtf((GOAL_WIDTH * GOAL_WIDTH) + (GOAL_HEIGHT * GOAL_HEIGHT)) / 2.0f;
@@ -115,14 +115,6 @@ void InitGoal(void)
 		s_aGoal[nCntGoal].col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
 		s_aGoal[nCntGoal].bUse = true;
 
-		if (s_aGoal[nCntGoal].bSide == 0)
-		{
-			SetPop(D3DXVECTOR3(GOAL_POP_WIDTH / 2, s_aGoal[nCntGoal].pos.y, 0.0f), s_aGoal[nCntGoal].rot, s_aGoal[nCntGoal].bSide, POP_TYPE_NORMAL, nCntGoal);
-		}
-		else
-		{
-			SetPop(D3DXVECTOR3(SCREEN_WIDTH - GOAL_POP_WIDTH / 2, s_aGoal[nCntGoal].pos.y, 0.0f), s_aGoal[nCntGoal].rot, s_aGoal[nCntGoal].bSide, POP_TYPE_NORMAL, nCntGoal);
-		}
 
 		//頂点座標の設定 = (配置位置 ± 正弦(対角線の角度 ± 向き) * 対角線の長さ)
 		pVtx[0].pos.x = s_aGoal[nCntGoal].pos.x - sinf(s_aGoal[nCntGoal].fAngle + s_aGoal[nCntGoal].rot.x) * s_aGoal[nCntGoal].fLength;
@@ -158,6 +150,15 @@ void InitGoal(void)
 		pVtx[1].tex = D3DXVECTOR2(1.0f, 0.0f);
 		pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);
 		pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);
+
+		if (s_aGoal[nCntGoal].bSide == 0)
+		{
+			SetPop(D3DXVECTOR3(GOAL_POP_WIDTH / 2, s_aGoal[nCntGoal].pos.y, 0.0f), s_aGoal[nCntGoal].rot, s_aGoal[nCntGoal].bSide, POP_TYPE_NORMAL, nCntGoal);
+		}
+		else
+		{
+			SetPop(D3DXVECTOR3(SCREEN_WIDTH - GOAL_POP_WIDTH / 2, s_aGoal[nCntGoal].pos.y, 0.0f), s_aGoal[nCntGoal].rot, s_aGoal[nCntGoal].bSide, POP_TYPE_NORMAL, nCntGoal);
+		}
 	}
 
 	//頂点バッファをアンロックする

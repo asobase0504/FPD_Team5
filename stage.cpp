@@ -16,6 +16,7 @@
 #include "wall.h"
 #include "disk.h"
 #include "shadow.h"
+#include "pop.h"
 
 //------------------------------------
 // スタティック変数
@@ -23,8 +24,8 @@
 static LPDIRECT3DTEXTURE9		s_pTextureStage[MAX_IMAGE_STAGE] = {};	//テクスチャへのポインタ
 static LPDIRECT3DVERTEXBUFFER9	s_pVtxBuffStage = NULL;					//頂点バッファへのポインタ
 static STAGE s_aStage[MAX_STAGE];										//ステージの情報
-static bool s_bFell;			//落ちた判定
-static float s_fFellCounter;	//落ちた時間
+static bool s_bStop;			//止まった判定
+static float s_fStopCounter;	//止まった時間
 static STAGE_LENGTH s_p1;		//プレイヤー1ステージ長さ
 static STAGE_LENGTH s_p2;		//プレイヤー2ステージ長さ
 
@@ -230,29 +231,35 @@ void UpdateStage(void)
 	s_pVtxBuffStage->Unlock();
 
 	//ディスクが動かない場合
-	if (pDisk->move.x == 0.0f && pDisk->move.y == 0.0f)
+	if (pDisk->move.x == 0.0f && pDisk->move.y == 0.0f && pDisk->bUse == true)
 	{
-		s_bFell = true;
+		s_bStop = true;
 	}
 	else
 	{
-		s_bFell = false;
+		s_bStop = false;
 	}
 
-	//ディスクが落ちた場合
-	if (s_bFell == true)
-	{
-		s_fFellCounter++;
+	//ディスクが止まっている場合
+	if (s_bStop == true)
+	{//秒数カウント
+		s_fStopCounter++;
 	}
 	else
-	{
-		s_fFellCounter = 0;
+	{//秒数リセット
+		s_fStopCounter = 0;
 	}
 
 	//ディスクを消す時間
-	if (s_fFellCounter >= DISK_DELETE)
+	if (s_fStopCounter >= DISK_DELETE)
 	{
 		DestroyDisk();
+
+		//空中ディスクの場合
+		if (pDisk->type == DISK_TYPE_LOB || pDisk->type == DISK_TYPE_JUMP)
+		{
+			SetPop(D3DXVECTOR3(pDisk->pos.x, pDisk->pos.y - FELL_POP_HEIGHT, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false, POP_TYPE_FELL, 6);
+		}
 	}
 
 	UpdateGoal();
