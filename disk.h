@@ -26,6 +26,7 @@ typedef enum
 	DISK_TYPE_NORMAL = 0,			//普通
 	DISK_TYPE_LOB,					//上投げ
 	DISK_TYPE_JUMP,					//ジャンプ投げ
+	DISK_TYPE_BLOCKED,
 	DISK_TYPE_SPECIAL_0,			//必殺技0
 	DISK_TYPE_SPECIAL_1,			//必殺技1
 	DISK_TYPE_SPECIAL_2,			//必殺技2
