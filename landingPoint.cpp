@@ -177,3 +177,8 @@ void DestroyLandingMark(void)
 {
 	g_aLandingMark.bUse = false;
 }
+
+LandingMark* GetLandingMark(void)
+{
+	return &g_aLandingMark;
+}

@@ -16,6 +16,8 @@
 #include <stdio.h>
 #include "shadow.h"
 #include "stage.h"
+#include "landingPoint.h"
+#include "effect.h"
 
 //-----------------------------------------
 // マクロ定義
@@ -40,6 +42,7 @@ static bool s_bCurveInput;
 static void MovePlayer(int nIdxPlayer);
 static void JumpPlayer(int nIdxPlayer);
 static void ThrowPlayer(int nIdxPlayer);
+static void ChargePlayer(int nIdxPlayer);
 static void CatchDiscPlayer(int nIdxPlayer);
 static void LoadPlayer(void);
 static bool CollisionCircle(D3DXVECTOR3 Pos1, float fRadius1, D3DXVECTOR3 Pos2, float fRadius2);	// 円同士の読み込み処理
@@ -116,9 +119,6 @@ void UpdatePlayer(void)
 		}
 		else
 		{
-			// 受け取る
-			CatchDiscPlayer(nIdxPlayer);
-
 			switch (pPlayer->jumpstate)
 			{
 			case JUMP_NONE:
@@ -126,6 +126,8 @@ void UpdatePlayer(void)
 				MovePlayer(nIdxPlayer);
 				// 跳躍
 				JumpPlayer(nIdxPlayer);
+				// チャージ
+				ChargePlayer(nIdxPlayer);
 				break;
 			case JUMP_NOW:
 				pPlayer->fHeight += pPlayer->fVerticalSpeed;
@@ -143,6 +145,9 @@ void UpdatePlayer(void)
 				assert(false);
 				break;
 			}
+
+			// 受け取る
+			CatchDiscPlayer(nIdxPlayer);
 		}
 
 		// 移動制限
@@ -267,6 +272,14 @@ void MovePlayer(int nIdxPlayer)
 		{
 			pPlayer->move -= pPlayer->move * pPlayer->fAttenuationSlidingSpead;
 			pPlayer->nSlidingRigorCnt++;
+			for (int i = 0; i < 25; i++)
+			{
+				SetEffect(pPlayer->pos, EFFECT_TYPE_SLIDING_IMPACT_2);
+			}
+			for (int i = 0; i < 10; i++)
+			{
+				SetEffect(pPlayer->pos, EFFECT_TYPE_SLIDING_IMPACT_3);
+			}
 		}
 	}
 	else
@@ -339,17 +352,23 @@ void ThrowPlayer(int nIdxPlayer)
 
 		if (GetJoypadTrigger(JOYKEY_B, nIdxPlayer))
 		{
-			SetDisk(pPlayer->pos, inputVec * pPlayer->fThrowPower, moveCurve, DISK_TYPE_NORMAL, nIdxPlayer, 40.0f);
+			if (pPlayer->nSpecialSkillCnt <= 100)
+			{
+				SetDisk(pPlayer->pos, inputVec * pPlayer->fThrowPower, moveCurve, DISK_TYPE_NORMAL, nIdxPlayer, 60.0f);
+			}
+			else
+			{
+				SetDisk(pPlayer->pos, inputVec * pPlayer->fThrowPower, ZERO_VECTOR, DISK_TYPE_SPECIAL_0, nIdxPlayer, 60.0f);
+			}
 			pPlayer->bHaveDisk = false;
 		}
 		else if (GetJoypadTrigger(JOYKEY_A, nIdxPlayer))
 		{
-			SetDisk(pPlayer->pos, inputVec * pPlayer->fThrowPower, ZERO_VECTOR, DISK_TYPE_LOB, nIdxPlayer, 40.0f);
+			SetDisk(pPlayer->pos, inputVec * pPlayer->fThrowPower, ZERO_VECTOR, DISK_TYPE_LOB, nIdxPlayer, 60.0f);
 			pPlayer->bHaveDisk = false;
 		}
 		else if (GetJoypadTrigger(JOYKEY_X, nIdxPlayer))
 		{
-			SetDisk(pPlayer->pos, inputVec * pPlayer->fThrowPower, ZERO_VECTOR, DISK_TYPE_SPECIAL_0, nIdxPlayer, 40.0f);
 			pPlayer->bHaveDisk = false;
 		}
 
@@ -358,19 +377,43 @@ void ThrowPlayer(int nIdxPlayer)
 	{ // キーボード入力
 		if (GetKeyboardPress(DIK_RETURN))
 		{
-			SetDisk(pPlayer->pos, inputVec * pPlayer->fThrowPower, moveCurve, DISK_TYPE_NORMAL, nIdxPlayer, 40.0f);
+			if (pPlayer->nSpecialSkillCnt <= 100)
+			{
+				SetDisk(pPlayer->pos, inputVec * pPlayer->fThrowPower, moveCurve, DISK_TYPE_NORMAL, nIdxPlayer, 60.0f);
+			}
+			else
+			{
+				SetDisk(pPlayer->pos, inputVec * pPlayer->fThrowPower, ZERO_VECTOR, DISK_TYPE_SPECIAL_4, nIdxPlayer, 60.0f);
+			}
 			pPlayer->bHaveDisk = false;
 		}
 		else if (GetKeyboardPress(DIK_SPACE))
 		{
-			SetDisk(pPlayer->pos, inputVec * pPlayer->fThrowPower, ZERO_VECTOR, DISK_TYPE_LOB, nIdxPlayer, 40.0f);
+			SetDisk(pPlayer->pos, inputVec * pPlayer->fThrowPower, ZERO_VECTOR, DISK_TYPE_LOB, nIdxPlayer, 60.0f);
 			pPlayer->bHaveDisk = false;
 		}
 		else if (GetKeyboardPress(DIK_M))
 		{
-			SetDisk(pPlayer->pos, inputVec * pPlayer->fThrowPower, ZERO_VECTOR, DISK_TYPE_SPECIAL_4, nIdxPlayer, 40.0f);
 			pPlayer->bHaveDisk = false;
 		}
+	}
+}
+
+//=========================================
+// 必殺技をチャージする
+//=========================================
+void ChargePlayer(int nIdxPlayer)
+{
+	Player *pPlayer = &s_player[nIdxPlayer];
+	LandingMark *pMark = GetLandingMark();
+
+	if (CollisionCircle(pPlayer->pos, pPlayer->fSize, pMark->pos,pMark->fSize * 0.5f) && pPlayer->jumpstate == JUMP_NONE && pMark->bUse)
+	{
+		pPlayer->nSpecialSkillCnt++;
+	}
+	else
+	{
+		pPlayer->nSpecialSkillCnt = 0;
 	}
 }
 

@@ -53,6 +53,7 @@ typedef struct
 	float fVerticalSpeed = 5.0f;		// 上昇スピード
 	float fThrowCurvePower;				// 曲げて投げる力
 	float fThrowPower;					// 投げる力
+	int nSpecialSkillCnt;				// 必殺技までのカウント
 	float fMoveSpeed;					// 移動量
 	float fSlidingVolume;				// スライディング量
 	int nSlidingRigorCnt;				// スライディングの硬直時間のカウント

@@ -1,6 +1,6 @@
 //============================================
-//設定
-//ACG000
+//
+//チーム制作<フライングパワーディスク>[option.cpp]
 //Author: goto yuuki
 //Author:Kishimoto Eiji
 //
@@ -10,6 +10,7 @@
 #include "fade.h"
 #include "input.h"
 #include "menu.h"
+#include "mode.h"
 
 #include <assert.h>
 
@@ -17,8 +18,8 @@
 //マクロ定義
 //***********************************
 #define MAX_TEXTURE		(4)			//使用するテクスチャの最大数
-#define MENU_WIDTH		(400.0f)	//メニューの幅
-#define MENU_HEIGHT		(140.0f)	//メニューの高さ
+#define MENU_WIDTH		(850.0f)	//メニューの幅
+#define MENU_HEIGHT		(85.0f)		//メニューの高さ
 
 //***********************************
 //スタティック変数
@@ -95,10 +96,10 @@ void InitOption(void)
 	pVtx[3].rhw = 1.0f;
 
 	//頂点カラーの設定
-	pVtx[0].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-	pVtx[1].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-	pVtx[2].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-	pVtx[3].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	pVtx[0].col = D3DXCOLOR(0.3f, 0.3f, 0.3f, 1.0f);
+	pVtx[1].col = D3DXCOLOR(0.3f, 0.3f, 0.3f, 1.0f);
+	pVtx[2].col = D3DXCOLOR(0.3f, 0.3f, 0.3f, 1.0f);
+	pVtx[3].col = D3DXCOLOR(0.3f, 0.3f, 0.3f, 1.0f);
 
 	//テクスチャ座標の設定
 	pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
@@ -116,8 +117,8 @@ void InitOption(void)
 	menu.nNumUse = OPTION_MAX;
 	menu.fLeft = 0.0f;
 	menu.fRight = SCREEN_WIDTH;
-	menu.fTop = SCREEN_HEIGHT * 0.5f;
-	menu.fBottom = SCREEN_HEIGHT;
+	menu.fTop = SCREEN_HEIGHT * 0.2f;
+	menu.fBottom = SCREEN_HEIGHT * 0.8f;
 	menu.fWidth = MENU_WIDTH;
 	menu.fHeight = MENU_HEIGHT;
 
@@ -135,6 +136,8 @@ void InitOption(void)
 	//メニューのセット
 	InitMenu();
 	SetMenu(menu, frame);
+
+	InitSelect();
 }
 
 //============================================
@@ -156,6 +159,8 @@ void UninitOption(void)
 		s_pVtxBuff->Release();
 		s_pVtxBuff = NULL;
 	}
+
+	UninitSelect();
 }
 
 //============================================
@@ -165,6 +170,7 @@ void UpdateOption(void)
 {
 	SelectMenu();	//メニュー選択
 	UpdateMenu();	//メニュー更新
+	UpdateSelect();
 }
 
 //============================================
@@ -183,12 +189,13 @@ void DrawOption(void)
 	//テクスチャの設定
 	pDevice->SetTexture(0, s_pTexture);
 
-	//ポリゴンの描画       
+	//ポリゴンの描画
 	pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP,	//ポリゴンの形
 							0,					//頂点の開始場所
 							2);					//プリミティブの数
 
 	DrawMenu();		//メニュー描画
+	DrawSelect();
 }
 
 //--------------------------------------------
@@ -252,6 +259,9 @@ static void SelectMenu(void)
 
 			<ChangeModeでゲームへ>
 			*/
+
+			ChangeMode(MODE_GAME);
+
 		}
 		break;
 

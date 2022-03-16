@@ -100,7 +100,7 @@ void UninitScore(void)
 		g_pTextureScore = NULL;
 	}
 
-	for (int nScoreCnt = 0; nScoreCnt < NUM_SCORE; nScoreCnt++)
+	for (int nScoreCnt = 0; nScoreCnt < 2; nScoreCnt++)
 	{
 		//頂点バッファの破棄
 		if (g_nScore[nScoreCnt].pVtxBuff != NULL)
@@ -196,10 +196,9 @@ void AddScore(int nValse, int nPlayerIdx)
 	int aPosTexU[4]; //各桁の数字を格納
 
 	g_nScore[nPlayerIdx].nScore[1] += nValse;
-	if ((g_nScore[nPlayerIdx].nScore[1] % 10 / 1) == 0)
-	{
-		g_nScore[nPlayerIdx].nScore[0] += 10;
-	}
+
+	//0番目の配列に、1番目の配列に数字を入れる
+	g_nScore[nPlayerIdx].nScore[0] = g_nScore[nPlayerIdx].nScore[1];
 
 	aPosTexU[0] = (g_nScore[0].nScore[0] % 100) / 10;
 	aPosTexU[1] = (g_nScore[0].nScore[1] % 10) / 1;
