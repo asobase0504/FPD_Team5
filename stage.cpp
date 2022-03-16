@@ -78,7 +78,7 @@ void InitStage(void)
 	s_p2.max = D3DXVECTOR3(MAX_WIDTH, MAX_HEIGHT, 0.0f);
 
 	//構造体の初期化処理
-	s_aStage[0].pos = D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.3f);
+	s_aStage[0].pos = D3DXVECTOR3(SCREEN_WIDTH / 2, (SCREEN_HEIGHT / 2) + (STAGE_HEIGHT_DOWN / 2), 0.3f);
 	s_aStage[0].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	s_aStage[0].fAngle = atan2f(STAGE_WIDTH, STAGE_HEIGHT);
 	s_aStage[0].fLength = sqrtf((STAGE_WIDTH * STAGE_WIDTH) + (STAGE_HEIGHT * STAGE_HEIGHT)) / 2.0f;
@@ -90,19 +90,19 @@ void InitStage(void)
 	s_aStage[1].fLength = sqrtf((SCREEN_WIDTH * SCREEN_WIDTH) + (SCREEN_HEIGHT * SCREEN_HEIGHT)) / 2.0f;
 	s_aStage[1].type = STAGE_TYPE_BACK;
 
-	s_aStage[2].pos = D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.1f);
+	s_aStage[2].pos = D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 + (STAGE_HEIGHT_DOWN / 2), 0.1f);
 	s_aStage[2].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	s_aStage[2].fAngle = atan2f(STAGE_NET_WIDTH, STAGE_NET_HEIGHT);
 	s_aStage[2].fLength = sqrtf((STAGE_NET_WIDTH * STAGE_NET_WIDTH) + (STAGE_NET_HEIGHT * STAGE_NET_HEIGHT)) / 2.0f;
 	s_aStage[2].type = STAGE_TYPE_NET;
 
-	s_aStage[3].pos = D3DXVECTOR3(MIN_WIDTH, SCREEN_HEIGHT / 2, 0.0f);
+	s_aStage[3].pos = D3DXVECTOR3(MIN_WIDTH, SCREEN_HEIGHT / 2 + (STAGE_HEIGHT_DOWN / 2), 0.0f);
 	s_aStage[3].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	s_aStage[3].fAngle = atan2f(STAGE_NET_WIDTH, STAGE_NET_HEIGHT);
 	s_aStage[3].fLength = sqrtf((STAGE_NET_WIDTH * STAGE_NET_WIDTH) + (STAGE_NET_HEIGHT * STAGE_NET_HEIGHT)) / 2.0f;
 	s_aStage[3].type = STAGE_TYPE_GOALNET;
 
-	s_aStage[4].pos = D3DXVECTOR3(MAX_WIDTH, SCREEN_HEIGHT / 2, 0.0f);
+	s_aStage[4].pos = D3DXVECTOR3(MAX_WIDTH, SCREEN_HEIGHT / 2 + (STAGE_HEIGHT_DOWN / 2), 0.0f);
 	s_aStage[4].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	s_aStage[4].fAngle = atan2f(STAGE_NET_WIDTH, STAGE_NET_HEIGHT);
 	s_aStage[4].fLength = sqrtf((STAGE_NET_WIDTH * STAGE_NET_WIDTH) + (STAGE_NET_HEIGHT * STAGE_NET_HEIGHT)) / 2.0f;
@@ -166,7 +166,7 @@ void InitStage(void)
 	//頂点バッファをアンロックする
 	s_pVtxBuffStage->Unlock();
 
-	SetWall(D3DXVECTOR3(SCREEN_WIDTH / 2, MIN_HEIGHT, 0.0f), STAGE_WIDTH, 10.0f, 0.0f);		//壁(上側)
+	SetWall(D3DXVECTOR3(SCREEN_WIDTH / 2, MIN_HEIGHT, 0.0f), STAGE_WIDTH, 10.0f, 0.0f);	//壁(上側)
 	SetWall(D3DXVECTOR3(SCREEN_WIDTH / 2, MAX_HEIGHT, 0.0f), STAGE_WIDTH, 10.0f, D3DX_PI);	//壁(下側)
 
 	InitGoal();

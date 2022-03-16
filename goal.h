@@ -10,13 +10,14 @@
 #define _GOAL_H_
 
 #include "main.h"
+#include "stage.h"
 
 //****************************************************************************
 //マクロ定義
 //****************************************************************************
 #define GOAL_WIDTH				(100)	//ゴールの横サイズ
-#define GOAL_HEIGHT				(230)	//ゴールの縦サイズ
-#define STRIKE_GOAL_HEIGHT		(60)	//真ん中ゴールの横サイズ
+#define GOAL_HEIGHT				(180)	//ゴールの縦サイズ
+#define STRIKE_GOAL_HEIGHT		(160)	//真ん中ゴールの横サイズ
 #define MAX_GOAL				(6)		//ゴールの最大数
 #define MAX_IMAGE_GOAL			(2)		//ゴール画像の最大数
 

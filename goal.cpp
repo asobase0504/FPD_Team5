@@ -49,42 +49,42 @@ void InitGoal(void)
 	);
 
 	//ÉSÅ[ÉãÇÃà íu
-	s_aGoal[0].pos = D3DXVECTOR3(GOAL_WIDTH / 2 + 25, 215.0f, 0.0f);
+	s_aGoal[0].pos = D3DXVECTOR3(GOAL_WIDTH / 2 + 25, 215.0f + (STAGE_HEIGHT_DOWN / 2), 0.1f);
 	s_aGoal[0].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	s_aGoal[0].fAngle = atan2f(GOAL_WIDTH, GOAL_HEIGHT);
 	s_aGoal[0].fLength = sqrtf((GOAL_WIDTH * GOAL_WIDTH) + (GOAL_HEIGHT * GOAL_HEIGHT)) / 2.0f;
 	s_aGoal[0].type = GOAL_TYPE_NORMAL;
 	s_aGoal[0].bSide = 0;
 
-	s_aGoal[1].pos = D3DXVECTOR3(GOAL_WIDTH / 2 + 25, SCREEN_HEIGHT / 2, 0.0f);
+	s_aGoal[1].pos = D3DXVECTOR3(GOAL_WIDTH / 2 + 25, SCREEN_HEIGHT / 2 + (STAGE_HEIGHT_DOWN / 2), 0.1f);
 	s_aGoal[1].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	s_aGoal[1].fAngle = atan2f(GOAL_WIDTH, STRIKE_GOAL_HEIGHT);
 	s_aGoal[1].fLength = sqrtf((GOAL_WIDTH * GOAL_WIDTH) + (STRIKE_GOAL_HEIGHT * STRIKE_GOAL_HEIGHT)) / 2.0f;
 	s_aGoal[1].type = GOAL_TYPE_STRIKE;
 	s_aGoal[1].bSide = 0;
 
-	s_aGoal[2].pos = D3DXVECTOR3(GOAL_WIDTH / 2 + 25, SCREEN_HEIGHT - 215.0f, 0.0f);
+	s_aGoal[2].pos = D3DXVECTOR3(GOAL_WIDTH / 2 + 25, SCREEN_HEIGHT - 215.0f + (STAGE_HEIGHT_DOWN / 2), 0.1f);
 	s_aGoal[2].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	s_aGoal[2].fAngle = atan2f(GOAL_WIDTH, GOAL_HEIGHT);
 	s_aGoal[2].fLength = sqrtf((GOAL_WIDTH * GOAL_WIDTH) + (GOAL_HEIGHT * GOAL_HEIGHT)) / 2.0f;
 	s_aGoal[2].type = GOAL_TYPE_NORMAL;
 	s_aGoal[2].bSide = 0;
 
-	s_aGoal[3].pos = D3DXVECTOR3(SCREEN_WIDTH - GOAL_WIDTH / 2 - 25, 215.0f, 0.0f);
+	s_aGoal[3].pos = D3DXVECTOR3(SCREEN_WIDTH - GOAL_WIDTH / 2 - 25, 215.0f + (STAGE_HEIGHT_DOWN / 2), 0.1f);
 	s_aGoal[3].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	s_aGoal[3].fAngle = atan2f(GOAL_WIDTH, GOAL_HEIGHT);
 	s_aGoal[3].fLength = sqrtf((GOAL_WIDTH * GOAL_WIDTH) + (GOAL_HEIGHT * GOAL_HEIGHT)) / 2.0f;
 	s_aGoal[3].type = GOAL_TYPE_NORMAL;
 	s_aGoal[3].bSide = 1;
 
-	s_aGoal[4].pos = D3DXVECTOR3(SCREEN_WIDTH - GOAL_WIDTH / 2 - 25, SCREEN_HEIGHT / 2, 0.0f);
+	s_aGoal[4].pos = D3DXVECTOR3(SCREEN_WIDTH - GOAL_WIDTH / 2 - 25, SCREEN_HEIGHT / 2 + (STAGE_HEIGHT_DOWN / 2), 0.1f);
 	s_aGoal[4].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	s_aGoal[4].fAngle = atan2f(GOAL_WIDTH, STRIKE_GOAL_HEIGHT);
 	s_aGoal[4].fLength = sqrtf((GOAL_WIDTH * GOAL_WIDTH) + (STRIKE_GOAL_HEIGHT * STRIKE_GOAL_HEIGHT)) / 2.0f;
 	s_aGoal[4].type = GOAL_TYPE_STRIKE;
 	s_aGoal[4].bSide = 1;
 
-	s_aGoal[5].pos = D3DXVECTOR3(SCREEN_WIDTH - GOAL_WIDTH / 2 - 25, SCREEN_HEIGHT - 215.0f, 0.0f);
+	s_aGoal[5].pos = D3DXVECTOR3(SCREEN_WIDTH - GOAL_WIDTH / 2 - 25, SCREEN_HEIGHT - 215.0f + (STAGE_HEIGHT_DOWN / 2), 0.1f);
 	s_aGoal[5].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	s_aGoal[5].fAngle = atan2f(GOAL_WIDTH, GOAL_HEIGHT);
 	s_aGoal[5].fLength = sqrtf((GOAL_WIDTH * GOAL_WIDTH) + (GOAL_HEIGHT * GOAL_HEIGHT)) / 2.0f;
