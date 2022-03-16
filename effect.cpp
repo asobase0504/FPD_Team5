@@ -46,6 +46,10 @@ void InitEffect(void)
 		"data\\TEXTURE\\Effect\\effect106.png",
 		&s_pTexture[EFFECT_TYPE_SLIDING_IMPACT_3]);
 
+	D3DXCreateTextureFromFile(pDevice,
+		"data\\TEXTURE\\Effect\\ImpactEffect.png",
+		&s_pTexture[EFFECT_TYPE_WALL_IMPACT]);
+
 	// 頂点バッファの生成
 	pDevice->CreateVertexBuffer(sizeof(VERTEX_2D) * 4 * MAX_EFFECT,
 		D3DUSAGE_WRITEONLY,
@@ -160,6 +164,12 @@ void UpdateEffect(void)
 			break;
 		case EFFECT_TYPE_WALL_IMPACT:
 
+			if (pEffect->fSize.x >= 35.0f)
+			{
+				pEffect->fDeltaSize.x *= -0.5f;
+				pEffect->fDeltaSize.y *= -0.5f;
+			}
+
 			break;
 		}
 
@@ -237,7 +247,7 @@ void DrawEffect(void)
 //====================================
 // エフェクトの設定処理
 //====================================
-void SetEffect(D3DXVECTOR3 pos, EFFECT_TYPE Type)
+void SetEffect(D3DXVECTOR3 pos, float rot, EFFECT_TYPE Type)
 {
 	VERTEX_2D *pVtx = NULL;
 	
@@ -257,6 +267,9 @@ void SetEffect(D3DXVECTOR3 pos, EFFECT_TYPE Type)
 		pEffect->pos = pos;
 		pEffect->type = Type;
 		pEffect->bUse = true;
+
+		pVtx[(nCntEffect * 4) + 2].tex = D3DXVECTOR2(0.0f, 1.0f);
+		pVtx[(nCntEffect * 4) + 3].tex = D3DXVECTOR2(1.0f, 1.0f);
 
 		switch (pEffect->type)
 		{
@@ -289,6 +302,23 @@ void SetEffect(D3DXVECTOR3 pos, EFFECT_TYPE Type)
 		}
 			break;
 		case EFFECT_TYPE_WALL_IMPACT:
+			pEffect->pos.x = pos.x;
+			pEffect->pos.y = pos.y;
+			pEffect->move = D3DXVECTOR3(sinf(rot), cosf(rot), 0.0f);
+			pEffect->fSize = D3DXVECTOR3(10.0f, 10.0f, 0.0f);
+			pEffect->fDeltaSize = D3DXVECTOR3(-0.5f, -0.5f, 0.0f);
+			pEffect->col = D3DXCOLOR(0.25f, 0.75f, 0.75f, 1.0f);
+			pEffect->fDeltaCol = D3DXCOLOR(-0.02f, 0.0f, 0.01f, 0.0025f);
+			pEffect->nLife = 30;
+
+			if (pos.y < SCREEN_HEIGHT * 0.5f)
+			{
+				pEffect->rot = rot - D3DX_PI * 0.25f;
+			}
+			else
+			{
+				pEffect->rot = rot - D3DX_PI * 1.25f;
+			}
 
 			break;
 		}
