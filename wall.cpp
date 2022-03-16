@@ -9,6 +9,7 @@
 //インクルードファイル
 //====================================
 #include "wall.h"
+#include "effect.h"
 
 //====================================
 //グローバル変数
@@ -282,6 +283,25 @@ void WallBounce(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pLastPos, D3DXVECTOR3 *pMove, D3
 					*(pPos) = finalPos;							//弾の新しい位置の設定
 					*(pMove) = fmove * bounceDir;				//弾の新しい移動量の設定
 					*(pAcc) = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+
+					float fY;
+					float fBeta;
+
+					if (impact.y < SCREEN_HEIGHT * 0.5f)
+					{
+						fY = 110.0f;
+						fBeta = -D3DX_PI * 0.45f;
+					}
+					else
+					{
+						fY = SCREEN_HEIGHT - 110.0f;
+						fBeta = D3DX_PI * 0.55f;
+					}
+					
+					for (int nCntAngle = 0; nCntAngle < 10; nCntAngle++, fBeta += D3DX_PI * 0.1f)
+					{
+						SetEffect(D3DXVECTOR3(impact.x, fY, 0.0f), fBeta, EFFECT_TYPE_WALL_IMPACT);
+					}
 				}
 			}
 		}

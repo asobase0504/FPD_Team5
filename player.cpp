@@ -274,11 +274,11 @@ void MovePlayer(int nIdxPlayer)
 			pPlayer->nSlidingRigorCnt++;
 			for (int i = 0; i < 25; i++)
 			{
-				SetEffect(pPlayer->pos, EFFECT_TYPE_SLIDING_IMPACT_2);
+				SetEffect(pPlayer->pos, 0.0f, EFFECT_TYPE_SLIDING_IMPACT_2);
 			}
 			for (int i = 0; i < 10; i++)
 			{
-				SetEffect(pPlayer->pos, EFFECT_TYPE_SLIDING_IMPACT_3);
+				SetEffect(pPlayer->pos, 0.0f, EFFECT_TYPE_SLIDING_IMPACT_3);
 			}
 		}
 	}
