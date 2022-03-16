@@ -20,7 +20,18 @@
 #include "effect.h"
 #include "referee.h"
 #include "landingPoint.h"
+#include "score.h"
 #include "ui.h"
+
+//------------------------------------
+// 静的変数
+//------------------------------------
+static int nNeedPoint;
+
+//------------------------------------
+// プロトタイプ宣言
+//------------------------------------
+static void SetNeedPoint(int nPoint);
 
 //=========================================
 // 初期化
@@ -86,4 +97,12 @@ void DrawGame()
 	DrawPlayer();		// プレイヤー
 	DrawReferee();		// レフェリー
 	DrawUI();			// UI
+}
+
+//=========================================
+// 必要ポイントの設定
+//=========================================
+void SetNeedPoint(int nPoint)
+{
+	nNeedPoint = nPoint;
 }

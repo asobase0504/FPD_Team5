@@ -50,7 +50,7 @@ void InitPop(void)
 	D3DXCreateTextureFromFile
 	(
 		pDevice,
-		"data\\TEXTURE\\goal\\Arrow.png",	//テクスチャのファイル名
+		"data\\TEXTURE\\pop\\life000.png",	//テクスチャのファイル名
 		&s_pTexturePop[POP_TYPE_FELL]
 	);
 
@@ -79,8 +79,6 @@ void InitPop(void)
 		s_aPop[nCntPop].pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 		s_aPop[nCntPop].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 		s_aPop[nCntPop].col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
-		s_aPop[nCntPop].fAngle = atan2f(GOAL_POP_WIDTH, GOAL_POP_HEIGHT);
-		s_aPop[nCntPop].fLength = sqrtf((GOAL_POP_WIDTH * GOAL_POP_WIDTH) + (GOAL_POP_HEIGHT * GOAL_POP_HEIGHT)) / 2.0f;
 		s_aPop[nCntPop].bUse = false;
 		s_aPop[nCntPop].bSide = false;
 
@@ -112,6 +110,12 @@ void InitPop(void)
 		pVtx[1].tex = D3DXVECTOR2(1.0f, 0.0f);
 		pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);
 		pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);
+
+		//頂点カラーの設定
+		pVtx[0].col = D3DCOLOR_RGBA(255, 255, 255, 255);
+		pVtx[1].col = D3DCOLOR_RGBA(255, 255, 255, 255);
+		pVtx[2].col = D3DCOLOR_RGBA(255, 255, 255, 255);
+		pVtx[3].col = D3DCOLOR_RGBA(255, 255, 255, 255);
 	}
 
 	//頂点バッファをアンロックする
@@ -222,7 +226,6 @@ void DrawPop()
 {
 	LPDIRECT3DDEVICE9 pDevice = GetDevice();	//デバイスへのポインタ
 
-												//頂点バッファをデータストリームに設定
 	pDevice->SetStreamSource
 	(
 		0,
@@ -262,6 +265,17 @@ void SetPop(D3DXVECTOR3 pos, D3DXVECTOR3 rot, bool side, POP_TYPE type, int nIdx
 	s_aPop[nIdxGoal].bSide = side;
 	s_aPop[nIdxGoal].type = type;
 	s_aPop[nIdxGoal].bUse = true;
+
+	if (s_aPop[nIdxGoal].type == POP_TYPE_NORMAL || s_aPop[nIdxGoal].type == POP_TYPE_STRIKE)
+	{
+		s_aPop[nIdxGoal].fAngle = atan2f(GOAL_POP_WIDTH, GOAL_POP_HEIGHT);
+		s_aPop[nIdxGoal].fLength = sqrtf((GOAL_POP_WIDTH * GOAL_POP_WIDTH) + (GOAL_POP_HEIGHT * GOAL_POP_HEIGHT)) / 2.0f;
+	}
+	else if (s_aPop[nIdxGoal].type == POP_TYPE_FELL)
+	{
+		s_aPop[nIdxGoal].fAngle = atan2f(FELL_POP_WIDTH, FELL_POP_HEIGHT);
+		s_aPop[nIdxGoal].fLength = sqrtf((FELL_POP_WIDTH * FELL_POP_WIDTH) + (FELL_POP_HEIGHT * FELL_POP_HEIGHT)) / 2.0f;
+	}
 }
 
 //============================================================================
@@ -282,7 +296,6 @@ void PopCounter(int nIdxPop)
 			{
 				s_aPop[nIdxPop].move.x = POP_SPEAD;
 			}
-
 		}
 		if (s_fPopCounter >= 100)
 		{
@@ -298,7 +311,7 @@ void PopCounter(int nIdxPop)
 	else if (s_aPop[nIdxPop].type == POP_TYPE_FELL)
 	{
 		//ポップ時間
-		if (s_fPopCounter >= 200)
+		if (s_fPopCounter >= 120)
 		{
 			s_aPop[nIdxPop].bUse = false;
 			s_fPopCounter = 0;

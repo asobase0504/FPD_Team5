@@ -39,7 +39,7 @@ void InitEffect(void)
 		&s_pTexture[EFFECT_TYPE_SLIDING_IMPACT_1]);
 	// テクスチャの読み込み
 	D3DXCreateTextureFromFile(pDevice,
-		"data\\TEXTURE\\Effect\\effect105.png",
+		"data\\TEXTURE\\Effect\\effect106.png",
 		&s_pTexture[EFFECT_TYPE_SLIDING_IMPACT_2]);
 	// テクスチャの読み込み
 	D3DXCreateTextureFromFile(pDevice,
@@ -280,22 +280,26 @@ void SetEffect(D3DXVECTOR3 pos, float rot, EFFECT_TYPE Type)
 
 			break;
 		case EFFECT_TYPE_SLIDING_IMPACT_2:
-			pEffect->pos.x += (rand() / (float)RAND_MAX) * (40.0f - -40.0f) + -40.0f;
-			pEffect->pos.y += (rand() / (float)RAND_MAX) * (40.0f - -40.0f) + -40.0f;
+			pEffect->pos.x += (rand() / (float)RAND_MAX) * (25.0f - -25.0f) + -25.0f;
+			pEffect->pos.y += (rand() / (float)RAND_MAX) * (25.0f - -25.0f) + -25.0f;
 			pEffect->fSize = D3DXVECTOR3(40.0f, 40.0f, 0.0f);
 			pEffect->fDeltaSize = D3DXVECTOR3(2.0f, 2.0f, 0.0f);
 			pEffect->col = D3DXCOLOR(0.7f, 0.4f, 0.15f, 0.8f);
+			pEffect->col.r += (rand() / (float)RAND_MAX) * (0.1f - -0.1f) + -0.1f;
 			pEffect->nLife = 15;
 			pEffect->rot = (rand() / (float)RAND_MAX) * (1.5f - 0.0f) + 0.0f;
 			break;
 		case EFFECT_TYPE_SLIDING_IMPACT_3:
-			pEffect->pos.x += (rand() / (float)RAND_MAX) * (40.0f - -40.0f) + -40.0f;
-			pEffect->pos.y += (rand() / (float)RAND_MAX) * (40.0f - -40.0f) + -40.0f;
+		{
+			pEffect->pos.x += (rand() / (float)RAND_MAX) * (25.0f - -25.0f) + -25.0f;
+			pEffect->pos.y += (rand() / (float)RAND_MAX) * (25.0f - -25.0f) + -25.0f;
 			pEffect->fSize = D3DXVECTOR3(40.0f, 40.0f, 0.0f);
 			pEffect->fDeltaSize = D3DXVECTOR3(4.0f, 4.0f, 0.0f);
-			pEffect->col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f);
+			float fCol = (rand() / (float)RAND_MAX) * (1.0f - 0.0f) + 0.0f;
+			pEffect->col = D3DXCOLOR(fCol, fCol, fCol, 1.0f);
 			pEffect->nLife = 15;
 			pEffect->rot = (rand() / (float)RAND_MAX) * (D3DX_PI - -D3DX_PI) + -D3DX_PI;
+		}
 			break;
 		case EFFECT_TYPE_WALL_IMPACT:
 			pEffect->pos.x = pos.x;
