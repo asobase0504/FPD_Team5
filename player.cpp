@@ -270,8 +270,10 @@ void MovePlayer(int nIdxPlayer)
 		}
 		else
 		{
-			pPlayer->move -= pPlayer->move * pPlayer->fAttenuationSlidingSpead;
+			pPlayer->move -= pPlayer->move * pPlayer->fAttenuationSlidingSpead;	// 移動量の減衰
 			pPlayer->nSlidingRigorCnt++;
+
+			// エフェクトの生成
 			for (int i = 0; i < 25; i++)
 			{
 				SetEffect(pPlayer->pos, EFFECT_TYPE_SLIDING_IMPACT_2);
@@ -327,6 +329,18 @@ void ThrowPlayer(int nIdxPlayer)
 		inputVec = D3DXVECTOR3(-2.0f, 0.0f, 0.0f);	// 入力方向
 	}
 
+	if (pPlayer->fThrowPower >= 2.5f)
+	{
+		// 威力の減衰
+		pPlayer->fThrowPower -= pPlayer->fThrowPower * 0.005f;
+	}
+	else
+	{
+		// 強制排出
+		SetDisk(pPlayer->pos, inputVec * pPlayer->fThrowPower, ZERO_VECTOR, DISK_TYPE_NORMAL, nIdxPlayer, 60.0f);
+		pPlayer->bHaveDisk = false;
+	}
+
 	// 方向入力処理
 	inputVec += InputMovePlayer(nIdxPlayer);
 
@@ -367,11 +381,6 @@ void ThrowPlayer(int nIdxPlayer)
 			SetDisk(pPlayer->pos, inputVec * pPlayer->fThrowPower, ZERO_VECTOR, DISK_TYPE_LOB, nIdxPlayer, 60.0f);
 			pPlayer->bHaveDisk = false;
 		}
-		else if (GetJoypadTrigger(JOYKEY_X, nIdxPlayer))
-		{
-			pPlayer->bHaveDisk = false;
-		}
-
 	}
 	else
 	{ // キーボード入力
@@ -379,7 +388,7 @@ void ThrowPlayer(int nIdxPlayer)
 		{
 			if (pPlayer->nSpecialSkillCnt <= 100)
 			{
-				SetDisk(pPlayer->pos, inputVec * pPlayer->fThrowPower, moveCurve, DISK_TYPE_NORMAL, nIdxPlayer, 60.0f);
+				SetDisk(pPlayer->pos, inputVec * pPlayer->fThrowPower, ZERO_VECTOR, DISK_TYPE_NORMAL, nIdxPlayer, 60.0f);
 			}
 			else
 			{
@@ -390,10 +399,6 @@ void ThrowPlayer(int nIdxPlayer)
 		else if (GetKeyboardPress(DIK_SPACE))
 		{
 			SetDisk(pPlayer->pos, inputVec * pPlayer->fThrowPower, ZERO_VECTOR, DISK_TYPE_LOB, nIdxPlayer, 60.0f);
-			pPlayer->bHaveDisk = false;
-		}
-		else if (GetKeyboardPress(DIK_M))
-		{
 			pPlayer->bHaveDisk = false;
 		}
 	}
@@ -432,12 +437,14 @@ void CatchDiscPlayer(int nIdxPlayer)
 		{
 			DestroyDisk();	// ディスクの破棄
 			pPlayer->bHaveDisk = true;
+			pPlayer->fThrowPower = pPlayer->fMaxThrowPower;
 		}
 
 		if (pDisk->type == DISK_TYPE_LOB && pPlayer->jumpstate == JUMP_NOW)
 		{
 			DestroyDisk();	// ディスクの破棄
 			pPlayer->bHaveDisk = true;
+			pPlayer->fThrowPower = pPlayer->fMaxThrowPower;
 		}
 	}
 }
@@ -578,7 +585,7 @@ void LoadPlayer(void)
 					else if (strcmp(s_aString, "THROW_POWER") == 0)
 					{
 						fscanf(pFile, "%s", s_aString);	// =の読み込み
-						fscanf(pFile, "%f", &s_playerType[nNumType].fThrowPower);
+						fscanf(pFile, "%f", &s_playerType[nNumType].fMaxThrowPower);
 					}
 					else if (strcmp(s_aString, "THROW_CURVE") == 0)
 					{

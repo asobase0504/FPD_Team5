@@ -52,7 +52,8 @@ typedef struct
 	float fHeight;						// 高さ
 	float fVerticalSpeed = 5.0f;		// 上昇スピード
 	float fThrowCurvePower;				// 曲げて投げる力
-	float fThrowPower;					// 投げる力
+	float fMaxThrowPower;				// 投げる最大の力
+	float fThrowPower;					// 投げる最大の力
 	int nSpecialSkillCnt;				// 必殺技までのカウント
 	float fMoveSpeed;					// 移動量
 	float fSlidingVolume;				// スライディング量
