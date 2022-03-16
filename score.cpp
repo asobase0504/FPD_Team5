@@ -196,7 +196,7 @@ void AddScore(int nValse, int nPlayerIdx)
 	int aPosTexU[4]; //äeåÖÇÃêîéöÇäiî[
 
 	g_nScore[nPlayerIdx].nScore[1] += nValse;
-	if ((g_nScore[nPlayerIdx].nScore[1] % 10 / 1) == 0)
+	if ((g_nScore[nPlayerIdx].nScore[1] % 10 / 3) == 0 || (g_nScore[nPlayerIdx].nScore[1] % 10 / 5) == 0)
 	{
 		g_nScore[nPlayerIdx].nScore[0] += 10;
 	}
