@@ -136,6 +136,13 @@ void UpdateDisk(void)
 				}
 				break;
 
+			case DISK_TYPE_BLOCKED:
+
+				g_aDisk[nCntDisk].fHeight += g_aDisk[nCntDisk].fVerticalSpeed;
+				g_aDisk[nCntDisk].fVerticalSpeed -= 0.05f;
+
+				break;
+
 			case DISK_TYPE_SPECIAL_0:
 
 				UpdateSpecialDisk(nCntDisk);
@@ -265,6 +272,7 @@ void SetDisk(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 acc, DISK_TYPE type,
 			g_aDisk[nCntDisk].nIdxShadow = SetShadow(pos, size * 1.25f);	//ディスクの影のインデックス
 			g_aDisk[nCntDisk].bUse = true;									//使用されている状態にする
 
+			//回転用の変数の設定
 			g_aDisk[nCntDisk].fLenght = sqrtf((g_aDisk[nCntDisk].fSize * g_aDisk[nCntDisk].fSize) + (g_aDisk[nCntDisk].fSize * g_aDisk[nCntDisk].fSize)) * 0.5f;
 			g_aDisk[nCntDisk].fAngle = atan2f(g_aDisk[nCntDisk].fSize * 0.5f, g_aDisk[nCntDisk].fSize * 0.5f);
 			g_aDisk[nCntDisk].rot = 0.0f;
@@ -312,6 +320,16 @@ void SetDisk(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 acc, DISK_TYPE type,
 				g_aDisk[nCntDisk].bBounce = false;
 
 				g_aDisk[nCntDisk].move = SetJumpAttackSpeed(g_aDisk[nCntDisk].pos);
+
+				break;
+
+			case DISK_TYPE_BLOCKED:
+
+				g_aDisk[nCntDisk].move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+				g_aDisk[nCntDisk].acc = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+				g_aDisk[nCntDisk].fHeight = JUMP_MAX_HEIGHT;
+				g_aDisk[nCntDisk].fVerticalSpeed = JUMP_MAX_HEIGHT / JUMP_ATTACK_TIME;
+				g_aDisk[nCntDisk].bBounce = false;
 
 				break;
 
@@ -384,14 +402,15 @@ void SetDisk(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 acc, DISK_TYPE type,
 				if (pos.x < SCREEN_WIDTH * 0.5f)
 				{
 					g_aDisk[nCntDisk].move.x = 7.5f;
+					g_aDisk[nCntDisk].acc.x = 0.05f;
 				}
 				else
 				{
 					g_aDisk[nCntDisk].move.x = -7.5f;
+					g_aDisk[nCntDisk].acc.x = -0.05f;
 				}
 
 				g_aDisk[nCntDisk].move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-				g_aDisk[nCntDisk].acc.x = 0.05f;
 				g_aDisk[nCntDisk].move.y = 0.0f;
 				g_aDisk[nCntDisk].fHeight = NORMAL_DISK_HEIGHT * 3.0f;
 				g_aDisk[nCntDisk].fVerticalSpeed = LOB_STARTING_SPEED * 3.0f;
