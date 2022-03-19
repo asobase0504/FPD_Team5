@@ -10,7 +10,6 @@
 //グローバル変数
 static LPDIRECT3DTEXTURE9 g_pTextureScore = NULL;				//テクスチャへのポインタ
 static SCORE	g_nScore[2];									//スコアの構造体
-static int nPlayerIdx;
 
 //------------------------------
 //スコアの初期化処理
@@ -228,7 +227,7 @@ void AddScore(int nValse, int nPlayerIdx)
 }
 
 //スコアの取得
-SCORE GetScore(void)
+SCORE* GetScore(void)
 {
-	return g_nScore[0];
+	return g_nScore;
 }
