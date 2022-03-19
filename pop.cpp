@@ -150,10 +150,6 @@ void UninitPop(void)
 //=========================================
 void UpdatePop(void)
 {
-	GOAL *pGoal = GetGoal();
-
-	LPDIRECT3DDEVICE9 pDevice = GetDevice();	//デバイスへのポインタ
-
 	VERTEX_2D *pVtx;				//頂点情報へのポインタ
 
 	//頂点バッファをロックし、頂点情報へのポインタを取得
@@ -170,7 +166,7 @@ void UpdatePop(void)
 			s_aPop[nCntPop].pos += s_aPop[nCntPop].move;
 
 			//移動推移
-			s_aPop[nCntPop].move *= 0.9;
+			s_aPop[nCntPop].move *= 0.9f;
 
 			//頂点座標の設定 = (配置位置 ± 正弦(対角線の角度 ± 向き) * 対角線の長さ)
 			pVtx[0].pos.x = s_aPop[nCntPop].pos.x - sinf(s_aPop[nCntPop].fAngle + s_aPop[nCntPop].rot.x) * s_aPop[nCntPop].fLength;

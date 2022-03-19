@@ -192,12 +192,8 @@ void UninitGoal(void)
 // ゴールの更新処理
 //=========================================
 void UpdateGoal(void)
-{
-	LPDIRECT3DDEVICE9 pDevice = GetDevice();	//デバイスへのポインタ
-	
+{	
 	VERTEX_2D *pVtx;				//頂点情報へのポインタ
-
-	Disk *pDisk = GetDisk();
 
 	//頂点バッファをロックし、頂点情報へのポインタを取得
 	s_pVtxBuffGoal->Lock(0, 0, (void**)&pVtx, 0);
