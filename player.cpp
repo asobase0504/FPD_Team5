@@ -47,6 +47,7 @@ static void ChargePlayer(int nIdxPlayer);
 static void CatchDiscPlayer(int nIdxPlayer);
 static void MoveLimitPlayer(int nIdxPlayer);
 static void LoadPlayer(void);
+static void ResetPosPlayer(int nIdxPlayer);	// 開始位置に戻る
 static bool CollisionCircle(D3DXVECTOR3 Pos1, float fRadius1, D3DXVECTOR3 Pos2, float fRadius2);	// 円同士の読み込み処理
 static D3DXVECTOR3 InputMovePlayer(int nIdxPlayer);
 
@@ -109,54 +110,76 @@ void UpdatePlayer(void)
 		// 影の位置の調整
 		SetPositionShadow(pPlayer->nIdxShadow, pPlayer->pos);
 
-		if (pPlayer->bHaveDisk)
-		{ //ディスクを所持してる場合
-
-			// 移動量を無くす。
-			pPlayer->move = ZERO_VECTOR;
-
-			// 投げる
-			ThrowPlayer(nIdxPlayer);
-
-			if (pPlayer->jumpstate == JUMP_NOW && pPlayer->fVerticalSpeed > 0.0f)
-			{
-				pPlayer->fHeight += pPlayer->fVerticalSpeed;
-				pPlayer->fVerticalSpeed -= 0.15f;
-			}
+		if (GetKeyboardPress(DIK_9))
+		{
+			ResetPosPlayer(nIdxPlayer);
 		}
 		else
 		{
-			switch (pPlayer->jumpstate)
-			{
-			case JUMP_NONE:
-				// 移動
-				MovePlayer(nIdxPlayer);
-				// 跳躍
-				JumpPlayer(nIdxPlayer);
-				// チャージ
-				ChargePlayer(nIdxPlayer);
-				break;
-			case JUMP_NOW:
-				pPlayer->fHeight += pPlayer->fVerticalSpeed;
-				pPlayer->fVerticalSpeed -= 0.15f;
+			if (pPlayer->bHaveDisk)
+			{ //ディスクを所持してる場合
 
-				if (pPlayer->fHeight <= 0.0f)
+				// 移動量を無くす。
+				pPlayer->move = ZERO_VECTOR;
+
+				// 投げる
+				ThrowPlayer(nIdxPlayer);
+
+				if (pPlayer->jumpstate == JUMP_NOW)
 				{
-					pPlayer->fVerticalSpeed = 5.0f;
-					pPlayer->fHeight = 0.0f;
-					pPlayer->jumpstate = JUMP_NONE;
+					if (pPlayer->fVerticalSpeed > 0.0f)
+					{
+						pPlayer->fHeight += pPlayer->fVerticalSpeed;
+						pPlayer->fVerticalSpeed -= 0.15f;
+					}
+
+					if (pPlayer->fThrowPower <= 4.0f)	// ここの条件式は後調整
+					{	// 一定時間の経過で床に戻る
+						pPlayer->fHeight += pPlayer->fVerticalSpeed;
+						pPlayer->fVerticalSpeed -= 0.15f;
+
+						if (pPlayer->fHeight <= 0.0f)
+						{
+							pPlayer->fVerticalSpeed = 5.0f;
+							pPlayer->fHeight = 0.0f;
+							pPlayer->jumpstate = JUMP_NONE;
+						}
+					}
+				}
+			}
+			else
+			{
+				switch (pPlayer->jumpstate)
+				{
+				case JUMP_NONE:
+					// 移動
+					MovePlayer(nIdxPlayer);
+					// チャージ
+					ChargePlayer(nIdxPlayer);
+					// 跳躍
+					JumpPlayer(nIdxPlayer);
+					break;
+				case JUMP_NOW:
+					pPlayer->fHeight += pPlayer->fVerticalSpeed;
+					pPlayer->fVerticalSpeed -= 0.15f;
+
+					if (pPlayer->fHeight <= 0.0f)
+					{
+						pPlayer->fVerticalSpeed = 5.0f;
+						pPlayer->fHeight = 0.0f;
+						pPlayer->jumpstate = JUMP_NONE;
+					}
+
+					break;
+				default:
+					assert(false);
+					break;
 				}
 
-				break;
-			default:
-				assert(false);
-				break;
+				// 受け取る
+				CatchDiscPlayer(nIdxPlayer);
 			}
-
-			// 受け取る
-			CatchDiscPlayer(nIdxPlayer);
 		}
-
 		// 移動制限
 		MoveLimitPlayer(nIdxPlayer);
 
@@ -639,6 +662,31 @@ void LoadPlayer(void)
 }
 
 //-----------------------------------------------------------------------------
+// 開始位置に戻る
+//-----------------------------------------------------------------------------
+void ResetPosPlayer(int nIdxPlayer)
+{
+	D3DXVECTOR3 posDist;
+
+	if (nIdxPlayer == 0)
+	{
+		posDist = D3DXVECTOR3(200.0f, SCREEN_HEIGHT * 0.5f, 0.0f);
+	}
+	else
+	{
+		posDist = D3DXVECTOR3(SCREEN_WIDTH - 200.0f, SCREEN_HEIGHT * 0.5f, 0.0f);
+	}
+
+	Player* pPlayer = &s_player[nIdxPlayer];
+
+	posDist -= pPlayer->pos;
+
+	D3DXVec3Normalize(&posDist, &posDist);
+
+	pPlayer->move = posDist * 5.0f;
+}
+
+//-----------------------------------------------------------------------------
 //円の当たり判定
 //-----------------------------------------------------------------------------
 static bool CollisionCircle(D3DXVECTOR3 Pos1, float fRadius1, D3DXVECTOR3 Pos2, float fRadius2)
@@ -654,7 +702,7 @@ static bool CollisionCircle(D3DXVECTOR3 Pos1, float fRadius1, D3DXVECTOR3 Pos2, 
 }
 
 //-----------------------------------------------------------------------------
-// 
+// 入力
 //-----------------------------------------------------------------------------
 D3DXVECTOR3 InputMovePlayer(int nIdxPlayer)
 {
