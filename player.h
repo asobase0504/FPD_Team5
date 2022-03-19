@@ -11,6 +11,7 @@
 // include
 //------------------------------------
 #include "main.h"
+#include "disk.h"
 
 //------------------------------------
 // マクロ定義
@@ -48,6 +49,7 @@ typedef struct
 	D3DXVECTOR3 pos;					// 位置
 	D3DXVECTOR3 move;					// 移動量
 	JUMPSTATE jumpstate;				// 跳躍の状態
+	DISK_TYPE typeSpecialDisk;			// 必殺技
 	float fSize;						// 大きさ
 	float fHeight;						// 高さ
 	float fVerticalSpeed = 5.0f;		// 上昇スピード
