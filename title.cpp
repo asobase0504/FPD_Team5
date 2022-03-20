@@ -239,6 +239,8 @@ static void SelectMenu(void)
 
 		case MENU_EXIT:		//èIóπ
 
+			ExitExe();
+
 			break;
 
 		default:

@@ -39,7 +39,7 @@ static int s_nNeedSet;			// 必要セット数
 static int s_nPlayerSet[2];		// プレイヤーがどれほどセットを取っているか
 static bool bIsResult;			// リザルトの表示中か
 static bool bIsResetGame;		// スコアリセット中か
-static int s_nResetGamePosCnt;		// 所定の位置に戻ってどれほど経過したか
+static int s_nResetGamePosCnt;	// 所定の位置に戻ってどれほど経過したか
 
 //------------------------------------
 // プロトタイプ宣言
@@ -234,11 +234,12 @@ void RoundReset(void)
 	SCORE* pScore = GetScore();
 	Player * pPlayer = GetPlayer();
 
-	AddScore(-pScore[0].nScore[0], 0);	// スコアのリセット
-	AddScore(-pScore[1].nScore[0], 1);	// スコアのリセット
-	pPlayer->bHaveDisk = false;
-	pPlayer++;
-	pPlayer->bHaveDisk = false;
+	for (int nIdxPlayer = 0; nIdxPlayer < 2; nIdxPlayer++, pPlayer++)
+	{
+		AddScore(-pScore[nIdxPlayer].nScore[0], 0);	// スコアのリセット
+		pPlayer->bHaveDisk = false;
+	}
+
 	SetTime(s_nNeedTime);				// タイムリセット
 	bIsResetGame = true;
 }
