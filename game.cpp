@@ -38,13 +38,13 @@ static int s_nNeedPoint;		// 必要ポイント数
 static int s_nNeedSet;			// 必要セット数
 static int s_nPlayerSet[2];		// プレイヤーがどれほどセットを取っているか
 static bool bIsResult;			// リザルトの表示中か
-static bool bIsResetRound;		// ラウンドリセット中か
 static bool bIsResetGame;		// スコアリセット中か
-static int s_nResetPosCnt;		// 所定の位置に戻ってどれほど経過したか
+static int s_nResetGamePosCnt;		// 所定の位置に戻ってどれほど経過したか
 
 //------------------------------------
 // プロトタイプ宣言
 //------------------------------------
+static void RoundReset(void);
 
 //=========================================
 // 初期化
@@ -63,12 +63,9 @@ void InitGame(void)
 	// 初期化
 	s_nPlayerSet[0] = 0;
 	s_nPlayerSet[1] = 0;
-	s_nResetPosCnt = 0;
+	s_nResetGamePosCnt = 0;
 	bIsResult = false;
-	bIsResetRound = false;
-	bIsResetGame = false;
-	GetReferee()->bThrow = true;
-	SetTime(s_nNeedTime);
+	RoundReset();
 }
 
 //=========================================
@@ -97,31 +94,19 @@ void UpdateGame(void)
 	}
 	else
 	{
-		if (bIsResetRound)
-		{ // ラウンドリセット中
-			if (ResetPosPlayer())
-			{
-				bIsResetRound = false;	// リセットの終了
-			}
-		}
-
-		if (bIsResetGame)
+		if (bIsResetGame && ResetPosPlayer())
 		{
-			if (ResetPosPlayer())
+			s_nResetGamePosCnt++;
+			if (s_nResetGamePosCnt == RESET_DELAY)
 			{
-				s_nResetPosCnt++;
-				if (s_nResetPosCnt == RESET_DELAY)
-				{
-					DestroyDisk();
-					GetReferee()->bThrow = true;
+				DestroyDisk();
+				GetReferee()->bThrow = true;
+			}
 
-				}
-
-				if (GetPlayer()[0].bHaveDisk || GetPlayer()[1].bHaveDisk)
-				{
-					s_nResetPosCnt = 0;
-					bIsResetGame = false;	// リセットの終了
-				}
+			if (GetPlayer()[0].bHaveDisk || GetPlayer()[1].bHaveDisk)
+			{
+				s_nResetGamePosCnt = 0;
+				bIsResetGame = false;	// リセットの終了
 			}
 		}
 
@@ -145,10 +130,26 @@ void UpdateGame(void)
 			{
 				// １セットのリセット
 				s_nPlayerSet[i]++;	// セット数の取得
-				AddScore(-pScore[0].nScore[0], 0);	// スコアのリセット
-				AddScore(-pScore[1].nScore[0], 1);	// スコアのリセット
-				SetTime(s_nNeedTime);				// タイムリセット
-				bIsResetRound = true;
+				RoundReset();
+			}
+		}
+
+		if (GetTime()->nTime <= 0)
+		{
+			DestroyDisk();	// ディスクの削除
+			if (s_nPlayerSet[0] > s_nPlayerSet[1])
+			{ // P1の勝ち
+				s_nPlayerSet[0]++;	// セット数の取得
+				RoundReset();
+			}
+			else if (s_nPlayerSet[0] < s_nPlayerSet[1])
+			{ // P2の勝ち
+				s_nPlayerSet[1]++;	// セット数の取得
+				RoundReset();
+			}
+			else
+			{ // 引き分け
+				RoundReset();
 			}
 		}
 
@@ -220,15 +221,24 @@ void SetNeedSet(int nPoint)
 //=========================================
 // リセット中か否か
 //=========================================
-bool GetResetRound(void)
-{
-	return bIsResetRound;
-}
-
-//=========================================
-// リセット中か否か
-//=========================================
 bool* GetResetScore(void)
 {
 	return &bIsResetGame;
+}
+
+//=========================================
+// ラウンドリセット
+//=========================================
+void RoundReset(void)
+{
+	SCORE* pScore = GetScore();
+	Player * pPlayer = GetPlayer();
+
+	AddScore(-pScore[0].nScore[0], 0);	// スコアのリセット
+	AddScore(-pScore[1].nScore[0], 1);	// スコアのリセット
+	pPlayer->bHaveDisk = false;
+	pPlayer++;
+	pPlayer->bHaveDisk = false;
+	SetTime(s_nNeedTime);				// タイムリセット
+	bIsResetGame = true;
 }

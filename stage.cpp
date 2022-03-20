@@ -17,6 +17,7 @@
 #include "disk.h"
 #include "shadow.h"
 #include "pop.h"
+#include "game.h"
 #include "referee.h"
 
 //------------------------------------
@@ -261,13 +262,14 @@ void UpdateStage(void)
 	//ディスクを消す時間
 	if (s_fStopCounter >= DISK_DELETE)
 	{
-		DestroyDisk();
-
 		//空中ディスクの場合
 		if (pDisk->type == DISK_TYPE_LOB || pDisk->type == DISK_TYPE_JUMP)
 		{
 			SetPop(D3DXVECTOR3(pDisk->pos.x, pDisk->pos.y - FELL_POP_HEIGHT, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false, POP_TYPE_FELL, 6);
+			*GetResetScore() = true;
 		}
+
+		DestroyDisk();
 	}
 
 	UpdateGoal();

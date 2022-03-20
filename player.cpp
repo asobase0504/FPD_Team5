@@ -111,7 +111,7 @@ void UpdatePlayer(void)
 		// 影の位置の調整
 		SetPositionShadow(pPlayer->nIdxShadow, pPlayer->pos);
 
-		if (!GetResetRound() || !GetResetScore())
+		if (!*GetResetScore())
 		{ // リセット中ではない
 			if (pPlayer->bHaveDisk)
 			{ //ディスクを所持してる場合
@@ -172,11 +172,11 @@ void UpdatePlayer(void)
 					assert(false);
 					break;
 				}
-
-				// 受け取る
-				CatchDiscPlayer(nIdxPlayer);
 			}
 		}
+
+		// 受け取る
+		CatchDiscPlayer(nIdxPlayer);
 
 		// 移動制限
 		MoveLimitPlayer(nIdxPlayer);
