@@ -56,6 +56,7 @@ typedef struct
 	float fThrowCurvePower;				// 曲げて投げる力
 	float fMaxThrowPower;				// 投げる最大の力
 	float fThrowPower;					// 投げる最大の力
+	DISK_TYPE SpecialSkillType;			// 必殺技のタイプ
 	int nSpecialSkillCnt;				// 必殺技までのカウント
 	float fMoveSpeed;					// 移動量
 	float fSlidingVolume;				// スライディング量
@@ -77,6 +78,7 @@ void UninitPlayer(void);
 void UpdatePlayer(void);
 void DrawPlayer(void);
 void SetPlayer(const D3DXVECTOR3& pos, PLAYERTYPE type);
+bool ResetPosPlayer();	// 開始位置に戻る
 Player* GetPlayer(void);
 
 #endif // !_PLAYER_H_

@@ -18,6 +18,7 @@
 #include "stage.h"
 #include "landingPoint.h"
 #include "effect.h"
+#include "game.h"
 
 //-----------------------------------------
 // マクロ定義
@@ -46,8 +47,8 @@ static void ThrowDisk(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 acc, DISK_T
 static void ChargePlayer(int nIdxPlayer);
 static void CatchDiscPlayer(int nIdxPlayer);
 static void MoveLimitPlayer(int nIdxPlayer);
+static void UpdateVtxPosPlayer(int nIdxPlayer);
 static void LoadPlayer(void);
-static void ResetPosPlayer(int nIdxPlayer);	// 開始位置に戻る
 static bool CollisionCircle(D3DXVECTOR3 Pos1, float fRadius1, D3DXVECTOR3 Pos2, float fRadius2);	// 円同士の読み込み処理
 static D3DXVECTOR3 InputMovePlayer(int nIdxPlayer);
 
@@ -110,12 +111,8 @@ void UpdatePlayer(void)
 		// 影の位置の調整
 		SetPositionShadow(pPlayer->nIdxShadow, pPlayer->pos);
 
-		if (GetKeyboardPress(DIK_9))
-		{
-			ResetPosPlayer(nIdxPlayer);
-		}
-		else
-		{
+		if (!GetResetRound())
+		{ // リセット中ではない
 			if (pPlayer->bHaveDisk)
 			{ //ディスクを所持してる場合
 
@@ -180,29 +177,12 @@ void UpdatePlayer(void)
 				CatchDiscPlayer(nIdxPlayer);
 			}
 		}
+
 		// 移動制限
 		MoveLimitPlayer(nIdxPlayer);
 
-		VERTEX_2D *pVtx;	// 頂点情報へのポインタ
-
-		// 頂点バッファをロックし、頂点情報へのポインタを取得
-		pPlayer->pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
-
-		// 頂点座標の設定
-		pVtx[0].pos = D3DXVECTOR3(pPlayer->pos.x - (pPlayer->fSize * (1 + (pPlayer->fHeight * 0.015f))),
-			pPlayer->pos.y - ((pPlayer->fHeight - 10.0f) * 0.5f) - (pPlayer->fSize * (1 + (pPlayer->fHeight * 0.015f))), 0.0f);
-
-		pVtx[1].pos = D3DXVECTOR3(pPlayer->pos.x + (pPlayer->fSize * (1 + (pPlayer->fHeight * 0.015f))),
-			pPlayer->pos.y - ((pPlayer->fHeight - 10.0f) * 0.5f) - (pPlayer->fSize * (1 + (pPlayer->fHeight * 0.015f))), 0.0f);
-
-		pVtx[2].pos = D3DXVECTOR3(pPlayer->pos.x - (pPlayer->fSize * (1 + (pPlayer->fHeight * 0.015f))),
-			pPlayer->pos.y - ((pPlayer->fHeight - 10.0f) * 0.5f) + (pPlayer->fSize * (1 + (pPlayer->fHeight * 0.015f))), 0.0f);
-
-		pVtx[3].pos = D3DXVECTOR3(pPlayer->pos.x + (pPlayer->fSize * (1 + (pPlayer->fHeight * 0.015f))),
-			pPlayer->pos.y - ((pPlayer->fHeight - 10.0f) * 0.5f) + (pPlayer->fSize * (1 + (pPlayer->fHeight * 0.015f))), 0.0f);
-
-		// 頂点バッファをアンロックする
-		pPlayer->pVtxBuff->Unlock();
+		// 頂点座標の更新
+		UpdateVtxPosPlayer(nIdxPlayer);
 	}
 }
 
@@ -395,7 +375,7 @@ void ThrowPlayer(int nIdxPlayer)
 	}
 	else
 	{ // キーボード入力
-		if (GetKeyboardPress(DIK_RETURN))
+		if (GetKeyboardTrigger(DIK_RETURN))
 		{
 			if (pPlayer->nSpecialSkillCnt <= 100)
 			{
@@ -496,6 +476,34 @@ void MoveLimitPlayer(int nIdxPlayer)
 	{
 		pPlayer->pos.x = stageLength.min.x + PLAYER_SIZ;
 	}
+}
+
+//=========================================
+// 頂点座標の更新
+//=========================================
+void UpdateVtxPosPlayer(int nIdxPlayer)
+{
+	Player* pPlayer = &s_player[nIdxPlayer];
+	VERTEX_2D *pVtx;	// 頂点情報へのポインタ
+
+	// 頂点バッファをロックし、頂点情報へのポインタを取得
+	pPlayer->pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
+	// 頂点座標の設定
+	pVtx[0].pos = D3DXVECTOR3(pPlayer->pos.x - (pPlayer->fSize * (1 + (pPlayer->fHeight * 0.015f))),
+		pPlayer->pos.y - ((pPlayer->fHeight - 10.0f) * 0.5f) - (pPlayer->fSize * (1 + (pPlayer->fHeight * 0.015f))), 0.0f);
+
+	pVtx[1].pos = D3DXVECTOR3(pPlayer->pos.x + (pPlayer->fSize * (1 + (pPlayer->fHeight * 0.015f))),
+		pPlayer->pos.y - ((pPlayer->fHeight - 10.0f) * 0.5f) - (pPlayer->fSize * (1 + (pPlayer->fHeight * 0.015f))), 0.0f);
+
+	pVtx[2].pos = D3DXVECTOR3(pPlayer->pos.x - (pPlayer->fSize * (1 + (pPlayer->fHeight * 0.015f))),
+		pPlayer->pos.y - ((pPlayer->fHeight - 10.0f) * 0.5f) + (pPlayer->fSize * (1 + (pPlayer->fHeight * 0.015f))), 0.0f);
+
+	pVtx[3].pos = D3DXVECTOR3(pPlayer->pos.x + (pPlayer->fSize * (1 + (pPlayer->fHeight * 0.015f))),
+		pPlayer->pos.y - ((pPlayer->fHeight - 10.0f) * 0.5f) + (pPlayer->fSize * (1 + (pPlayer->fHeight * 0.015f))), 0.0f);
+
+	// 頂点バッファをアンロックする
+	pPlayer->pVtxBuff->Unlock();
 }
 
 //=========================================
@@ -651,6 +659,11 @@ void LoadPlayer(void)
 						fscanf(pFile, "%s", s_aString);	// =の読み込み
 						fscanf(pFile, "%d", &s_playerType[nNumType].nSlidingRigorMax);
 					}
+					else if (strcmp(s_aString, "SPECIALSKILL_TYPE") == 0)
+					{
+						fscanf(pFile, "%s", s_aString);	// =の読み込み
+						fscanf(pFile, "%d", &s_playerType[nNumType].SpecialSkillType);
+					}
 				}
 
 				nNumType++;
@@ -664,26 +677,37 @@ void LoadPlayer(void)
 //-----------------------------------------------------------------------------
 // 開始位置に戻る
 //-----------------------------------------------------------------------------
-void ResetPosPlayer(int nIdxPlayer)
+bool ResetPosPlayer(void)
 {
 	D3DXVECTOR3 posDist;
+	D3DXVECTOR3 vec;
 
-	if (nIdxPlayer == 0)
+	for (int nIdxPlayer = 0; nIdxPlayer < 2; nIdxPlayer++)
 	{
-		posDist = D3DXVECTOR3(200.0f, SCREEN_HEIGHT * 0.5f, 0.0f);
+		if (nIdxPlayer == 0)
+		{
+			posDist = D3DXVECTOR3(200.0f, SCREEN_HEIGHT * 0.5f, 0.0f);
+		}
+		else
+		{
+			posDist = D3DXVECTOR3(SCREEN_WIDTH - 200.0f, SCREEN_HEIGHT * 0.5f, 0.0f);
+		}
+
+		Player* pPlayer = &s_player[nIdxPlayer];
+
+		posDist -= pPlayer->pos;
+
+		D3DXVec3Normalize(&vec, &posDist);
+
+		pPlayer->move = vec * 5.0f;
+
+		if (D3DXVec3Length(&posDist) < D3DXVec3Length(&pPlayer->move))
+		{
+			pPlayer->move = posDist;
+		}
 	}
-	else
-	{
-		posDist = D3DXVECTOR3(SCREEN_WIDTH - 200.0f, SCREEN_HEIGHT * 0.5f, 0.0f);
-	}
 
-	Player* pPlayer = &s_player[nIdxPlayer];
-
-	posDist -= pPlayer->pos;
-
-	D3DXVec3Normalize(&posDist, &posDist);
-
-	pPlayer->move = posDist * 5.0f;
+	return (D3DXVec3Length(&posDist) == D3DXVec3Length(&s_player[0].move)) && (D3DXVec3Length(&posDist) == D3DXVec3Length(&s_player[1].move));
 }
 
 //-----------------------------------------------------------------------------
