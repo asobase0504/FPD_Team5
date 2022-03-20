@@ -26,6 +26,11 @@
 #include "ui.h"
 
 //------------------------------------
+// マクロ定義
+//------------------------------------
+#define RESET_DELAY	(20)	// 次開始までの遅延
+
+//------------------------------------
 // 静的変数
 //------------------------------------
 static int s_nNeedTime;			// 必要タイム数
@@ -33,7 +38,9 @@ static int s_nNeedPoint;		// 必要ポイント数
 static int s_nNeedSet;			// 必要セット数
 static int s_nPlayerSet[2];		// プレイヤーがどれほどセットを取っているか
 static bool bIsResult;			// リザルトの表示中か
-static bool bIsResetRound;		// リセット中か
+static bool bIsResetRound;		// ラウンドリセット中か
+static bool bIsResetGame;		// スコアリセット中か
+static int s_nResetPosCnt;		// 所定の位置に戻ってどれほど経過したか
 
 //------------------------------------
 // プロトタイプ宣言
@@ -56,8 +63,10 @@ void InitGame(void)
 	// 初期化
 	s_nPlayerSet[0] = 0;
 	s_nPlayerSet[1] = 0;
+	s_nResetPosCnt = 0;
 	bIsResult = false;
 	bIsResetRound = false;
+	bIsResetGame = false;
 	GetReferee()->bThrow = true;
 	SetTime(s_nNeedTime);
 }
@@ -83,16 +92,36 @@ void UninitGame(void)
 void UpdateGame(void)
 {
 	if (bIsResult)
-	{
+	{ // リザルト中
 		UpdateResult();			// リザルト
 	}
 	else
 	{
 		if (bIsResetRound)
-		{	
+		{ // ラウンドリセット中
 			if (ResetPosPlayer())
 			{
-				bIsResetRound = false;
+				bIsResetRound = false;	// リセットの終了
+			}
+		}
+
+		if (bIsResetGame)
+		{
+			if (ResetPosPlayer())
+			{
+				s_nResetPosCnt++;
+				if (s_nResetPosCnt == RESET_DELAY)
+				{
+					DestroyDisk();
+					GetReferee()->bThrow = true;
+
+				}
+
+				if (GetPlayer()[0].bHaveDisk || GetPlayer()[1].bHaveDisk)
+				{
+					s_nResetPosCnt = 0;
+					bIsResetGame = false;	// リセットの終了
+				}
 			}
 		}
 
@@ -144,8 +173,18 @@ void DrawGame()
 	DrawShadow();		// 影
 	DrawLandingMark();	// ディスクの落下地点
 	DrawEffect();		// エフェクト
-	DrawPlayer();		// プレイヤー
-	DrawDisk();			// ディスク
+
+	if (GetDisk()->type == DISK_TYPE_LOB)
+	{
+		DrawPlayer();		// プレイヤー
+		DrawDisk();			// ディスク
+	}
+	else
+	{
+		DrawDisk();			// ディスク
+		DrawPlayer();		// プレイヤー
+	}
+
 	DrawUI();			// UI
 
 	if (bIsResult)
@@ -184,4 +223,12 @@ void SetNeedSet(int nPoint)
 bool GetResetRound(void)
 {
 	return bIsResetRound;
+}
+
+//=========================================
+// リセット中か否か
+//=========================================
+bool* GetResetScore(void)
+{
+	return &bIsResetGame;
 }

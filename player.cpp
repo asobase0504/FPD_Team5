@@ -111,7 +111,7 @@ void UpdatePlayer(void)
 		// 影の位置の調整
 		SetPositionShadow(pPlayer->nIdxShadow, pPlayer->pos);
 
-		if (!GetResetRound())
+		if (!GetResetRound() || !GetResetScore())
 		{ // リセット中ではない
 			if (pPlayer->bHaveDisk)
 			{ //ディスクを所持してる場合

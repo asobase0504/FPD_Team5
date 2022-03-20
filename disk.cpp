@@ -907,9 +907,8 @@ D3DXVECTOR3 SetJumpAttackSpeed(D3DXVECTOR3 pos)
 //======================================
 void DestroyDisk(void)
 {
-	Shadow *pShadow = GetShadow();						//影の情報へのポインタ
-
 	g_aDisk[0].bUse = false;							//ディスクを使用されていない状態にする
-	pShadow[g_aDisk[0].nIdxShadow].bUse = false;		//影を使用されていない状態にする
-	DestroyLandingMark();
+	GetShadow()[g_aDisk[0].nIdxShadow].bUse = false;	//影を使用されていない状態にする
+	DestroyLandingMark();								// 空中の到着地点のマークを削除
+	g_aDisk[0].pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 位置の初期化
 }

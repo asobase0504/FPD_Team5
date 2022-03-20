@@ -15,6 +15,7 @@
 #include "disk.h"
 #include "stage.h"
 #include "score.h"
+#include "game.h"
 #include "pop.h"
 
 //------------------------------------
@@ -295,11 +296,13 @@ void ColisionGoal(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pLastPos, float fWidth, float 
 					{
 						SetPop(D3DXVECTOR3 (GOAL_POP_WIDTH / 2, pDisk->pos.y,0.0f), s_aGoal[nCntGoal].rot, s_aGoal[nCntGoal].bSide, POP_TYPE_NORMAL, nCntGoal);
 						AddScore(3, 1);
+						*GetResetScore() = true;
 					}
 					else
 					{
 						SetPop(D3DXVECTOR3(SCREEN_WIDTH - GOAL_POP_WIDTH / 2, pDisk->pos.y, 0.0f), s_aGoal[nCntGoal].rot, s_aGoal[nCntGoal].bSide, POP_TYPE_NORMAL, nCntGoal);
 						AddScore(3, 0);
+						*GetResetScore() = true;
 					}
 					pDisk->move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 				}
@@ -314,11 +317,13 @@ void ColisionGoal(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pLastPos, float fWidth, float 
 					{
 						SetPop(D3DXVECTOR3(GOAL_POP_WIDTH / 2, pDisk->pos.y, 0.0f), s_aGoal[nCntGoal].rot, s_aGoal[nCntGoal].bSide, POP_TYPE_STRIKE, nCntGoal);
 						AddScore(5,1);
+						*GetResetScore() = true;
 					}
 					else
 					{
 						SetPop(D3DXVECTOR3(SCREEN_WIDTH - GOAL_POP_WIDTH / 2, pDisk->pos.y, 0.0f), s_aGoal[nCntGoal].rot, s_aGoal[nCntGoal].bSide, POP_TYPE_STRIKE, nCntGoal);
 						AddScore(5, 0);
+						*GetResetScore() = true;
 					}
 					pDisk->move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 				}
