@@ -14,7 +14,7 @@
 //====================================
 //グローバル変数
 //====================================
-static Wall g_aWall[MAX_WALL];									//ディスク型のグローバル変数を宣言する
+static Wall g_aWall[MAX_WALL];									//壁型のグローバル変数を宣言する
 static LPDIRECT3DVERTEXBUFFER9 g_pVtxBuffWall = NULL;			//頂点バッファへのポインタ
 static LPDIRECT3DTEXTURE9 g_apTexWall = NULL;					//テクスチャへのポインタ
 
@@ -289,7 +289,7 @@ void WallBounce(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pLastPos, D3DXVECTOR3 *pMove, D3
 
 					if (impact.y < SCREEN_HEIGHT * 0.5f)
 					{
-						fY = 110.0f;
+						fY = 160.0f;
 						fBeta = -D3DX_PI * 0.45f;
 					}
 					else
