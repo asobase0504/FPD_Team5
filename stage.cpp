@@ -42,7 +42,7 @@ void InitStage(void)
 	D3DXCreateTextureFromFile
 	(
 		pDevice,
-		"data\\TEXTURE\\stage\\block004.jpg",	//テクスチャのファイル名
+		"data\\TEXTURE\\stage\\Map1.png",	//テクスチャのファイル名
 		&s_pTextureStage[STAGE_TYPE_FRONT]
 	);
 
@@ -50,7 +50,7 @@ void InitStage(void)
 	D3DXCreateTextureFromFile
 	(
 		pDevice,
-		"data\\TEXTURE\\stage\\block005.jpg",	//テクスチャのファイル名
+		"data\\TEXTURE\\stage\\Map1.png",	//テクスチャのファイル名
 		&s_pTextureStage[STAGE_TYPE_BACK]
 	);
 
@@ -278,6 +278,11 @@ void DrawStage()
 
 	for (int nCntStage = 0; nCntStage < MAX_STAGE_OBJECT; nCntStage++)
 	{
+		if (s_aStage[nCntStage].type == STAGE_TYPE_FRONT)
+		{
+			continue;
+		}
+
 		//テクスチャの設定
 		pDevice->SetTexture(0, s_pTextureStage[s_aStage[nCntStage].type]);
 
