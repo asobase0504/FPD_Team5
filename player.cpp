@@ -375,20 +375,35 @@ void ThrowPlayer(int nIdxPlayer)
 	}
 	else
 	{ // キーボード入力
-		if (GetKeyboardTrigger(DIK_RETURN))
+		switch (pPlayer->jumpstate)
 		{
-			if (pPlayer->nSpecialSkillCnt <= 100)
+		case JUMP_NONE:
+			if (GetKeyboardTrigger(DIK_RETURN))
 			{
-				ThrowDisk(pPlayer->pos, move, ZERO_VECTOR, DISK_TYPE_NORMAL, nIdxPlayer, 60.0f);
+				if (pPlayer->nSpecialSkillCnt <= 100)
+				{
+					ThrowDisk(pPlayer->pos, move, ZERO_VECTOR, DISK_TYPE_NORMAL, nIdxPlayer, 60.0f);
+				}
+				else
+				{
+					ThrowDisk(pPlayer->pos, move, ZERO_VECTOR, DISK_TYPE_SPECIAL_4, nIdxPlayer, 60.0f);
+				}
 			}
-			else
+			else if (GetKeyboardTrigger(DIK_SPACE))
 			{
-				ThrowDisk(pPlayer->pos, move, ZERO_VECTOR, DISK_TYPE_SPECIAL_4, nIdxPlayer, 60.0f);
+				ThrowDisk(pPlayer->pos, move, ZERO_VECTOR, DISK_TYPE_LOB, nIdxPlayer, 60.0f);
 			}
-		}
-		else if (GetKeyboardPress(DIK_SPACE))
-		{
-			ThrowDisk(pPlayer->pos, move, ZERO_VECTOR, DISK_TYPE_LOB, nIdxPlayer, 60.0f);
+			break;
+		case JUMP_NOW:
+			if (GetKeyboardTrigger(DIK_RETURN))
+			{
+				ThrowDisk(pPlayer->pos, move, moveCurve, DISK_TYPE_JUMP, nIdxPlayer, 60.0f);
+			}
+			break;
+		case JUMP_MAX:
+		default:
+			assert(false);
+			break;
 		}
 	}
 }
