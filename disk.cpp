@@ -37,7 +37,7 @@ void InitDisk(void)
 
 	//テクスチャの読み込み
 	D3DXCreateTextureFromFile(pDevice,
-		"data\\TEXTURE\\Gear.png",
+		"data\\TEXTURE\\SilverGear.png",
 		&g_apTexDisk);
 
 	//頂点バッファの生成
@@ -195,19 +195,19 @@ void UpdateDisk(void)
 			g_aDisk[nCntDisk].fVertexLenght = (g_aDisk[nCntDisk].fSize * 0.5f * (1 + (g_aDisk[nCntDisk].fHeight * 0.005f)));
 
 			pVtx[(nCntDisk * 4) + 0].pos.x = g_aDisk[nCntDisk].pos.x + sinf(g_aDisk[nCntDisk].rot + g_aDisk[nCntDisk].fAngle + (D3DX_PI * 0.75f)) * g_aDisk[nCntDisk].fVertexLenght;
-			pVtx[(nCntDisk * 4) + 0].pos.y = g_aDisk[nCntDisk].pos.y + cosf(g_aDisk[nCntDisk].rot + g_aDisk[nCntDisk].fAngle + (D3DX_PI * 0.75f)) * g_aDisk[nCntDisk].fVertexLenght;
+			pVtx[(nCntDisk * 4) + 0].pos.y = g_aDisk[nCntDisk].pos.y + cosf(g_aDisk[nCntDisk].rot + g_aDisk[nCntDisk].fAngle + (D3DX_PI * 0.75f)) * g_aDisk[nCntDisk].fVertexLenght - (g_aDisk[nCntDisk].fHeight * 0.2f);
 			pVtx[(nCntDisk * 4) + 0].pos.z = 0.0f;
 
 			pVtx[(nCntDisk * 4) + 1].pos.x = g_aDisk[nCntDisk].pos.x + sinf(g_aDisk[nCntDisk].rot + g_aDisk[nCntDisk].fAngle + (D3DX_PI * 0.25f)) * g_aDisk[nCntDisk].fVertexLenght;
-			pVtx[(nCntDisk * 4) + 1].pos.y = g_aDisk[nCntDisk].pos.y + cosf(g_aDisk[nCntDisk].rot + g_aDisk[nCntDisk].fAngle + (D3DX_PI * 0.25f)) * g_aDisk[nCntDisk].fVertexLenght;
+			pVtx[(nCntDisk * 4) + 1].pos.y = g_aDisk[nCntDisk].pos.y + cosf(g_aDisk[nCntDisk].rot + g_aDisk[nCntDisk].fAngle + (D3DX_PI * 0.25f)) * g_aDisk[nCntDisk].fVertexLenght - (g_aDisk[nCntDisk].fHeight * 0.2f);
 			pVtx[(nCntDisk * 4) + 1].pos.z = 0.0f;
 
 			pVtx[(nCntDisk * 4) + 2].pos.x = g_aDisk[nCntDisk].pos.x + sinf(g_aDisk[nCntDisk].rot + g_aDisk[nCntDisk].fAngle + (-D3DX_PI * 0.75f)) * g_aDisk[nCntDisk].fVertexLenght;
-			pVtx[(nCntDisk * 4) + 2].pos.y = g_aDisk[nCntDisk].pos.y + cosf(g_aDisk[nCntDisk].rot + g_aDisk[nCntDisk].fAngle + (-D3DX_PI * 0.75f)) * g_aDisk[nCntDisk].fVertexLenght;
+			pVtx[(nCntDisk * 4) + 2].pos.y = g_aDisk[nCntDisk].pos.y + cosf(g_aDisk[nCntDisk].rot + g_aDisk[nCntDisk].fAngle + (-D3DX_PI * 0.75f)) * g_aDisk[nCntDisk].fVertexLenght - (g_aDisk[nCntDisk].fHeight * 0.2f);
 			pVtx[(nCntDisk * 4) + 2].pos.z = 0.0f;
 
 			pVtx[(nCntDisk * 4) + 3].pos.x = g_aDisk[nCntDisk].pos.x + sinf(g_aDisk[nCntDisk].rot + g_aDisk[nCntDisk].fAngle + (-D3DX_PI * 0.25f)) * g_aDisk[nCntDisk].fVertexLenght;
-			pVtx[(nCntDisk * 4) + 3].pos.y = g_aDisk[nCntDisk].pos.y + cosf(g_aDisk[nCntDisk].rot + g_aDisk[nCntDisk].fAngle + (-D3DX_PI * 0.25f)) * g_aDisk[nCntDisk].fVertexLenght;
+			pVtx[(nCntDisk * 4) + 3].pos.y = g_aDisk[nCntDisk].pos.y + cosf(g_aDisk[nCntDisk].rot + g_aDisk[nCntDisk].fAngle + (-D3DX_PI * 0.25f)) * g_aDisk[nCntDisk].fVertexLenght - (g_aDisk[nCntDisk].fHeight * 0.2f);
 			pVtx[(nCntDisk * 4) + 3].pos.z = 0.0f;
 
 			//頂点バッファをアンロックする
