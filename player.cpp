@@ -414,7 +414,7 @@ void ThrowPlayer(int nIdxPlayer)
 void ThrowDisk(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 acc, DISK_TYPE type, int nIdxPlayer, float size)
 {
 	Player *pPlayer = &s_player[nIdxPlayer];
-	SetDisk(pos, move, acc, type, nIdxPlayer, size);
+	SetDisk(pos, move, acc, type, nIdxPlayer, 90.0f);
 	pPlayer->bHaveDisk = false;
 	s_bCurveInput = false;
 }

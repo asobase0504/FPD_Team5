@@ -3,14 +3,13 @@
 // ゴール処理
 // Author Tanimoto_Kosuke
 //
-// Update 22/03/16
+// Update 22/03/22
 // 
 //=========================================
 //------------------------------------
 // include
 //------------------------------------
 #include "goal.h"
-#include "main.h"
 #include <stdio.h>
 #include "disk.h"
 #include "stage.h"
@@ -21,11 +20,9 @@
 //------------------------------------
 // スタティック変数
 //------------------------------------
-static LPDIRECT3DTEXTURE9		s_pTextureGoal[MAX_IMAGE_GOAL] = {};	//テクスチャへのポインタ
+static LPDIRECT3DTEXTURE9		s_pTextureGoal[MAX_IMAGE_DRUM] = {};	//テクスチャへのポインタ
 static LPDIRECT3DVERTEXBUFFER9	s_pVtxBuffGoal = NULL;	//頂点バッファへのポインタ
-static GOAL s_aGoal[MAX_GOAL];							//ゴールの情報
-static float s_fPopCounter;
-static bool s_bPause;	// ポーズ中かどうか
+static Goal s_aGoal[MAX_GOAL];							//ゴールの情報
 
 //=========================================
 // ゴールの初期化処理
@@ -38,59 +35,24 @@ void InitGoal(void)
 	D3DXCreateTextureFromFile
 	(
 		pDevice,
-		"data\\TEXTURE\\goal\\block000.jpg",	//テクスチャのファイル名
+		"data\\TEXTURE\\goal\\stripe.png",	//テクスチャのファイル名
 		&s_pTextureGoal[GOAL_TYPE_NORMAL]
 	);
 
 	D3DXCreateTextureFromFile
 	(
 		pDevice,
-		"data\\TEXTURE\\goal\\block001.jpg",	//テクスチャのファイル名
+		"data\\TEXTURE\\goal\\stripe5.png",	//テクスチャのファイル名
 		&s_pTextureGoal[GOAL_TYPE_STRIKE]
 	);
 
 	//ゴールの位置
-	s_aGoal[0].pos = D3DXVECTOR3(GOAL_WIDTH / 2 + 25, 200.0f + (STAGE_HEIGHT_DOWN / 2), 0.1f);
-	s_aGoal[0].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	s_aGoal[0].fAngle = atan2f(GOAL_WIDTH, GOAL_HEIGHT);
-	s_aGoal[0].fLength = sqrtf((GOAL_WIDTH * GOAL_WIDTH) + (GOAL_HEIGHT * GOAL_HEIGHT)) / 2.0f;
-	s_aGoal[0].type = GOAL_TYPE_NORMAL;
-	s_aGoal[0].bSide = 0;
-
-	s_aGoal[1].pos = D3DXVECTOR3(GOAL_WIDTH / 2 + 25, SCREEN_HEIGHT / 2 + (STAGE_HEIGHT_DOWN / 2), 0.1f);
-	s_aGoal[1].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	s_aGoal[1].fAngle = atan2f(GOAL_WIDTH, STRIKE_GOAL_HEIGHT);
-	s_aGoal[1].fLength = sqrtf((GOAL_WIDTH * GOAL_WIDTH) + (STRIKE_GOAL_HEIGHT * STRIKE_GOAL_HEIGHT)) / 2.0f;
-	s_aGoal[1].type = GOAL_TYPE_STRIKE;
-	s_aGoal[1].bSide = 0;
-
-	s_aGoal[2].pos = D3DXVECTOR3(GOAL_WIDTH / 2 + 25, SCREEN_HEIGHT - 200.0f + (STAGE_HEIGHT_DOWN / 2), 0.1f);
-	s_aGoal[2].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	s_aGoal[2].fAngle = atan2f(GOAL_WIDTH, GOAL_HEIGHT);
-	s_aGoal[2].fLength = sqrtf((GOAL_WIDTH * GOAL_WIDTH) + (GOAL_HEIGHT * GOAL_HEIGHT)) / 2.0f;
-	s_aGoal[2].type = GOAL_TYPE_NORMAL;
-	s_aGoal[2].bSide = 0;
-
-	s_aGoal[3].pos = D3DXVECTOR3(SCREEN_WIDTH - GOAL_WIDTH / 2 - 25, 200.0f + (STAGE_HEIGHT_DOWN / 2), 0.1f);
-	s_aGoal[3].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	s_aGoal[3].fAngle = atan2f(GOAL_WIDTH, GOAL_HEIGHT);
-	s_aGoal[3].fLength = sqrtf((GOAL_WIDTH * GOAL_WIDTH) + (GOAL_HEIGHT * GOAL_HEIGHT)) / 2.0f;
-	s_aGoal[3].type = GOAL_TYPE_NORMAL;
-	s_aGoal[3].bSide = 1;
-
-	s_aGoal[4].pos = D3DXVECTOR3(SCREEN_WIDTH - GOAL_WIDTH / 2 - 25, SCREEN_HEIGHT / 2 + (STAGE_HEIGHT_DOWN / 2), 0.1f);
-	s_aGoal[4].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	s_aGoal[4].fAngle = atan2f(GOAL_WIDTH, STRIKE_GOAL_HEIGHT);
-	s_aGoal[4].fLength = sqrtf((GOAL_WIDTH * GOAL_WIDTH) + (STRIKE_GOAL_HEIGHT * STRIKE_GOAL_HEIGHT)) / 2.0f;
-	s_aGoal[4].type = GOAL_TYPE_STRIKE;
-	s_aGoal[4].bSide = 1;
-
-	s_aGoal[5].pos = D3DXVECTOR3(SCREEN_WIDTH - GOAL_WIDTH / 2 - 25, SCREEN_HEIGHT - 200.0f + (STAGE_HEIGHT_DOWN / 2), 0.1f);
-	s_aGoal[5].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	s_aGoal[5].fAngle = atan2f(GOAL_WIDTH, GOAL_HEIGHT);
-	s_aGoal[5].fLength = sqrtf((GOAL_WIDTH * GOAL_WIDTH) + (GOAL_HEIGHT * GOAL_HEIGHT)) / 2.0f;
-	s_aGoal[5].type = GOAL_TYPE_NORMAL;
-	s_aGoal[5].bSide = 1;
+	SetGoal(D3DXVECTOR3(GOAL_WIDTH / 2 + 25, 200.0f + (STAGE_HEIGHT_DOWN / 2), 0.1f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false, GOAL_TYPE_NORMAL, 0);
+	SetGoal(D3DXVECTOR3(GOAL_WIDTH / 2 + 25, SCREEN_HEIGHT / 2 + (STAGE_HEIGHT_DOWN / 2), 0.1f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false, GOAL_TYPE_STRIKE, 1);
+	SetGoal(D3DXVECTOR3(GOAL_WIDTH / 2 + 25, SCREEN_HEIGHT - 200.0f + (STAGE_HEIGHT_DOWN / 2), 0.1f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false, GOAL_TYPE_NORMAL, 2);
+	SetGoal(D3DXVECTOR3(SCREEN_WIDTH - GOAL_WIDTH / 2 - 25, 200.0f + (STAGE_HEIGHT_DOWN / 2), 0.1f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), true, GOAL_TYPE_NORMAL, 3);
+	SetGoal(D3DXVECTOR3(SCREEN_WIDTH - GOAL_WIDTH / 2 - 25, SCREEN_HEIGHT / 2 + (STAGE_HEIGHT_DOWN / 2), 0.1f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), true, GOAL_TYPE_STRIKE, 4);
+	SetGoal(D3DXVECTOR3(SCREEN_WIDTH - GOAL_WIDTH / 2 - 25, SCREEN_HEIGHT - 200.0f + (STAGE_HEIGHT_DOWN / 2), 0.1f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), true, GOAL_TYPE_NORMAL, 5);
 
 	//頂点バッファの生成
 	pDevice->CreateVertexBuffer
@@ -163,8 +125,6 @@ void InitGoal(void)
 
 	//頂点バッファをアンロックする
 	s_pVtxBuffGoal->Unlock();
-
-	s_fPopCounter = 0;
 }
 
 //=========================================
@@ -172,7 +132,7 @@ void InitGoal(void)
 //=========================================
 void UninitGoal(void)
 {
-	for (int nCntImgGoal = 0; nCntImgGoal < MAX_IMAGE_GOAL; nCntImgGoal++)
+	for (int nCntImgGoal = 0; nCntImgGoal < MAX_IMAGE_DRUM; nCntImgGoal++)
 	{
 		//テクスチャの破棄
 		if (s_pTextureGoal[nCntImgGoal] != NULL)
@@ -226,6 +186,23 @@ void UpdateGoal(void)
 			pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);
 			pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);
 
+			//ゴールサイドで向きを変える処理
+			if (s_aGoal[nCntGoal].bSide == 0)
+			{
+				//テクスチャ座標の設定(0.0f ~ (1 / xパターン数)f)
+				pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
+				pVtx[1].tex = D3DXVECTOR2(1.0f, 0.0f);
+				pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);
+				pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);
+			}
+			else
+			{
+				//テクスチャ座標の設定(0.0f ~ (1 / xパターン数)f)
+				pVtx[0].tex = D3DXVECTOR2(1.0f, 0.0f);
+				pVtx[1].tex = D3DXVECTOR2(0.0f, 0.0f);
+				pVtx[2].tex = D3DXVECTOR2(1.0f, 1.0f);
+				pVtx[3].tex = D3DXVECTOR2(0.0f, 1.0f);
+			}
 		}
 	}
 
@@ -271,6 +248,29 @@ void DrawGoal()
 }
 
 //=========================================
+// ゴールの設定処理
+//=========================================
+void SetGoal(D3DXVECTOR3 pos, D3DXVECTOR3 rot, bool side, GOAL_TYPE type, int nIdxGoal)
+{
+	s_aGoal[nIdxGoal].pos = pos;
+	s_aGoal[nIdxGoal].rot = rot;
+	s_aGoal[nIdxGoal].bSide = side;
+	s_aGoal[nIdxGoal].type = type;
+	s_aGoal[nIdxGoal].bUse = true;
+
+	if (s_aGoal[nIdxGoal].type == GOAL_TYPE_NORMAL)
+	{
+		s_aGoal[nIdxGoal].fAngle = atan2f(GOAL_WIDTH, GOAL_HEIGHT);
+		s_aGoal[nIdxGoal].fLength = sqrtf((GOAL_WIDTH * GOAL_WIDTH) + (GOAL_HEIGHT * GOAL_HEIGHT)) / 2.0f;
+	}
+	else if (s_aGoal[nIdxGoal].type == GOAL_TYPE_STRIKE)
+	{
+		s_aGoal[nIdxGoal].fAngle = atan2f(GOAL_WIDTH, STRIKE_GOAL_HEIGHT);
+		s_aGoal[nIdxGoal].fLength = sqrtf((GOAL_WIDTH * GOAL_WIDTH) + (STRIKE_GOAL_HEIGHT * STRIKE_GOAL_HEIGHT)) / 2.0f;
+	}
+}
+
+//=========================================
 // ゴールの当たり判定処理
 //=========================================
 void ColisionGoal(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pLastPos, float fWidth, float fHeight)
@@ -292,6 +292,11 @@ void ColisionGoal(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pLastPos, float fWidth, float 
 					s_aGoal[nCntGoal].pos - D3DXVECTOR3(0.0f, (GOAL_HEIGHT / 2), 0.0f),
 					(s_aGoal[nCntGoal].pos + D3DXVECTOR3(0.0f, (GOAL_HEIGHT / 2), 0.0f)) - (s_aGoal[nCntGoal].pos - D3DXVECTOR3(0.0f, (GOAL_HEIGHT / 2), 0.0f))) == true)
 				{
+					SetPop(D3DXVECTOR3(SCREEN_WIDTH / 2 - (SCORE_POP_WIDTH * 2), SCREEN_HEIGHT / 2, 0.0f), s_aGoal[nCntGoal].rot, false, POP_TYPE_SCORE, 7);
+					SetPop(D3DXVECTOR3(SCREEN_WIDTH / 2 - (SCORE_POP_WIDTH), SCREEN_HEIGHT / 2, 0.0f), s_aGoal[nCntGoal].rot, false, POP_TYPE_SCORE, 8);
+					SetPop(D3DXVECTOR3(SCREEN_WIDTH / 2 + (SCORE_POP_WIDTH), SCREEN_HEIGHT / 2, 0.0f), s_aGoal[nCntGoal].rot, false, POP_TYPE_SCORE, 9);
+					SetPop(D3DXVECTOR3(SCREEN_WIDTH / 2 + (SCORE_POP_WIDTH * 2), SCREEN_HEIGHT / 2, 0.0f), s_aGoal[nCntGoal].rot, false, POP_TYPE_SCORE, 10);
+
 					if (s_aGoal[nCntGoal].bSide == false)
 					{
 						SetPop(D3DXVECTOR3 (GOAL_POP_WIDTH / 2, pDisk->pos.y,0.0f), s_aGoal[nCntGoal].rot, s_aGoal[nCntGoal].bSide, POP_TYPE_NORMAL, nCntGoal);
@@ -313,6 +318,11 @@ void ColisionGoal(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pLastPos, float fWidth, float 
 					s_aGoal[nCntGoal].pos - D3DXVECTOR3(0.0f, (STRIKE_GOAL_HEIGHT / 2), 0.0f),
 					(s_aGoal[nCntGoal].pos + D3DXVECTOR3(0.0f, (STRIKE_GOAL_HEIGHT / 2), 0.0f)) - (s_aGoal[nCntGoal].pos - D3DXVECTOR3(0.0f, (STRIKE_GOAL_HEIGHT / 2), 0.0f))) == true)
 				{
+					SetPop(D3DXVECTOR3(SCREEN_WIDTH / 2 - (SCORE_POP_WIDTH * 2), SCREEN_HEIGHT / 2, 0.0f), s_aGoal[nCntGoal].rot, false, POP_TYPE_SCORE, 7);
+					SetPop(D3DXVECTOR3(SCREEN_WIDTH / 2 - (SCORE_POP_WIDTH), SCREEN_HEIGHT / 2, 0.0f), s_aGoal[nCntGoal].rot, false, POP_TYPE_SCORE, 8);
+					SetPop(D3DXVECTOR3(SCREEN_WIDTH / 2 + (SCORE_POP_WIDTH), SCREEN_HEIGHT / 2, 0.0f), s_aGoal[nCntGoal].rot, false, POP_TYPE_SCORE, 9);
+					SetPop(D3DXVECTOR3(SCREEN_WIDTH / 2 + (SCORE_POP_WIDTH * 2), SCREEN_HEIGHT / 2, 0.0f), s_aGoal[nCntGoal].rot, false, POP_TYPE_SCORE, 10);
+
 					if (s_aGoal[nCntGoal].bSide == false)
 					{
 						SetPop(D3DXVECTOR3(GOAL_POP_WIDTH / 2, pDisk->pos.y, 0.0f), s_aGoal[nCntGoal].rot, s_aGoal[nCntGoal].bSide, POP_TYPE_STRIKE, nCntGoal);
@@ -374,7 +384,7 @@ float Vec3CrossGoal(D3DXVECTOR3* vec1, D3DXVECTOR3* vec2)
 //============================================================================
 //ゴールの取得処理
 //============================================================================
-GOAL *GetGoal(void)
+Goal *GetGoal(void)
 {
 	return s_aGoal;	//ゴール情報の先頭アドレスを返す
 }

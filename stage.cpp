@@ -3,14 +3,13 @@
 // ステージ処理
 // Author Tanimoto_Kosuke
 //
-// Update 22/03/16
+// Update 22/03/22
 // 
 //=========================================
 //------------------------------------
 // include
 //------------------------------------
 #include "stage.h"
-#include "main.h"
 #include <stdio.h>
 #include "goal.h"
 #include "wall.h"
@@ -19,14 +18,14 @@
 #include "pop.h"
 #include "game.h"
 #include "referee.h"
+#include "drum.h"
 
 //------------------------------------
 // スタティック変数
 //------------------------------------
 static LPDIRECT3DTEXTURE9		s_pTextureStage[MAX_IMAGE_STAGE] = {};	//テクスチャへのポインタ
 static LPDIRECT3DVERTEXBUFFER9	s_pVtxBuffStage = NULL;					//頂点バッファへのポインタ
-static STAGE s_aStage[MAX_STAGE];										//ステージの情報
-static bool s_bGoal;			//ゴール判定
+static STAGE s_aStage[MAX_STAGE_OBJECT];										//ステージの情報
 static bool s_bStop;			//止まった判定
 static float s_fStopCounter;	//止まった時間
 static STAGE_LENGTH s_p1;		//プレイヤー1ステージ長さ
@@ -59,20 +58,9 @@ void InitStage(void)
 	D3DXCreateTextureFromFile
 	(
 		pDevice,
-		"data\\TEXTURE\\stage\\block005.jpg",	//テクスチャのファイル名
+		"data\\TEXTURE\\stage\\net.png",	//テクスチャのファイル名
 		&s_pTextureStage[STAGE_TYPE_NET]
 	);
-
-
-	//テクスチャーの読み込み
-	D3DXCreateTextureFromFile
-	(
-		pDevice,
-		"data\\tanimoto\\TEXTURE\\block004.jpg",	//テクスチャのファイル名
-		&s_pTextureStage[STAGE_TYPE_GOALNET]
-	);
-
-	s_bGoal = false;
 
 	//p1のステージ長さ
 	s_p1.min = D3DXVECTOR3(MIN_WIDTH, MIN_HEIGHT, 0.0f);
@@ -100,23 +88,11 @@ void InitStage(void)
 	s_aStage[2].fAngle = atan2f(STAGE_NET_WIDTH, STAGE_NET_HEIGHT);
 	s_aStage[2].fLength = sqrtf((STAGE_NET_WIDTH * STAGE_NET_WIDTH) + (STAGE_NET_HEIGHT * STAGE_NET_HEIGHT)) / 2.0f;
 	s_aStage[2].type = STAGE_TYPE_NET;
-
-	s_aStage[3].pos = D3DXVECTOR3(MIN_WIDTH, SCREEN_HEIGHT / 2 + (STAGE_HEIGHT_DOWN / 2), 0.0f);
-	s_aStage[3].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	s_aStage[3].fAngle = atan2f(STAGE_NET_WIDTH, STAGE_NET_HEIGHT);
-	s_aStage[3].fLength = sqrtf((STAGE_NET_WIDTH * STAGE_NET_WIDTH) + (STAGE_NET_HEIGHT * STAGE_NET_HEIGHT)) / 2.0f;
-	s_aStage[3].type = STAGE_TYPE_GOALNET;
-
-	s_aStage[4].pos = D3DXVECTOR3(MAX_WIDTH, SCREEN_HEIGHT / 2 + (STAGE_HEIGHT_DOWN / 2), 0.0f);
-	s_aStage[4].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	s_aStage[4].fAngle = atan2f(STAGE_NET_WIDTH, STAGE_NET_HEIGHT);
-	s_aStage[4].fLength = sqrtf((STAGE_NET_WIDTH * STAGE_NET_WIDTH) + (STAGE_NET_HEIGHT * STAGE_NET_HEIGHT)) / 2.0f;
-	s_aStage[4].type = STAGE_TYPE_GOALNET;
 	
 	//頂点バッファの生成
 	pDevice->CreateVertexBuffer
 	(
-		sizeof(VERTEX_2D) * 4 * MAX_STAGE,
+		sizeof(VERTEX_2D) * 4 * MAX_STAGE_OBJECT,
 		D3DUSAGE_WRITEONLY,
 		FVF_VERTEX_2D,
 		D3DPOOL_MANAGED,
@@ -130,7 +106,7 @@ void InitStage(void)
 	//頂点バッファをロックし、頂点情報へのポインタを取得
 	s_pVtxBuffStage->Lock(0, 0, (void**)&pVtx, 0);
 
-	for (int nCntStage = 0; nCntStage < MAX_STAGE; nCntStage++,pVtx += 4)
+	for (int nCntStage = 0; nCntStage < MAX_STAGE_OBJECT; nCntStage++,pVtx += 4)
 	{
 		//頂点座標の設定 = (配置位置 ± 正弦(対角線の角度 ± 向き) * 対角線の長さ)
 		pVtx[0].pos.x = s_aStage[nCntStage].pos.x - sinf(s_aStage[nCntStage].fAngle + s_aStage[nCntStage].rot.x) * s_aStage[nCntStage].fLength;
@@ -172,11 +148,13 @@ void InitStage(void)
 	s_pVtxBuffStage->Unlock();
 
 	InitGoal();
+	InitDrum();
 	InitWall();			// 壁
 	InitReferee();		// レフェリー
 
 	SetWall(D3DXVECTOR3(SCREEN_WIDTH / 2, MIN_HEIGHT, 0.0f), STAGE_WIDTH, 10.0f, 0.0f);		//壁(上側)
 	SetWall(D3DXVECTOR3(SCREEN_WIDTH / 2, MAX_HEIGHT, 0.0f), STAGE_WIDTH, 10.0f, D3DX_PI);	//壁(下側)
+
 }
 
 //=========================================
@@ -201,6 +179,7 @@ void UninitStage(void)
 	}
 
 	UninitGoal();
+	UninitDrum();
 	UninitWall();			// 壁
 	UninitReferee();		// レフェリー
 }
@@ -217,7 +196,7 @@ void UpdateStage(void)
 	//頂点バッファをロックし、頂点情報へのポインタを取得
 	s_pVtxBuffStage->Lock(0, 0, (void**)&pVtx, 0);
 
-	for (int nCntStage = 0; nCntStage < MAX_STAGE; nCntStage++, pVtx += 4)
+	for (int nCntStage = 0; nCntStage < MAX_STAGE_OBJECT; nCntStage++, pVtx += 4)
 	{
 		//頂点座標の設定 = (配置位置 ± 正弦(対角線の角度 ± 向き) * 対角線の長さ)
 		pVtx[0].pos.x = s_aStage[nCntStage].pos.x - sinf(s_aStage[nCntStage].fAngle + s_aStage[nCntStage].rot.x) * s_aStage[nCntStage].fLength;
@@ -273,6 +252,7 @@ void UpdateStage(void)
 	}
 
 	UpdateGoal();
+	UpdateDrum();
 	UpdateWall();			// 壁
 	UpdateReferee();		// レフェリー
 }
@@ -296,7 +276,7 @@ void DrawStage()
 	//頂点フォーマットの設定
 	pDevice->SetFVF(FVF_VERTEX_2D);
 
-	for (int nCntStage = 0; nCntStage < MAX_STAGE; nCntStage++)
+	for (int nCntStage = 0; nCntStage < MAX_STAGE_OBJECT; nCntStage++)
 	{
 		//テクスチャの設定
 		pDevice->SetTexture(0, s_pTextureStage[s_aStage[nCntStage].type]);
@@ -311,6 +291,7 @@ void DrawStage()
 	}
 
 	DrawGoal();
+	DrawDrum();
 	DrawWall();			// 壁
 	DrawReferee();		// レフェリー
 }

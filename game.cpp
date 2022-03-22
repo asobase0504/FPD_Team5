@@ -54,10 +54,10 @@ void InitGame(void)
 	InitDisk();			// ディスク
 	InitShadow();		// 影
 	InitPlayer();		// プレイヤー
+	InitUI();			// UI
 	InitStage();		// ステージ
 	InitLandingMark();	// ディスクの落下地点
 	InitEffect();		// エフェクト
-	InitUI();			// UI
 	InitResult();		// リザルト
 
 	// 初期化
@@ -66,6 +66,7 @@ void InitGame(void)
 	s_nResetGamePosCnt = 0;
 	bIsResult = false;
 	RoundReset();
+
 }
 
 //=========================================

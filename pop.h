@@ -3,7 +3,7 @@
 // ポップアップ(ヘッダーファイル)
 // Author Tanimoto_Kosuke
 //
-// Update 22/03/16
+// Update 22/03/22
 // 
 //=========================================
 #ifndef _POP_H_
@@ -14,13 +14,15 @@
 //****************************************************************************
 //マクロ定義
 //****************************************************************************
-#define GOAL_POP_WIDTH			(150)	//ゴールポップの横サイズ
-#define GOAL_POP_HEIGHT			(50)	//ゴールポップの縦サイズ
-#define FELL_POP_WIDTH			(50)	//フォールポップの横サイズ
-#define FELL_POP_HEIGHT			(100)	//フォールポップの縦サイズ
-#define MAX_POP					(7)		//ポップの最大数
-#define MAX_IMAGE_POP			(3)		//ポップ画像の最大数
-#define POP_SPEAD				(4)		//ポップの移動速度
+#define GOAL_POP_WIDTH		(150)				//ゴールポップの横サイズ
+#define GOAL_POP_HEIGHT		(50)				//ゴールポップの縦サイズ
+#define FELL_POP_WIDTH		(50)				//フォールポップの横サイズ
+#define FELL_POP_HEIGHT		(100)				//フォールポップの縦サイズ
+#define SCORE_POP_WIDTH		(SCREEN_WIDTH / 10)	//スコアポップの横サイズ
+#define SCORE_POP_HEIGHT	(SCREEN_HEIGHT / 4)	//スコアポップの縦サイズ
+#define MAX_POP				(11)				//ポップの最大数
+#define MAX_IMAGE_POP		(4)					//ポップ画像の最大数
+#define POP_SPEAD			(4)					//ポップの移動速度
 
 //****************************************************************************
 //ポップの種類
@@ -30,6 +32,7 @@ typedef enum
 	POP_TYPE_NORMAL = 0,	//3点ゴールポップ
 	POP_TYPE_STRIKE,		//5点ゴールポップ
 	POP_TYPE_FELL,			//2点ゴールポップ
+	POP_TYPE_SCORE,			//スコアポップ
 	POP_TYPE_MAX
 }POP_TYPE;
 
