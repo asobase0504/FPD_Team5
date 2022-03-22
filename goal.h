@@ -16,8 +16,8 @@
 //マクロ定義
 //****************************************************************************
 #define GOAL_WIDTH				(80)	//ゴールの横サイズ
-#define GOAL_HEIGHT				(180)	//ゴールの縦サイズ
-#define STRIKE_GOAL_HEIGHT		(160)	//真ん中ゴールの横サイズ
+#define GOAL_HEIGHT				(150)	//ゴールの縦サイズ
+#define STRIKE_GOAL_HEIGHT		(170)	//真ん中ゴールの縦サイズ
 #define MAX_GOAL				(6)		//ゴールの最大数
 #define MAX_IMAGE_GOAL			(2)		//ゴール画像の最大数
 
