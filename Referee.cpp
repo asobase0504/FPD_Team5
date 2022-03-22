@@ -181,7 +181,7 @@ void ThrowRefree(int nIdxPlayer)
 		D3DXVec3Normalize(&move, &move);
 
 		// ディスク投げ
-		SetDisk(posThrow, move * THROW_POWER, D3DXVECTOR3(0.0f, 0.0f, 0.0f), DISK_TYPE_NORMAL, -1, 60.0f);
+		SetDisk(posThrow, move * THROW_POWER, D3DXVECTOR3(0.0f, 0.0f, 0.0f), DISK_TYPE_NORMAL, -1, 90.0f);
 	}
 }
 
