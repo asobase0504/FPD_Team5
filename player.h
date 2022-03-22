@@ -11,6 +11,7 @@
 // include
 //------------------------------------
 #include "main.h"
+#include "disk.h"
 
 //------------------------------------
 // マクロ定義
@@ -48,11 +49,14 @@ typedef struct
 	D3DXVECTOR3 pos;					// 位置
 	D3DXVECTOR3 move;					// 移動量
 	JUMPSTATE jumpstate;				// 跳躍の状態
+	DISK_TYPE typeSpecialDisk;			// 必殺技
 	float fSize;						// 大きさ
 	float fHeight;						// 高さ
 	float fVerticalSpeed = 5.0f;		// 上昇スピード
 	float fThrowCurvePower;				// 曲げて投げる力
-	float fThrowPower;					// 投げる力
+	float fMaxThrowPower;				// 投げる最大の力
+	float fThrowPower;					// 投げる最大の力
+	DISK_TYPE SpecialSkillType;			// 必殺技のタイプ
 	int nSpecialSkillCnt;				// 必殺技までのカウント
 	float fMoveSpeed;					// 移動量
 	float fSlidingVolume;				// スライディング量
@@ -74,6 +78,7 @@ void UninitPlayer(void);
 void UpdatePlayer(void);
 void DrawPlayer(void);
 void SetPlayer(const D3DXVECTOR3& pos, PLAYERTYPE type);
+bool ResetPosPlayer();	// 開始位置に戻る
 Player* GetPlayer(void);
 
 #endif // !_PLAYER_H_

@@ -44,6 +44,6 @@ void InitEffect(void);
 void UninitEffect(void);
 void UpdateEffect(void);
 void DrawEffect(void);
-void SetEffect(D3DXVECTOR3 pos, EFFECT_TYPE Type);
+void SetEffect(D3DXVECTOR3 pos, float rot, EFFECT_TYPE Type);
 
 #endif // !_EFFECT_H_

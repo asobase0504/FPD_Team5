@@ -10,7 +10,6 @@
 //グローバル変数
 static LPDIRECT3DTEXTURE9 g_pTextureScore = NULL;				//テクスチャへのポインタ
 static SCORE	g_nScore[2];									//スコアの構造体
-static int nPlayerIdx;
 
 //------------------------------
 //スコアの初期化処理
@@ -21,7 +20,7 @@ void InitScore(void)
 
 	//テクスチャの読み込み
 	D3DXCreateTextureFromFile(pDevice,
-		"data/gotou/TEXTURE/number000.png",
+		"data/TEXTURE/number.png",
 		&g_pTextureScore);
 
 	for (int nScoreCnt = 0; nScoreCnt < 2; nScoreCnt++)
@@ -29,7 +28,7 @@ void InitScore(void)
 		g_nScore[nScoreCnt].nScore[0] = 0;									//値を初期化する
 		g_nScore[nScoreCnt].nScore[1] = 0;									//値を初期化する
 		g_nScore[nScoreCnt].nCnt = 0;										//値を初期化する
-		g_nScore[nScoreCnt].pos = D3DXVECTOR3(500.0f, 50.0f, 0.0f);			//位置を初期化する
+		g_nScore[nScoreCnt].pos = D3DXVECTOR3(SCREEN_WIDTH * 0.5f - 70.0f * 0.5f - 55.0f - 27.5f, 85.0f, 0.0f);			//位置を初期化する
 
 		//頂点バッファの生成
 		pDevice->CreateVertexBuffer(
@@ -49,17 +48,17 @@ void InitScore(void)
 		for (int nPosCnt = 0; nPosCnt < NUM_SCORE; nPosCnt++)
 		{
 			//頂点座標
-			pVtx[0].pos = D3DXVECTOR3(g_nScore[nScoreCnt].pos.x - 30.0f + nPosCnt * 70.0f, g_nScore[nScoreCnt].pos.y - 30, 0.0f);
-			pVtx[1].pos = D3DXVECTOR3(g_nScore[nScoreCnt].pos.x + 30.0f + nPosCnt * 70.0f, g_nScore[nScoreCnt].pos.y - 30, 0.0f);
-			pVtx[2].pos = D3DXVECTOR3(g_nScore[nScoreCnt].pos.x - 30.0f + nPosCnt * 70.0f, g_nScore[nScoreCnt].pos.y + 30, 0.0f);
-			pVtx[3].pos = D3DXVECTOR3(g_nScore[nScoreCnt].pos.x + 30.0f + nPosCnt * 70.0f, g_nScore[nScoreCnt].pos.y + 30, 0.0f);
+			pVtx[0].pos = D3DXVECTOR3(g_nScore[nScoreCnt].pos.x - 25.0f + nPosCnt * 55.0f, g_nScore[nScoreCnt].pos.y - 30.0f, 0.0f);
+			pVtx[1].pos = D3DXVECTOR3(g_nScore[nScoreCnt].pos.x + 25.0f + nPosCnt * 55.0f, g_nScore[nScoreCnt].pos.y - 30.0f, 0.0f);
+			pVtx[2].pos = D3DXVECTOR3(g_nScore[nScoreCnt].pos.x - 25.0f + nPosCnt * 55.0f, g_nScore[nScoreCnt].pos.y + 30.0f, 0.0f);
+			pVtx[3].pos = D3DXVECTOR3(g_nScore[nScoreCnt].pos.x + 25.0f + nPosCnt * 55.0f, g_nScore[nScoreCnt].pos.y + 30.0f, 0.0f);
 
 			if (nPosCnt == 1 || nPosCnt == 2)
 			{
-				g_nScore[nScoreCnt].pos += D3DXVECTOR3(60.0f, 0.0f, 0.0f);
+				g_nScore[nScoreCnt].pos += D3DXVECTOR3(70.0f, 0.0f, 0.0f);
 				if (nPosCnt == 2)
 				{
-					g_nScore[nScoreCnt].pos -= D3DXVECTOR3(60.0f, 0.0f, 0.0f);
+					g_nScore[nScoreCnt].pos -= D3DXVECTOR3(70.0f, 0.0f, 0.0f);
 				}
 			}
 
@@ -228,7 +227,7 @@ void AddScore(int nValse, int nPlayerIdx)
 }
 
 //スコアの取得
-SCORE GetScore(void)
+SCORE* GetScore(void)
 {
-	return g_nScore[0];
+	return g_nScore;
 }

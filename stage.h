@@ -3,7 +3,7 @@
 // ステージ(ヘッダーファイル)
 // Author Tanimoto_Kosuke
 //
-// Update 22/03/14
+// Update 22/03/22
 // 
 //=========================================
 #ifndef _STAGE_H_
@@ -14,18 +14,19 @@
 //****************************************************************************
 //マクロ定義
 //****************************************************************************
-#define STAGE_WIDTH			(SCREEN_WIDTH - 50)				//ステージの横サイズ
-#define STAGE_HEIGHT		(SCREEN_HEIGHT - 200)			//ステージの縦サイズ
-#define STAGE_NET_WIDTH		(10)							//網の横サイズ
-#define STAGE_NET_HEIGHT	(SCREEN_HEIGHT - 200)			//網の縦サイズ
-#define MAX_STAGE			(5)								//ステージオブジェクトの最大数
-#define MAX_IMAGE_STAGE		(4)								//ステージ画像の最大数
-#define DISK_DELETE			(30)							//落ちたディスクが消える時間
+#define STAGE_HEIGHT_DOWN		(50)								//ステージ縦のズレ(下側)
+#define STAGE_WIDTH				(SCREEN_WIDTH - 50)					//ステージの横サイズ
+#define STAGE_HEIGHT			(SCREEN_HEIGHT - 250)				//ステージの縦サイズ
+#define STAGE_NET_WIDTH			(10)								//網の横サイズ
+#define STAGE_NET_HEIGHT		(SCREEN_HEIGHT - 250)				//網の縦サイズ
+#define MAX_STAGE_OBJECT		(3)									//ステージオブジェクトの最大数
+#define MAX_IMAGE_STAGE			(3)									//ステージ画像の最大数
+#define DISK_DELETE				(30)								//落ちたディスクが消える時間
 
-#define MIN_WIDTH			(80)							//横最小値
-#define MIN_HEIGHT			(100)							//縦最小値
-#define MAX_WIDTH			(SCREEN_WIDTH - MIN_WIDTH)		//横最大値
-#define MAX_HEIGHT			(SCREEN_HEIGHT -  MIN_HEIGHT)	//縦最大値
+#define MIN_WIDTH				(80)								//横最小値
+#define MIN_HEIGHT				(150)								//縦最小値
+#define MAX_WIDTH				(SCREEN_WIDTH - MIN_WIDTH)			//横最大値
+#define MAX_HEIGHT				(SCREEN_HEIGHT - MIN_HEIGHT + 50)	//縦最大値
 
 //****************************************************************************
 //ステージの種類
@@ -35,7 +36,6 @@ typedef enum
 	STAGE_TYPE_FRONT = 0,	//ステージ前側
 	STAGE_TYPE_BACK,		//ステージ後ろ側
 	STAGE_TYPE_NET,			//網
-	STAGE_TYPE_GOALNET,		//網(ゴール)
 	STAGE_TYPE_MAX
 }STAGE_TYPE;
 

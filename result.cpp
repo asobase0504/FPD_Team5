@@ -7,6 +7,7 @@
 //================================
 #include "result.h"
 #include "input.h"
+#include "mode.h"
 
 //**************************************************
 //É}ÉNÉçíËã`
@@ -131,7 +132,10 @@ void UninitResult(void)
 //============================
 void UpdateResult(void)
 {
-
+	if (GetKeyboardTrigger(DIK_RETURN))
+	{
+		ChangeMode(MODE_OPTION);
+	}
 }
 
 //============================

@@ -186,11 +186,11 @@ int SetShadow(D3DXVECTOR3 pos, float size)
 		if (g_aShadow[nCntShadow].bUse == false)
 		{//使用されていない場合
 
-			size -= 2.0f;								//大きさの調整
+			size *= 0.5f;								//大きさの調整
 
 			g_aShadow[nCntShadow].pos = pos;			//影の位置の設定
-			g_aShadow[nCntShadow].pos.x -= 10.0f;
-			g_aShadow[nCntShadow].pos.y += 10.0f;		
+			g_aShadow[nCntShadow].pos.x -= 8.0f;
+			g_aShadow[nCntShadow].pos.y += 8.0f;		
 			g_aShadow[nCntShadow].fSize = size;			//影の大きさの設定
 			g_aShadow[nCntShadow].bUse = true;			//使用されている状態にする
 
@@ -217,8 +217,8 @@ void SetPositionShadow(int nIdxShadow, D3DXVECTOR3 pos)
 {
 	//影の位置の更新
 	g_aShadow[nIdxShadow].pos = pos;
-	g_aShadow[nIdxShadow].pos.x -= 10.0f;
-	g_aShadow[nIdxShadow].pos.y += 10.0f;		
+	g_aShadow[nIdxShadow].pos.x -= 8.0f;
+	g_aShadow[nIdxShadow].pos.y += 8.0f;		
 }
 
 Shadow *GetShadow(void)

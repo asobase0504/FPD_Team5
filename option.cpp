@@ -11,6 +11,8 @@
 #include "input.h"
 #include "menu.h"
 #include "mode.h"
+#include "game.h"
+#include "gear.h"
 
 #include <assert.h>
 
@@ -48,7 +50,7 @@ void InitOption(void)
 
 	//テクスチャの読み込み
 	D3DXCreateTextureFromFile(pDevice,
-								"data/TEXTURE/背景",
+								"data/TEXTURE/OldPaper.png",
 								&s_pTexture);
 
 	D3DXCreateTextureFromFile(pDevice,
@@ -96,10 +98,10 @@ void InitOption(void)
 	pVtx[3].rhw = 1.0f;
 
 	//頂点カラーの設定
-	pVtx[0].col = D3DXCOLOR(0.3f, 0.3f, 0.3f, 1.0f);
-	pVtx[1].col = D3DXCOLOR(0.3f, 0.3f, 0.3f, 1.0f);
-	pVtx[2].col = D3DXCOLOR(0.3f, 0.3f, 0.3f, 1.0f);
-	pVtx[3].col = D3DXCOLOR(0.3f, 0.3f, 0.3f, 1.0f);
+	pVtx[0].col = D3DXCOLOR(0.8f,0.8f, 0.8f, 1.0f);
+	pVtx[1].col = D3DXCOLOR(0.8f,0.8f, 0.8f, 1.0f);
+	pVtx[2].col = D3DXCOLOR(0.8f,0.8f, 0.8f, 1.0f);
+	pVtx[3].col = D3DXCOLOR(0.8f,0.8f, 0.8f, 1.0f);
 
 	//テクスチャ座標の設定
 	pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
@@ -138,6 +140,27 @@ void InitOption(void)
 	SetMenu(menu, frame);
 
 	InitSelect();
+
+	//歯車の初期化処理
+	InitGear();
+
+	//===============================================================================
+	//オプション画面の歯車の設定
+	SetGear(D3DXVECTOR3(353.0f, 273.0f, 0.0f), 150.0f, -D3DX_PI * 0.015f, 0);
+	SetGear(D3DXVECTOR3(690.0f, 410.0f, 0.0f), 200.0f, -D3DX_PI * 0.005f, 1);
+	SetGear(D3DXVECTOR3(1020.0f, 40.0f, 0.0f), 250.0f, D3DX_PI * 0.011f, 2);
+	SetGear(D3DXVECTOR3(350.0f, 500.0f, 0.0f), 230.0f, D3DX_PI * 0.009f, 3);
+	SetGear(D3DXVECTOR3(950.0f, 460.0f, 0.0f), 280.0f, -D3DX_PI * 0.008f, 4);
+	SetGear(D3DXVECTOR3(45.0f, 0.0f, 0.0f), 280.0f, -D3DX_PI * 0.018f, 2);
+	SetGear(D3DXVECTOR3(750.0f, 730.0f, 0.0f), 300.0f, D3DX_PI * 0.008f, 1);
+	SetGear(D3DXVECTOR3(1250.0f, 700.0f, 0.0f), 300.0f, D3DX_PI * 0.022f, 0);
+	SetGear(D3DXVECTOR3(1145.0f, 415.0f, 0.0f), 220.0f, D3DX_PI * 0.008f, 4);
+	SetGear(D3DXVECTOR3(165.0f, 625.0f, 0.0f), 300.0f, -D3DX_PI * 0.009f, 3);
+	SetGear(D3DXVECTOR3(60.0f, 235.0f, 0.0f), 280.0f, D3DX_PI * 0.018f, 2);
+	SetGear(D3DXVECTOR3(460.0f, 340.0f, 0.0f), 150.0f, D3DX_PI * 0.015f, 0);
+	SetGear(D3DXVECTOR3(500.0f, 0.0f, 0.0f), 100.0f, -D3DX_PI * 0.03f, 4);
+	SetGear(D3DXVECTOR3(565.0f, 45.0f, 0.0f), 100.0f, D3DX_PI * 0.03f, 4);
+	//===============================================================================
 }
 
 //============================================
@@ -153,6 +176,11 @@ void UninitOption(void)
 			s_apTextureMenu[i] = NULL;
 		}
 	}
+	if (s_pTexture != NULL)
+	{//テクスチャの破棄
+		s_pTexture->Release();
+		s_pTexture = NULL;
+	}
 
 	if (s_pVtxBuff != NULL)
 	{//頂点バッファの破棄
@@ -161,6 +189,7 @@ void UninitOption(void)
 	}
 
 	UninitSelect();
+	UninitGear();					//歯車の終了処理
 }
 
 //============================================
@@ -168,6 +197,7 @@ void UninitOption(void)
 //============================================
 void UpdateOption(void)
 {
+	UpdateGear();	//歯車の更新処理
 	SelectMenu();	//メニュー選択
 	UpdateMenu();	//メニュー更新
 	UpdateSelect();
@@ -194,6 +224,7 @@ void DrawOption(void)
 							0,					//頂点の開始場所
 							2);					//プリミティブの数
 
+	DrawGear();		//歯車の描画処理
 	DrawMenu();		//メニュー描画
 	DrawSelect();
 }
@@ -251,14 +282,10 @@ static void SelectMenu(void)
 
 		if (GetKeyboardTrigger(DIK_RETURN) || GetJoypadTrigger(JOYKEY_START, 0))
 		{//決定キー(ENTERキー)が押されたかどうか
-			/* イメージ↓
 
-			SetTime(s_nSelectTimeLimit);	//制限時間
-			SetPoint(s_nSelectPoint);		//ポイント数
-			SetSetCount(s_nSelectSetCount);	//セット数
-
-			<ChangeModeでゲームへ>
-			*/
+			SetNeedTime(s_nSelectTimeLimit);	//制限時間
+			SetNeedPoint(s_nSelectPoint);	//ポイント数
+			SetNeedSet(s_nSelectSetCount);	//セット数
 
 			ChangeMode(MODE_GAME);
 
