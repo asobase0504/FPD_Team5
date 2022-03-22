@@ -47,6 +47,5 @@ typedef struct
 // プロトタイプ宣言
 //------------------------------------
 LPDIRECT3DDEVICE9 GetDevice(void);
-void SetMode(void);
 void ExitExe(void);
 #endif	// !_MAIN_H_

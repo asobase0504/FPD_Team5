@@ -11,6 +11,7 @@
 #include "input.h"
 #include "menu.h"
 #include "mode.h"
+#include "game.h"
 
 #include <assert.h>
 
@@ -251,14 +252,10 @@ static void SelectMenu(void)
 
 		if (GetKeyboardTrigger(DIK_RETURN) || GetJoypadTrigger(JOYKEY_START, 0))
 		{//決定キー(ENTERキー)が押されたかどうか
-			/* イメージ↓
 
-			SetTime(s_nSelectTimeLimit);	//制限時間
-			SetPoint(s_nSelectPoint);		//ポイント数
-			SetSetCount(s_nSelectSetCount);	//セット数
-
-			<ChangeModeでゲームへ>
-			*/
+			SetNeedTime(s_nSelectTimeLimit);	//制限時間
+			SetNeedPoint(s_nSelectPoint);	//ポイント数
+			SetNeedSet(s_nSelectSetCount);	//セット数
 
 			ChangeMode(MODE_GAME);
 

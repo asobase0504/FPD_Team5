@@ -31,6 +31,6 @@ void UpdateScore(void);
 void DrawScore(void);
 void SetScore(int nScore);//,int nPlayerIdx);
 void AddScore(int nValse,int nPlayerIdx);
-SCORE GetScore(void);
+SCORE* GetScore(void);
 
 #endif
