@@ -115,8 +115,7 @@ void UpdatePlayer(void)
 			if (pPlayer->bHaveDisk)
 			{ //ディスクを所持してる場合
 
-				// 移動量を無くす。
-				pPlayer->move = ZERO_VECTOR;
+				pPlayer->move -= pPlayer->move * pPlayer->fAttenuationSlidingSpead;	// 移動量の減衰
 
 				// 投げる
 				ThrowPlayer(nIdxPlayer);
@@ -390,7 +389,6 @@ void ThrowPlayer(int nIdxPlayer)
 			}
 			else if (GetKeyboardTrigger(DIK_SPACE))
 			{
-				move = inputVec * pPlayer->fThrowPower * 100.0f;
 				ThrowDisk(pPlayer->pos, move, ZERO_VECTOR, DISK_TYPE_LOB, nIdxPlayer);
 			}
 			break;
@@ -451,6 +449,7 @@ void CatchDiscPlayer(int nIdxPlayer)
 		// 床で取得
 		if ((pDisk->type != DISK_TYPE_LOB || (pDisk->type == DISK_TYPE_LOB && pDisk->fHeight <= 0.0f)) && pPlayer->jumpstate == JUMP_NONE)
 		{
+			pPlayer->move += D3DXVECTOR3(pDisk->move.x, -pDisk->move.y, pDisk->move.z);
 			DestroyDisk();	// ディスクの破棄
 			pPlayer->bHaveDisk = true;
 			pPlayer->fThrowPower = pPlayer->fMaxThrowPower;
