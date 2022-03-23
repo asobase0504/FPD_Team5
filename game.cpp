@@ -24,6 +24,8 @@
 #include "result.h"
 #include "time.h"
 #include "ui.h"
+#include "pipe.h"
+#include "gear.h"
 
 //------------------------------------
 // マクロ定義
@@ -59,6 +61,8 @@ void InitGame(void)
 	InitLandingMark();	// ディスクの落下地点
 	InitEffect();		// エフェクト
 	InitResult();		// リザルト
+	InitPipe();			// 配管
+	InitGear();			// 歯車
 
 	// 初期化
 	s_nPlayerSet[0] = 0;
@@ -67,6 +71,17 @@ void InitGame(void)
 	bIsResult = false;
 	RoundReset();
 
+	SetPipe(D3DXVECTOR3(150.0f, 70.0f, 0.0f), D3DXVECTOR3(25.5f, 70.0f, 0.0f), PIPE_TYPE_VERTICAL);
+	SetPipe(D3DXVECTOR3(250.0f, 70.0f, 0.0f), D3DXVECTOR3(25.5f, 70.0f, 0.0f), PIPE_TYPE_VERTICAL);
+	SetPipe(D3DXVECTOR3(350.0f, 70.0f, 0.0f), D3DXVECTOR3(25.5f, 70.0f, 0.0f), PIPE_TYPE_VERTICAL);
+	SetPipe(D3DXVECTOR3(450.0f, 70.0f, 0.0f), D3DXVECTOR3(25.5f, 70.0f, 0.0f), PIPE_TYPE_VERTICAL);
+	SetPipe(D3DXVECTOR3(420.0f, 35.0f, 0.0f), D3DXVECTOR3(70.0f, 21.85f, 0.0f), PIPE_TYPE_STEAM);
+	SetPipe(D3DXVECTOR3(420.0f, 90.0f, 0.0f), D3DXVECTOR3(70.0f, 21.85f, 0.0f), PIPE_TYPE_STEAM);
+	SetPipe(D3DXVECTOR3(820.0f, 70.0f, 0.0f), D3DXVECTOR3(60.0f, 21.85f, 0.0f), PIPE_TYPE_STEAM);
+	SetGear(D3DXVECTOR3(1060.0f, 40.0f, 0.0f), 100.0f, -D3DX_PI * 0.008f, 2);
+	SetGear(D3DXVECTOR3(1116.0f, 90.0f, 0.0f), 70.0f, D3DX_PI * 0.008f, 2);
+	SetGear(D3DXVECTOR3(1174.0f, 52.0f, 0.0f), 90.0f, -D3DX_PI * 0.008f, 2);
+	SetGear(D3DXVECTOR3(1265.0f, 81.0f, 0.0f), 130.0f, D3DX_PI * 0.008f, 2);
 }
 
 //=========================================
@@ -82,6 +97,8 @@ void UninitGame(void)
 	UninitEffect();			// エフェクト
 	UninitUI();				// UI
 	UninitResult();			// リザルト
+	UninitPipe();			// 配管
+	UninitGear();			// 歯車
 }
 
 //=========================================
@@ -118,6 +135,8 @@ void UpdateGame(void)
 		UpdateShadow();			// 影
 		UpdateEffect();			// エフェクト
 		UpdateUI();				// UI
+		UpdatePipe();			// 配管
+		UpdateGear();			// 歯車
 	}
 
 	// スコア関係の処理
@@ -172,9 +191,11 @@ void UpdateGame(void)
 void DrawGame()
 {
 	DrawStage();		// ステージ
+	DrawGear();			// 歯車
 	DrawShadow();		// 影
 	DrawLandingMark();	// ディスクの落下地点
 	DrawEffect();		// エフェクト
+	DrawPipe();			// 配管
 
 	if (GetDisk()->type == DISK_TYPE_LOB)
 	{

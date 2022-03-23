@@ -117,16 +117,14 @@ void UpdateDisk(void)
 			g_aDisk[nCntDisk].pos += g_aDisk[nCntDisk].move;				//現在位置の更新
 			g_aDisk[nCntDisk].move += g_aDisk[nCntDisk].acc;				//移動量の更新
 
-			if (g_aDisk[nCntDisk].fHeight <= 15.0f)
-			{
-				SetEffect((g_aDisk[nCntDisk].pos - g_aDisk[nCntDisk].move), 0.0f, EFFECT_TYPE_TRAIL);
-				SetEffect((g_aDisk[nCntDisk].pos - g_aDisk[nCntDisk].move), 0.0f, EFFECT_TYPE_TRAIL);
-			}
-
 			switch (g_aDisk[nCntDisk].type)
 			{
 			default:
-				
+				if (g_aDisk[nCntDisk].fHeight <= 15.0f)
+				{
+					SetEffect((g_aDisk[nCntDisk].pos - g_aDisk[nCntDisk].move), 0.0f, EFFECT_TYPE_TRAIL);
+					SetEffect((g_aDisk[nCntDisk].pos - g_aDisk[nCntDisk].move), 0.0f, EFFECT_TYPE_TRAIL);
+				}
 				break;
 
 			case DISK_TYPE_LOB:
@@ -145,6 +143,11 @@ void UpdateDisk(void)
 				break;
 
 			case DISK_TYPE_JUMP:
+
+				if (g_aDisk[nCntDisk].fHeight > 10.0f)
+				{
+					SetEffect(D3DXVECTOR3(g_aDisk[nCntDisk].pos.x, g_aDisk[nCntDisk].pos.y - (g_aDisk[nCntDisk].fHeight * 0.2f), 0.0f), g_aDisk[nCntDisk].rot, EFFECT_TYPE_TRAIL_JUMP);
+				}
 
 				if (g_aDisk[nCntDisk].fHeight > 0.0f)
 				{
