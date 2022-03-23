@@ -32,7 +32,7 @@ void InitScore(void)
 		g_nScore[nScoreCnt].nScore[0] = 0;									//値を初期化する
 		g_nScore[nScoreCnt].nScore[1] = 0;									//値を初期化する
 		g_nScore[nScoreCnt].nCnt = 0;										//値を初期化する
-		g_nScore[nScoreCnt].pos = D3DXVECTOR3(SCREEN_WIDTH * 0.5f - 70.0f * 0.5f - 55.0f - 27.5f, 85.0f, 0.0f);			//位置を初期化する
+		g_nScore[nScoreCnt].pos = D3DXVECTOR3(SCREEN_WIDTH * 0.5f - 70.0f * 0.5f - 55.0f - 27.5f, 50.0f, 0.0f);			//位置を初期化する
 
 		//頂点バッファの生成
 		pDevice->CreateVertexBuffer(
@@ -52,10 +52,10 @@ void InitScore(void)
 		for (int nPosCnt = 0; nPosCnt < NUM_SCORE; nPosCnt++)
 		{
 			//頂点座標
-			pVtx[0].pos = D3DXVECTOR3(g_nScore[nScoreCnt].pos.x - 25.0f + nPosCnt * 55.0f, g_nScore[nScoreCnt].pos.y - 30.0f, 0.0f);
-			pVtx[1].pos = D3DXVECTOR3(g_nScore[nScoreCnt].pos.x + 25.0f + nPosCnt * 55.0f, g_nScore[nScoreCnt].pos.y - 30.0f, 0.0f);
-			pVtx[2].pos = D3DXVECTOR3(g_nScore[nScoreCnt].pos.x - 25.0f + nPosCnt * 55.0f, g_nScore[nScoreCnt].pos.y + 30.0f, 0.0f);
-			pVtx[3].pos = D3DXVECTOR3(g_nScore[nScoreCnt].pos.x + 25.0f + nPosCnt * 55.0f, g_nScore[nScoreCnt].pos.y + 30.0f, 0.0f);
+			pVtx[0].pos = D3DXVECTOR3(g_nScore[nScoreCnt].pos.x - 25.0f + nPosCnt * 55.0f, g_nScore[nScoreCnt].pos.y - 35.0f, 0.0f);
+			pVtx[1].pos = D3DXVECTOR3(g_nScore[nScoreCnt].pos.x + 25.0f + nPosCnt * 55.0f, g_nScore[nScoreCnt].pos.y - 35.0f, 0.0f);
+			pVtx[2].pos = D3DXVECTOR3(g_nScore[nScoreCnt].pos.x - 25.0f + nPosCnt * 55.0f, g_nScore[nScoreCnt].pos.y + 35.0f, 0.0f);
+			pVtx[3].pos = D3DXVECTOR3(g_nScore[nScoreCnt].pos.x + 25.0f + nPosCnt * 55.0f, g_nScore[nScoreCnt].pos.y + 35.0f, 0.0f);
 
 			if (nPosCnt == 1 || nPosCnt == 2)
 			{
@@ -73,10 +73,10 @@ void InitScore(void)
 			pVtx[3].rhw = 1.0f;
 
 			//頂点カラーの設定
-			pVtx[0].col = D3DXCOLOR(1.0f, 1.0f, 0.5f, 1.0f);
-			pVtx[1].col = D3DXCOLOR(1.0f, 1.0f, 0.5f, 1.0f);
-			pVtx[2].col = D3DXCOLOR(1.0f, 1.0f, 0.5f, 1.0f);
-			pVtx[3].col = D3DXCOLOR(1.0f, 1.0f, 0.5f, 1.0f);
+			pVtx[0].col = D3DXCOLOR(0.0f, 1.0f, 0.5f, 1.0f);
+			pVtx[1].col = D3DXCOLOR(0.0f, 1.0f, 0.5f, 1.0f);
+			pVtx[2].col = D3DXCOLOR(0.0f, 1.0f, 0.5f, 1.0f);
+			pVtx[3].col = D3DXCOLOR(0.0f, 1.0f, 0.5f, 1.0f);
 
 			//テクスチャの座標設定
 			pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
@@ -159,7 +159,8 @@ void SetScore(int nScore)//,int nPlayerIdx)
 	int nCntScore;
 	int aPosTexU[4];	//各桁の数字を格納
 
-	g_nScore[2].nScore[2] = nScore;
+	g_nScore[0].nScore[0] = nScore;
+	g_nScore[1].nScore[0] = nScore;
 
 	aPosTexU[0] = (g_nScore[0].nScore[0] % 100) / 10;
 	aPosTexU[1] = (g_nScore[0].nScore[1] % 10) / 1;

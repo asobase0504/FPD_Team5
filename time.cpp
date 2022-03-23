@@ -19,7 +19,7 @@ void InitTime(void)
 
 	//テクスチャの読み込み
 	D3DXCreateTextureFromFile(pDevice,
-		"data/TEXTURE/number000.png",
+		"data/TEXTURE/number.png",
 		&g_pTexture);
 
 	bool bTimeFlag = false;									//タイトルの移動のフラグ
@@ -41,7 +41,7 @@ void InitTime(void)
 
 	for (g_Time.nCntTime = 0; g_Time.nCntTime < MAX_CNT_TIME; g_Time.nCntTime++)
 	{
-		g_Time.pos[g_Time.nCntTime] = D3DXVECTOR3(594.0f + (20.0f + (20.0f * 2) * g_Time.nCntTime), 0.0f + 60.0f, 0.0f);
+		g_Time.pos[g_Time.nCntTime] = D3DXVECTOR3(SCREEN_WIDTH * 0.5f - (-20.0f + (20.0f * 2) * g_Time.nCntTime), 80.0f, 0.0f);
 	}
 
 	//頂点バッファをロックし、頂点情報へのポインタを取得
@@ -62,10 +62,10 @@ void InitTime(void)
 		pVtx[3].rhw = 1.0f;
 
 		//頂点カラーの設定
-		pVtx[0].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-		pVtx[1].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-		pVtx[2].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-		pVtx[3].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+		pVtx[0].col = D3DXCOLOR(0.0f, 1.0f, 0.5f, 1.0f);
+		pVtx[1].col = D3DXCOLOR(0.0f, 1.0f, 0.5f, 1.0f);
+		pVtx[2].col = D3DXCOLOR(0.0f, 1.0f, 0.5f, 1.0f);
+		pVtx[3].col = D3DXCOLOR(0.0f, 1.0f, 0.5f, 1.0f);
 
 		//テクスチャ座標の設定
 		pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);

@@ -36,8 +36,10 @@ typedef enum
 //スタティック変数
 //**************************************************
 static LPDIRECT3DTEXTURE9		s_pTexture = NULL;				//テクスチャへのポインタ(タイトル背景)
+static LPDIRECT3DTEXTURE9		s_pTextureTitle = NULL;			//テクスチャへのポインタ(タイトル背景)
 static LPDIRECT3DTEXTURE9		s_apTextureMenu[MAX_TEXTURE];	//テクスチャへのポインタ(タイトルメニュー)
 static LPDIRECT3DVERTEXBUFFER9	s_pVtxBuff = NULL;				//頂点バッファへのポインタ
+static LPDIRECT3DVERTEXBUFFER9	s_pVtxBuffTitle = NULL;				//頂点バッファへのポインタ
 static int						s_nSelectMenu;					//選ばれているメニュー
 
 //**************************************************
@@ -61,20 +63,67 @@ void InitTitle(void)
 								"data/TEXTURE/OldPaper.png",
 								&s_pTexture);
 
+	//テクスチャの読み込み
 	D3DXCreateTextureFromFile(pDevice,
-								"data/TEXTURE/GameStart.png",
+								NULL,
+								&s_pTextureTitle);
+
+	D3DXCreateTextureFromFile(pDevice,
+								"data/TEXTURE/TitleUI/FPD_TitleUI_GameStart.png",
 								&s_apTextureMenu[MENU_GAMESTART]);
 
 	D3DXCreateTextureFromFile(pDevice,
-								"data/TEXTURE/Tutorial.png",
+								"data/TEXTURE/TitleUI/FPD_TitleUI_Tutorial.png",
 								&s_apTextureMenu[MENU_TUTORIAL]);
 
 	D3DXCreateTextureFromFile(pDevice,
-								"data/TEXTURE/GameEnd.png",
+								"data/TEXTURE/TitleUI/FPD_TitleUI_GameEnd.png",
 								&s_apTextureMenu[MENU_EXIT]);
 
 	//変数の初期化
 	s_nSelectMenu = 0;
+
+	//頂点バッファの生成
+	pDevice->CreateVertexBuffer(sizeof(VERTEX_2D) * 4,
+		D3DUSAGE_WRITEONLY,
+		FVF_VERTEX_2D,
+		D3DPOOL_MANAGED,
+		&s_pVtxBuffTitle,
+		NULL);
+
+	//頂点バッファをロックし、頂点情報へのポインタを取得
+	s_pVtxBuffTitle->Lock(0, 0, (void**)&pVtx, 0);
+
+	D3DXVECTOR3 size = D3DXVECTOR3(560.0f, 96.0f, 0.0f);
+	D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 150.0f, 0.0f);
+
+	//頂点座標の設定
+	pVtx[0].pos = D3DXVECTOR3(pos.x - size.x, pos.y - size.y, 0.0f);
+	pVtx[1].pos = D3DXVECTOR3(pos.x + size.x, pos.y - size.y, 0.0f);
+	pVtx[2].pos = D3DXVECTOR3(pos.x - size.x, pos.y + size.y, 0.0f);
+	pVtx[3].pos = D3DXVECTOR3(pos.x + size.x, pos.y + size.y, 0.0f);
+
+	// rhwの設定
+	pVtx[0].rhw = 1.0f;
+	pVtx[1].rhw = 1.0f;
+	pVtx[2].rhw = 1.0f;
+	pVtx[3].rhw = 1.0f;
+
+	// 頂点カラーの設定
+	pVtx[0].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	pVtx[1].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	pVtx[2].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	pVtx[3].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+
+	// テクスチャ座標の設定
+	pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
+	pVtx[1].tex = D3DXVECTOR2(1.0f, 0.0f);
+	pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);
+	pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);
+
+	// 頂点バッファをアンロックする
+	s_pVtxBuffTitle->Unlock();
+
 
 	//頂点バッファの生成
 	pDevice->CreateVertexBuffer(sizeof(VERTEX_2D) * 4,
@@ -128,7 +177,7 @@ void InitTitle(void)
 
 	for (int i = 0; i < MENU_MAX; i++)
 	{
-		menu.pTexture[i] = NULL;
+		menu.pTexture[i] = s_apTextureMenu[i];
 	}
 
 	//枠の引数の情報
@@ -239,6 +288,20 @@ void DrawTitle(void)
 
 	DrawGear();		//歯車の描画処理
 	DrawMenu();		//メニュー描画
+
+	//頂点バッファをデータストリームに設定
+	pDevice->SetStreamSource(0, s_pVtxBuffTitle, 0, sizeof(VERTEX_2D));
+
+	//頂点フォーマットの設定
+	pDevice->SetFVF(FVF_VERTEX_2D);
+
+	//テクスチャの設定
+	pDevice->SetTexture(0, s_pTextureTitle);
+
+	//チュートリアルの描画
+	pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP,		//プリミティブの種類
+							0,						//描画する最初の頂点インデックス
+							2);						//描画するプリミティブ数
 }
 
 //--------------------------------------------------

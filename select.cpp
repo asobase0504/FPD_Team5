@@ -27,10 +27,10 @@
 #define ARROW_SIZE		(25.0f)		//矢印のサイズ
 #define ARROW_POS_X		(100.0f)	//選択部分から見た矢印のX座標
 
-#define TEXTURE_TIMELIMIT	("data/TEXTURE/WORD/FPD_SelectUI_TimeLimit.png")	//制限時間のテクスチャ
-#define TEXTURE_POINT		("data/TEXTURE/WORD/FPD_SelectUI_Point.png")		//ポイント数のテクスチャ
-#define TEXTURE_SETCOUNT	("data/TEXTURE/WORD/FPD_SelectUI_SetCount.png")		//セット数のテクスチャ
-#define TEXTURE_ARROW		("data/TEXTURE/WORD/FPD_SelectUI_Arrow.png")		//矢印のテクスチャ
+#define TEXTURE_TIMELIMIT	("data/TEXTURE/WORD/FPD_SelectUI_TimeLimit_Re.png")	//制限時間のテクスチャ
+#define TEXTURE_POINT		("data/TEXTURE/WORD/FPD_SelectUI_Point_Re.png")		//ポイント数のテクスチャ
+#define TEXTURE_SETCOUNT	("data/TEXTURE/WORD/FPD_SelectUI_SetCount_Re.png")		//セット数のテクスチャ
+#define TEXTURE_ARROW		("data/TEXTURE/WORD/FPD_SelectUI_Arrow_Re.png")		//矢印のテクスチャ
 
 //***********************************
 //スタティック変数

@@ -54,19 +54,19 @@ void InitOption(void)
 								&s_pTexture);
 
 	D3DXCreateTextureFromFile(pDevice,
-								"data/TEXTURE/OptionUI/HGPñæí©E/FPD_OptionUI_TimenLimit_HGPmintyou.png",
+								"data/TEXTURE/WORD/Option/FPD_OptionUI_TimenLimit_HGPmintyou.png",
 								&s_apTextureMenu[0]);
 
 	D3DXCreateTextureFromFile(pDevice,
-								"data/TEXTURE/OptionUI/HGPñæí©E/FPD_OptionUI_Point_HGPmintyou.png",
+								"data/TEXTURE/WORD/Option/FPD_OptionUI_Point_HGPmintyou.png",
 								&s_apTextureMenu[1]);
 
 	D3DXCreateTextureFromFile(pDevice,
-								"data/TEXTURE/OptionUI/HGPñæí©E/FPD_OptionUI_SetCount_HGPmintyou.png",
+								"data/TEXTURE/WORD/Option/FPD_OptionUI_SetCount_HGPmintyou.png",
 								&s_apTextureMenu[2]);
 
 	D3DXCreateTextureFromFile(pDevice,
-								"data/TEXTURE/É^ÉCÉgÉãÇ÷ñﬂÇÈ",
+								"data/TEXTURE/WORD/Option/FPD_OptionUI_BattleStart_HGPmintyou.png",
 								&s_apTextureMenu[3]);
 
 	//ïœêîÇÃèâä˙âª
