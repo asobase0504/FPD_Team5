@@ -143,6 +143,21 @@ void UpdateDisk(void)
 				}
 				break;
 
+			case DISK_TYPE_JUMP:
+
+				if (g_aDisk[nCntDisk].fHeight > 0.0f)
+				{
+					g_aDisk[nCntDisk].fHeight += g_aDisk[nCntDisk].fVerticalSpeed;
+					g_aDisk[nCntDisk].fVerticalSpeed -= 0.05f;
+
+					if (g_aDisk[nCntDisk].fHeight <= 0.0f)
+					{
+						g_aDisk[nCntDisk].move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+						g_aDisk[nCntDisk].acc = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+					}
+				}
+				break;
+
 			case DISK_TYPE_BLOCKED:
 
 				g_aDisk[nCntDisk].fHeight += g_aDisk[nCntDisk].fVerticalSpeed;
@@ -298,6 +313,7 @@ void SetDisk(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 acc, DISK_TYPE type,
 			pVtx[(nCntDisk * 4) + 2].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 			pVtx[(nCntDisk * 4) + 3].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 
+			int a = 0;
 			switch (type)
 			{
 			default:
@@ -323,11 +339,12 @@ void SetDisk(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 acc, DISK_TYPE type,
 			case DISK_TYPE_JUMP:
 
 				g_aDisk[nCntDisk].fHeight = JUMP_MAX_HEIGHT;
-				g_aDisk[nCntDisk].fVerticalSpeed = JUMP_MAX_HEIGHT / JUMP_ATTACK_TIME;
+				g_aDisk[nCntDisk].fVerticalSpeed = -JUMP_MAX_HEIGHT / JUMP_ATTACK_TIME;
 				g_aDisk[nCntDisk].bBounce = false;
 
 				g_aDisk[nCntDisk].move = SetJumpAttackSpeed(g_aDisk[nCntDisk].pos);
 
+				SetLandingMark(g_aDisk[nCntDisk].pos, g_aDisk[nCntDisk].move, g_aDisk[nCntDisk].fHeight, g_aDisk[nCntDisk].fVerticalSpeed, GRAVITY_ACCELERATION_LOB, g_aDisk[nCntDisk].fSize);
 				break;
 
 			case DISK_TYPE_BLOCKED:
@@ -891,13 +908,13 @@ D3DXVECTOR3 SetJumpAttackSpeed(D3DXVECTOR3 pos)
 
 	if (nPlayer == 0)
 	{//プレイヤー１だったら
-		endPos.x = pArea2->min.x + 50.0f + (pPlayer->fThrowPower * 5.0f);			//目的の位置のX座標を設定する
+		endPos.x = pArea2->min.x + 200.0f + (pPlayer->fThrowPower * 5.0f);			//目的の位置のX座標を設定する
 		endPos.y = pos.y;															//目的の位置のY座標を設定する
 		endPos.z = 0.0f;															//目的の位置のZ座標を0にする
 	}
 	else
 	{//プレイヤー２だったら
-		endPos.x = pArea1->max.x - 50.0f - (pPlayer->fThrowPower * 5.0f);			//目的の位置のX座標を設定する
+		endPos.x = pArea1->max.x - 200.0f - (pPlayer->fThrowPower * 5.0f);			//目的の位置のX座標を設定する
 		endPos.y = pos.y;															//目的の位置のY座標を設定する
 		endPos.z = 0.0f;															//目的の位置のZ座標を0にする
 	}																				
