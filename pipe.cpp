@@ -115,7 +115,7 @@ void UpdatePipe(void)
 
 			if (g_aPipe[nCntPipe].nType == PIPE_TYPE_VERTICAL)
 			{
-				g_aPipe[nCntPipe].pos.y = 30.0f * sin((g_aPipe[nCntPipe].nCntMove + g_aPipe[nCntPipe].pos.x) * 0.03f) + 735.0f;
+				g_aPipe[nCntPipe].pos.y = 30.0f * sin((g_aPipe[nCntPipe].nCntMove + g_aPipe[nCntPipe].pos.x) * 0.03f) + 755.0f;
 			}
 			else
 			{
