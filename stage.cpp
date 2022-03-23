@@ -3,7 +3,7 @@
 // ステージ処理
 // Author Tanimoto_Kosuke
 //
-// Update 22/03/22
+// Update 22/03/23
 // 
 //=========================================
 //------------------------------------
@@ -17,8 +17,8 @@
 #include "shadow.h"
 #include "pop.h"
 #include "game.h"
-#include "referee.h"
 #include "drum.h"
+#include "score.h"
 
 //------------------------------------
 // スタティック変数
@@ -42,7 +42,7 @@ void InitStage(void)
 	D3DXCreateTextureFromFile
 	(
 		pDevice,
-		"data\\TEXTURE\\stage\\Map1.png",	//テクスチャのファイル名
+		"data\\TEXTURE\\stage\\Map06.png",	//テクスチャのファイル名
 		&s_pTextureStage[STAGE_TYPE_FRONT]
 	);
 
@@ -50,7 +50,7 @@ void InitStage(void)
 	D3DXCreateTextureFromFile
 	(
 		pDevice,
-		"data\\TEXTURE\\stage\\Map1.png",	//テクスチャのファイル名
+		"data\\TEXTURE\\stage\\Map06.png",	//テクスチャのファイル名
 		&s_pTextureStage[STAGE_TYPE_BACK]
 	);
 
@@ -62,6 +62,14 @@ void InitStage(void)
 		&s_pTextureStage[STAGE_TYPE_NET]
 	);
 
+	//テクスチャーの読み込み
+	D3DXCreateTextureFromFile
+	(
+		pDevice,
+		"data\\TEXTURE\\stage\\wall.png",	//テクスチャのファイル名
+		&s_pTextureStage[STAGE_TYPE_WALL]
+	);
+
 	//p1のステージ長さ
 	s_p1.min = D3DXVECTOR3(MIN_WIDTH, MIN_HEIGHT, 0.0f);
 	s_p1.max = D3DXVECTOR3((SCREEN_WIDTH / 2) - (STAGE_NET_WIDTH / 2), MAX_HEIGHT, 0.0f);
@@ -70,24 +78,33 @@ void InitStage(void)
 	s_p2.min = D3DXVECTOR3((SCREEN_WIDTH / 2) + (STAGE_NET_WIDTH / 2), MIN_HEIGHT, 0.0f);
 	s_p2.max = D3DXVECTOR3(MAX_WIDTH, MAX_HEIGHT, 0.0f);
 
-	//構造体の初期化処理
+	//ステージ(前側)
 	s_aStage[0].pos = D3DXVECTOR3(SCREEN_WIDTH / 2, (SCREEN_HEIGHT / 2) + (STAGE_HEIGHT_DOWN / 2), 0.3f);
 	s_aStage[0].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	s_aStage[0].fAngle = atan2f(STAGE_WIDTH, STAGE_HEIGHT);
 	s_aStage[0].fLength = sqrtf((STAGE_WIDTH * STAGE_WIDTH) + (STAGE_HEIGHT * STAGE_HEIGHT)) / 2.0f;
 	s_aStage[0].type = STAGE_TYPE_FRONT;
 
+	//ステージ(後ろ側)
 	s_aStage[1].pos = D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.4f);
 	s_aStage[1].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	s_aStage[1].fAngle = atan2f(SCREEN_WIDTH, SCREEN_HEIGHT);
 	s_aStage[1].fLength = sqrtf((SCREEN_WIDTH * SCREEN_WIDTH) + (SCREEN_HEIGHT * SCREEN_HEIGHT)) / 2.0f;
 	s_aStage[1].type = STAGE_TYPE_BACK;
 
+	//中央ネット
 	s_aStage[2].pos = D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 + (STAGE_HEIGHT_DOWN / 2), 0.1f);
 	s_aStage[2].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	s_aStage[2].fAngle = atan2f(STAGE_NET_WIDTH, STAGE_NET_HEIGHT);
 	s_aStage[2].fLength = sqrtf((STAGE_NET_WIDTH * STAGE_NET_WIDTH) + (STAGE_NET_HEIGHT * STAGE_NET_HEIGHT)) / 2.0f;
 	s_aStage[2].type = STAGE_TYPE_NET;
+
+	//壁(上側)
+	s_aStage[3].pos = D3DXVECTOR3(SCREEN_WIDTH / 2, MIN_HEIGHT - 20, 0.0f);
+	s_aStage[3].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	s_aStage[3].fAngle = atan2f(STAGE_WALL_WIDTH, STAGE_WALL_HEIGHT);
+	s_aStage[3].fLength = sqrtf((STAGE_WALL_WIDTH * STAGE_WALL_WIDTH) + (STAGE_WALL_HEIGHT * STAGE_WALL_HEIGHT)) / 2.0f;
+	s_aStage[3].type = STAGE_TYPE_WALL;
 	
 	//頂点バッファの生成
 	pDevice->CreateVertexBuffer
@@ -150,11 +167,9 @@ void InitStage(void)
 	InitGoal();
 	InitDrum();
 	InitWall();			// 壁
-	InitReferee();		// レフェリー
 
-	SetWall(D3DXVECTOR3(SCREEN_WIDTH / 2, MIN_HEIGHT, 0.0f), STAGE_WIDTH, 10.0f, 0.0f);		//壁(上側)
+	SetWall(D3DXVECTOR3(SCREEN_WIDTH / 2, MIN_HEIGHT, 0.0f), STAGE_WIDTH, 10.0f, 0.0f);	//壁(上側)
 	SetWall(D3DXVECTOR3(SCREEN_WIDTH / 2, MAX_HEIGHT, 0.0f), STAGE_WIDTH, 10.0f, D3DX_PI);	//壁(下側)
-
 }
 
 //=========================================
@@ -181,7 +196,6 @@ void UninitStage(void)
 	UninitGoal();
 	UninitDrum();
 	UninitWall();			// 壁
-	UninitReferee();		// レフェリー
 }
 
 //=========================================
@@ -246,6 +260,15 @@ void UpdateStage(void)
 		{
 			SetPop(D3DXVECTOR3(pDisk->pos.x, pDisk->pos.y - FELL_POP_HEIGHT, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false, POP_TYPE_FELL, 6);
 			*GetResetScore() = true;
+
+			if (pDisk->pos.x >= SCREEN_WIDTH / 2)
+			{
+				AddScore(2, 0);
+			}
+			else
+			{
+				AddScore(2, 1);
+			}
 		}
 
 		DestroyDisk();
@@ -254,7 +277,6 @@ void UpdateStage(void)
 	UpdateGoal();
 	UpdateDrum();
 	UpdateWall();			// 壁
-	UpdateReferee();		// レフェリー
 }
 
 //=========================================
@@ -297,8 +319,6 @@ void DrawStage()
 
 	DrawGoal();
 	DrawDrum();
-	DrawWall();			// 壁
-	DrawReferee();		// レフェリー
 }
 
 //============================================================================
