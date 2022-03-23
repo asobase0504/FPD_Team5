@@ -15,7 +15,7 @@
 //====================================
 // マクロ定義
 //====================================
-#define MAX_EFFECT	(2400)		// エフェクトの最大数
+#define MAX_EFFECT	(4800)		// エフェクトの最大数
 
 //====================================
 // グローバル変数
@@ -49,6 +49,38 @@ void InitEffect(void)
 	D3DXCreateTextureFromFile(pDevice,
 		"data\\TEXTURE\\Effect\\ImpactEffect.png",
 		&s_pTexture[EFFECT_TYPE_WALL_IMPACT]);
+
+	D3DXCreateTextureFromFile(pDevice,
+		"data\\TEXTURE\\Effect\\effect105.png",
+		&s_pTexture[EFFECT_TYPE_TRAIL]);
+
+	D3DXCreateTextureFromFile(pDevice,
+		"data\\TEXTURE\\Effect\\effect105.png",
+		&s_pTexture[EFFECT_TYPE_POINT_SMOKE_RED]);
+
+	D3DXCreateTextureFromFile(pDevice,
+		"data\\TEXTURE\\Effect\\effect105.png",
+		&s_pTexture[EFFECT_TYPE_POINT_SMOKE_BLUE]);
+
+	D3DXCreateTextureFromFile(pDevice,
+		"data\\TEXTURE\\Effect\\effect105.png",
+		&s_pTexture[EFFECT_TYPE_SPECIAL_GENERAL]);
+
+	D3DXCreateTextureFromFile(pDevice,
+		"data\\TEXTURE\\Effect\\effect105.png",
+		&s_pTexture[EFFECT_TYPE_SPECIAL_TRAIL0]);
+
+	D3DXCreateTextureFromFile(pDevice,
+		"data\\TEXTURE\\SilverGear.png",
+		&s_pTexture[EFFECT_TYPE_SPECIAL_TRAIL2]);
+
+	D3DXCreateTextureFromFile(pDevice,
+		"data\\TEXTURE\\Effect\\effect105.png",
+		&s_pTexture[EFFECT_TYPE_SPECIAL_TRAIL3]);
+
+	D3DXCreateTextureFromFile(pDevice,
+		"data\\TEXTURE\\Effect\\effect105.png",
+		&s_pTexture[EFFECT_TYPE_SPECIAL_TRAIL4]);
 
 	// 頂点バッファの生成
 	pDevice->CreateVertexBuffer(sizeof(VERTEX_2D) * 4 * MAX_EFFECT,
@@ -268,9 +300,6 @@ void SetEffect(D3DXVECTOR3 pos, float rot, EFFECT_TYPE Type)
 		pEffect->type = Type;
 		pEffect->bUse = true;
 
-		pVtx[(nCntEffect * 4) + 2].tex = D3DXVECTOR2(0.0f, 1.0f);
-		pVtx[(nCntEffect * 4) + 3].tex = D3DXVECTOR2(1.0f, 1.0f);
-
 		switch (pEffect->type)
 		{
 		case EFFECT_TYPE_SLIDING_IMPACT_1:
@@ -319,6 +348,159 @@ void SetEffect(D3DXVECTOR3 pos, float rot, EFFECT_TYPE Type)
 			{
 				pEffect->rot = rot - D3DX_PI * 1.25f;
 			}
+
+			break;
+
+		case EFFECT_TYPE_TRAIL:
+
+			pEffect->pos.x += (rand() / (float)RAND_MAX) * (10.0f - -10.0f) + -10.0f;
+			pEffect->pos.y += (rand() / (float)RAND_MAX) * (10.0f - -10.0f) + -10.0f;
+			pEffect->move = D3DXVECTOR3((pos.x - pEffect->pos.x) * 0.05f * ((rand() % 3) - 1), (pos.y - pEffect->pos.y) * 0.05f * ((rand() % 3) - 1), 0.0f);
+			pEffect->fSize = D3DXVECTOR3(20.0f, 20.0f, 0.0f);
+			pEffect->fDeltaSize = D3DXVECTOR3(0.5f, 0.5f, 0.0f);
+			pEffect->col = D3DXCOLOR(0.95f, 0.75f, 0.5f, 0.3f);
+			pEffect->fDeltaCol = D3DXCOLOR(0.0f, +0.0f, +0.0f, 0.001f);
+			pEffect->nLife = 30;
+			pEffect->rot = 0.0f;
+
+			break;
+
+		case EFFECT_TYPE_POINT_SMOKE_RED:
+		{
+			float fY;
+
+			if (pos.y < SCREEN_HEIGHT * 0.5f)
+			{
+				fY = 1.0f;
+			}
+			else
+			{
+				fY = -1.0f;
+			}
+
+			pEffect->move = D3DXVECTOR3((rand() % 3) - 1.0f + ((rand() % 21) - 10.0f) * 0.1f, fY * ((rand() % 7) + 1), 0.0f);
+			pEffect->fSize = D3DXVECTOR3(30.0f, 30.0f, 0.0f);
+			pEffect->fDeltaSize = D3DXVECTOR3(0.5f, 0.5f, 0.0f);
+			pEffect->col = D3DXCOLOR(1.0f, 0.3f, 0.13f, 0.25f);
+			pEffect->fDeltaCol = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.001f);
+			pEffect->nLife = 60;
+			pEffect->rot = 0.0f;
+		}
+			break;
+
+		case EFFECT_TYPE_POINT_SMOKE_BLUE:
+		{
+			float fYb;
+
+			if (pos.y < SCREEN_HEIGHT * 0.5f)
+			{
+				fYb = 1.0f;
+			}
+			else
+			{
+				fYb = -1.0f;
+			}
+
+			pEffect->move = D3DXVECTOR3((rand() % 3) - 1.0f + ((rand() % 21) - 10.0f) * 0.1f, fYb * ((rand() % 7) + 1), 0.0f);
+			pEffect->fSize = D3DXVECTOR3(30.0f, 30.0f, 0.0f);
+			pEffect->fDeltaSize = D3DXVECTOR3(0.5f, 0.5f, 0.0f);
+			pEffect->col = D3DXCOLOR(0.13f, 0.3f, 1.0f, 0.25f);
+			pEffect->fDeltaCol = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.001f);
+			pEffect->nLife = 30;
+			pEffect->rot = 0.0f;
+		}
+			break;
+
+		case EFFECT_TYPE_SPECIAL_GENERAL:
+
+		{
+			pEffect->move = D3DXVECTOR3((rand() % 3) - 1.0f + ((rand() % 21) - 10.0f) * 0.1f, (rand() % 3) - 1.0f + ((rand() % 21) - 10.0f) * 0.1f, 0.0f);
+			pEffect->fSize = D3DXVECTOR3(20.0f, 20.0f, 0.0f);
+			pEffect->fDeltaSize = D3DXVECTOR3(1.0f, 1.0f, 0.0f);
+			pEffect->col = D3DXCOLOR(0.0f, 1.0f, 0.9f, 0.6f);
+			pEffect->fDeltaCol = D3DXCOLOR(0.0f, 0.0f, 0.0f, -0.001f);
+			pEffect->nLife = 30;
+			pEffect->rot = 0.0f;
+		}
+
+		break;
+
+		case EFFECT_TYPE_SPECIAL_TRAIL0:
+
+		{
+			int nY;
+
+			if (pEffect->pos.y < SCREEN_HEIGHT * 0.5f)
+			{
+				nY = 1;
+			}
+			else
+			{
+				nY = -1;
+			}
+
+			pEffect->move.x = ((rand() % 251) - 125) * 0.025f;
+			pEffect->move.y = nY * ((rand() % 101) * 0.05f);
+			pEffect->fSize = D3DXVECTOR3(15.0f, 15.0f, 0.0f);
+			pEffect->fDeltaSize = D3DXVECTOR3(0.5f, 0.5f, 0.0f);
+			pEffect->col = D3DXCOLOR(1.0f, 0.7f, 0.15f, 0.8f);
+			pEffect->fDeltaCol = D3DXCOLOR(0.0f, 0.0f, 0.0f, -0.001f);
+			pEffect->nLife = 30;
+			pEffect->rot = 0.0f;
+		}
+
+			break;
+
+		case EFFECT_TYPE_SPECIAL_TRAIL2:
+
+		{
+			pEffect->fSize = D3DXVECTOR3(90.0f, 90.0f, 0.0f);
+			pEffect->fDeltaSize = D3DXVECTOR3(0.5f, 0.5f, 0.0f);
+			pEffect->col = D3DXCOLOR(0.75f, 0.75f, 0.75f, 0.6f);
+			pEffect->fDeltaCol = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.025f);
+			pEffect->nLife = 30;
+			pEffect->rot = 0.0f;
+		}
+
+		break;
+
+		case EFFECT_TYPE_SPECIAL_TRAIL3:
+
+		{
+			int nX;
+
+			if (pos.x < SCREEN_WIDTH * 0.5f)
+			{
+				nX = 1;
+			}
+			else
+			{
+				nX = -1;
+			}
+
+			pEffect->move.x = nX * 1.0f;
+			pEffect->move.y = -4.0f;
+			pEffect->acceleration.y = 0.2;
+			pEffect->fSize = D3DXVECTOR3(25.0f, 25.0f, 0.0f);
+			pEffect->fDeltaSize = D3DXVECTOR3(0.5f, 0.5f, 0.0f);
+			pEffect->col = D3DXCOLOR(0.6f, 0.5f, 0.4f, 0.6f);
+			pEffect->fDeltaCol = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.015f);
+			pEffect->nLife = 40;
+			pEffect->rot = 0.0f;
+		}
+
+		break;
+
+		case EFFECT_TYPE_SPECIAL_TRAIL4:
+
+			pEffect->move.x = ((rand() % 251) - 125) * 0.025f;
+			pEffect->move.y = ((rand() % 251) - 125) * 0.025f;
+			pEffect->fSize = D3DXVECTOR3(30.0f, 30.0f, 0.0f);
+			pEffect->fDeltaSize = D3DXVECTOR3(0.5f, 0.5f, 0.0f);
+			pEffect->col = D3DXCOLOR(1.0f, 0.1f, 0.5f, 0.5f);
+			pEffect->fDeltaCol = D3DXCOLOR(0.0f, -0.02f, 0.02f, -0.001f);
+			pEffect->nLife = 30;
+			pEffect->rot = 0.0f;
 
 			break;
 		}

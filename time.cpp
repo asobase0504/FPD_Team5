@@ -19,7 +19,7 @@ void InitTime(void)
 
 	//テクスチャの読み込み
 	D3DXCreateTextureFromFile(pDevice,
-		"data/gotou/TEXTURE/number000.png",
+		"data/TEXTURE/number000.png",
 		&g_pTexture);
 
 	bool bTimeFlag = false;									//タイトルの移動のフラグ

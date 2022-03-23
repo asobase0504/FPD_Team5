@@ -15,8 +15,8 @@
 #define NORMAL_VERTICAL_SPEED		(0.0f)				//ディスクの普通の上下移動量
 #define NORMAL_DISK_HEIGHT			(15.0f)				//ディスクの普通高さ
 #define JUMP_MAX_HEIGHT				(260.0f)			//ジャンプした後の最大高さ
-#define JUMP_ATTACK_TIME			(30.0f)				//ジャンプ投げの時、ディスクが落ちるまでの時間
-#define GRAVITY_ACCELERATION_LOB	(-0.05f)			//重量の加速
+#define JUMP_ATTACK_TIME			(60.0f)				//ジャンプ投げの時、ディスクが落ちるまでの時間
+#define GRAVITY_ACCELERATION	(-0.1f)					//重量の加速
 #define BASE_ROTATION_SPEED			(-D3DX_PI * 0.01f)	//ベースの回転スピード
 
 //ディスクの種類

@@ -9,6 +9,8 @@
 #include"input.h"
 #include "pop.h"
 
+#include "point.h"
+
 //グローバル変数
 static LPDIRECT3DTEXTURE9 g_pTextureScore = NULL;				//テクスチャへのポインタ
 static SCORE	g_nScore[2];									//スコアの構造体
@@ -71,10 +73,10 @@ void InitScore(void)
 			pVtx[3].rhw = 1.0f;
 
 			//頂点カラーの設定
-			pVtx[0].col = D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f);
-			pVtx[1].col = D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f);
-			pVtx[2].col = D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f);
-			pVtx[3].col = D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f);
+			pVtx[0].col = D3DXCOLOR(1.0f, 1.0f, 0.5f, 1.0f);
+			pVtx[1].col = D3DXCOLOR(1.0f, 1.0f, 0.5f, 1.0f);
+			pVtx[2].col = D3DXCOLOR(1.0f, 1.0f, 0.5f, 1.0f);
+			pVtx[3].col = D3DXCOLOR(1.0f, 1.0f, 0.5f, 1.0f);
 
 			//テクスチャの座標設定
 			pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
@@ -232,6 +234,11 @@ void AddScore(int nValse, int nPlayerIdx)
 	SetPop(D3DXVECTOR3(SCREEN_WIDTH / 2 - (SCORE_POP_WIDTH), SCREEN_HEIGHT / 2, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false, POP_TYPE_SCORE, 8);
 	SetPop(D3DXVECTOR3(SCREEN_WIDTH / 2 + (SCORE_POP_WIDTH), SCREEN_HEIGHT / 2, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false, POP_TYPE_SCORE, 9);
 	SetPop(D3DXVECTOR3(SCREEN_WIDTH / 2 + (SCORE_POP_WIDTH * 2), SCREEN_HEIGHT / 2, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false, POP_TYPE_SCORE, 10);
+
+	if (nValse > 0)
+	{
+		SetPoint();
+	}
 }
 
 //スコアの取得

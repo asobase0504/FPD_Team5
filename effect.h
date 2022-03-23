@@ -18,6 +18,14 @@ typedef enum
 	EFFECT_TYPE_SLIDING_IMPACT_2,		// スライディングエフェクト2
 	EFFECT_TYPE_SLIDING_IMPACT_3,		// スライディングエフェクト3
 	EFFECT_TYPE_WALL_IMPACT,			// 壁と当たるエフェクト
+	EFFECT_TYPE_TRAIL,					//ディスクの軌跡エフェクト
+	EFFECT_TYPE_POINT_SMOKE_RED,		//赤い煙のエフェクト
+	EFFECT_TYPE_POINT_SMOKE_BLUE,		//青い煙のエフェクト
+	EFFECT_TYPE_SPECIAL_GENERAL,		//必殺技用の軌跡エフェクト
+	EFFECT_TYPE_SPECIAL_TRAIL0,			//必殺技0の軌跡エフェクト
+	EFFECT_TYPE_SPECIAL_TRAIL2,			//必殺技2の軌跡エフェクト
+	EFFECT_TYPE_SPECIAL_TRAIL3,			//必殺技3の軌跡エフェクト
+	EFFECT_TYPE_SPECIAL_TRAIL4,			//必殺技4の軌跡エフェクト
 	EFFECT_TYPE_MAX
 }EFFECT_TYPE;
 
