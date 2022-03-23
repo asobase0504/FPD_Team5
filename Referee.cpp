@@ -44,11 +44,11 @@ void InitReferee(void)
 	LPDIRECT3DDEVICE9 pDevice = GetDevice();	// デバイスへのポインタ
 
 	// テクスチャーの読み込み
-	D3DXCreateTextureFromFile(pDevice,"data\\TEXTURE\\referee\\field000.jpg",&s_pTexture);
+	D3DXCreateTextureFromFile(pDevice,"data/TEXTURE/Player/FPD_Player04.png",&s_pTexture);
 
 	// ゴールの位置
 	s_aRefree.pos = D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT - REFEREE_HEIGHT * 0.75f, 0.0f);
-	s_aRefree.rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	s_aRefree.rot = D3DXVECTOR3(0.0f, 0.0f, D3DX_PI * 0.5f);
 	s_aRefree.nor = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	s_aRefree.col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
 	s_aRefree.fAngle = atan2f(REFEREE_WIDTH, REFEREE_HEIGHT);
@@ -70,20 +70,20 @@ void InitReferee(void)
 	s_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
 	// 頂点座標の設定 = (配置位置 ± 正弦(対角線の角度 ± 向き) * 対角線の長さ)
-	pVtx[0].pos.x = s_aRefree.pos.x - sinf(s_aRefree.fAngle + s_aRefree.rot.x) * s_aRefree.fLength;
-	pVtx[0].pos.y = s_aRefree.pos.y - cosf(s_aRefree.fAngle + s_aRefree.rot.y) * s_aRefree.fLength;
+	pVtx[0].pos.x = s_aRefree.pos.x - sinf(s_aRefree.fAngle + s_aRefree.rot.z) * s_aRefree.fLength;
+	pVtx[0].pos.y = s_aRefree.pos.y - cosf(s_aRefree.fAngle + s_aRefree.rot.z) * s_aRefree.fLength;
 	pVtx[0].pos.z = s_aRefree.pos.z;
 
-	pVtx[1].pos.x = s_aRefree.pos.x + sinf(s_aRefree.fAngle - s_aRefree.rot.x) * s_aRefree.fLength;
-	pVtx[1].pos.y = s_aRefree.pos.y - cosf(s_aRefree.fAngle - s_aRefree.rot.y) * s_aRefree.fLength;
+	pVtx[1].pos.x = s_aRefree.pos.x + sinf(s_aRefree.fAngle - s_aRefree.rot.z) * s_aRefree.fLength;
+	pVtx[1].pos.y = s_aRefree.pos.y - cosf(s_aRefree.fAngle - s_aRefree.rot.z) * s_aRefree.fLength;
 	pVtx[1].pos.z = s_aRefree.pos.z;
 
-	pVtx[2].pos.x = s_aRefree.pos.x - sinf(s_aRefree.fAngle - s_aRefree.rot.x) * s_aRefree.fLength;
-	pVtx[2].pos.y = s_aRefree.pos.y + cosf(s_aRefree.fAngle - s_aRefree.rot.y) * s_aRefree.fLength;
+	pVtx[2].pos.x = s_aRefree.pos.x - sinf(s_aRefree.fAngle - s_aRefree.rot.z) * s_aRefree.fLength;
+	pVtx[2].pos.y = s_aRefree.pos.y + cosf(s_aRefree.fAngle - s_aRefree.rot.z) * s_aRefree.fLength;
 	pVtx[2].pos.z = s_aRefree.pos.z;
 
-	pVtx[3].pos.x = s_aRefree.pos.x + sinf(s_aRefree.fAngle + s_aRefree.rot.x) * s_aRefree.fLength;
-	pVtx[3].pos.y = s_aRefree.pos.y + cosf(s_aRefree.fAngle + s_aRefree.rot.y) * s_aRefree.fLength;
+	pVtx[3].pos.x = s_aRefree.pos.x + sinf(s_aRefree.fAngle + s_aRefree.rot.z) * s_aRefree.fLength;
+	pVtx[3].pos.y = s_aRefree.pos.y + cosf(s_aRefree.fAngle + s_aRefree.rot.z) * s_aRefree.fLength;
 	pVtx[3].pos.z = s_aRefree.pos.z;
 
 	// rhwの設定
@@ -142,20 +142,20 @@ void UpdateReferee(void)
 		s_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
 		// 頂点座標の設定 = (配置位置 ± 正弦(対角線の角度 ± 向き) * 対角線の長さ)
-		pVtx[0].pos.x = s_aRefree.pos.x - sinf(s_aRefree.fAngle + s_aRefree.rot.x) * s_aRefree.fLength;
-		pVtx[0].pos.y = s_aRefree.pos.y - cosf(s_aRefree.fAngle + s_aRefree.rot.y) * s_aRefree.fLength;
+		pVtx[0].pos.x = s_aRefree.pos.x - sinf(s_aRefree.fAngle + s_aRefree.rot.z) * s_aRefree.fLength;
+		pVtx[0].pos.y = s_aRefree.pos.y - cosf(s_aRefree.fAngle + s_aRefree.rot.z) * s_aRefree.fLength;
 		pVtx[0].pos.z = s_aRefree.pos.z;
 
-		pVtx[1].pos.x = s_aRefree.pos.x + sinf(s_aRefree.fAngle - s_aRefree.rot.x) * s_aRefree.fLength;
-		pVtx[1].pos.y = s_aRefree.pos.y - cosf(s_aRefree.fAngle - s_aRefree.rot.y) * s_aRefree.fLength;
+		pVtx[1].pos.x = s_aRefree.pos.x + sinf(s_aRefree.fAngle - s_aRefree.rot.z) * s_aRefree.fLength;
+		pVtx[1].pos.y = s_aRefree.pos.y - cosf(s_aRefree.fAngle - s_aRefree.rot.z) * s_aRefree.fLength;
 		pVtx[1].pos.z = s_aRefree.pos.z;
 
-		pVtx[2].pos.x = s_aRefree.pos.x - sinf(s_aRefree.fAngle - s_aRefree.rot.x) * s_aRefree.fLength;
-		pVtx[2].pos.y = s_aRefree.pos.y + cosf(s_aRefree.fAngle - s_aRefree.rot.y) * s_aRefree.fLength;
+		pVtx[2].pos.x = s_aRefree.pos.x - sinf(s_aRefree.fAngle - s_aRefree.rot.z) * s_aRefree.fLength;
+		pVtx[2].pos.y = s_aRefree.pos.y + cosf(s_aRefree.fAngle - s_aRefree.rot.z) * s_aRefree.fLength;
 		pVtx[2].pos.z = s_aRefree.pos.z;
 
-		pVtx[3].pos.x = s_aRefree.pos.x + sinf(s_aRefree.fAngle + s_aRefree.rot.x) * s_aRefree.fLength;
-		pVtx[3].pos.y = s_aRefree.pos.y + cosf(s_aRefree.fAngle + s_aRefree.rot.y) * s_aRefree.fLength;
+		pVtx[3].pos.x = s_aRefree.pos.x + sinf(s_aRefree.fAngle + s_aRefree.rot.z) * s_aRefree.fLength;
+		pVtx[3].pos.y = s_aRefree.pos.y + cosf(s_aRefree.fAngle + s_aRefree.rot.z) * s_aRefree.fLength;
 		pVtx[3].pos.z = s_aRefree.pos.z;
 
 		// 頂点バッファをアンロックする

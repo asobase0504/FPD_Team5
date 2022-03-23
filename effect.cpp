@@ -365,9 +365,9 @@ void SetEffect(D3DXVECTOR3 pos, float rot, EFFECT_TYPE Type)
 			pEffect->move = D3DXVECTOR3((rand() % 3) - 1.0f + ((rand() % 21) - 10.0f) * 0.1f, fY * ((rand() % 7) + 1), 0.0f);
 			pEffect->fSize = D3DXVECTOR3(30.0f, 30.0f, 0.0f);
 			pEffect->fDeltaSize = D3DXVECTOR3(0.5f, 0.5f, 0.0f);
-			pEffect->col = D3DXCOLOR(1.0f, 0.3f, 0.13f, 0.15f);
+			pEffect->col = D3DXCOLOR(1.0f, 0.3f, 0.13f, 0.25f);
 			pEffect->fDeltaCol = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.001f);
-			pEffect->nLife = 30;
+			pEffect->nLife = 60;
 			pEffect->rot = 0.0f;
 
 			break;
@@ -388,7 +388,7 @@ void SetEffect(D3DXVECTOR3 pos, float rot, EFFECT_TYPE Type)
 			pEffect->move = D3DXVECTOR3((rand() % 3) - 1.0f + ((rand() % 21) - 10.0f) * 0.1f, fYb * ((rand() % 7) + 1), 0.0f);
 			pEffect->fSize = D3DXVECTOR3(30.0f, 30.0f, 0.0f);
 			pEffect->fDeltaSize = D3DXVECTOR3(0.5f, 0.5f, 0.0f);
-			pEffect->col = D3DXCOLOR(0.13f, 0.3f, 1.0f, 0.15f);
+			pEffect->col = D3DXCOLOR(0.13f, 0.3f, 1.0f, 0.25f);
 			pEffect->fDeltaCol = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.001f);
 			pEffect->nLife = 30;
 			pEffect->rot = 0.0f;

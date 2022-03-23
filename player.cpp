@@ -103,18 +103,6 @@ void UpdatePlayer(void)
 {
 	Player *pPlayer = s_player;
 
-	for (int nCntEffect = 0; nCntEffect < 10; nCntEffect++)
-	{
-		SetEffect(D3DXVECTOR3(300.0f, 150.0f, 0.0f), 0.0f, EFFECT_TYPE_POINT_SMOKE_RED);
-		SetEffect(D3DXVECTOR3(300.0f, SCREEN_HEIGHT - 100.0f, 0.0f), 0.0f, EFFECT_TYPE_POINT_SMOKE_RED);
-	}
-
-	for (int nCntEffect = 0; nCntEffect < 10; nCntEffect++)
-	{
-		SetEffect(D3DXVECTOR3(SCREEN_WIDTH - 300.0f, 150.0f, 0.0f), 0.0f, EFFECT_TYPE_POINT_SMOKE_BLUE);
-		SetEffect(D3DXVECTOR3(SCREEN_WIDTH - 300.0f, SCREEN_HEIGHT - 100.0f, 0.0f), 0.0f, EFFECT_TYPE_POINT_SMOKE_BLUE);
-	}
-
 	for (int nIdxPlayer = 0; nIdxPlayer < NUM_PLAYER; nIdxPlayer++, pPlayer++)
 	{
 		pPlayer->pos += pPlayer->move;
@@ -127,8 +115,7 @@ void UpdatePlayer(void)
 			if (pPlayer->bHaveDisk)
 			{ //ディスクを所持してる場合
 
-				// 移動量を無くす。
-				pPlayer->move = ZERO_VECTOR;
+				pPlayer->move -= pPlayer->move * pPlayer->fAttenuationSlidingSpead;	// 移動量の減衰
 
 				// 投げる
 				ThrowPlayer(nIdxPlayer);
@@ -402,7 +389,6 @@ void ThrowPlayer(int nIdxPlayer)
 			}
 			else if (GetKeyboardTrigger(DIK_SPACE))
 			{
-				move = inputVec * pPlayer->fThrowPower * 100.0f;
 				ThrowDisk(pPlayer->pos, move, ZERO_VECTOR, DISK_TYPE_LOB, nIdxPlayer);
 			}
 			break;
@@ -463,6 +449,7 @@ void CatchDiscPlayer(int nIdxPlayer)
 		// 床で取得
 		if ((pDisk->type != DISK_TYPE_LOB || (pDisk->type == DISK_TYPE_LOB && pDisk->fHeight <= 0.0f)) && pPlayer->jumpstate == JUMP_NONE)
 		{
+			pPlayer->move += D3DXVECTOR3(pDisk->move.x, -pDisk->move.y, pDisk->move.z);
 			DestroyDisk();	// ディスクの破棄
 			pPlayer->bHaveDisk = true;
 			pPlayer->fThrowPower = pPlayer->fMaxThrowPower;
@@ -589,10 +576,20 @@ void SetPlayer(const D3DXVECTOR3& pos, PLAYERTYPE type)
 		pVtx[3].rhw = 1.0f;
 
 		// テクスチャ座標の設定
-		pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
-		pVtx[1].tex = D3DXVECTOR2(1.0f, 0.0f);
-		pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);
-		pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);
+		if (i == 0)
+		{
+			pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
+			pVtx[1].tex = D3DXVECTOR2(1.0f, 0.0f);
+			pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);
+			pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);
+		}
+		else
+		{
+			pVtx[0].tex = D3DXVECTOR2(1.0f, 0.0f);
+			pVtx[1].tex = D3DXVECTOR2(0.0f, 0.0f);
+			pVtx[2].tex = D3DXVECTOR2(1.0f, 1.0f);
+			pVtx[3].tex = D3DXVECTOR2(0.0f, 1.0f);
+		}
 
 		// 頂点バッファをアンロックする
 		pPlayer->pVtxBuff->Unlock();
