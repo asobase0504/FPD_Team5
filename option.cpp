@@ -54,15 +54,15 @@ void InitOption(void)
 								&s_pTexture);
 
 	D3DXCreateTextureFromFile(pDevice,
-								"data/TEXTURE/タイマー",
+								"data/TEXTURE/WORD/FPD_OptionUI_TimeLimit.png",
 								&s_apTextureMenu[0]);
 
 	D3DXCreateTextureFromFile(pDevice,
-								"data/TEXTURE/ポイント数",
+								"data/TEXTURE/WORD/FPD_OptionUI_Point.png",
 								&s_apTextureMenu[1]);
 
 	D3DXCreateTextureFromFile(pDevice,
-								"data/TEXTURE/セット数",
+								"data/TEXTURE/WORD/FPD_OptionUI_SetCount.png",
 								&s_apTextureMenu[2]);
 
 	D3DXCreateTextureFromFile(pDevice,
@@ -156,10 +156,11 @@ void InitOption(void)
 	SetGear(D3DXVECTOR3(1250.0f, 700.0f, 0.0f), 300.0f, D3DX_PI * 0.022f, 0);
 	SetGear(D3DXVECTOR3(1145.0f, 415.0f, 0.0f), 220.0f, D3DX_PI * 0.008f, 4);
 	SetGear(D3DXVECTOR3(165.0f, 625.0f, 0.0f), 300.0f, -D3DX_PI * 0.009f, 3);
-	SetGear(D3DXVECTOR3(60.0f, 235.0f, 0.0f), 280.0f, D3DX_PI * 0.018f, 2);
+	SetGear(D3DXVECTOR3(60.0f, 233.0f, 0.0f), 280.0f, D3DX_PI * 0.018f, 2);
 	SetGear(D3DXVECTOR3(460.0f, 340.0f, 0.0f), 150.0f, D3DX_PI * 0.015f, 0);
 	SetGear(D3DXVECTOR3(500.0f, 0.0f, 0.0f), 100.0f, -D3DX_PI * 0.03f, 4);
 	SetGear(D3DXVECTOR3(565.0f, 45.0f, 0.0f), 100.0f, D3DX_PI * 0.03f, 4);
+	SetGear(D3DXVECTOR3(260.0f, 45.0f, 0.0f), 240.0f, D3DX_PI * 0.018f, 2);
 	//===============================================================================
 }
 

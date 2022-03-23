@@ -7,6 +7,8 @@
 #include"main.h"
 #include"score.h"
 #include"input.h"
+#include "pop.h"
+
 #include "point.h"
 
 //グローバル変数
@@ -227,6 +229,7 @@ void AddScore(int nValse, int nPlayerIdx)
 		g_nScore[nScoreCnt].pVtxBuff->Unlock();
 	}
 
+	//得点時、中央にスコアポップを表示する処理
 	if (nValse > 0)
 	{
 		SetPoint();
