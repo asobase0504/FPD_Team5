@@ -2,6 +2,7 @@
 // 
 // ポイントの表示
 // Author YudaKaito
+// Author Tanimoto
 // 
 //=========================================
 //------------------------------------
@@ -52,7 +53,9 @@ void InitPoint(void)
 			&pPoint->pVtxBuff,
 			NULL);
 
-		pPoint->pos = D3DXVECTOR3(SCREEN_WIDTH * 0.5f - 400.0f + 700.0f * nCntScore, SCREEN_HEIGHT * 0.5f, 0.0f);
+		//pos.x = ((画面半分) - (長さ横 * (桁数 + 2個分))) + ((長さ横 * (表示数 + 桁数 + 1.5個分)) * 何個目)
+		pPoint->pos = D3DXVECTOR3(((SCREEN_WIDTH / 2) - (POINT_WIDTH * (DIGIT_POINT + 1.5))) + ((POINT_WIDTH * (NUM_POINT + DIGIT_POINT + 1)) * nCntScore),
+			SCREEN_HEIGHT * 0.5f, 0.0f);
 		pPoint->bUse = false;
 		s_bPointUse = false;
 		s_nUseTime = 0;
@@ -64,11 +67,11 @@ void InitPoint(void)
 
 		for (int nCntDigit = 0; nCntDigit < DIGIT_POINT; nCntDigit++ , pVtx += 4)
 		{
-
-			pVtx[0].pos = D3DXVECTOR3(pPoint->pos.x - 55.0f + nCntDigit * 115.0f, pPoint->pos.y - 60.0f, 0.0f);
-			pVtx[1].pos = D3DXVECTOR3(pPoint->pos.x + 55.0f + nCntDigit * 115.0f, pPoint->pos.y - 60.0f, 0.0f);
-			pVtx[2].pos = D3DXVECTOR3(pPoint->pos.x - 55.0f + nCntDigit * 115.0f, pPoint->pos.y + 60.0f, 0.0f);
-			pVtx[3].pos = D3DXVECTOR3(pPoint->pos.x + 55.0f + nCntDigit * 115.0f, pPoint->pos.y + 60.0f, 0.0f);
+			//pVtx.pos.x = (位置.x - 長さ横 + (何個目 * 長さ横 * 桁数))
+			pVtx[0].pos = D3DXVECTOR3(pPoint->pos.x - POINT_WIDTH + (nCntDigit * POINT_WIDTH * DIGIT_POINT), pPoint->pos.y - POINT_HEIGHT, 0.0f);
+			pVtx[1].pos = D3DXVECTOR3(pPoint->pos.x + POINT_WIDTH + (nCntDigit * POINT_WIDTH * DIGIT_POINT), pPoint->pos.y - POINT_HEIGHT, 0.0f);
+			pVtx[2].pos = D3DXVECTOR3(pPoint->pos.x - POINT_WIDTH + (nCntDigit * POINT_WIDTH * DIGIT_POINT), pPoint->pos.y + POINT_HEIGHT, 0.0f);
+			pVtx[3].pos = D3DXVECTOR3(pPoint->pos.x + POINT_WIDTH + (nCntDigit * POINT_WIDTH * DIGIT_POINT), pPoint->pos.y + POINT_HEIGHT, 0.0f);
 
 			//RHWの設定
 			pVtx[0].rhw = 1.0f;
@@ -112,6 +115,7 @@ void UpdatePoint(void)
 
 		if (s_nUseTime >= 120)
 		{
+			s_nUseTime = 0;
 			s_bPointUse = false;
 		}
 	}

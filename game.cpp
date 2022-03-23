@@ -24,6 +24,7 @@
 #include "result.h"
 #include "time.h"
 #include "ui.h"
+#include "stgfg.h"
 #include "pipe.h"
 #include "gear.h"
 
@@ -58,6 +59,7 @@ void InitGame(void)
 	InitPlayer();		// プレイヤー
 	InitUI();			// UI
 	InitStage();		// ステージ
+	InitStgFg();		// ステージ前景
 	InitLandingMark();	// ディスクの落下地点
 	InitEffect();		// エフェクト
 	InitResult();		// リザルト
@@ -93,6 +95,7 @@ void UninitGame(void)
 	UninitShadow();			// 影
 	UninitDisk();			// ディスク
 	UninitStage();			// ステージ
+	UninitStgFg();			// ステージ前景
 	UninitLandingMark();	// ディスクの落下地点
 	UninitEffect();			// エフェクト
 	UninitUI();				// UI
@@ -129,6 +132,7 @@ void UpdateGame(void)
 		}
 
 		UpdateStage();			// ステージ
+		UpdateStgFg();			// ステージ前景
 		UpdatePlayer();			// プレイヤー
 		UpdateDisk();			// ディスク
 		UpdateLandingMark();	// ディスクの落下地点
@@ -207,6 +211,7 @@ void DrawGame()
 		DrawDisk();			// ディスク
 		DrawPlayer();		// プレイヤー
 	}
+	DrawStgFg();		// ステージ前景
 
 	DrawUI();			// UI
 

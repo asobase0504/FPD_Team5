@@ -28,7 +28,7 @@ void InitWall(void)
 
 	//テクスチャの読み込み
 	D3DXCreateTextureFromFile(pDevice,
-		"data\\TEXTURE\\PlayerSpriteSheet.png",
+		"data\\TEXTURE\\stage\\wall.png",
 		&g_apTexWall);
 
 	//頂点バッファの生成

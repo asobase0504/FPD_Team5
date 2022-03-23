@@ -2,7 +2,6 @@
 //								  //
 //       ディスクのファイル		  //
 //       Author: Ricci Alex		  //
-//       Author: tanimoto		  //
 //								  //
 //================================//
 
@@ -216,7 +215,7 @@ void UpdateDisk(void)
 			}
 
 			//ゴールとの当たり判定(pos, lastPos, fWidth, fHeight)
-			ColisionGoal(&g_aDisk[nCntDisk].pos, &g_aDisk[nCntDisk].lastPos, 10.0f, 10.0f);
+			ColisionGoal(&g_aDisk[nCntDisk].pos, &g_aDisk[nCntDisk].lastPos);
 
 			g_aDisk[nCntDisk].lastPos = g_aDisk[nCntDisk].pos;							//前回の位置の更新
 
