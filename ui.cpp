@@ -11,6 +11,7 @@
 #include "score.h"
 #include "time.h"
 #include "pop.h"
+#include "point.h"
 
 //------------------------------------
 // 静的変数
@@ -37,6 +38,7 @@ void InitUI(void)
 	InitTime();			// タイム
 	InitPop();			// 得点
 	InitScoreDesign();	// スコアデザイン
+	InitPoint();		// ポイント
 }
 
 //=========================================
@@ -48,6 +50,7 @@ void UninitUI(void)
 	UninitTime();			// タイム
 	UninitPop();			// 得点
 	UninitScoreDesign();	// スコアデザイン
+	UninitPoint();			// ポイント
 }
 
 //=========================================
@@ -59,6 +62,7 @@ void UpdateUI(void)
 	UpdateTime();			// タイム
 	UpdatePop();			// 得点
 	UpdateScoreDesign();	// スコアデザイン
+	UpdatePoint();			// ポイント
 }
 
 //=========================================
@@ -71,6 +75,7 @@ void DrawUI()
 	DrawTime();				// タイム
 	DrawScore();			// スコア
 	DrawAgScoreDesign();	// スコアデザイン
+	DrawPoint();			// ポイント
 }
 
 //=========================================
