@@ -50,6 +50,10 @@ void InitEffect(void)
 		"data\\TEXTURE\\Effect\\ImpactEffect.png",
 		&s_pTexture[EFFECT_TYPE_WALL_IMPACT]);
 
+	D3DXCreateTextureFromFile(pDevice,
+		"data\\TEXTURE\\Effect\\effect105.png",
+		&s_pTexture[EFFECT_TYPE_TRAIL]);
+
 	// 頂点バッファの生成
 	pDevice->CreateVertexBuffer(sizeof(VERTEX_2D) * 4 * MAX_EFFECT,
 		D3DUSAGE_WRITEONLY,
@@ -268,9 +272,6 @@ void SetEffect(D3DXVECTOR3 pos, float rot, EFFECT_TYPE Type)
 		pEffect->type = Type;
 		pEffect->bUse = true;
 
-		pVtx[(nCntEffect * 4) + 2].tex = D3DXVECTOR2(0.0f, 1.0f);
-		pVtx[(nCntEffect * 4) + 3].tex = D3DXVECTOR2(1.0f, 1.0f);
-
 		switch (pEffect->type)
 		{
 		case EFFECT_TYPE_SLIDING_IMPACT_1:
@@ -319,6 +320,20 @@ void SetEffect(D3DXVECTOR3 pos, float rot, EFFECT_TYPE Type)
 			{
 				pEffect->rot = rot - D3DX_PI * 1.25f;
 			}
+
+			break;
+
+		case EFFECT_TYPE_TRAIL:
+
+			pEffect->pos.x += (rand() / (float)RAND_MAX) * (10.0f - -10.0f) + -10.0f;
+			pEffect->pos.y += (rand() / (float)RAND_MAX) * (10.0f - -10.0f) + -10.0f;
+			pEffect->move = D3DXVECTOR3((pos.x - pEffect->pos.x) * 0.05f * ((rand() % 3) - 1), (pos.y - pEffect->pos.y) * 0.05f * ((rand() % 3) - 1), 0.0f);
+			pEffect->fSize = D3DXVECTOR3(20.0f, 20.0f, 0.0f);
+			pEffect->fDeltaSize = D3DXVECTOR3(0.5f, 0.5f, 0.0f);
+			pEffect->col = D3DXCOLOR(0.95f, 0.75f, 0.5f, 0.3f);
+			pEffect->fDeltaCol = D3DXCOLOR(0.0f, +0.0f, +0.0f, 0.001f);
+			pEffect->nLife = 30;
+			pEffect->rot = 0.0f;
 
 			break;
 		}
