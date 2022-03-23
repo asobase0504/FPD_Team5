@@ -25,7 +25,6 @@
 //-----------------------------------------
 #define NUM_PLAYER		(2)								// プレイヤーの数
 #define PLAYER_FILE		"data/player.txt"				// プレイヤー読み込みファイル
-#define PLAYER_TEX		"data/TEXTURE/player00.png"		// プレイヤーのテクスチャ
 #define PLAYER_SIZ		(45.0f)							// プレイヤーの大きさ
 #define ZERO_VECTOR		(D3DXVECTOR3(0.0f, 0.0f, 0.0f))	// ゼロベクトル
 
@@ -391,6 +390,7 @@ void ThrowPlayer(int nIdxPlayer)
 			}
 			else if (GetKeyboardTrigger(DIK_SPACE))
 			{
+				move = inputVec * pPlayer->fThrowPower * 100.0f;
 				ThrowDisk(pPlayer->pos, move, ZERO_VECTOR, DISK_TYPE_LOB, nIdxPlayer);
 			}
 			break;
