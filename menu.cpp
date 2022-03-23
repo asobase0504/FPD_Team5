@@ -18,7 +18,7 @@
 // マクロ定義
 //--------------------------------------------------
 #define MAX_MENU					(16)		// メニューの最大数
-#define NORMAL_BLINK_SPEED			(0.01f)		// 通常時の点滅速度
+#define NORMAL_BLINK_SPEED			(0.0f)		// 通常時の点滅速度
 #define DECISION_BLINK_SPEED		(0.1f)		// 決定時の点滅速度
 #define MIN_ALPHA					(0.6f)		// α値の最小値
 
