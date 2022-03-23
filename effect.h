@@ -19,6 +19,8 @@ typedef enum
 	EFFECT_TYPE_SLIDING_IMPACT_3,		// スライディングエフェクト3
 	EFFECT_TYPE_WALL_IMPACT,			// 壁と当たるエフェクト
 	EFFECT_TYPE_TRAIL,					//ディスクの軌跡エフェクト
+	EFFECT_TYPE_TRAIL_JUMP,				//ジャンプ投げの軌跡エフェクト
+	EFFECT_TYPE_SMOKE,					//普通の煙のエフェクト
 	EFFECT_TYPE_POINT_SMOKE_RED,		//赤い煙のエフェクト
 	EFFECT_TYPE_POINT_SMOKE_BLUE,		//青い煙のエフェクト
 	EFFECT_TYPE_SPECIAL_GENERAL,		//必殺技用の軌跡エフェクト

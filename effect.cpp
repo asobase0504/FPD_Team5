@@ -56,6 +56,14 @@ void InitEffect(void)
 
 	D3DXCreateTextureFromFile(pDevice,
 		"data\\TEXTURE\\Effect\\effect105.png",
+		&s_pTexture[EFFECT_TYPE_TRAIL_JUMP]);
+
+	D3DXCreateTextureFromFile(pDevice,
+		"data\\TEXTURE\\Effect\\effect105.png",
+		&s_pTexture[EFFECT_TYPE_SMOKE]);
+
+	D3DXCreateTextureFromFile(pDevice,
+		"data\\TEXTURE\\Effect\\effect105.png",
 		&s_pTexture[EFFECT_TYPE_POINT_SMOKE_RED]);
 
 	D3DXCreateTextureFromFile(pDevice,
@@ -364,6 +372,43 @@ void SetEffect(D3DXVECTOR3 pos, float rot, EFFECT_TYPE Type)
 			pEffect->rot = 0.0f;
 
 			break;
+
+		case EFFECT_TYPE_TRAIL_JUMP:
+
+		{
+			pEffect->fSize = D3DXVECTOR3(60.0f, 60.0f, 0.0f);
+			pEffect->fDeltaSize = D3DXVECTOR3(0.5f, 0.5f, 0.0f);
+			pEffect->col = D3DXCOLOR(0.75f, 0.75f, 0.75f, 0.6f);
+			pEffect->fDeltaCol = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.025f);
+			pEffect->nLife = 30;
+			pEffect->rot = 0.0f;
+		}
+
+			break;
+
+		case EFFECT_TYPE_SMOKE:
+		{
+			int nX;
+
+			if (pos.x > SCREEN_WIDTH * 0.5f)
+			{
+				nX = 1;
+			}
+			else
+			{
+				nX = -1;
+			}
+
+			pEffect->pos.y -= (rand() % 501) * 0.03f;
+			pEffect->move = D3DXVECTOR3(((rand() % 101) + 50) * nX * 0.0067f * 3.5f, ((rand() % 201)) * -0.005f, 0.0f);
+			pEffect->fSize = D3DXVECTOR3(10.0f, 10.0f, 0.0f);
+			pEffect->fDeltaSize = D3DXVECTOR3(0.1f, 0.1f, 0.0f);
+			pEffect->col = D3DXCOLOR(0.9f, 0.9f, 0.9f, 0.4f);
+			pEffect->fDeltaCol = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0067f);
+			pEffect->nLife = 60;
+			pEffect->rot = 0.0f;
+		}
+		break;
 
 		case EFFECT_TYPE_POINT_SMOKE_RED:
 		{
