@@ -37,7 +37,7 @@ void InitDisk(void)
 
 	//テクスチャの読み込み
 	D3DXCreateTextureFromFile(pDevice,
-		"data\\TEXTURE\\disk.png",
+		"data\\TEXTURE\\SilverGear.png",
 		&g_apTexDisk);
 
 	//頂点バッファの生成
@@ -136,6 +136,13 @@ void UpdateDisk(void)
 				}
 				break;
 
+			case DISK_TYPE_BLOCKED:
+
+				g_aDisk[nCntDisk].fHeight += g_aDisk[nCntDisk].fVerticalSpeed;
+				g_aDisk[nCntDisk].fVerticalSpeed -= 0.05f;
+
+				break;
+
 			case DISK_TYPE_SPECIAL_0:
 
 				UpdateSpecialDisk(nCntDisk);
@@ -188,19 +195,19 @@ void UpdateDisk(void)
 			g_aDisk[nCntDisk].fVertexLenght = (g_aDisk[nCntDisk].fSize * 0.5f * (1 + (g_aDisk[nCntDisk].fHeight * 0.005f)));
 
 			pVtx[(nCntDisk * 4) + 0].pos.x = g_aDisk[nCntDisk].pos.x + sinf(g_aDisk[nCntDisk].rot + g_aDisk[nCntDisk].fAngle + (D3DX_PI * 0.75f)) * g_aDisk[nCntDisk].fVertexLenght;
-			pVtx[(nCntDisk * 4) + 0].pos.y = g_aDisk[nCntDisk].pos.y + cosf(g_aDisk[nCntDisk].rot + g_aDisk[nCntDisk].fAngle + (D3DX_PI * 0.75f)) * g_aDisk[nCntDisk].fVertexLenght;
+			pVtx[(nCntDisk * 4) + 0].pos.y = g_aDisk[nCntDisk].pos.y + cosf(g_aDisk[nCntDisk].rot + g_aDisk[nCntDisk].fAngle + (D3DX_PI * 0.75f)) * g_aDisk[nCntDisk].fVertexLenght - (g_aDisk[nCntDisk].fHeight * 0.2f);
 			pVtx[(nCntDisk * 4) + 0].pos.z = 0.0f;
 
 			pVtx[(nCntDisk * 4) + 1].pos.x = g_aDisk[nCntDisk].pos.x + sinf(g_aDisk[nCntDisk].rot + g_aDisk[nCntDisk].fAngle + (D3DX_PI * 0.25f)) * g_aDisk[nCntDisk].fVertexLenght;
-			pVtx[(nCntDisk * 4) + 1].pos.y = g_aDisk[nCntDisk].pos.y + cosf(g_aDisk[nCntDisk].rot + g_aDisk[nCntDisk].fAngle + (D3DX_PI * 0.25f)) * g_aDisk[nCntDisk].fVertexLenght;
+			pVtx[(nCntDisk * 4) + 1].pos.y = g_aDisk[nCntDisk].pos.y + cosf(g_aDisk[nCntDisk].rot + g_aDisk[nCntDisk].fAngle + (D3DX_PI * 0.25f)) * g_aDisk[nCntDisk].fVertexLenght - (g_aDisk[nCntDisk].fHeight * 0.2f);
 			pVtx[(nCntDisk * 4) + 1].pos.z = 0.0f;
 
 			pVtx[(nCntDisk * 4) + 2].pos.x = g_aDisk[nCntDisk].pos.x + sinf(g_aDisk[nCntDisk].rot + g_aDisk[nCntDisk].fAngle + (-D3DX_PI * 0.75f)) * g_aDisk[nCntDisk].fVertexLenght;
-			pVtx[(nCntDisk * 4) + 2].pos.y = g_aDisk[nCntDisk].pos.y + cosf(g_aDisk[nCntDisk].rot + g_aDisk[nCntDisk].fAngle + (-D3DX_PI * 0.75f)) * g_aDisk[nCntDisk].fVertexLenght;
+			pVtx[(nCntDisk * 4) + 2].pos.y = g_aDisk[nCntDisk].pos.y + cosf(g_aDisk[nCntDisk].rot + g_aDisk[nCntDisk].fAngle + (-D3DX_PI * 0.75f)) * g_aDisk[nCntDisk].fVertexLenght - (g_aDisk[nCntDisk].fHeight * 0.2f);
 			pVtx[(nCntDisk * 4) + 2].pos.z = 0.0f;
 
 			pVtx[(nCntDisk * 4) + 3].pos.x = g_aDisk[nCntDisk].pos.x + sinf(g_aDisk[nCntDisk].rot + g_aDisk[nCntDisk].fAngle + (-D3DX_PI * 0.25f)) * g_aDisk[nCntDisk].fVertexLenght;
-			pVtx[(nCntDisk * 4) + 3].pos.y = g_aDisk[nCntDisk].pos.y + cosf(g_aDisk[nCntDisk].rot + g_aDisk[nCntDisk].fAngle + (-D3DX_PI * 0.25f)) * g_aDisk[nCntDisk].fVertexLenght;
+			pVtx[(nCntDisk * 4) + 3].pos.y = g_aDisk[nCntDisk].pos.y + cosf(g_aDisk[nCntDisk].rot + g_aDisk[nCntDisk].fAngle + (-D3DX_PI * 0.25f)) * g_aDisk[nCntDisk].fVertexLenght - (g_aDisk[nCntDisk].fHeight * 0.2f);
 			pVtx[(nCntDisk * 4) + 3].pos.z = 0.0f;
 
 			//頂点バッファをアンロックする
@@ -265,6 +272,7 @@ void SetDisk(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 acc, DISK_TYPE type,
 			g_aDisk[nCntDisk].nIdxShadow = SetShadow(pos, size * 1.25f);	//ディスクの影のインデックス
 			g_aDisk[nCntDisk].bUse = true;									//使用されている状態にする
 
+			//回転用の変数の設定
 			g_aDisk[nCntDisk].fLenght = sqrtf((g_aDisk[nCntDisk].fSize * g_aDisk[nCntDisk].fSize) + (g_aDisk[nCntDisk].fSize * g_aDisk[nCntDisk].fSize)) * 0.5f;
 			g_aDisk[nCntDisk].fAngle = atan2f(g_aDisk[nCntDisk].fSize * 0.5f, g_aDisk[nCntDisk].fSize * 0.5f);
 			g_aDisk[nCntDisk].rot = 0.0f;
@@ -312,6 +320,16 @@ void SetDisk(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 acc, DISK_TYPE type,
 				g_aDisk[nCntDisk].bBounce = false;
 
 				g_aDisk[nCntDisk].move = SetJumpAttackSpeed(g_aDisk[nCntDisk].pos);
+
+				break;
+
+			case DISK_TYPE_BLOCKED:
+
+				g_aDisk[nCntDisk].move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+				g_aDisk[nCntDisk].acc = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+				g_aDisk[nCntDisk].fHeight = JUMP_MAX_HEIGHT;
+				g_aDisk[nCntDisk].fVerticalSpeed = JUMP_MAX_HEIGHT / JUMP_ATTACK_TIME;
+				g_aDisk[nCntDisk].bBounce = false;
 
 				break;
 
@@ -384,14 +402,15 @@ void SetDisk(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 acc, DISK_TYPE type,
 				if (pos.x < SCREEN_WIDTH * 0.5f)
 				{
 					g_aDisk[nCntDisk].move.x = 7.5f;
+					g_aDisk[nCntDisk].acc.x = 0.05f;
 				}
 				else
 				{
 					g_aDisk[nCntDisk].move.x = -7.5f;
+					g_aDisk[nCntDisk].acc.x = -0.05f;
 				}
 
 				g_aDisk[nCntDisk].move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-				g_aDisk[nCntDisk].acc.x = 0.05f;
 				g_aDisk[nCntDisk].move.y = 0.0f;
 				g_aDisk[nCntDisk].fHeight = NORMAL_DISK_HEIGHT * 3.0f;
 				g_aDisk[nCntDisk].fVerticalSpeed = LOB_STARTING_SPEED * 3.0f;
@@ -888,9 +907,8 @@ D3DXVECTOR3 SetJumpAttackSpeed(D3DXVECTOR3 pos)
 //======================================
 void DestroyDisk(void)
 {
-	Shadow *pShadow = GetShadow();						//影の情報へのポインタ
-
 	g_aDisk[0].bUse = false;							//ディスクを使用されていない状態にする
-	pShadow[g_aDisk[0].nIdxShadow].bUse = false;		//影を使用されていない状態にする
-	DestroyLandingMark();
+	GetShadow()[g_aDisk[0].nIdxShadow].bUse = false;	//影を使用されていない状態にする
+	DestroyLandingMark();								// 空中の到着地点のマークを削除
+	g_aDisk[0].pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 位置の初期化
 }

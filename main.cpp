@@ -17,6 +17,7 @@
 #include "mode.h"
 #include "input.h"
 #include <stdio.h>
+#include <time.h>
 
 //-----------------------------------------
 // マクロ定義
@@ -297,6 +298,8 @@ HRESULT Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 
 	s_bExit = false;
 
+	srand((unsigned int)time(0));	// 乱数の初期化
+									
 	//キーボードの初期化処理
 	if (FAILED(InitInput(hInstance, hWnd)))
 	{
@@ -400,6 +403,14 @@ void Draw(void)
 LPDIRECT3DDEVICE9 GetDevice(void)
 {
 	return g_pD3DDevice;
+}
+
+//=========================================
+// 終了
+//=========================================
+void ExitExe(void)
+{
+	s_bExit = true;
 }
 
 //=========================================

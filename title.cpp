@@ -10,6 +10,7 @@
 #include "fade.h"
 #include "input.h"
 #include "mode.h"
+#include "gear.h"
 
 #include <assert.h>
 
@@ -57,7 +58,7 @@ void InitTitle(void)
 
 	//テクスチャの読み込み
 	D3DXCreateTextureFromFile(pDevice,
-								"data/TEXTURE/仮タイトル.png",
+								"data/TEXTURE/OldPaper.png",
 								&s_pTexture);
 
 	D3DXCreateTextureFromFile(pDevice,
@@ -139,6 +140,49 @@ void InitTitle(void)
 	//メニューのセット
 	InitMenu();
 	SetMenu(menu, frame);
+
+	InitGear();				//歯車の初期化処理
+	
+	//===============================================================================
+	//タイトル画面の歯車の設定
+	/*SetGear(D3DXVECTOR3(353.0f, 273.0f, 0.0f), 150.0f, -D3DX_PI * 0.015f, 0);
+	SetGear(D3DXVECTOR3(690.0f, 410.0f, 0.0f), 200.0f, -D3DX_PI * 0.005f, 1);
+	SetGear(D3DXVECTOR3(1020.0f, 40.0f, 0.0f), 250.0f, D3DX_PI * 0.011f, 2);
+	SetGear(D3DXVECTOR3(350.0f, 500.0f, 0.0f), 230.0f, D3DX_PI * 0.009f, 3);
+	SetGear(D3DXVECTOR3(950.0f, 460.0f, 0.0f), 280.0f, -D3DX_PI * 0.008f, 4);
+	SetGear(D3DXVECTOR3(45.0f, 0.0f, 0.0f), 280.0f, -D3DX_PI * 0.018f, 2);
+	SetGear(D3DXVECTOR3(750.0f, 730.0f, 0.0f), 300.0f, D3DX_PI * 0.008f, 1);
+	SetGear(D3DXVECTOR3(1250.0f, 700.0f, 0.0f), 300.0f, D3DX_PI * 0.022f, 0);
+	SetGear(D3DXVECTOR3(1145.0f, 415.0f, 0.0f), 220.0f, D3DX_PI * 0.008f, 4);
+	SetGear(D3DXVECTOR3(165.0f, 625.0f, 0.0f), 300.0f, -D3DX_PI * 0.009f, 3);
+	SetGear(D3DXVECTOR3(60.0f, 235.0f, 0.0f), 280.0f, D3DX_PI * 0.018f, 2);
+	SetGear(D3DXVECTOR3(460.0f, 340.0f, 0.0f), 150.0f, D3DX_PI * 0.015f, 0);
+	SetGear(D3DXVECTOR3(500.0f, 0.0f, 0.0f), 100.0f, -D3DX_PI * 0.03f, 4);
+	SetGear(D3DXVECTOR3(565.0f, 45.0f, 0.0f), 100.0f, D3DX_PI * 0.03f, 4);*/
+	//===============================================================================
+
+	SetGear(D3DXVECTOR3(1235.0f, SCREEN_HEIGHT - 597.0f, 0.0f), 280.0f, -D3DX_PI * 0.008f, 4);
+	SetGear(D3DXVECTOR3(1050.0f, SCREEN_HEIGHT - 560.0f, 0.0f), 170.0f, D3DX_PI * 0.008f, 3);
+	SetGear(D3DXVECTOR3(865.0f,  SCREEN_HEIGHT - 595.0f, 0.0f), 280.0f, -D3DX_PI * 0.008f, 4);
+	SetGear(D3DXVECTOR3(660.0f,  SCREEN_HEIGHT - 555.0f, 0.0f), 240.0f, D3DX_PI * 0.008f, 3);
+	SetGear(D3DXVECTOR3(495.0f,  SCREEN_HEIGHT - 590.0f, 0.0f), 170.0f, -D3DX_PI * 0.008f, 3);
+	SetGear(D3DXVECTOR3(348.0f,  SCREEN_HEIGHT - 618.0f, 0.0f), 200.0f, D3DX_PI * 0.008f, 4);
+	SetGear(D3DXVECTOR3(165.0f,  SCREEN_HEIGHT - 585.0f, 0.0f), 260.0f, -D3DX_PI * 0.008f, 4);
+
+	SetGear(D3DXVECTOR3(1235.0f, 597.0f, 0.0f), 280.0f, -D3DX_PI * 0.008f, 4);
+	SetGear(D3DXVECTOR3(1050.0f, 560.0f, 0.0f), 170.0f, D3DX_PI * 0.008f, 3);
+	SetGear(D3DXVECTOR3(865.0f, 595.0f, 0.0f), 280.0f, -D3DX_PI * 0.008f, 4);
+	SetGear(D3DXVECTOR3(660.0f, 555.0f, 0.0f), 240.0f, D3DX_PI * 0.008f, 3);
+	SetGear(D3DXVECTOR3(495.0f, 590.0f, 0.0f), 170.0f, -D3DX_PI * 0.008f, 3);
+	SetGear(D3DXVECTOR3(348.0f, 618.0f, 0.0f), 200.0f, D3DX_PI * 0.008f, 4);
+	SetGear(D3DXVECTOR3(165.0f, 585.0f, 0.0f), 260.0f, -D3DX_PI * 0.008f, 4);
+
+	SetGear(D3DXVECTOR3(530.0f, 359.0f, 0.0f), 320.0f, -D3DX_PI * 0.008f, 3);
+	SetGear(D3DXVECTOR3(65.0f, 280.0f, 0.0f), 170.0f, D3DX_PI * 0.008f, 4);
+	SetGear(D3DXVECTOR3(65.0f, 440.0f, 0.0f), 170.0f, D3DX_PI * 0.008f, 4);
+	SetGear(D3DXVECTOR3(170.0f, 360.0f, 0.0f), 150.0f, -D3DX_PI * 0.008f, 4);
+	
+
 }
 
 //==================================================
@@ -147,6 +191,7 @@ void InitTitle(void)
 void UninitTitle(void)
 {
 	UninitMenu();	//メニュー
+	UninitGear();	//歯車の終了処理
 
 	if (s_pTexture != NULL)
 	{//テクスチャの破棄
@@ -166,6 +211,7 @@ void UninitTitle(void)
 //==================================================
 void UpdateTitle(void)
 {
+	UpdateGear();	//歯車の更新処理
 	SelectMenu();	//メニュー選択
 	UpdateMenu();	//メニュー更新
 }
@@ -191,6 +237,7 @@ void DrawTitle(void)
 							0,						//描画する最初の頂点インデックス
 							2);						//描画するプリミティブ数
 
+	DrawGear();		//歯車の描画処理
 	DrawMenu();		//メニュー描画
 }
 
@@ -238,6 +285,8 @@ static void SelectMenu(void)
 			break;
 
 		case MENU_EXIT:		//終了
+
+			ExitExe();
 
 			break;
 

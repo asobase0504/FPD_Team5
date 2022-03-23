@@ -7,6 +7,9 @@
 #ifndef _SCORE_H_
 #define _SCORE_H_
 
+// include
+#include "main.h"
+
 //マクロ定義
 #define NUM_SCORE		(4)								//桁数
 #define MAX_CNT_SCORE	(2)								//最大カウンター数
@@ -28,6 +31,6 @@ void UpdateScore(void);
 void DrawScore(void);
 void SetScore(int nScore);//,int nPlayerIdx);
 void AddScore(int nValse,int nPlayerIdx);
-SCORE GetScore(void);
+SCORE* GetScore(void);
 
 #endif

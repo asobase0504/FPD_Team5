@@ -41,7 +41,7 @@ void InitTime(void)
 
 	for (g_Time.nCntTime = 0; g_Time.nCntTime < MAX_CNT_TIME; g_Time.nCntTime++)
 	{
-		g_Time.pos[g_Time.nCntTime] = D3DXVECTOR3(600.0f + (20.0f + (20.0f * 2) * g_Time.nCntTime), 0.0f + 60.0f, 0.0f);
+		g_Time.pos[g_Time.nCntTime] = D3DXVECTOR3(594.0f + (20.0f + (20.0f * 2) * g_Time.nCntTime), 0.0f + 60.0f, 0.0f);
 	}
 
 	//頂点バッファをロックし、頂点情報へのポインタを取得

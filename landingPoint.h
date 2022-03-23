@@ -30,5 +30,6 @@ void UpdateLandingMark(void);
 void DrawLandingMark(void);
 void SetLandingMark(D3DXVECTOR3 pos, D3DXVECTOR3 move, float fHeight, float fSpeed, float fAcc, float fSize);
 void DestroyLandingMark(void);
+LandingMark* GetLandingMark(void);
 
 #endif

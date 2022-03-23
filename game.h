@@ -14,5 +14,9 @@ void InitGame(void);	// ‰Šú‰»ˆ—
 void UninitGame(void);	// I—¹ˆ—
 void UpdateGame(void);	// XVˆ—
 void DrawGame(void);	// •`‰æˆ—
+void SetNeedTime(int nPoint);
+void SetNeedPoint(int nPoint);
+void SetNeedSet(int nPoint);
+bool* GetResetScore(void);
 
-#endif // !_COMMON_H_
+#endif // !_GAME_H_

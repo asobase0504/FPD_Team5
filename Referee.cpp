@@ -34,7 +34,7 @@ static REFEREE s_aRefree;							// レフェリーの情報
 //------------------------------------
 // プロトタイプ宣言
 //------------------------------------
-static void ThrowRefree(void);
+static void ThrowRefree(int nIdxPlayer);
 
 //=========================================
 // 初期化
@@ -134,7 +134,7 @@ void UpdateReferee(void)
 {
 	if (s_aRefree.bUse)
 	{
-		ThrowRefree();
+		ThrowRefree(0);	// 引数のプレイヤーを自在に変更
 
 		VERTEX_2D *pVtx;	// 頂点情報へのポインタ
 
@@ -166,7 +166,7 @@ void UpdateReferee(void)
 //=========================================
 // 投擲処理
 //=========================================
-void ThrowRefree(void)
+void ThrowRefree(int nIdxPlayer)
 {
 	// 投げる場合
 	if (s_aRefree.bThrow)
@@ -176,12 +176,12 @@ void ThrowRefree(void)
 		D3DXVECTOR3 posThrow = s_aRefree.pos;
 		posThrow.y -= 80.0f;
 
-		D3DXVECTOR3 move = GetPlayer()->pos - posThrow;
+		D3DXVECTOR3 move = GetPlayer()[nIdxPlayer].pos - posThrow;
 
 		D3DXVec3Normalize(&move, &move);
 
 		// ディスク投げ
-		SetDisk(posThrow, move * THROW_POWER, D3DXVECTOR3(0.0f, 0.0f, 0.0f), DISK_TYPE_NORMAL, -1, 40.0f);
+		SetDisk(posThrow, move * THROW_POWER, D3DXVECTOR3(0.0f, 0.0f, 0.0f), DISK_TYPE_NORMAL, -1, 90.0f);
 	}
 }
 
