@@ -103,18 +103,6 @@ void UpdatePlayer(void)
 {
 	Player *pPlayer = s_player;
 
-	for (int nCntEffect = 0; nCntEffect < 10; nCntEffect++)
-	{
-		SetEffect(D3DXVECTOR3(300.0f, 150.0f, 0.0f), 0.0f, EFFECT_TYPE_POINT_SMOKE_RED);
-		SetEffect(D3DXVECTOR3(300.0f, SCREEN_HEIGHT - 100.0f, 0.0f), 0.0f, EFFECT_TYPE_POINT_SMOKE_RED);
-	}
-
-	for (int nCntEffect = 0; nCntEffect < 10; nCntEffect++)
-	{
-		SetEffect(D3DXVECTOR3(SCREEN_WIDTH - 300.0f, 150.0f, 0.0f), 0.0f, EFFECT_TYPE_POINT_SMOKE_BLUE);
-		SetEffect(D3DXVECTOR3(SCREEN_WIDTH - 300.0f, SCREEN_HEIGHT - 100.0f, 0.0f), 0.0f, EFFECT_TYPE_POINT_SMOKE_BLUE);
-	}
-
 	for (int nIdxPlayer = 0; nIdxPlayer < NUM_PLAYER; nIdxPlayer++, pPlayer++)
 	{
 		pPlayer->pos += pPlayer->move;
