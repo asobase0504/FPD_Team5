@@ -36,14 +36,14 @@ void InitGoal(void)
 	D3DXCreateTextureFromFile
 	(
 		pDevice,
-		"data\\TEXTURE\\goal\\stripe.png",	//テクスチャのファイル名
+		"data\\TEXTURE\\goal\\stripe03.png",	//テクスチャのファイル名
 		&s_pTextureGoal[GOAL_TYPE_NORMAL]
 	);
 
 	D3DXCreateTextureFromFile
 	(
 		pDevice,
-		"data\\TEXTURE\\goal\\stripe5.png",	//テクスチャのファイル名
+		"data\\TEXTURE\\goal\\stripe04.png",	//テクスチャのファイル名
 		&s_pTextureGoal[GOAL_TYPE_STRIKE]
 	);
 

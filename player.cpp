@@ -477,21 +477,21 @@ void MoveLimitPlayer(int nIdxPlayer)
 
 	STAGE_LENGTH stageLength = nIdxPlayer == 0 ? *GetP1StgLng() : *GetP2StgLng();
 
-	if (stageLength.max.y - 5.0f <= pPlayer->pos.y + PLAYER_SIZ)
+	if (stageLength.max.y - 10.0f <= pPlayer->pos.y + PLAYER_SIZ)
 	{
-		pPlayer->pos.y = stageLength.max.y - PLAYER_SIZ - 5.0f;
+		pPlayer->pos.y = stageLength.max.y - PLAYER_SIZ - 10.0f;
 	}
-	if (stageLength.max.x - 5.0f <= pPlayer->pos.x + PLAYER_SIZ)
+	if (stageLength.max.x - 10.0f <= pPlayer->pos.x + PLAYER_SIZ)
 	{
-		pPlayer->pos.x = stageLength.max.x - PLAYER_SIZ - 5.0f;
+		pPlayer->pos.x = stageLength.max.x - PLAYER_SIZ - 10.0f;
 	}
-	if (stageLength.min.y + 5.0f >= pPlayer->pos.y - PLAYER_SIZ)
+	if (stageLength.min.y + 10.0f >= pPlayer->pos.y - PLAYER_SIZ)
 	{
-		pPlayer->pos.y = stageLength.min.y + PLAYER_SIZ + 5.0f;
+		pPlayer->pos.y = stageLength.min.y + PLAYER_SIZ + 10.0f;
 	}
-	if (stageLength.min.x + 5.0f >= pPlayer->pos.x - PLAYER_SIZ)
+	if (stageLength.min.x + 10.0f >= pPlayer->pos.x - PLAYER_SIZ)
 	{
-		pPlayer->pos.x = stageLength.min.x + PLAYER_SIZ + 5.0f;
+		pPlayer->pos.x = stageLength.min.x + PLAYER_SIZ + 10.0f;
 	}
 }
 

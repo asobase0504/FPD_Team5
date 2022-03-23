@@ -54,15 +54,15 @@ void InitOption(void)
 								&s_pTexture);
 
 	D3DXCreateTextureFromFile(pDevice,
-								"data/TEXTURE/WORD/FPD_OptionUI_TimeLimit.png",
+								"data/TEXTURE/OptionUI/HGP–¾’©E/FPD_OptionUI_TimenLimit_HGPmintyou.png",
 								&s_apTextureMenu[0]);
 
 	D3DXCreateTextureFromFile(pDevice,
-								"data/TEXTURE/WORD/FPD_OptionUI_Point.png",
+								"data/TEXTURE/OptionUI/HGP–¾’©E/FPD_OptionUI_Point_HGPmintyou.png",
 								&s_apTextureMenu[1]);
 
 	D3DXCreateTextureFromFile(pDevice,
-								"data/TEXTURE/WORD/FPD_OptionUI_SetCount.png",
+								"data/TEXTURE/OptionUI/HGP–¾’©E/FPD_OptionUI_SetCount_HGPmintyou.png",
 								&s_apTextureMenu[2]);
 
 	D3DXCreateTextureFromFile(pDevice,

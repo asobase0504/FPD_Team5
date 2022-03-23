@@ -35,7 +35,7 @@ void InitDrum(void)
 	D3DXCreateTextureFromFile
 	(
 		pDevice,
-		"data\\TEXTURE\\goal\\Drum.png",	//テクスチャのファイル名
+		"data\\TEXTURE\\goal\\Drum4.png",	//テクスチャのファイル名
 		&s_pTextureDrum[DRUM_TYPE_NORMAL]
 	);
 
