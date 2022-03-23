@@ -3,7 +3,7 @@
 // ゴール処理
 // Author Tanimoto_Kosuke
 //
-// Update 22/03/22
+// Update 22/03/23
 // 
 //=========================================
 //------------------------------------
@@ -144,8 +144,6 @@ void UninitPop(void)
 //=========================================
 void UpdatePop(void)
 {
-	SCORE *pScore = GetScore();
-
 	VERTEX_2D *pVtx;				//頂点情報へのポインタ
 
 	//頂点バッファをロックし、頂点情報へのポインタを取得
@@ -300,7 +298,7 @@ void PopCounter(int nIdxPop)
 			s_aPop[nIdxPop].fPopCounter++;
 		}
 	}
-	else if (s_aPop[nIdxPop].type == POP_TYPE_FELL || s_aPop[nIdxPop].type == POP_TYPE_SCORE)
+	else if (s_aPop[nIdxPop].type == POP_TYPE_FELL)
 	{
 		//ポップ時間
 		if (s_aPop[nIdxPop].fPopCounter >= 120)

@@ -230,11 +230,6 @@ void AddScore(int nValse, int nPlayerIdx)
 	}
 
 	//得点時、中央にスコアポップを表示する処理
-	SetPop(D3DXVECTOR3(SCREEN_WIDTH / 2 - (SCORE_POP_WIDTH * 2), SCREEN_HEIGHT / 2, 0.0f), D3DXVECTOR3(0.0f,0.0f,0.0f), false, POP_TYPE_SCORE, 7);
-	SetPop(D3DXVECTOR3(SCREEN_WIDTH / 2 - (SCORE_POP_WIDTH), SCREEN_HEIGHT / 2, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false, POP_TYPE_SCORE, 8);
-	SetPop(D3DXVECTOR3(SCREEN_WIDTH / 2 + (SCORE_POP_WIDTH), SCREEN_HEIGHT / 2, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false, POP_TYPE_SCORE, 9);
-	SetPop(D3DXVECTOR3(SCREEN_WIDTH / 2 + (SCORE_POP_WIDTH * 2), SCREEN_HEIGHT / 2, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false, POP_TYPE_SCORE, 10);
-
 	if (nValse > 0)
 	{
 		SetPoint();

@@ -19,7 +19,7 @@
 #define STAGE_HEIGHT			(SCREEN_HEIGHT - 250)				//ステージの縦サイズ
 #define STAGE_NET_WIDTH			(10)								//網の横サイズ
 #define STAGE_NET_HEIGHT		(SCREEN_HEIGHT - 250)				//網の縦サイズ
-#define STAGE_WALL_WIDTH		(1280)								//壁の横サイズ
+#define STAGE_WALL_WIDTH		(SCREEN_WIDTH - 20)					//壁の横サイズ
 #define STAGE_WALL_HEIGHT		(50)								//壁の縦サイズ
 #define MAX_STAGE_OBJECT		(4)									//ステージオブジェクトの最大数
 #define MAX_IMAGE_STAGE			(4)									//ステージ画像の最大数

@@ -288,7 +288,7 @@ void SetGoal(D3DXVECTOR3 pos, D3DXVECTOR3 rot, bool side, GOAL_TYPE type, int nI
 //=========================================
 // ゴールの当たり判定処理
 //=========================================
-void ColisionGoal(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pLastPos, float fWidth, float fHeight)
+void ColisionGoal(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pLastPos)
 {
 	VERTEX_2D *pVtx;			//頂点情報へのポインタ
 
