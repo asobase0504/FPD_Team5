@@ -164,11 +164,13 @@ void UpdateGame(void)
 			if (s_nPlayerSet[0] > s_nPlayerSet[1])
 			{ // P1の勝ち
 				s_nPlayerSet[0]++;	// セット数の取得
+				SetThoThrowRefreeIdx(1);	// 投げる方向の選択
 				RoundReset();
 			}
 			else if (s_nPlayerSet[0] < s_nPlayerSet[1])
 			{ // P2の勝ち
 				s_nPlayerSet[1]++;	// セット数の取得
+				SetThoThrowRefreeIdx(0);	// 投げる方向の選択
 				RoundReset();
 			}
 			else

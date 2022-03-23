@@ -34,5 +34,6 @@ void UninitReferee(void);
 void UpdateReferee(void);
 void DrawReferee(void);
 REFEREE *GetReferee(void);
+void SetThoThrowRefreeIdx(int nIdx);
 
 #endif

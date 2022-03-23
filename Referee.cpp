@@ -30,6 +30,7 @@
 static LPDIRECT3DTEXTURE9		s_pTexture = NULL;	// テクスチャへのポインタ
 static LPDIRECT3DVERTEXBUFFER9	s_pVtxBuff = NULL;	// 頂点バッファへのポインタ
 static REFEREE s_aRefree;							// レフェリーの情報
+static int s_nThrowRefreeIdx;						// 投げるプレイヤーの方向
 
 //------------------------------------
 // プロトタイプ宣言
@@ -106,6 +107,8 @@ void InitReferee(void)
 
 	// 頂点バッファをアンロックする
 	s_pVtxBuff->Unlock();
+
+	s_nThrowRefreeIdx = 0;
 }
 
 //=========================================
@@ -134,7 +137,7 @@ void UpdateReferee(void)
 {
 	if (s_aRefree.bUse)
 	{
-		ThrowRefree(0);	// 引数のプレイヤーを自在に変更
+		ThrowRefree(s_nThrowRefreeIdx);	// 引数のプレイヤーを自在に変更
 
 		VERTEX_2D *pVtx;	// 頂点情報へのポインタ
 
@@ -215,4 +218,12 @@ void DrawReferee()
 REFEREE* GetReferee(void)
 {
 	return &s_aRefree;	// ゴール情報の先頭アドレスを返す
+}
+
+//============================================================================
+// 投げる方向の取得
+//============================================================================
+void SetThoThrowRefreeIdx(int nIdx)
+{
+	s_nThrowRefreeIdx = nIdx;
 }
