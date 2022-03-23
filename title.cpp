@@ -19,7 +19,7 @@
 //**************************************************
 #define MAX_TEXTURE		(3)			//使用するテクスチャの最大数
 #define MENU_WIDTH		(400.0f)	//メニューの幅
-#define MENU_HEIGHT		(140.0f)	//メニューの高さ
+#define MENU_HEIGHT		(100.0f)	//メニューの高さ
 
 //**************************************************
 //タイトルメニューの列挙型
@@ -128,7 +128,7 @@ void InitTitle(void)
 
 	for (int i = 0; i < MENU_MAX; i++)
 	{
-		menu.pTexture[i] = s_apTextureMenu[i];
+		menu.pTexture[i] = NULL;
 	}
 
 	//枠の引数の情報
