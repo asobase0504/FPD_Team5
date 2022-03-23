@@ -153,6 +153,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="disk.cpp" />
+    <ClCompile Include="drum.cpp" />
     <ClCompile Include="effect.cpp" />
     <ClCompile Include="fade.cpp" />
     <ClCompile Include="game.cpp" />
@@ -180,6 +181,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="disk.h" />
+    <ClInclude Include="drum.h" />
     <ClInclude Include="effect.h" />
     <ClInclude Include="fade.h" />
     <ClInclude Include="game.h" />

@@ -43,7 +43,7 @@ static bool s_bCurveInput;
 static void MovePlayer(int nIdxPlayer);
 static void JumpPlayer(int nIdxPlayer);
 static void ThrowPlayer(int nIdxPlayer);
-static void ThrowDisk(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 acc, DISK_TYPE type, int nIdxPlayer, float size);
+static void ThrowDisk(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 acc, DISK_TYPE type, int nIdxPlayer);
 static void ChargePlayer(int nIdxPlayer);
 static void CatchDiscPlayer(int nIdxPlayer);
 static void MoveLimitPlayer(int nIdxPlayer);
@@ -337,7 +337,7 @@ void ThrowPlayer(int nIdxPlayer)
 	else
 	{
 		// 強制排出
-		ThrowDisk(pPlayer->pos, move, ZERO_VECTOR, DISK_TYPE_NORMAL, nIdxPlayer, 60.0f);
+		ThrowDisk(pPlayer->pos, move, ZERO_VECTOR, DISK_TYPE_NORMAL, nIdxPlayer);
 	}
 
 	if (IsJoyPadUse(nIdxPlayer))
@@ -349,22 +349,22 @@ void ThrowPlayer(int nIdxPlayer)
 			{
 				if (pPlayer->nSpecialSkillCnt <= 100)
 				{
-					ThrowDisk(pPlayer->pos, move, moveCurve, DISK_TYPE_NORMAL, nIdxPlayer, 60.0f);
+					ThrowDisk(pPlayer->pos, move, moveCurve, DISK_TYPE_NORMAL, nIdxPlayer);
 				}
 				else
 				{
-					ThrowDisk(pPlayer->pos, move, ZERO_VECTOR, DISK_TYPE_SPECIAL_0, nIdxPlayer, 60.0f);
+					ThrowDisk(pPlayer->pos, move, ZERO_VECTOR, DISK_TYPE_SPECIAL_0, nIdxPlayer);
 				}
 			}
 			else if (GetJoypadTrigger(JOYKEY_B, nIdxPlayer))
 			{
-				ThrowDisk(pPlayer->pos, move, ZERO_VECTOR, DISK_TYPE_LOB, nIdxPlayer, 60.0f);
+				ThrowDisk(pPlayer->pos, move, ZERO_VECTOR, DISK_TYPE_LOB, nIdxPlayer);
 			}
 			break;
 		case JUMP_NOW:
 			if (GetJoypadTrigger(JOYKEY_A, nIdxPlayer))
 			{
-				ThrowDisk(pPlayer->pos, move, moveCurve, DISK_TYPE_JUMP, nIdxPlayer, 60.0f);
+				ThrowDisk(pPlayer->pos, move, moveCurve, DISK_TYPE_JUMP, nIdxPlayer);
 			}
 			break;
 		case JUMP_MAX:
@@ -375,20 +375,35 @@ void ThrowPlayer(int nIdxPlayer)
 	}
 	else
 	{ // キーボード入力
-		if (GetKeyboardTrigger(DIK_RETURN))
+		switch (pPlayer->jumpstate)
 		{
-			if (pPlayer->nSpecialSkillCnt <= 100)
+		case JUMP_NONE:
+			if (GetKeyboardTrigger(DIK_RETURN))
 			{
-				ThrowDisk(pPlayer->pos, move, ZERO_VECTOR, DISK_TYPE_NORMAL, nIdxPlayer, 60.0f);
+				if (pPlayer->nSpecialSkillCnt <= 100)
+				{
+					ThrowDisk(pPlayer->pos, move, ZERO_VECTOR, DISK_TYPE_NORMAL, nIdxPlayer);
+				}
+				else
+				{
+					ThrowDisk(pPlayer->pos, move, ZERO_VECTOR, DISK_TYPE_SPECIAL_4, nIdxPlayer);
+				}
 			}
-			else
+			else if (GetKeyboardTrigger(DIK_SPACE))
 			{
-				ThrowDisk(pPlayer->pos, move, ZERO_VECTOR, DISK_TYPE_SPECIAL_4, nIdxPlayer, 60.0f);
+				ThrowDisk(pPlayer->pos, move, ZERO_VECTOR, DISK_TYPE_LOB, nIdxPlayer);
 			}
-		}
-		else if (GetKeyboardPress(DIK_SPACE))
-		{
-			ThrowDisk(pPlayer->pos, move, ZERO_VECTOR, DISK_TYPE_LOB, nIdxPlayer, 60.0f);
+			break;
+		case JUMP_NOW:
+			if (GetKeyboardTrigger(DIK_RETURN))
+			{
+				ThrowDisk(pPlayer->pos, move, moveCurve, DISK_TYPE_JUMP, nIdxPlayer);
+			}
+			break;
+		case JUMP_MAX:
+		default:
+			assert(false);
+			break;
 		}
 	}
 }
@@ -396,7 +411,7 @@ void ThrowPlayer(int nIdxPlayer)
 //=========================================
 // プレイヤーがディスクを投げる
 //=========================================
-void ThrowDisk(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 acc, DISK_TYPE type, int nIdxPlayer, float size)
+void ThrowDisk(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 acc, DISK_TYPE type, int nIdxPlayer)
 {
 	Player *pPlayer = &s_player[nIdxPlayer];
 	SetDisk(pos, move, acc, type, nIdxPlayer, 90.0f);

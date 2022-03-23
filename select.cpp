@@ -17,12 +17,15 @@
 //***********************************
 #define MAX_SELECT		(3)			//選択肢の最大数
 #define SELECT_SIZE		(35.0f)		//選択部分のサイズ
+#define SELECT_POS_X	(200.0f)	//選択肢の位置から見た選択部分のX座標
+
 #define MAX_TIMELIMIT	(5)			//制限時間の選択肢の最大数
 #define MAX_POINT		(4)			//ポイント数の選択肢の最大数
 #define MAX_SETCOUNT	(4)			//セット数の選択肢の最大数
 
 #define MAX_ARROW		(6)			//矢印の最大数
 #define ARROW_SIZE		(25.0f)		//矢印のサイズ
+#define ARROW_POS_X		(100.0f)	//選択部分から見た矢印のX座標
 
 #define TEXTURE_TIMELIMIT	("data/TEXTURE/制限時間.png")		//制限時間のテクスチャ
 #define TEXTURE_POINT		("data/TEXTURE/ポイント数.png")		//ポイント数のテクスチャ
@@ -112,7 +115,7 @@ void InitSelect(void)
 	for (int i = 0; i < MAX_SELECT; i++)
 	{
 		//メニューの位置を始点に、選択部分の位置を設定する
-		posSelect.x = (GetMenu()->Option[i].pos.x) + 200.0f;
+		posSelect.x = (GetMenu()->Option[i].pos.x) + SELECT_POS_X;
 		posSelect.y = GetMenu()->Option[i].pos.y;
 		posSelect.z = 0.0f;
 
@@ -164,15 +167,15 @@ void InitSelect(void)
 		float fPosX, fPosY;		//位置設定用
 		
 		if ((i >= 0) && (i < (MAX_ARROW / 2)))
-		{
+		{//左の縦列
 			//保存しておいた座標から、左側の矢印の位置を決める
-			fPosX = aPosArrow[i].x - 100.0f;
+			fPosX = aPosArrow[i].x - ARROW_POS_X;
 			fPosY = aPosArrow[i].y;
 		}
 		else if ((i >= (MAX_ARROW / 2)) && (i < MAX_ARROW))
-		{
+		{//右の縦列
 			//保存しておいた座標から、右側の矢印の位置を決める
-			fPosX = aPosArrow[i % MAX_SELECT].x + 100.0f;
+			fPosX = aPosArrow[i % MAX_SELECT].x + ARROW_POS_X;
 			fPosY = aPosArrow[i % MAX_SELECT].y;
 		}
 

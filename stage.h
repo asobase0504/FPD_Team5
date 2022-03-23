@@ -3,7 +3,7 @@
 // ステージ(ヘッダーファイル)
 // Author Tanimoto_Kosuke
 //
-// Update 22/03/16
+// Update 22/03/22
 // 
 //=========================================
 #ifndef _STAGE_H_
@@ -19,8 +19,8 @@
 #define STAGE_HEIGHT			(SCREEN_HEIGHT - 250)				//ステージの縦サイズ
 #define STAGE_NET_WIDTH			(10)								//網の横サイズ
 #define STAGE_NET_HEIGHT		(SCREEN_HEIGHT - 250)				//網の縦サイズ
-#define MAX_STAGE				(5)									//ステージオブジェクトの最大数
-#define MAX_IMAGE_STAGE			(4)									//ステージ画像の最大数
+#define MAX_STAGE_OBJECT		(3)									//ステージオブジェクトの最大数
+#define MAX_IMAGE_STAGE			(3)									//ステージ画像の最大数
 #define DISK_DELETE				(30)								//落ちたディスクが消える時間
 
 #define MIN_WIDTH				(80)								//横最小値
@@ -36,7 +36,6 @@ typedef enum
 	STAGE_TYPE_FRONT = 0,	//ステージ前側
 	STAGE_TYPE_BACK,		//ステージ後ろ側
 	STAGE_TYPE_NET,			//網
-	STAGE_TYPE_GOALNET,		//網(ゴール)
 	STAGE_TYPE_MAX
 }STAGE_TYPE;
 
