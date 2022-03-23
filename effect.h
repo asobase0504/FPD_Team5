@@ -18,6 +18,7 @@ typedef enum
 	EFFECT_TYPE_SLIDING_IMPACT_2,		// スライディングエフェクト2
 	EFFECT_TYPE_SLIDING_IMPACT_3,		// スライディングエフェクト3
 	EFFECT_TYPE_WALL_IMPACT,			// 壁と当たるエフェクト
+	EFFECT_TYPE_TRAIL,					//ディスクの軌跡エフェクト
 	EFFECT_TYPE_MAX
 }EFFECT_TYPE;
 

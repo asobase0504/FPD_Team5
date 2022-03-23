@@ -18,6 +18,7 @@
 #include "player.h"
 #include "input.h"
 #include "landingPoint.h"
+#include "effect.h"
 
 //====================================
 //グローバル変数
@@ -115,6 +116,12 @@ void UpdateDisk(void)
 		{
 			g_aDisk[nCntDisk].pos += g_aDisk[nCntDisk].move;				//現在位置の更新
 			g_aDisk[nCntDisk].move += g_aDisk[nCntDisk].acc;				//移動量の更新
+
+			if (g_aDisk[nCntDisk].fHeight <= 15.0f)
+			{
+				SetEffect((g_aDisk[nCntDisk].pos - g_aDisk[nCntDisk].move), 0.0f, EFFECT_TYPE_TRAIL);
+				SetEffect((g_aDisk[nCntDisk].pos - g_aDisk[nCntDisk].move), 0.0f, EFFECT_TYPE_TRAIL);
+			}
 
 			switch (g_aDisk[nCntDisk].type)
 			{
