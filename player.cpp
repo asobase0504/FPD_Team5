@@ -577,10 +577,20 @@ void SetPlayer(const D3DXVECTOR3& pos, PLAYERTYPE type)
 		pVtx[3].rhw = 1.0f;
 
 		// テクスチャ座標の設定
-		pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
-		pVtx[1].tex = D3DXVECTOR2(1.0f, 0.0f);
-		pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);
-		pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);
+		if (i == 0)
+		{
+			pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
+			pVtx[1].tex = D3DXVECTOR2(1.0f, 0.0f);
+			pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);
+			pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);
+		}
+		else
+		{
+			pVtx[0].tex = D3DXVECTOR2(1.0f, 0.0f);
+			pVtx[1].tex = D3DXVECTOR2(0.0f, 0.0f);
+			pVtx[2].tex = D3DXVECTOR2(1.0f, 1.0f);
+			pVtx[3].tex = D3DXVECTOR2(0.0f, 1.0f);
+		}
 
 		// 頂点バッファをアンロックする
 		pPlayer->pVtxBuff->Unlock();
