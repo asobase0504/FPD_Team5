@@ -384,7 +384,7 @@ void ThrowPlayer(int nIdxPlayer)
 				}
 				else
 				{
-					ThrowDisk(pPlayer->pos, move, ZERO_VECTOR, DISK_TYPE_SPECIAL_4, nIdxPlayer);
+					ThrowDisk(pPlayer->pos, move, ZERO_VECTOR, DISK_TYPE_SPECIAL_1, nIdxPlayer);
 				}
 			}
 			else if (GetKeyboardTrigger(DIK_SPACE))
@@ -449,7 +449,10 @@ void CatchDiscPlayer(int nIdxPlayer)
 		// 床で取得
 		if ((pDisk->type != DISK_TYPE_LOB || (pDisk->type == DISK_TYPE_LOB && pDisk->fHeight <= 0.0f)) && pPlayer->jumpstate == JUMP_NONE)
 		{
-			pPlayer->move += D3DXVECTOR3(pDisk->move.x, -pDisk->move.y, pDisk->move.z);
+			float fBack = D3DXVec3Length(&pDisk->move);
+			D3DXVECTOR3 nomal;
+			D3DXVec3Normalize(&nomal, &pDisk->move);
+			pPlayer->move += D3DXVECTOR3(pDisk->move.x, -nomal.y * fBack * 30.0f, pDisk->move.z);
 			DestroyDisk();	// ディスクの破棄
 			pPlayer->bHaveDisk = true;
 			pPlayer->fThrowPower = pPlayer->fMaxThrowPower;
@@ -474,21 +477,21 @@ void MoveLimitPlayer(int nIdxPlayer)
 
 	STAGE_LENGTH stageLength = nIdxPlayer == 0 ? *GetP1StgLng() : *GetP2StgLng();
 
-	if (stageLength.max.y <= pPlayer->pos.y + PLAYER_SIZ)
+	if (stageLength.max.y - 5.0f <= pPlayer->pos.y + PLAYER_SIZ)
 	{
-		pPlayer->pos.y = stageLength.max.y - PLAYER_SIZ;
+		pPlayer->pos.y = stageLength.max.y - PLAYER_SIZ - 5.0f;
 	}
-	if (stageLength.max.x <= pPlayer->pos.x + PLAYER_SIZ)
+	if (stageLength.max.x - 5.0f <= pPlayer->pos.x + PLAYER_SIZ)
 	{
-		pPlayer->pos.x = stageLength.max.x - PLAYER_SIZ;
+		pPlayer->pos.x = stageLength.max.x - PLAYER_SIZ - 5.0f;
 	}
-	if (stageLength.min.y >= pPlayer->pos.y - PLAYER_SIZ)
+	if (stageLength.min.y + 5.0f >= pPlayer->pos.y - PLAYER_SIZ)
 	{
-		pPlayer->pos.y = stageLength.min.y + PLAYER_SIZ;
+		pPlayer->pos.y = stageLength.min.y + PLAYER_SIZ + 5.0f;
 	}
-	if (stageLength.min.x >= pPlayer->pos.x - PLAYER_SIZ)
+	if (stageLength.min.x + 5.0f >= pPlayer->pos.x - PLAYER_SIZ)
 	{
-		pPlayer->pos.x = stageLength.min.x + PLAYER_SIZ;
+		pPlayer->pos.x = stageLength.min.x + PLAYER_SIZ + 5.0f;
 	}
 }
 

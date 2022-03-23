@@ -112,6 +112,7 @@ void UpdatePoint(void)
 
 		if (s_nUseTime >= 120)
 		{
+			s_nUseTime = 0;
 			s_bPointUse = false;
 		}
 	}

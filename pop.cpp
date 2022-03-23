@@ -3,7 +3,7 @@
 // ゴール処理
 // Author Tanimoto_Kosuke
 //
-// Update 22/03/22
+// Update 22/03/23
 // 
 //=========================================
 //------------------------------------
@@ -20,9 +20,8 @@
 // スタティック変数
 //------------------------------------
 static LPDIRECT3DTEXTURE9		s_pTexturePop[MAX_IMAGE_POP] = {};	//テクスチャへのポインタ
-static LPDIRECT3DVERTEXBUFFER9	s_pVtxBuffPop = NULL;	//頂点バッファへのポインタ
-static POP s_aPop[MAX_POP];							//ゴールの情報
-static float s_fPopCounter;
+static LPDIRECT3DVERTEXBUFFER9	s_pVtxBuffPop = NULL;				//頂点バッファへのポインタ
+static POP s_aPop[MAX_POP];											//ゴールの情報
 
 //=========================================
 // ポップの初期化処理
@@ -75,6 +74,7 @@ void InitPop(void)
 		s_aPop[nCntPop].pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 		s_aPop[nCntPop].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 		s_aPop[nCntPop].col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
+		s_aPop[nCntPop].fPopCounter = 0;
 		s_aPop[nCntPop].bUse = false;
 		s_aPop[nCntPop].bSide = false;
 
@@ -116,8 +116,6 @@ void InitPop(void)
 
 	//頂点バッファをアンロックする
 	s_pVtxBuffPop->Unlock();
-
-	s_fPopCounter = 0;
 }
 
 //=========================================
@@ -146,8 +144,6 @@ void UninitPop(void)
 //=========================================
 void UpdatePop(void)
 {
-	SCORE *pScore = GetScore();
-
 	VERTEX_2D *pVtx;				//頂点情報へのポインタ
 
 	//頂点バッファをロックし、頂点情報へのポインタを取得
@@ -280,7 +276,7 @@ void PopCounter(int nIdxPop)
 	if (s_aPop[nIdxPop].type == POP_TYPE_NORMAL || s_aPop[nIdxPop].type == POP_TYPE_STRIKE)
 	{
 		//ポップ時間
-		if (s_fPopCounter >= 50)
+		if (s_aPop[nIdxPop].fPopCounter >= 80)
 		{
 			if (s_aPop[nIdxPop].bSide == 0)
 			{
@@ -291,15 +287,29 @@ void PopCounter(int nIdxPop)
 				s_aPop[nIdxPop].move.x = POP_SPEAD;
 			}
 		}
-		if (s_fPopCounter >= 100)
+		if (s_aPop[nIdxPop].fPopCounter >= 120)
 		{
 			s_aPop[nIdxPop].bUse = false;
-			s_fPopCounter = 0;
+			s_aPop[nIdxPop].fPopCounter = 0;
 			s_aPop[nIdxPop].move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 		}
 		else
 		{
-			s_fPopCounter++;
+			s_aPop[nIdxPop].fPopCounter++;
+		}
+	}
+	else if (s_aPop[nIdxPop].type == POP_TYPE_FELL)
+	{
+		//ポップ時間
+		if (s_aPop[nIdxPop].fPopCounter >= 120)
+		{
+			s_aPop[nIdxPop].bUse = false;
+			s_aPop[nIdxPop].fPopCounter = 0;
+			s_aPop[nIdxPop].move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		}
+		else
+		{
+			s_aPop[nIdxPop].fPopCounter++;
 		}
 	}
 }
