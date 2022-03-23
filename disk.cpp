@@ -169,11 +169,15 @@ void UpdateDisk(void)
 
 				UpdateSpecialDisk(nCntDisk);
 
+				SetEffect(g_aDisk[nCntDisk].pos, 0.0f, EFFECT_TYPE_SPECIAL_TRAIL);
+
 				break;
 
 			case DISK_TYPE_SPECIAL_1:
 
 				UpdateSpecialDisk(nCntDisk);
+
+				SetEffect(g_aDisk[nCntDisk].pos, 0.0f, EFFECT_TYPE_SPECIAL_TRAIL);
 
 				break;
 
@@ -181,17 +185,26 @@ void UpdateDisk(void)
 
 				UpdateSpecialDisk(nCntDisk);
 
+				SetEffect(g_aDisk[nCntDisk].pos, 0.0f, EFFECT_TYPE_SPECIAL_TRAIL);
+
 				break;
 
 			case DISK_TYPE_SPECIAL_3:
 
 				UpdateSpecialDisk(nCntDisk);
 
+				SetEffect(g_aDisk[nCntDisk].pos, 0.0f, EFFECT_TYPE_SPECIAL_TRAIL);
+
 				break;
 
 			case DISK_TYPE_SPECIAL_4:
 
 				UpdateSpecialDisk(nCntDisk);
+
+				for (int nCntEffect = 0; nCntEffect < 10; nCntEffect++)
+				{
+					SetEffect(g_aDisk[nCntDisk].pos, 0.0f, EFFECT_TYPE_SPECIAL_TRAIL);
+				}
 
 				break;
 			}

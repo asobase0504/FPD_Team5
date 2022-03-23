@@ -62,6 +62,10 @@ void InitEffect(void)
 		"data\\TEXTURE\\Effect\\effect105.png",
 		&s_pTexture[EFFECT_TYPE_POINT_SMOKE_BLUE]);
 
+	D3DXCreateTextureFromFile(pDevice,
+		"data\\TEXTURE\\Effect\\effect105.png",
+		&s_pTexture[EFFECT_TYPE_SPECIAL_TRAIL]);
+
 	// 頂点バッファの生成
 	pDevice->CreateVertexBuffer(sizeof(VERTEX_2D) * 4 * MAX_EFFECT,
 		D3DUSAGE_WRITEONLY,
@@ -386,6 +390,19 @@ void SetEffect(D3DXVECTOR3 pos, float rot, EFFECT_TYPE Type)
 			pEffect->fDeltaSize = D3DXVECTOR3(0.5f, 0.5f, 0.0f);
 			pEffect->col = D3DXCOLOR(0.13f, 0.3f, 1.0f, 0.15f);
 			pEffect->fDeltaCol = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.001f);
+			pEffect->nLife = 30;
+			pEffect->rot = 0.0f;
+
+			break;
+
+		case EFFECT_TYPE_SPECIAL_TRAIL:
+
+			pEffect->move.x = ((rand() % 101) - 50) * 0.02f;
+			pEffect->move.y = ((rand() % 101) - 50) * 0.02f;
+			pEffect->fSize = D3DXVECTOR3(30.0f, 30.0f, 0.0f);
+			pEffect->fDeltaSize = D3DXVECTOR3(0.5f, 0.5f, 0.0f);
+			pEffect->col = D3DXCOLOR(1.0f, 0.1f, 0.5f, 0.3f);
+			pEffect->fDeltaCol = D3DXCOLOR(0.0f, -0.02f, 0.02f, -0.001f);
 			pEffect->nLife = 30;
 			pEffect->rot = 0.0f;
 
