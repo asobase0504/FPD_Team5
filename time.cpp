@@ -22,10 +22,8 @@ void InitTime(void)
 		"data/TEXTURE/number.png",
 		&g_pTexture);
 
-	bool bTimeFlag = false;									//タイトルの移動のフラグ
-	g_Time.nTime =30;										//タイムの値
-	g_Time.nCntTime = 0;									//タイムカウンター値
-	g_Time.nMinusTime =0;										//タイムを引く数
+	g_Time.nTime = 30;			//タイムの値
+	g_Time.nMinusTime =0;		//タイムを引く数
 
 	//頂点バッファの生成
 	pDevice->CreateVertexBuffer(sizeof(VERTEX_2D) * 4 * MAX_CNT_TIME,
@@ -35,25 +33,24 @@ void InitTime(void)
 		&g_pVtxBuff,
 		NULL);
 
-	VERTEX_2D*pVtx;									//頂点情報へのポインタ
-
 	//タイムをずらして描画する設定
-
-	for (g_Time.nCntTime = 0; g_Time.nCntTime < MAX_CNT_TIME; g_Time.nCntTime++)
+	for (int i = 0; i < MAX_CNT_TIME; i++)
 	{
-		g_Time.pos[g_Time.nCntTime] = D3DXVECTOR3(SCREEN_WIDTH * 0.5f - (-20.0f + (20.0f * 2) * g_Time.nCntTime), 80.0f, 0.0f);
+		g_Time.pos[i] = D3DXVECTOR3(SCREEN_WIDTH * 0.5f - (-20.0f + (20.0f * 2) * i), 80.0f, 0.0f);
 	}
+
+	VERTEX_2D*pVtx;		//頂点情報へのポインタ
 
 	//頂点バッファをロックし、頂点情報へのポインタを取得
 	g_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
-	for (g_Time.nCntTime = 0; g_Time.nCntTime < MAX_CNT_TIME; g_Time.nCntTime++)
+	for (int i = 0; i < MAX_CNT_TIME; i++)
 	{
 		//頂点座標の設定
-		pVtx[0].pos = D3DXVECTOR3(g_Time.pos[g_Time.nCntTime].x - 20.0f, g_Time.pos[g_Time.nCntTime].y - 35.0f, 0.0f);
-		pVtx[1].pos = D3DXVECTOR3(g_Time.pos[g_Time.nCntTime].x + 20.0f, g_Time.pos[g_Time.nCntTime].y - 35.0f, 0.0f);
-		pVtx[2].pos = D3DXVECTOR3(g_Time.pos[g_Time.nCntTime].x - 20.0f, g_Time.pos[g_Time.nCntTime].y + 35.0f, 0.0f);
-		pVtx[3].pos = D3DXVECTOR3(g_Time.pos[g_Time.nCntTime].x + 20.0f, g_Time.pos[g_Time.nCntTime].y + 35.0f, 0.0f);
+		pVtx[0].pos = D3DXVECTOR3(g_Time.pos[i].x - 20.0f, g_Time.pos[i].y - 35.0f, 0.0f);
+		pVtx[1].pos = D3DXVECTOR3(g_Time.pos[i].x + 20.0f, g_Time.pos[i].y - 35.0f, 0.0f);
+		pVtx[2].pos = D3DXVECTOR3(g_Time.pos[i].x - 20.0f, g_Time.pos[i].y + 35.0f, 0.0f);
+		pVtx[3].pos = D3DXVECTOR3(g_Time.pos[i].x + 20.0f, g_Time.pos[i].y + 35.0f, 0.0f);
 
 		//rhwの設定
 		pVtx[0].rhw = 1.0f;
@@ -99,59 +96,40 @@ void UninitTime(void)
 void UpdateTime(void)
 {
 	int aPosTexU[2];			//各桁の数字を格納
-	g_Time.nMinusTime++;				//nCntTimeが引かれていく
+	g_Time.nMinusTime++;		//nCntTimeが引かれていく
 	if (g_Time.nTime != 0)
 	{
-
 		if (g_Time.nMinusTime % 60 == 0)		//nCntTimeが0より小さくなったら
 		{
 			g_Time.nTime--;
-			//g_nTime[s_nSelectTime]--;				//時間が一秒ずつ減っていく
 		}
 	}
-	aPosTexU[0] = g_Time.nTime % 100 / 10;
-	aPosTexU[1] = g_Time.nTime % 10;
-	//aPosTexU[2] = g_Time.nTime % 10;
+	aPosTexU[1] = g_Time.nTime % 100 / 10;
+	aPosTexU[0] = g_Time.nTime % 10;
 
-	//aPosTexU[0] = g_nTime[s_nSelectTime] % 1000 / 100;
-	//aPosTexU[1] = g_nTime[s_nSelectTime] % 100 / 10;
-	//aPosTexU[2] = g_nTime[s_nSelectTime] % 10;
+	VERTEX_2D*pVtx;		//頂点情報へのポインタ
 
-	VERTEX_2D*pVtx;												//頂点情報へのポインタ
-
-																//頂点バッファをロックし、頂点情報へのポインタを取得
+	//頂点バッファをロックし、頂点情報へのポインタを取得
 	g_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
-	for (g_Time.nCntTime = 0; g_Time.nCntTime < MAX_CNT_TIME; g_Time.nCntTime++)
+	for (int i = 0; i < MAX_CNT_TIME; i++)
 	{
 		//テクスチャ座標の設定
-		pVtx[0].tex = D3DXVECTOR2(0.0f + (aPosTexU[g_Time.nCntTime] * 0.1f), 0.0f);
-		pVtx[1].tex = D3DXVECTOR2(0.1f + (aPosTexU[g_Time.nCntTime] * 0.1f), 0.0f);
-		pVtx[2].tex = D3DXVECTOR2(0.0f + (aPosTexU[g_Time.nCntTime] * 0.1f), 1.0f);
-		pVtx[3].tex = D3DXVECTOR2(0.1f + (aPosTexU[g_Time.nCntTime] * 0.1f), 1.0f);
+		pVtx[0].tex = D3DXVECTOR2(0.0f + (aPosTexU[i] * 0.1f), 0.0f);
+		pVtx[1].tex = D3DXVECTOR2(0.1f + (aPosTexU[i] * 0.1f), 0.0f);
+		pVtx[2].tex = D3DXVECTOR2(0.0f + (aPosTexU[i] * 0.1f), 1.0f);
+		pVtx[3].tex = D3DXVECTOR2(0.1f + (aPosTexU[i] * 0.1f), 1.0f);
 
 		pVtx += 4;
 	}
 	//頂点バッファをアンロック
 	g_pVtxBuff->Unlock();
-
-	/*if (g_nTime <= 0)
-	{
-	if (GetFade() == FADE_NONE)
-	{
-	ChangeMode(MODE_RESULT);
-	}
-	}*/
-
 }
 
 //タイムの描画処理
 void DrawTime(void)
 {
-	LPDIRECT3DDEVICE9 pDevice;
-
-	//デバイスの取得
-	pDevice = GetDevice();
+	LPDIRECT3DDEVICE9 pDevice = GetDevice();	//デバイスの取得
 
 	//頂点バッファをデータストリームに設定
 	pDevice->SetStreamSource(0, g_pVtxBuff, 0, sizeof(VERTEX_2D));
@@ -159,15 +137,13 @@ void DrawTime(void)
 	//頂点フォーマットの設定
 	pDevice->SetFVF(FVF_VERTEX_2D);
 
-	for (g_Time.nCntTime = 0; g_Time.nCntTime < MAX_CNT_TIME; g_Time.nCntTime++)
+	for (int i = 0; i < MAX_CNT_TIME; i++)
 	{
 		//テクスチャの設定
 		pDevice->SetTexture(0, g_pTexture);
 
 		//ポリゴンの描画
-		pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP,
-			4 * g_Time.nCntTime,
-			2);
+		pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, 4 * i, 2);
 	}
 }
 

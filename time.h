@@ -20,7 +20,6 @@ typedef struct
 	D3DXVECTOR3 pos[MAX_CNT_TIME];									//現在の位置
 	int nTime;											//タイムの設定数
 	int nMinusTime;										//タイムを引く数
-	int nCntTime;										//タイムのカウンター
 	bool bTimeFlag;										//タイトルの移動のフラグ
 }TIME;
 

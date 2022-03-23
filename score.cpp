@@ -29,8 +29,7 @@ void InitScore(void)
 
 	for (int nScoreCnt = 0; nScoreCnt < 2; nScoreCnt++)
 	{
-		g_nScore[nScoreCnt].nScore[0] = 0;									//値を初期化する
-		g_nScore[nScoreCnt].nScore[1] = 0;									//値を初期化する
+		g_nScore[nScoreCnt].nScore = 0;									//値を初期化する
 		g_nScore[nScoreCnt].nCnt = 0;										//値を初期化する
 		g_nScore[nScoreCnt].pos = D3DXVECTOR3(SCREEN_WIDTH * 0.5f - 70.0f * 0.5f - 55.0f - 27.5f, 50.0f, 0.0f);			//位置を初期化する
 
@@ -159,13 +158,12 @@ void SetScore(int nScore)//,int nPlayerIdx)
 	int nCntScore;
 	int aPosTexU[4];	//各桁の数字を格納
 
-	g_nScore[0].nScore[0] = nScore;
-	g_nScore[1].nScore[0] = nScore;
+	g_nScore[0].nScore = nScore;
 
-	aPosTexU[0] = (g_nScore[0].nScore[0] % 100) / 10;
-	aPosTexU[1] = (g_nScore[0].nScore[1] % 10) / 1;
-	aPosTexU[2] = (g_nScore[1].nScore[0] % 100) / 10;
-	aPosTexU[3] = (g_nScore[1].nScore[1] % 10) / 1;
+	aPosTexU[0] = (g_nScore[0].nScore % 100) / 10;
+	aPosTexU[1] = (g_nScore[0].nScore % 10) / 1;
+	aPosTexU[2] = (g_nScore[1].nScore % 100) / 10;
+	aPosTexU[3] = (g_nScore[1].nScore % 10) / 1;
 
 	//aPosTexU[0] = (g_nScore[2].nScore % 100) / 10;
 	//aPosTexU[0] = (g_nScore[3].nScore % 10) / 1;
@@ -200,14 +198,13 @@ void AddScore(int nValse, int nPlayerIdx)
 	int nCntScore;
 	int aPosTexU[4]; //各桁の数字を格納
 
-	g_nScore[nPlayerIdx].nScore[1] += nValse;
 	//0番目の配列に、1番目の配列に数字を入れる
-	g_nScore[nPlayerIdx].nScore[0] = g_nScore[nPlayerIdx].nScore[1];
+	g_nScore[nPlayerIdx].nScore += nValse;
 
-	aPosTexU[0] = (g_nScore[0].nScore[0] % 100) / 10;
-	aPosTexU[1] = (g_nScore[0].nScore[1] % 10) / 1;
-	aPosTexU[2] = (g_nScore[1].nScore[0] % 100) / 10;
-	aPosTexU[3] = (g_nScore[1].nScore[1] % 10) / 1;
+	aPosTexU[0] = (g_nScore[0].nScore % 100) / 10;
+	aPosTexU[1] = (g_nScore[0].nScore % 10) / 1;
+	aPosTexU[2] = (g_nScore[1].nScore % 100) / 10;
+	aPosTexU[3] = (g_nScore[1].nScore % 10) / 1;
 
 	for (int nScoreCnt = 0; nScoreCnt < 2; nScoreCnt++)
 	{

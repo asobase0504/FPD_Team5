@@ -168,7 +168,7 @@ void SetPoint(void)
 
 	for (int i = 0; i < NUM_POINT; i++, pScore++, pPoint++)
 	{
-		pPoint->nScore = pScore->nScore[0];
+		pPoint->nScore = pScore->nScore;
 
 		int aNumDigit = pPoint->nScore;
 

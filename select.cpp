@@ -171,12 +171,22 @@ void InitSelect(void)
 			//保存しておいた座標から、左側の矢印の位置を決める
 			fPosX = aPosArrow[i].x - ARROW_POS_X;
 			fPosY = aPosArrow[i].y;
+			//テクスチャ座標の設定
+			pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
+			pVtx[1].tex = D3DXVECTOR2(1.0f, 0.0f);
+			pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);
+			pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);
 		}
 		else if ((i >= (MAX_ARROW / 2)) && (i < MAX_ARROW))
 		{//右の縦列
 			//保存しておいた座標から、右側の矢印の位置を決める
 			fPosX = aPosArrow[i % MAX_SELECT].x + ARROW_POS_X;
 			fPosY = aPosArrow[i % MAX_SELECT].y;
+			//テクスチャ座標の設定
+			pVtx[0].tex = D3DXVECTOR2(1.0f, 0.0f);
+			pVtx[1].tex = D3DXVECTOR2(0.0f, 0.0f);
+			pVtx[2].tex = D3DXVECTOR2(1.0f, 1.0f);
+			pVtx[3].tex = D3DXVECTOR2(0.0f, 1.0f);
 		}
 
 		//変数にまとめて短くする
@@ -202,12 +212,6 @@ void InitSelect(void)
 		pVtx[1].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 		pVtx[2].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 		pVtx[3].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-
-		//テクスチャ座標の設定
-		pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
-		pVtx[1].tex = D3DXVECTOR2(1.0f, 0.0f);
-		pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);
-		pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);
 
 		pVtx += 4;		//4つ分進める
 	}

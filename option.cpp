@@ -162,6 +162,12 @@ void InitOption(void)
 	SetGear(D3DXVECTOR3(565.0f, 45.0f, 0.0f), 100.0f, D3DX_PI * 0.03f, 4);
 	SetGear(D3DXVECTOR3(260.0f, 45.0f, 0.0f), 240.0f, D3DX_PI * 0.018f, 2);
 	//===============================================================================
+
+	// èâä˙ílÇÃì¸óÕ
+	s_nSelectTimeLimit = SelectTimeLimit(s_nSelectMenu);
+	s_nSelectPoint = SelectPoint(s_nSelectMenu);
+	s_nSelectSetCount = SelectSetCount(s_nSelectMenu);
+
 }
 
 //============================================

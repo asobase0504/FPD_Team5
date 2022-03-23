@@ -150,7 +150,7 @@ void UpdateGame(void)
 		// スコアが一定以上か否か
 		for (int i = 0; i < 2; i++)
 		{
-			if (pScore[i].nScore[0] >= s_nNeedPoint)
+			if (pScore[i].nScore >= s_nNeedPoint)
 			{
 				// １セットのリセット
 				s_nPlayerSet[i]++;	// セット数の取得
@@ -263,7 +263,7 @@ void RoundReset(void)
 
 	for (int nIdxPlayer = 0; nIdxPlayer < 2; nIdxPlayer++, pPlayer++)
 	{
-		AddScore(-pScore[nIdxPlayer].nScore[0], 0);	// スコアのリセット
+		AddScore(-pScore[nIdxPlayer].nScore, 0);	// スコアのリセット
 		pPlayer->bHaveDisk = false;
 	}
 
