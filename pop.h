@@ -22,7 +22,7 @@
 #define SCORE_POP_HEIGHT	(SCREEN_HEIGHT / 4)	//スコアポップの縦サイズ
 #define MAX_POP				(11)				//ポップの最大数
 #define MAX_IMAGE_POP		(4)					//ポップ画像の最大数
-#define POP_SPEAD			(4)					//ポップの移動速度
+#define POP_SPEAD			(8)					//ポップの移動速度
 
 //****************************************************************************
 //ポップの種類
@@ -49,6 +49,7 @@ typedef struct
 	bool bSide;			//どっち側判定(false:左側 true:右側)
 	float fAngle;		//角度(アークタンジェント)
 	float fLength;		//長さ(スクウェアルート)
+	float fPopCounter;	//ポップカウンター
 	bool bUse;			//使用判定
 }POP;
 
