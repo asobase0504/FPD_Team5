@@ -126,6 +126,7 @@ void UpdateDisk(void)
 			switch (g_aDisk[nCntDisk].type)
 			{
 			default:
+				
 				break;
 
 			case DISK_TYPE_LOB:
@@ -133,7 +134,7 @@ void UpdateDisk(void)
 				if (g_aDisk[nCntDisk].fHeight > 0.0f)
 				{
 					g_aDisk[nCntDisk].fHeight += g_aDisk[nCntDisk].fVerticalSpeed;
-					g_aDisk[nCntDisk].fVerticalSpeed += GRAVITY_ACCELERATION_LOB;
+					g_aDisk[nCntDisk].fVerticalSpeed += GRAVITY_ACCELERATION;
 
 					if (g_aDisk[nCntDisk].fHeight <= 0.0f)
 					{
@@ -148,7 +149,7 @@ void UpdateDisk(void)
 				if (g_aDisk[nCntDisk].fHeight > 0.0f)
 				{
 					g_aDisk[nCntDisk].fHeight += g_aDisk[nCntDisk].fVerticalSpeed;
-					g_aDisk[nCntDisk].fVerticalSpeed += GRAVITY_ACCELERATION_LOB;
+					g_aDisk[nCntDisk].fVerticalSpeed += GRAVITY_ACCELERATION;
 
 					if (g_aDisk[nCntDisk].fHeight <= 0.0f)
 					{
@@ -161,13 +162,15 @@ void UpdateDisk(void)
 			case DISK_TYPE_BLOCKED:
 
 				g_aDisk[nCntDisk].fHeight += g_aDisk[nCntDisk].fVerticalSpeed;
-				g_aDisk[nCntDisk].fVerticalSpeed -= 0.05f;
+				g_aDisk[nCntDisk].fVerticalSpeed += GRAVITY_ACCELERATION;
 
 				break;
 
 			case DISK_TYPE_SPECIAL_0:
 
 				UpdateSpecialDisk(nCntDisk);
+
+				
 
 				break;
 
@@ -181,6 +184,8 @@ void UpdateDisk(void)
 
 				UpdateSpecialDisk(nCntDisk);
 
+				SetEffect(g_aDisk[nCntDisk].pos, g_aDisk[nCntDisk].rot, EFFECT_TYPE_SPECIAL_TRAIL2);
+
 				break;
 
 			case DISK_TYPE_SPECIAL_3:
@@ -192,6 +197,11 @@ void UpdateDisk(void)
 			case DISK_TYPE_SPECIAL_4:
 
 				UpdateSpecialDisk(nCntDisk);
+
+				for (int nCntEffect = 0; nCntEffect < 10; nCntEffect++)
+				{
+					SetEffect(g_aDisk[nCntDisk].pos, 0.0f, EFFECT_TYPE_SPECIAL_TRAIL4);
+				}
 
 				break;
 			}
@@ -332,7 +342,7 @@ void SetDisk(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 acc, DISK_TYPE type,
 				
 				g_aDisk[nCntDisk].move = SetLobSpeed(g_aDisk[nCntDisk].pos, g_aDisk[nCntDisk].move, nCntDisk, g_aDisk[nCntDisk].fHeight, g_aDisk[nCntDisk].fVerticalSpeed);
 
-				SetLandingMark(g_aDisk[nCntDisk].pos, g_aDisk[nCntDisk].move, g_aDisk[nCntDisk].fHeight, g_aDisk[nCntDisk].fVerticalSpeed, GRAVITY_ACCELERATION_LOB, g_aDisk[nCntDisk].fSize);
+				SetLandingMark(g_aDisk[nCntDisk].pos, g_aDisk[nCntDisk].move, g_aDisk[nCntDisk].fHeight, g_aDisk[nCntDisk].fVerticalSpeed, GRAVITY_ACCELERATION, g_aDisk[nCntDisk].fSize);
 
 				break;
 
@@ -344,7 +354,7 @@ void SetDisk(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 acc, DISK_TYPE type,
 
 				g_aDisk[nCntDisk].move = SetJumpAttackSpeed(g_aDisk[nCntDisk].pos);
 
-				SetLandingMark(g_aDisk[nCntDisk].pos, g_aDisk[nCntDisk].move, g_aDisk[nCntDisk].fHeight, g_aDisk[nCntDisk].fVerticalSpeed, GRAVITY_ACCELERATION_LOB, g_aDisk[nCntDisk].fSize);
+				SetLandingMark(g_aDisk[nCntDisk].pos, g_aDisk[nCntDisk].move, g_aDisk[nCntDisk].fHeight, g_aDisk[nCntDisk].fVerticalSpeed, GRAVITY_ACCELERATION, g_aDisk[nCntDisk].fSize);
 				break;
 
 			case DISK_TYPE_BLOCKED:
@@ -500,11 +510,20 @@ void UpdateSpecialDisk(int nCntDisk)
 		switch (g_aDisk[nCntDisk].nCntPhase)
 		{
 		default:
+			for (int nCntEffect = 0; nCntEffect < 8; nCntEffect++)
+			{
+				SetEffect(g_aDisk[nCntDisk].pos, 0.0f, EFFECT_TYPE_SPECIAL_GENERAL);
+			}
 			break;
 
 		case 0:
 
 			bImpact = SpecialWallBounce(&g_aDisk[nCntDisk].pos, &g_aDisk[nCntDisk].lastPos, &g_aDisk[nCntDisk].move, 10.0f);
+
+			for (int nCntEffect = 0; nCntEffect < 8; nCntEffect++)
+			{
+				SetEffect(g_aDisk[nCntDisk].pos, 0.0f, EFFECT_TYPE_SPECIAL_GENERAL);
+			}
 
 			if (bImpact == true)
 			{
@@ -517,9 +536,22 @@ void UpdateSpecialDisk(int nCntDisk)
 
 		case 1:
 
-			fChangePoint = SCREEN_WIDTH * (0.7f - (0.4f * g_aDisk[nCntDisk].nPlayer));
+			for (int nCntEffect = 0; nCntEffect < 15; nCntEffect++)
+			{
+				SetEffect(g_aDisk[nCntDisk].pos, 0.0f, EFFECT_TYPE_SPECIAL_TRAIL0);
+			}
 
-			if (g_aDisk[nCntDisk].pos.x >= fChangePoint)
+			fChangePoint = SCREEN_WIDTH * (0.7f - (0.3f * g_aDisk[nCntDisk].nPlayer));
+
+			if (g_aDisk[nCntDisk].pos.x >= fChangePoint && g_aDisk[nCntDisk].move.x > 0.0f)
+			{
+				int nDir = (int)(g_aDisk[nCntDisk].pos.y / SCREEN_HEIGHT + 1.0f);
+
+				g_aDisk[nCntDisk].nCntPhase++;
+				g_aDisk[nCntDisk].move = D3DXVECTOR3(-2.5f + (1.0f * g_aDisk[nCntDisk].nPlayer), 15.0f - (30.0f * nDir), 0.0f);
+				g_aDisk[nCntDisk].acc = D3DXVECTOR3(0.5f - (1.0f * g_aDisk[nCntDisk].nPlayer), 0.0f, 0.0f);
+			}
+			else if (g_aDisk[nCntDisk].pos.x <= fChangePoint && g_aDisk[nCntDisk].move.x < 0.0f)
 			{
 				int nDir = (int)(g_aDisk[nCntDisk].pos.y / SCREEN_HEIGHT + 1.0f);
 
@@ -533,6 +565,11 @@ void UpdateSpecialDisk(int nCntDisk)
 		case 2:
 
 			bImpact = SpecialWallBounce(&g_aDisk[nCntDisk].pos, &g_aDisk[nCntDisk].lastPos, &g_aDisk[nCntDisk].move, 10.0f);
+
+			for (int nCntEffect = 0; nCntEffect < 8; nCntEffect++)
+			{
+				SetEffect(g_aDisk[nCntDisk].pos, 0.0f, EFFECT_TYPE_SPECIAL_GENERAL);
+			}
 
 			if (bImpact == true)
 			{
@@ -553,9 +590,18 @@ void UpdateSpecialDisk(int nCntDisk)
 
 		switch (g_aDisk[nCntDisk].nCntPhase)
 		{
+
+		default:
+
+			SetEffect(g_aDisk[nCntDisk].pos, g_aDisk[nCntDisk].rot, EFFECT_TYPE_SPECIAL_TRAIL2);
+
+			break;
+
 		case 0:
 
 			fChangePoint = SCREEN_WIDTH * (0.3f + (0.4f * g_aDisk[nCntDisk].nPlayer));
+
+			SetEffect(g_aDisk[nCntDisk].pos, g_aDisk[nCntDisk].rot, EFFECT_TYPE_SPECIAL_TRAIL2);
 
 			if (g_aDisk[nCntDisk].move.x >= 0)
 			{
@@ -586,6 +632,8 @@ void UpdateSpecialDisk(int nCntDisk)
 
 			bImpact = SpecialWallBounce(&g_aDisk[nCntDisk].pos, &g_aDisk[nCntDisk].lastPos, &g_aDisk[nCntDisk].move, 10.0f);
 
+			SetEffect(g_aDisk[nCntDisk].pos, g_aDisk[nCntDisk].rot, EFFECT_TYPE_SPECIAL_TRAIL2);
+
 			if (bImpact == true)
 			{
 				g_aDisk[nCntDisk].nCntPhase++;
@@ -598,6 +646,11 @@ void UpdateSpecialDisk(int nCntDisk)
 		case 2:
 
 			fChangePoint = SCREEN_WIDTH * (0.7f - (0.4f * g_aDisk[nCntDisk].nPlayer));
+
+			for (int nCntEffect = 0; nCntEffect < 15; nCntEffect++)
+			{
+				SetEffect(g_aDisk[nCntDisk].pos, 0.0f, EFFECT_TYPE_SPECIAL_TRAIL0);
+			}
 
 			if (g_aDisk[nCntDisk].move.x < 0)
 			{
@@ -625,6 +678,8 @@ void UpdateSpecialDisk(int nCntDisk)
 		case 3:
 
 			fChangePoint = (SCREEN_HEIGHT * 0.5f) + ((rand() % 201) - 100);
+
+			SetEffect(g_aDisk[nCntDisk].pos, g_aDisk[nCntDisk].rot, EFFECT_TYPE_SPECIAL_TRAIL2);
 
 			if (g_aDisk[nCntDisk].move.y > 0)
 			{
@@ -763,6 +818,12 @@ void UpdateSpecialDisk(int nCntDisk)
 				break;
 
 			default:
+
+				for (int nCntEffect = 0; nCntEffect < 15; nCntEffect++)
+				{
+					SetEffect(g_aDisk[nCntDisk].pos, 0.0f, EFFECT_TYPE_SPECIAL_TRAIL3);
+				}
+
 				break;
 			}
 			break;
@@ -831,7 +892,7 @@ D3DXVECTOR3 SetLobSpeed(D3DXVECTOR3 pos, D3DXVECTOR3 move, int nCntDisk, float f
 	while (height > 0.0f)
 	{//ディスクが落ちた時の位置と必要な時間を計算する
 		height += vSpeed;
-		vSpeed += GRAVITY_ACCELERATION_LOB;
+		vSpeed += GRAVITY_ACCELERATION;
 		endPos += move;
 		fTime += 1.0f;
 	}

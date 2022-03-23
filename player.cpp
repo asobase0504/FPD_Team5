@@ -384,7 +384,7 @@ void ThrowPlayer(int nIdxPlayer)
 				}
 				else
 				{
-					ThrowDisk(pPlayer->pos, move, ZERO_VECTOR, DISK_TYPE_SPECIAL_4, nIdxPlayer);
+					ThrowDisk(pPlayer->pos, move, ZERO_VECTOR, DISK_TYPE_SPECIAL_1, nIdxPlayer);
 				}
 			}
 			else if (GetKeyboardTrigger(DIK_SPACE))
