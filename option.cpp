@@ -297,4 +297,9 @@ static void SelectMenu(void)
 		assert(false);
 		break;
 	}
+
+	if (GetKeyboardTrigger(DIK_BACKSPACE) || GetJoypadTrigger(JOYKEY_B, 0))
+	{
+		ChangeMode(MODE_TITLE);
+	}
 }
