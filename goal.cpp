@@ -13,6 +13,7 @@
 #include <stdio.h>
 #include "disk.h"
 #include "stage.h"
+#include "effect.h"
 #include "score.h"
 #include "game.h"
 #include "pop.h"
@@ -292,19 +293,39 @@ void ColisionGoal(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pLastPos, float fWidth, float 
 					s_aGoal[nCntGoal].pos - D3DXVECTOR3(0.0f, (GOAL_HEIGHT / 2), 0.0f),
 					(s_aGoal[nCntGoal].pos + D3DXVECTOR3(0.0f, (GOAL_HEIGHT / 2), 0.0f)) - (s_aGoal[nCntGoal].pos - D3DXVECTOR3(0.0f, (GOAL_HEIGHT / 2), 0.0f))) == true)
 				{
-					SetPop(D3DXVECTOR3(SCREEN_WIDTH / 2 - (SCORE_POP_WIDTH * 2), SCREEN_HEIGHT / 2, 0.0f), s_aGoal[nCntGoal].rot, false, POP_TYPE_SCORE, 7);
-					SetPop(D3DXVECTOR3(SCREEN_WIDTH / 2 - (SCORE_POP_WIDTH), SCREEN_HEIGHT / 2, 0.0f), s_aGoal[nCntGoal].rot, false, POP_TYPE_SCORE, 8);
-					SetPop(D3DXVECTOR3(SCREEN_WIDTH / 2 + (SCORE_POP_WIDTH), SCREEN_HEIGHT / 2, 0.0f), s_aGoal[nCntGoal].rot, false, POP_TYPE_SCORE, 9);
-					SetPop(D3DXVECTOR3(SCREEN_WIDTH / 2 + (SCORE_POP_WIDTH * 2), SCREEN_HEIGHT / 2, 0.0f), s_aGoal[nCntGoal].rot, false, POP_TYPE_SCORE, 10);
 
 					if (s_aGoal[nCntGoal].bSide == false)
 					{
+						for (int nCntEffect = 0; nCntEffect < 50; nCntEffect++)
+						{
+							SetEffect(D3DXVECTOR3(300.0f, 150.0f, 0.0f), 0.0f, EFFECT_TYPE_POINT_SMOKE_BLUE);
+							SetEffect(D3DXVECTOR3(300.0f, SCREEN_HEIGHT - 100.0f, 0.0f), 0.0f, EFFECT_TYPE_POINT_SMOKE_BLUE);
+						}
+
+						for (int nCntEffect = 0; nCntEffect < 50; nCntEffect++)
+						{
+							SetEffect(D3DXVECTOR3(SCREEN_WIDTH - 300.0f, 150.0f, 0.0f), 0.0f, EFFECT_TYPE_POINT_SMOKE_BLUE);
+							SetEffect(D3DXVECTOR3(SCREEN_WIDTH - 300.0f, SCREEN_HEIGHT - 100.0f, 0.0f), 0.0f, EFFECT_TYPE_POINT_SMOKE_BLUE);
+						}
+
 						SetPop(D3DXVECTOR3 (GOAL_POP_WIDTH / 2, pDisk->pos.y,0.0f), s_aGoal[nCntGoal].rot, s_aGoal[nCntGoal].bSide, POP_TYPE_NORMAL, nCntGoal);
 						AddScore(3, 1);
 						*GetResetScore() = true;
 					}
 					else
 					{
+						for (int nCntEffect = 0; nCntEffect < 50; nCntEffect++)
+						{
+							SetEffect(D3DXVECTOR3(300.0f, 150.0f, 0.0f), 0.0f, EFFECT_TYPE_POINT_SMOKE_RED);
+							SetEffect(D3DXVECTOR3(300.0f, SCREEN_HEIGHT - 100.0f, 0.0f), 0.0f, EFFECT_TYPE_POINT_SMOKE_RED);
+						}
+
+						for (int nCntEffect = 0; nCntEffect < 50; nCntEffect++)
+						{
+							SetEffect(D3DXVECTOR3(SCREEN_WIDTH - 300.0f, 150.0f, 0.0f), 0.0f, EFFECT_TYPE_POINT_SMOKE_RED);
+							SetEffect(D3DXVECTOR3(SCREEN_WIDTH - 300.0f, SCREEN_HEIGHT - 100.0f, 0.0f), 0.0f, EFFECT_TYPE_POINT_SMOKE_RED);
+						}
+
 						SetPop(D3DXVECTOR3(SCREEN_WIDTH - GOAL_POP_WIDTH / 2, pDisk->pos.y, 0.0f), s_aGoal[nCntGoal].rot, s_aGoal[nCntGoal].bSide, POP_TYPE_NORMAL, nCntGoal);
 						AddScore(3, 0);
 						*GetResetScore() = true;
@@ -318,19 +339,35 @@ void ColisionGoal(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pLastPos, float fWidth, float 
 					s_aGoal[nCntGoal].pos - D3DXVECTOR3(0.0f, (STRIKE_GOAL_HEIGHT / 2), 0.0f),
 					(s_aGoal[nCntGoal].pos + D3DXVECTOR3(0.0f, (STRIKE_GOAL_HEIGHT / 2), 0.0f)) - (s_aGoal[nCntGoal].pos - D3DXVECTOR3(0.0f, (STRIKE_GOAL_HEIGHT / 2), 0.0f))) == true)
 				{
-					SetPop(D3DXVECTOR3(SCREEN_WIDTH / 2 - (SCORE_POP_WIDTH * 2), SCREEN_HEIGHT / 2, 0.0f), s_aGoal[nCntGoal].rot, false, POP_TYPE_SCORE, 7);
-					SetPop(D3DXVECTOR3(SCREEN_WIDTH / 2 - (SCORE_POP_WIDTH), SCREEN_HEIGHT / 2, 0.0f), s_aGoal[nCntGoal].rot, false, POP_TYPE_SCORE, 8);
-					SetPop(D3DXVECTOR3(SCREEN_WIDTH / 2 + (SCORE_POP_WIDTH), SCREEN_HEIGHT / 2, 0.0f), s_aGoal[nCntGoal].rot, false, POP_TYPE_SCORE, 9);
-					SetPop(D3DXVECTOR3(SCREEN_WIDTH / 2 + (SCORE_POP_WIDTH * 2), SCREEN_HEIGHT / 2, 0.0f), s_aGoal[nCntGoal].rot, false, POP_TYPE_SCORE, 10);
 
 					if (s_aGoal[nCntGoal].bSide == false)
 					{
+						for (int nCntEffect = 0; nCntEffect < 50; nCntEffect++)
+						{
+							SetEffect(D3DXVECTOR3(300.0f, 150.0f, 0.0f), 0.0f, EFFECT_TYPE_POINT_SMOKE_BLUE);
+							SetEffect(D3DXVECTOR3(300.0f, SCREEN_HEIGHT - 100.0f, 0.0f), 0.0f, EFFECT_TYPE_POINT_SMOKE_BLUE);
+						}
+
+						for (int nCntEffect = 0; nCntEffect < 50; nCntEffect++)
+						{
+							SetEffect(D3DXVECTOR3(SCREEN_WIDTH - 300.0f, 150.0f, 0.0f), 0.0f, EFFECT_TYPE_POINT_SMOKE_BLUE);
+							SetEffect(D3DXVECTOR3(SCREEN_WIDTH - 300.0f, SCREEN_HEIGHT - 100.0f, 0.0f), 0.0f, EFFECT_TYPE_POINT_SMOKE_BLUE);
+						}
+						
 						SetPop(D3DXVECTOR3(GOAL_POP_WIDTH / 2, pDisk->pos.y, 0.0f), s_aGoal[nCntGoal].rot, s_aGoal[nCntGoal].bSide, POP_TYPE_STRIKE, nCntGoal);
 						AddScore(5,1);
 						*GetResetScore() = true;
 					}
 					else
 					{
+						for (int nCntEffect = 0; nCntEffect < 150; nCntEffect++)
+						{
+							SetEffect(D3DXVECTOR3(300.0f, 0.0f, 0.0f), 0.0f, EFFECT_TYPE_POINT_SMOKE_RED);
+							SetEffect(D3DXVECTOR3(300.0f, SCREEN_HEIGHT, 0.0f), 0.0f, EFFECT_TYPE_POINT_SMOKE_RED);
+							SetEffect(D3DXVECTOR3(SCREEN_WIDTH - 300.0f, 0.0f, 0.0f), 0.0f, EFFECT_TYPE_POINT_SMOKE_RED);
+							SetEffect(D3DXVECTOR3(SCREEN_WIDTH - 300.0f, SCREEN_HEIGHT, 0.0f), 0.0f, EFFECT_TYPE_POINT_SMOKE_RED);
+						}
+
 						SetPop(D3DXVECTOR3(SCREEN_WIDTH - GOAL_POP_WIDTH / 2, pDisk->pos.y, 0.0f), s_aGoal[nCntGoal].rot, s_aGoal[nCntGoal].bSide, POP_TYPE_STRIKE, nCntGoal);
 						AddScore(5, 0);
 						*GetResetScore() = true;

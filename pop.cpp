@@ -52,13 +52,6 @@ void InitPop(void)
 		&s_pTexturePop[POP_TYPE_FELL]
 	);
 
-	D3DXCreateTextureFromFile
-	(
-		pDevice,
-		"data\\gotou\\TEXTURE\\number000.png",	//テクスチャのファイル名
-		&s_pTexturePop[POP_TYPE_SCORE]
-	);
-
 	//頂点バッファの生成
 	pDevice->CreateVertexBuffer
 	(
@@ -155,14 +148,6 @@ void UpdatePop(void)
 {
 	SCORE *pScore = GetScore();
 
-	int aPosTexU[4];	//各桁の数字を格納
-	int nCntScore = 0;
-
-	aPosTexU[0] = (pScore[0].nScore[0] % 100) / 10;
-	aPosTexU[1] = (pScore[0].nScore[1] % 10) / 1;
-	aPosTexU[2] = (pScore[1].nScore[0] % 100) / 10;
-	aPosTexU[3] = (pScore[1].nScore[1] % 10) / 1;
-
 	VERTEX_2D *pVtx;				//頂点情報へのポインタ
 
 	//頂点バッファをロックし、頂点情報へのポインタを取得
@@ -213,15 +198,6 @@ void UpdatePop(void)
 				pVtx[1].col = D3DCOLOR_RGBA(255, 255, 255, 255);
 				pVtx[2].col = D3DCOLOR_RGBA(255, 255, 255, 255);
 				pVtx[3].col = D3DCOLOR_RGBA(255, 255, 255, 255);
-			}
-			else if (s_aPop[nCntPop].type == POP_TYPE_SCORE)
-			{
-				//テクスチャ座標の設定(0.0f ~ (1 / xパターン数)f)
-				pVtx[0].tex = D3DXVECTOR2(0.1f * aPosTexU[nCntScore], 0.0f);
-				pVtx[1].tex = D3DXVECTOR2(0.1f * aPosTexU[nCntScore] + 0.1f, 0.0f);
-				pVtx[2].tex = D3DXVECTOR2(0.1f * aPosTexU[nCntScore], 1.0f);
-				pVtx[3].tex = D3DXVECTOR2(0.1f * aPosTexU[nCntScore] + 0.1f, 1.0f);
-				nCntScore++;
 			}
 
 			if (s_aPop[nCntPop].bSide == true)
@@ -294,11 +270,6 @@ void SetPop(D3DXVECTOR3 pos, D3DXVECTOR3 rot, bool side, POP_TYPE type, int nIdx
 		s_aPop[nIdxGoal].fAngle = atan2f(FELL_POP_WIDTH, FELL_POP_HEIGHT);
 		s_aPop[nIdxGoal].fLength = sqrtf((FELL_POP_WIDTH * FELL_POP_WIDTH) + (FELL_POP_HEIGHT * FELL_POP_HEIGHT)) / 2.0f;
 	}
-	else if (s_aPop[nIdxGoal].type == POP_TYPE_SCORE)
-	{
-		s_aPop[nIdxGoal].fAngle = atan2f(SCORE_POP_WIDTH, SCORE_POP_HEIGHT);
-		s_aPop[nIdxGoal].fLength = sqrtf((SCORE_POP_WIDTH * SCORE_POP_WIDTH) + (SCORE_POP_HEIGHT * SCORE_POP_HEIGHT)) / 2.0f;
-	}
 }
 
 //============================================================================
@@ -321,20 +292,6 @@ void PopCounter(int nIdxPop)
 			}
 		}
 		if (s_fPopCounter >= 100)
-		{
-			s_aPop[nIdxPop].bUse = false;
-			s_fPopCounter = 0;
-			s_aPop[nIdxPop].move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-		}
-		else
-		{
-			s_fPopCounter++;
-		}
-	}
-	else if (s_aPop[nIdxPop].type == POP_TYPE_FELL || s_aPop[nIdxPop].type == POP_TYPE_SCORE)
-	{
-		//ポップ時間
-		if (s_fPopCounter >= 120)
 		{
 			s_aPop[nIdxPop].bUse = false;
 			s_fPopCounter = 0;

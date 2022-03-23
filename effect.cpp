@@ -15,7 +15,7 @@
 //====================================
 // マクロ定義
 //====================================
-#define MAX_EFFECT	(2400)		// エフェクトの最大数
+#define MAX_EFFECT	(4800)		// エフェクトの最大数
 
 //====================================
 // グローバル変数
@@ -53,6 +53,14 @@ void InitEffect(void)
 	D3DXCreateTextureFromFile(pDevice,
 		"data\\TEXTURE\\Effect\\effect105.png",
 		&s_pTexture[EFFECT_TYPE_TRAIL]);
+
+	D3DXCreateTextureFromFile(pDevice,
+		"data\\TEXTURE\\Effect\\effect105.png",
+		&s_pTexture[EFFECT_TYPE_POINT_SMOKE_RED]);
+
+	D3DXCreateTextureFromFile(pDevice,
+		"data\\TEXTURE\\Effect\\effect105.png",
+		&s_pTexture[EFFECT_TYPE_POINT_SMOKE_BLUE]);
 
 	// 頂点バッファの生成
 	pDevice->CreateVertexBuffer(sizeof(VERTEX_2D) * 4 * MAX_EFFECT,
@@ -332,6 +340,52 @@ void SetEffect(D3DXVECTOR3 pos, float rot, EFFECT_TYPE Type)
 			pEffect->fDeltaSize = D3DXVECTOR3(0.5f, 0.5f, 0.0f);
 			pEffect->col = D3DXCOLOR(0.95f, 0.75f, 0.5f, 0.3f);
 			pEffect->fDeltaCol = D3DXCOLOR(0.0f, +0.0f, +0.0f, 0.001f);
+			pEffect->nLife = 30;
+			pEffect->rot = 0.0f;
+
+			break;
+
+		case EFFECT_TYPE_POINT_SMOKE_RED:
+
+			float fY;
+
+			if (pos.y < SCREEN_HEIGHT * 0.5f)
+			{
+				fY = 1.0f;
+			}
+			else
+			{
+				fY = -1.0f;
+			}
+
+			pEffect->move = D3DXVECTOR3((rand() % 3) - 1.0f + ((rand() % 21) - 10.0f) * 0.1f, fY * ((rand() % 7) + 1), 0.0f);
+			pEffect->fSize = D3DXVECTOR3(30.0f, 30.0f, 0.0f);
+			pEffect->fDeltaSize = D3DXVECTOR3(0.5f, 0.5f, 0.0f);
+			pEffect->col = D3DXCOLOR(1.0f, 0.3f, 0.13f, 0.25f);
+			pEffect->fDeltaCol = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.001f);
+			pEffect->nLife = 60;
+			pEffect->rot = 0.0f;
+
+			break;
+
+		case EFFECT_TYPE_POINT_SMOKE_BLUE:
+
+			float fYb;
+
+			if (pos.y < SCREEN_HEIGHT * 0.5f)
+			{
+				fYb = 1.0f;
+			}
+			else
+			{
+				fYb = -1.0f;
+			}
+
+			pEffect->move = D3DXVECTOR3((rand() % 3) - 1.0f + ((rand() % 21) - 10.0f) * 0.1f, fYb * ((rand() % 7) + 1), 0.0f);
+			pEffect->fSize = D3DXVECTOR3(30.0f, 30.0f, 0.0f);
+			pEffect->fDeltaSize = D3DXVECTOR3(0.5f, 0.5f, 0.0f);
+			pEffect->col = D3DXCOLOR(0.13f, 0.3f, 1.0f, 0.25f);
+			pEffect->fDeltaCol = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.001f);
 			pEffect->nLife = 30;
 			pEffect->rot = 0.0f;
 

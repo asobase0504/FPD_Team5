@@ -25,7 +25,6 @@
 //-----------------------------------------
 #define NUM_PLAYER		(2)								// プレイヤーの数
 #define PLAYER_FILE		"data/player.txt"				// プレイヤー読み込みファイル
-#define PLAYER_TEX		"data/TEXTURE/player00.png"		// プレイヤーのテクスチャ
 #define PLAYER_SIZ		(45.0f)							// プレイヤーの大きさ
 #define ZERO_VECTOR		(D3DXVECTOR3(0.0f, 0.0f, 0.0f))	// ゼロベクトル
 
@@ -116,8 +115,7 @@ void UpdatePlayer(void)
 			if (pPlayer->bHaveDisk)
 			{ //ディスクを所持してる場合
 
-				// 移動量を無くす。
-				pPlayer->move = ZERO_VECTOR;
+				pPlayer->move -= pPlayer->move * pPlayer->fAttenuationSlidingSpead;	// 移動量の減衰
 
 				// 投げる
 				ThrowPlayer(nIdxPlayer);
@@ -451,6 +449,7 @@ void CatchDiscPlayer(int nIdxPlayer)
 		// 床で取得
 		if ((pDisk->type != DISK_TYPE_LOB || (pDisk->type == DISK_TYPE_LOB && pDisk->fHeight <= 0.0f)) && pPlayer->jumpstate == JUMP_NONE)
 		{
+			pPlayer->move += D3DXVECTOR3(pDisk->move.x, -pDisk->move.y, pDisk->move.z);
 			DestroyDisk();	// ディスクの破棄
 			pPlayer->bHaveDisk = true;
 			pPlayer->fThrowPower = pPlayer->fMaxThrowPower;
@@ -577,10 +576,20 @@ void SetPlayer(const D3DXVECTOR3& pos, PLAYERTYPE type)
 		pVtx[3].rhw = 1.0f;
 
 		// テクスチャ座標の設定
-		pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
-		pVtx[1].tex = D3DXVECTOR2(1.0f, 0.0f);
-		pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);
-		pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);
+		if (i == 0)
+		{
+			pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
+			pVtx[1].tex = D3DXVECTOR2(1.0f, 0.0f);
+			pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);
+			pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);
+		}
+		else
+		{
+			pVtx[0].tex = D3DXVECTOR2(1.0f, 0.0f);
+			pVtx[1].tex = D3DXVECTOR2(0.0f, 0.0f);
+			pVtx[2].tex = D3DXVECTOR2(1.0f, 1.0f);
+			pVtx[3].tex = D3DXVECTOR2(0.0f, 1.0f);
+		}
 
 		// 頂点バッファをアンロックする
 		pPlayer->pVtxBuff->Unlock();

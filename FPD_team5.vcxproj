@@ -165,6 +165,7 @@
     <ClCompile Include="menu.cpp" />
     <ClCompile Include="mode.cpp" />
     <ClCompile Include="player.cpp" />
+    <ClCompile Include="point.cpp" />
     <ClCompile Include="pop.cpp" />
     <ClCompile Include="Referee.cpp" />
     <ClCompile Include="result.cpp" />
@@ -193,6 +194,7 @@
     <ClInclude Include="menu.h" />
     <ClInclude Include="mode.h" />
     <ClInclude Include="player.h" />
+    <ClInclude Include="point.h" />
     <ClInclude Include="pop.h" />
     <ClInclude Include="referee.h" />
     <ClInclude Include="result.h" />

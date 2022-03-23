@@ -133,7 +133,7 @@ void UpdateDisk(void)
 				if (g_aDisk[nCntDisk].fHeight > 0.0f)
 				{
 					g_aDisk[nCntDisk].fHeight += g_aDisk[nCntDisk].fVerticalSpeed;
-					g_aDisk[nCntDisk].fVerticalSpeed -= 0.05f;
+					g_aDisk[nCntDisk].fVerticalSpeed += GRAVITY_ACCELERATION_LOB;
 
 					if (g_aDisk[nCntDisk].fHeight <= 0.0f)
 					{
@@ -148,7 +148,7 @@ void UpdateDisk(void)
 				if (g_aDisk[nCntDisk].fHeight > 0.0f)
 				{
 					g_aDisk[nCntDisk].fHeight += g_aDisk[nCntDisk].fVerticalSpeed;
-					g_aDisk[nCntDisk].fVerticalSpeed -= 0.05f;
+					g_aDisk[nCntDisk].fVerticalSpeed += GRAVITY_ACCELERATION_LOB;
 
 					if (g_aDisk[nCntDisk].fHeight <= 0.0f)
 					{
@@ -831,7 +831,7 @@ D3DXVECTOR3 SetLobSpeed(D3DXVECTOR3 pos, D3DXVECTOR3 move, int nCntDisk, float f
 	while (height > 0.0f)
 	{//ディスクが落ちた時の位置と必要な時間を計算する
 		height += vSpeed;
-		vSpeed -= 0.05f;
+		vSpeed += GRAVITY_ACCELERATION_LOB;
 		endPos += move;
 		fTime += 1.0f;
 	}
