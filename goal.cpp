@@ -292,10 +292,6 @@ void ColisionGoal(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pLastPos, float fWidth, float 
 					s_aGoal[nCntGoal].pos - D3DXVECTOR3(0.0f, (GOAL_HEIGHT / 2), 0.0f),
 					(s_aGoal[nCntGoal].pos + D3DXVECTOR3(0.0f, (GOAL_HEIGHT / 2), 0.0f)) - (s_aGoal[nCntGoal].pos - D3DXVECTOR3(0.0f, (GOAL_HEIGHT / 2), 0.0f))) == true)
 				{
-					SetPop(D3DXVECTOR3(SCREEN_WIDTH / 2 - (SCORE_POP_WIDTH * 2), SCREEN_HEIGHT / 2, 0.0f), s_aGoal[nCntGoal].rot, false, POP_TYPE_SCORE, 7);
-					SetPop(D3DXVECTOR3(SCREEN_WIDTH / 2 - (SCORE_POP_WIDTH), SCREEN_HEIGHT / 2, 0.0f), s_aGoal[nCntGoal].rot, false, POP_TYPE_SCORE, 8);
-					SetPop(D3DXVECTOR3(SCREEN_WIDTH / 2 + (SCORE_POP_WIDTH), SCREEN_HEIGHT / 2, 0.0f), s_aGoal[nCntGoal].rot, false, POP_TYPE_SCORE, 9);
-					SetPop(D3DXVECTOR3(SCREEN_WIDTH / 2 + (SCORE_POP_WIDTH * 2), SCREEN_HEIGHT / 2, 0.0f), s_aGoal[nCntGoal].rot, false, POP_TYPE_SCORE, 10);
 
 					if (s_aGoal[nCntGoal].bSide == false)
 					{
@@ -318,10 +314,6 @@ void ColisionGoal(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pLastPos, float fWidth, float 
 					s_aGoal[nCntGoal].pos - D3DXVECTOR3(0.0f, (STRIKE_GOAL_HEIGHT / 2), 0.0f),
 					(s_aGoal[nCntGoal].pos + D3DXVECTOR3(0.0f, (STRIKE_GOAL_HEIGHT / 2), 0.0f)) - (s_aGoal[nCntGoal].pos - D3DXVECTOR3(0.0f, (STRIKE_GOAL_HEIGHT / 2), 0.0f))) == true)
 				{
-					SetPop(D3DXVECTOR3(SCREEN_WIDTH / 2 - (SCORE_POP_WIDTH * 2), SCREEN_HEIGHT / 2, 0.0f), s_aGoal[nCntGoal].rot, false, POP_TYPE_SCORE, 7);
-					SetPop(D3DXVECTOR3(SCREEN_WIDTH / 2 - (SCORE_POP_WIDTH), SCREEN_HEIGHT / 2, 0.0f), s_aGoal[nCntGoal].rot, false, POP_TYPE_SCORE, 8);
-					SetPop(D3DXVECTOR3(SCREEN_WIDTH / 2 + (SCORE_POP_WIDTH), SCREEN_HEIGHT / 2, 0.0f), s_aGoal[nCntGoal].rot, false, POP_TYPE_SCORE, 9);
-					SetPop(D3DXVECTOR3(SCREEN_WIDTH / 2 + (SCORE_POP_WIDTH * 2), SCREEN_HEIGHT / 2, 0.0f), s_aGoal[nCntGoal].rot, false, POP_TYPE_SCORE, 10);
 
 					if (s_aGoal[nCntGoal].bSide == false)
 					{

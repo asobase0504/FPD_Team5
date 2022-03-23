@@ -152,10 +152,10 @@ void SetLandingMark(D3DXVECTOR3 pos, D3DXVECTOR3 move, float fHeight, float fSpe
 		}
 
 		//頂点座標の設定
-		pVtx[0].pos = D3DXVECTOR3(pos.x - (fSize * 0.5f), pos.y - (fSize * 0.5f) + 7.0f, 0.0f);
-		pVtx[1].pos = D3DXVECTOR3(pos.x + (fSize * 0.5f), pos.y - (fSize * 0.5f) + 7.0f, 0.0f);
-		pVtx[2].pos = D3DXVECTOR3(pos.x - (fSize * 0.5f), pos.y + (fSize * 0.5f) + 7.0f, 0.0f);
-		pVtx[3].pos = D3DXVECTOR3(pos.x + (fSize * 0.5f), pos.y + (fSize * 0.5f) + 7.0f, 0.0f);
+		pVtx[0].pos = D3DXVECTOR3(pos.x - (fSize * 0.25f), pos.y - (fSize * 0.25f), 0.0f);
+		pVtx[1].pos = D3DXVECTOR3(pos.x + (fSize * 0.25f), pos.y - (fSize * 0.25f), 0.0f);
+		pVtx[2].pos = D3DXVECTOR3(pos.x - (fSize * 0.25f), pos.y + (fSize * 0.25f), 0.0f);
+		pVtx[3].pos = D3DXVECTOR3(pos.x + (fSize * 0.25f), pos.y + (fSize * 0.25f), 0.0f);
 
 		//頂点カラーの設定
 		pVtx[0].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
