@@ -177,14 +177,14 @@ void SetPoint(void)
 		//テクスチャの座標設定
 		int aData = aNumDigit * 0.1f;
 		pVtx[0].tex = D3DXVECTOR2(aData % 10 * 0.1f, 0.0f);
-		pVtx[1].tex = D3DXVECTOR2((aData + 1) % 10 * 0.1f, 0.0f);
+		pVtx[1].tex = D3DXVECTOR2((aData % 10 + 1) * 0.1f, 0.0f);
 		pVtx[2].tex = D3DXVECTOR2(aData % 10 * 0.1f, 1.0f);
-		pVtx[3].tex = D3DXVECTOR2((aData + 1) % 10 * 0.1f, 1.0f);
+		pVtx[3].tex = D3DXVECTOR2((aData % 10 + 1) * 0.1f, 1.0f);
 
 		pVtx[4].tex = D3DXVECTOR2(aNumDigit % 10 * 0.1f, 0.0f);
-		pVtx[5].tex = D3DXVECTOR2((aNumDigit + 1) % 10 * 0.1f, 0.0f);
+		pVtx[5].tex = D3DXVECTOR2((aNumDigit % 10 + 1) * 0.1f, 0.0f);
 		pVtx[6].tex = D3DXVECTOR2(aNumDigit % 10 * 0.1f, 1.0f);
-		pVtx[7].tex = D3DXVECTOR2((aNumDigit + 1) % 10 * 0.1f, 1.0f);
+		pVtx[7].tex = D3DXVECTOR2((aNumDigit % 10 + 1) * 0.1f, 1.0f);
 
 		//頂点バッファをアンロックする
 		pPoint->pVtxBuff->Unlock();
