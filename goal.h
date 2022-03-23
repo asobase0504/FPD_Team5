@@ -56,7 +56,7 @@ void UpdateGoal(void);
 void DrawGoal(void);
 void SetGoal(D3DXVECTOR3 pos, D3DXVECTOR3 rot, bool side, GOAL_TYPE type, int nIdxGoal);
 
-void ColisionGoal(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pLastPos, float fWidth, float fHeight);
+void ColisionGoal(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pLastPos);
 bool ColSegmentsGoal(D3DXVECTOR3 &seg1Start, D3DXVECTOR3 &seg1Vec, D3DXVECTOR3 &seg2Start, D3DXVECTOR3 &seg2Vec);
 float Vec3CrossGoal(D3DXVECTOR3* vec1, D3DXVECTOR3* vec2);
 
