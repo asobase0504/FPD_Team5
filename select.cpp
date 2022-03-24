@@ -29,7 +29,7 @@
 
 #define TEXTURE_TIMELIMIT	("data/TEXTURE/WORD/FPD_SelectUI_TimeLimit_Re.png")	//制限時間のテクスチャ
 #define TEXTURE_POINT		("data/TEXTURE/WORD/FPD_SelectUI_Point_Re.png")		//ポイント数のテクスチャ
-#define TEXTURE_SETCOUNT	("data/TEXTURE/WORD/FPD_SelectUI_SetCount_Re.png")		//セット数のテクスチャ
+#define TEXTURE_SETCOUNT	("data/TEXTURE/WORD/FPD_SelectUI_SetCount_Re.png")	//セット数のテクスチャ
 #define TEXTURE_ARROW		("data/TEXTURE/WORD/FPD_SelectUI_Arrow_Re.png")		//矢印のテクスチャ
 
 //***********************************
@@ -617,32 +617,36 @@ static void ChangeColorSelectBefore(void)
 
 		/**************** 矢印 ****************/
 
-		//頂点バッファをロックし、頂点データへのポインタを取得
-		s_pVtxBuffArrow->Lock(0, 0, (void**)&pVtx, 0);
+		//if (GetSelectMenuBefore() != OPTION_GOTOGAME)
+		//{
+		//	//頂点バッファをロックし、頂点データへのポインタを取得
+		//	s_pVtxBuffArrow->Lock(0, 0, (void**)&pVtx, 0);
 
-		pVtx += (GetSelectMenuBefore() * 4);	//左側の矢印
+		//	int nIdx = (GetSelectMenuBefore() * 4);
+		//	pVtx += nIdx;	//左側の矢印
 
-		//頂点カラーの設定
-		pVtx[0].col = NO_SELECT_COLOR;
-		pVtx[1].col = NO_SELECT_COLOR;
-		pVtx[2].col = NO_SELECT_COLOR;
-		pVtx[3].col = NO_SELECT_COLOR;
+		//	//頂点カラーの設定
+		//	pVtx[0].col = NO_SELECT_COLOR;
+		//	pVtx[1].col = NO_SELECT_COLOR;
+		//	pVtx[2].col = NO_SELECT_COLOR;
+		//	pVtx[3].col = NO_SELECT_COLOR;
 
-		//頂点バッファをアンロックする
-		s_pVtxBuffArrow->Unlock();
+		//	//頂点バッファをアンロックする
+		//	s_pVtxBuffArrow->Unlock();
 
-		//頂点バッファをロックし、頂点データへのポインタを取得
-		s_pVtxBuffArrow->Lock(0, 0, (void**)&pVtx, 0);
+		//	//頂点バッファをロックし、頂点データへのポインタを取得
+		//	s_pVtxBuffArrow->Lock(0, 0, (void**)&pVtx, 0);
 
-		pVtx += ((GetSelectMenuBefore() + 3) * 4);	//右側の矢印
+		//	pVtx += ((GetSelectMenuBefore() + 3) * 4);	//右側の矢印
 
-		//頂点カラーの設定
-		pVtx[0].col = NO_SELECT_COLOR;
-		pVtx[1].col = NO_SELECT_COLOR;
-		pVtx[2].col = NO_SELECT_COLOR;
-		pVtx[3].col = NO_SELECT_COLOR;
+		//	//頂点カラーの設定
+		//	pVtx[0].col = NO_SELECT_COLOR;
+		//	pVtx[1].col = NO_SELECT_COLOR;
+		//	pVtx[2].col = NO_SELECT_COLOR;
+		//	pVtx[3].col = NO_SELECT_COLOR;
 
-		//頂点バッファをアンロックする
-		s_pVtxBuffArrow->Unlock();
+		//	//頂点バッファをアンロックする
+		//	s_pVtxBuffArrow->Unlock();
+		//}
 	}
 }
