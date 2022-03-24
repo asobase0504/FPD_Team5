@@ -28,11 +28,12 @@
 #include "pipe.h"
 #include "gear.h"
 #include "sound.h"
+#include "point.h"
 
 //------------------------------------
 // マクロ定義
 //------------------------------------
-#define RESET_DELAY	(20)	// 次開始までの遅延
+#define RESET_DELAY	(120)	// 次開始までの遅延
 
 //------------------------------------
 // 静的変数
@@ -128,11 +129,11 @@ void UpdateGame(void)
 		UpdateDisk();			// ディスク
 		UpdateLandingMark();	// ディスクの落下地点
 		UpdateShadow();			// 影
-		UpdateEffect();			// エフェクト
 		UpdateUI();				// UI
+	}
 		UpdatePipe();			// 配管
 		UpdateGear();			// 歯車
-	}
+		UpdateEffect();			// エフェクト
 
 	// スコア関係の処理
 	{
@@ -171,6 +172,7 @@ void UpdateGame(void)
 			{ // 引き分け
 				RoundReset();
 			}
+			SetPointRound(s_nPlayerSet);
 		}
 
 		// セット数が一定以上か否か
@@ -196,6 +198,8 @@ void DrawGame()
 	DrawLandingMark();	// ディスクの落下地点
 	DrawPipe();			// 配管
 
+	DrawStgFg();		// ステージ前景
+
 	if (GetDisk()->type == DISK_TYPE_LOB)
 	{
 		DrawPlayer();		// プレイヤー
@@ -206,8 +210,6 @@ void DrawGame()
 		DrawDisk();			// ディスク
 		DrawPlayer();		// プレイヤー
 	}
-	DrawStgFg();		// ステージ前景
-
 	DrawUI();			// UI
 	DrawEffect();		// エフェクト
 
