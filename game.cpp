@@ -27,6 +27,7 @@
 #include "stgfg.h"
 #include "pipe.h"
 #include "gear.h"
+#include "sound.h"
 
 //------------------------------------
 // マクロ定義
@@ -161,6 +162,8 @@ void UpdateGame(void)
 		if (GetTime()->nTime <= 0)
 		{
 			DestroyDisk();	// ディスクの削除
+			PlaySound(SOUND_LABEL_SE_WHISTLE_STOP);
+
 			if (s_nPlayerSet[0] > s_nPlayerSet[1])
 			{ // P1の勝ち
 				s_nPlayerSet[0]++;	// セット数の取得
