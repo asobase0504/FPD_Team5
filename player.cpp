@@ -128,14 +128,14 @@ void UpdatePlayer(void)
 					pPlayer->fVerticalSpeed -= 0.15f;
 				}
 
-				if (pPlayer->fThrowPower <= 4.0f)	// ここの条件式は後調整
+				if (pPlayer->fThrowPower <= 3.5f)	// ここの条件式は後調整
 				{	// 一定時間の経過で床に戻る
 					pPlayer->fHeight += pPlayer->fVerticalSpeed;
 					pPlayer->fVerticalSpeed -= 0.15f;
 
 					if (pPlayer->fHeight <= 0.0f)
 					{
-						pPlayer->fVerticalSpeed = 5.0f;
+						pPlayer->fVerticalSpeed = 2.5f;
 						pPlayer->fHeight = 0.0f;
 						pPlayer->jumpstate = JUMP_NONE;
 					}
@@ -312,12 +312,12 @@ void ThrowPlayer(int nIdxPlayer)
 	// 入力処理
 	inputVec += InputMovePlayer(nIdxPlayer);
 
-	if (D3DXVec3Length(&inputVec) >= 0.9f)
+	if (D3DXVec3Length(&inputVec) >= 0.95f)
 	{
 		if (!s_bCurveInput)
 		{
 			// どれくらい曲がるかの入力
-			moveCurve.y = -inputVec.y;
+			moveCurve.y = inputVec.y;
 		}
 		s_bCurveInput = true;
 	}
@@ -351,6 +351,11 @@ void ThrowPlayer(int nIdxPlayer)
 			{
 				if (pPlayer->nSpecialSkillCnt <= 40)
 				{
+					if (inputVec.y - moveCurve.y <= 0.1f)
+					{
+						moveCurve = ZERO_VECTOR;
+					}
+
 					ThrowDisk(pPlayer->pos, move, moveCurve, DISK_TYPE_NORMAL, nIdxPlayer);
 					PlaySound(SOUND_LABEL_SE_THROW_NORMAL);
 				}
@@ -458,7 +463,7 @@ void CatchDiscPlayer(int nIdxPlayer)
 	Disk* pDisk = GetDisk();
 
 	// ディスクとプレイヤーの当たり判定
-	if ((CollisionCircle(pPlayer->pos, pPlayer->fSize * (1 + (pPlayer->fHeight * 0.005f)), pDisk->pos, (pDisk->fSize * 0.5f))) && (pDisk->nPlayer != nIdxPlayer))
+	if ((CollisionCircle(pPlayer->pos, (pPlayer->fSize - 45.0f) * (1 + (pPlayer->fHeight * 0.005f)), pDisk->pos, (pDisk->fSize * 0.5f))) && (pDisk->nPlayer != nIdxPlayer))
 	{
 		// 床で取得
 		if ((pDisk->type != DISK_TYPE_LOB || (pDisk->type == DISK_TYPE_LOB && pDisk->fHeight <= 0.0f)) && pPlayer->jumpstate == JUMP_NONE)

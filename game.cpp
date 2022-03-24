@@ -206,10 +206,12 @@ void UpdateGame(void)
 		// ƒZƒbƒg”‚ªˆê’èˆÈã‚©”Û‚©
 		if (s_nPlayerSet[0] >= s_nNeedSet)
 		{
+			SetWInPlayerIdx(0);
 			bIsResult = true;
 		}
 		else if (s_nPlayerSet[1] >= s_nNeedSet)
 		{
+			SetWInPlayerIdx(1);
 			bIsResult = true;
 		}
 	}

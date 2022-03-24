@@ -16,15 +16,16 @@
 #define WIN_LOSE_WIDTH		(184.0f)	//勝敗UIの幅
 #define WIN_LOSE_HEIGHT		(96.0f)		//勝敗UIの高さ
 #define LEFTSIDE_POS_X		(SCREEN_WIDTH * 0.3f)	//左側のUIのX座標
-#define LEFTSIDE_POS_Y		(250.0f)	//左側のUIのY座標
+#define LEFTSIDE_POS_Y		(SCREEN_HEIGHT * 0.7f)	//左側のUIのY座標
 #define RIGHTSIDE_POS_X		(SCREEN_WIDTH * 0.7f)	//右側のUIのX座標
-#define RIGHTSIDE_POS_Y		(250.0f)	//右側のUIのY座標
+#define RIGHTSIDE_POS_Y		(SCREEN_HEIGHT * 0.7f)	//右側のUIのY座標
 
 //**************************************************
 //スタティック変数
 //**************************************************
 static LPDIRECT3DTEXTURE9		s_apTexture[MAX_WIN_LOSE];	//テクスチャへのポインタ
 static LPDIRECT3DVERTEXBUFFER9	s_pVtxBuffWinLose = NULL;		//頂点バッファへのポインタ
+static int s_nWinPlayerIdx;
 
 //============================
 // リザルトの初期化処理
@@ -153,12 +154,28 @@ void DrawResult(void)
 
 	for (int i = 0; i < MAX_WIN_LOSE; i++)
 	{
-		//テクスチャの設定
-		pDevice->SetTexture(0, s_apTexture[i]);
+		if (s_nWinPlayerIdx == i)
+		{
+			//テクスチャの設定
+			pDevice->SetTexture(0, s_apTexture[1]);
+		}
+		else
+		{
+			//テクスチャの設定
+			pDevice->SetTexture(0, s_apTexture[0]);
+		}
 
 		//チュートリアルの描画
 		pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP,		//プリミティブの種類
 								i * 4,					//描画する最初の頂点インデックス
 								2);						//描画するプリミティブ数
 	}
+}
+
+//============================
+// リザルトの描画処理
+//============================
+void SetWInPlayerIdx(int nIdx)
+{
+	s_nWinPlayerIdx = nIdx;
 }
