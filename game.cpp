@@ -31,6 +31,7 @@
 #include "point.h"
 #include "menu.h"
 #include "pause.h"
+#include "chain.h"
 
 //------------------------------------
 // マクロ定義
@@ -71,6 +72,7 @@ void InitGame(void)
 	InitPipe();			// 配管
 	InitGear();			// 歯車
 	InitPause();		// ポーズ
+	InitChain();		// 鎖
 
 	// 初期化
 	s_nPlayerSet[0] = 0;
@@ -100,6 +102,7 @@ void UninitGame(void)
 	UninitPipe();			// 配管
 	UninitGear();			// 歯車
 	UninitPause();			// ポーズ
+	UninitChain();			// 鎖
 }
 
 //=========================================
@@ -154,6 +157,7 @@ void UpdateGame(void)
 		UpdateLandingMark();	// ディスクの落下地点
 		UpdateShadow();			// 影
 		UpdateUI();				// UI
+		UpdateChain();			// 鎖
 	}
 		UpdatePipe();			// 配管
 		UpdateGear();			// 歯車
@@ -221,7 +225,7 @@ void DrawGame()
 	DrawShadow();		// 影
 	DrawLandingMark();	// ディスクの落下地点
 	DrawPipe();			// 配管
-
+	DrawChain();		// 鎖
 	DrawStgFg();		// ステージ前景
 
 	if (GetDisk()->type == DISK_TYPE_LOB)
@@ -305,6 +309,8 @@ void RoundReset(void)
 //=========================================
 void SetBackground(void)
 {
+	SetChain(D3DXVECTOR3(SCREEN_WIDTH * 0.5f - 2.0f, SCREEN_HEIGHT * 0.5f, 0.0f), D3DXVECTOR3(10.0f, 270.0f, 0.0f));
+
 	SetPipe(D3DXVECTOR3(125.0f, 70.0f, 0.0f), D3DXVECTOR3(18.21f, 50.0f, 0.0f), PIPE_TYPE_VERTICAL);
 	SetPipe(D3DXVECTOR3(250.0f, 70.0f, 0.0f), D3DXVECTOR3(18.21f, 50.0f, 0.0f), PIPE_TYPE_VERTICAL);
 	SetPipe(D3DXVECTOR3(375.0f, 70.0f, 0.0f), D3DXVECTOR3(18.21f, 50.0f, 0.0f), PIPE_TYPE_VERTICAL);

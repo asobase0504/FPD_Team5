@@ -67,10 +67,10 @@ void InitPlayer(void)
 
 	// プレイヤーの設定
 	SetPlayer(D3DXVECTOR3(200.0f, SCREEN_HEIGHT * 0.5f, 0.0f), PLAYERTYPE_1);
-	s_player[0].nIdxShadow = SetShadow(s_player[0].pos, PLAYER_SIZ * 3.0f);
+	//s_player[0].nIdxShadow = SetShadow(s_player[0].pos, PLAYER_SIZ * 3.0f);
 
 	SetPlayer(D3DXVECTOR3(SCREEN_WIDTH - 200.0f, SCREEN_HEIGHT * 0.5f, 0.0f), PLAYERTYPE_2);
-	s_player[1].nIdxShadow = SetShadow(s_player[1].pos, PLAYER_SIZ * 3.0f);
+	//s_player[1].nIdxShadow = SetShadow(s_player[1].pos, PLAYER_SIZ * 3.0f);
 }
 
 //=========================================
@@ -110,7 +110,7 @@ void UpdatePlayer(void)
 		pPlayer->pos += pPlayer->move;
 
 		// 影の位置の調整
-		SetPositionShadow(pPlayer->nIdxShadow, pPlayer->pos);
+		//SetPositionShadow(pPlayer->nIdxShadow, pPlayer->pos);
 
 		if (pPlayer->bHaveDisk)
 		{ //ディスクを所持してる場合
