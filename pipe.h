@@ -29,6 +29,7 @@ typedef struct
 	int nCntAnim;					//アニメーションカウンター
 	int nCntMove;					//移動用の変数
 	float fRand;					//アニメーション移動用の変数
+	int nScored;					
 	bool bUse;						//使用されているかどうか
 }Pipe;
 
@@ -37,8 +38,11 @@ void InitPipe(void);
 void UninitPipe(void);
 void UpdatePipe(void);
 void DrawPipe(void);
+void PipeAnimation(int nCntPipe);
 
 //位置・サイズ・一フレームの回転角度・種類
 void SetPipe(D3DXVECTOR3 pos, D3DXVECTOR3 size, PIPE_TYPE type);
+
+void PointSmokeAnimation(int nPlayer);
 
 #endif
