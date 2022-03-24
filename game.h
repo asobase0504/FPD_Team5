@@ -19,5 +19,6 @@ void SetNeedPoint(int nPoint);
 void SetNeedSet(int nPoint);
 bool* GetResetScore(void);
 void SetBackground(void);
+void SetEnablePause(bool bUse);	// ƒ|[ƒY‚Ìó‘Ô‚ğİ’è‚·‚é
 
 #endif // !_GAME_H_
