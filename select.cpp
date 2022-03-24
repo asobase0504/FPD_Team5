@@ -140,10 +140,10 @@ void InitSelect(void)
 		pVtx[3].rhw = 1.0f;
 
 		//頂点カラーの設定
-		pVtx[0].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-		pVtx[1].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-		pVtx[2].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-		pVtx[3].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+		pVtx[0].col = NO_SELECT_COLOR;
+		pVtx[1].col = NO_SELECT_COLOR;
+		pVtx[2].col = NO_SELECT_COLOR;
+		pVtx[3].col = NO_SELECT_COLOR;
 
 		//テクスチャ座標の設定
 		pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
@@ -171,6 +171,7 @@ void InitSelect(void)
 			//保存しておいた座標から、左側の矢印の位置を決める
 			fPosX = aPosArrow[i].x - ARROW_POS_X;
 			fPosY = aPosArrow[i].y;
+
 			//テクスチャ座標の設定
 			pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
 			pVtx[1].tex = D3DXVECTOR2(1.0f, 0.0f);
@@ -182,6 +183,7 @@ void InitSelect(void)
 			//保存しておいた座標から、右側の矢印の位置を決める
 			fPosX = aPosArrow[i % MAX_SELECT].x + ARROW_POS_X;
 			fPosY = aPosArrow[i % MAX_SELECT].y;
+
 			//テクスチャ座標の設定
 			pVtx[0].tex = D3DXVECTOR2(1.0f, 0.0f);
 			pVtx[1].tex = D3DXVECTOR2(0.0f, 0.0f);
@@ -208,10 +210,10 @@ void InitSelect(void)
 		pVtx[3].rhw = 1.0f;
 
 		//頂点カラーの設定
-		pVtx[0].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-		pVtx[1].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-		pVtx[2].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-		pVtx[3].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+		pVtx[0].col = NO_SELECT_COLOR;
+		pVtx[1].col = NO_SELECT_COLOR;
+		pVtx[2].col = NO_SELECT_COLOR;
+		pVtx[3].col = NO_SELECT_COLOR;
 
 		pVtx += 4;		//4つ分進める
 	}
@@ -262,7 +264,108 @@ void UninitSelect(void)
 //============================================
 void UpdateSelect(void)
 {
-	
+	VERTEX_2D *pVtx = NULL;								//頂点情報へのポインタ
+
+	if (GetSelectMenuNow() != OPTION_GOTOGAME)
+	{//「ゲーム開始」以外を先手くしている場合
+
+		D3DXCOLOR col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);	//設定用
+
+		/**************** 選択部分 ****************/
+
+		//頂点バッファをロックし、頂点データへのポインタを取得
+		s_pVtxBuffSelect->Lock(0, 0, (void**)&pVtx, 0);
+
+		pVtx += (GetSelectMenuNow() * 4);		//指定の位置まで進める
+
+		//頂点カラーの設定
+		pVtx[0].col = col;
+		pVtx[1].col = col;
+		pVtx[2].col = col;
+		pVtx[3].col = col;
+
+		//頂点バッファをアンロックする
+		s_pVtxBuffSelect->Unlock();
+
+		/**************** 矢印 ****************/
+
+		//頂点バッファをロックし、頂点データへのポインタを取得
+		s_pVtxBuffArrow->Lock(0, 0, (void**)&pVtx, 0);
+
+		pVtx += (GetSelectMenuNow() * 4);	//左側の矢印
+
+		//頂点カラーの設定
+		pVtx[0].col = col;
+		pVtx[1].col = col;
+		pVtx[2].col = col;
+		pVtx[3].col = col;
+
+		//頂点バッファをアンロックする
+		s_pVtxBuffArrow->Unlock();
+
+		//頂点バッファをロックし、頂点データへのポインタを取得
+		s_pVtxBuffArrow->Lock(0, 0, (void**)&pVtx, 0);
+
+		pVtx += ((GetSelectMenuNow() + 3) * 4);	//右側の矢印
+
+		//頂点カラーの設定
+		pVtx[0].col = col;
+		pVtx[1].col = col;
+		pVtx[2].col = col;
+		pVtx[3].col = col;
+
+		//頂点バッファをアンロックする
+		s_pVtxBuffArrow->Unlock();
+	}
+
+	if (GetSelectMenuBefore() != GetSelectMenuNow())
+	{
+		/**************** 選択部分 ****************/
+
+		//頂点バッファをロックし、頂点データへのポインタを取得
+		s_pVtxBuffSelect->Lock(0, 0, (void**)&pVtx, 0);
+
+		pVtx += (GetSelectMenuBefore() * 4);		//指定の位置まで進める
+
+		//頂点カラーの設定
+		pVtx[0].col = NO_SELECT_COLOR;
+		pVtx[1].col = NO_SELECT_COLOR;
+		pVtx[2].col = NO_SELECT_COLOR;
+		pVtx[3].col = NO_SELECT_COLOR;
+
+		//頂点バッファをアンロックする
+		s_pVtxBuffSelect->Unlock();
+
+		/**************** 矢印 ****************/
+
+		//頂点バッファをロックし、頂点データへのポインタを取得
+		s_pVtxBuffArrow->Lock(0, 0, (void**)&pVtx, 0);
+
+		pVtx += (GetSelectMenuBefore() * 4);	//左側の矢印
+
+		//頂点カラーの設定
+		pVtx[0].col = NO_SELECT_COLOR;
+		pVtx[1].col = NO_SELECT_COLOR;
+		pVtx[2].col = NO_SELECT_COLOR;
+		pVtx[3].col = NO_SELECT_COLOR;
+
+		//頂点バッファをアンロックする
+		s_pVtxBuffArrow->Unlock();
+
+		//頂点バッファをロックし、頂点データへのポインタを取得
+		s_pVtxBuffArrow->Lock(0, 0, (void**)&pVtx, 0);
+
+		pVtx += ((GetSelectMenuBefore() + 3) * 4);	//右側の矢印
+
+		//頂点カラーの設定
+		pVtx[0].col = NO_SELECT_COLOR;
+		pVtx[1].col = NO_SELECT_COLOR;
+		pVtx[2].col = NO_SELECT_COLOR;
+		pVtx[3].col = NO_SELECT_COLOR;
+
+		//頂点バッファをアンロックする
+		s_pVtxBuffArrow->Unlock();
+	}
 }
 
 //============================================
@@ -271,6 +374,8 @@ void UpdateSelect(void)
 void DrawSelect(void)
 {
 	LPDIRECT3DDEVICE9 pDevice = GetDevice();	//デバイスの取得
+
+	/**************** 選択部分 ****************/
 
 	//頂点バッファをデータストリームに設定
 	pDevice->SetStreamSource(0, s_pVtxBuffSelect, 0, sizeof(VERTEX_2D));
@@ -288,6 +393,8 @@ void DrawSelect(void)
 								i * 4,				//頂点の開始場所
 								2);					//プリミティブの数
 	}
+
+	/**************** 矢印 ****************/
 
 	//頂点バッファをデータストリームに設定
 	pDevice->SetStreamSource(0, s_pVtxBuffArrow, 0, sizeof(VERTEX_2D));
@@ -371,7 +478,7 @@ int SelectPoint(int nSelectMenu)
 {
 	if (GetKeyboardTrigger(DIK_A) || GetJoypadTrigger(JOYKEY_LEFT, 0))
 	{// 左を入力( Aキー or 十字キー左 )
-
+		
 		//選択肢を一つ前(左)にする
 		s_nSelectPoint = ((s_nSelectPoint - 1) + POINTCOUNT_MAX) % POINTCOUNT_MAX;
 		PlaySound(SOUND_LABEL_SE_SELECT);
@@ -423,7 +530,7 @@ int SelectSetCount(int nSelectMenu)
 {
 	if (GetKeyboardTrigger(DIK_A) || GetJoypadTrigger(JOYKEY_LEFT, 0))
 	{// 左を入力( Aキー or 十字キー左 )
-
+		
 		//選択肢を一つ前(左)にする
 		s_nSelectSetCount = ((s_nSelectSetCount - 1) + SETCOUNT_MAX) % SETCOUNT_MAX;
 		PlaySound(SOUND_LABEL_SE_SELECT);

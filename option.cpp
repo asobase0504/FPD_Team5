@@ -31,7 +31,8 @@ static LPDIRECT3DTEXTURE9		s_pTexture = NULL;				//テクスチャへのポインタ(背景)
 static LPDIRECT3DTEXTURE9		s_apTextureMenu[MAX_TEXTURE];	//テクスチャへのポインタ(メニュー)
 static LPDIRECT3DVERTEXBUFFER9	s_pVtxBuff = NULL;				//頂点バッファへのポインタ
 
-static int s_nSelectMenu;		//選ばれているメニュー
+static int s_nSelectMenuNow;	//現在選ばれているメニュー
+static int s_nSelectMenuBefore;	//前回選ばれていたメニュー
 static int s_nSelectTimeLimit;	//選択した制限時間
 static int s_nSelectPoint;		//選択したポイント数
 static int s_nSelectSetCount;	//選択したセット数
@@ -71,7 +72,8 @@ void InitOption(void)
 								&s_apTextureMenu[3]);
 
 	//変数の初期化
-	s_nSelectMenu = 0;
+	s_nSelectMenuNow = 0;
+	s_nSelectMenuBefore = 0;
 	
 	VERTEX_2D * pVtx = NULL;	//頂点情報へのポインタ
 
@@ -165,14 +167,14 @@ void InitOption(void)
 	//===============================================================================
 
 	// 初期値の入力
-	s_nSelectTimeLimit = SelectTimeLimit(s_nSelectMenu);
-	s_nSelectPoint = SelectPoint(s_nSelectMenu);
-	s_nSelectSetCount = SelectSetCount(s_nSelectMenu);
+	s_nSelectTimeLimit = SelectTimeLimit(s_nSelectMenuNow);
+	s_nSelectPoint = SelectPoint(s_nSelectMenuNow);
+	s_nSelectSetCount = SelectSetCount(s_nSelectMenuNow);
 
-	//変数の初期化
-	s_nSelectMenu = 3;
+	//ゲーム開始が選択されている状態にする
+	s_nSelectMenuNow = OPTION_GOTOGAME;
 
-	ChangeOption(s_nSelectMenu);	//選択肢を変更
+	ChangeOption(s_nSelectMenuNow);	//選択肢を変更
 }
 
 //============================================
@@ -209,6 +211,8 @@ void UninitOption(void)
 //============================================
 void UpdateOption(void)
 {
+	s_nSelectMenuBefore = s_nSelectMenuNow;		//前回選択していた番号を保存
+
 	UpdateGear();	//歯車の更新処理
 	SelectMenu();	//メニュー選択
 	UpdateMenu();	//メニュー更新
@@ -256,9 +260,9 @@ static void SelectMenu(void)
 		InitColorOption();		//選択肢の色を初期化
 
 		//選択肢を上にずらす
-		s_nSelectMenu = ((s_nSelectMenu - 1) + OPTION_MAX) % OPTION_MAX;
+		s_nSelectMenuNow = ((s_nSelectMenuNow - 1) + OPTION_MAX) % OPTION_MAX;
 
-		ChangeOption(s_nSelectMenu);	//選択肢を変更
+		ChangeOption(s_nSelectMenuNow);	//選択肢を変更
 
 		PlaySound(SOUND_LABEL_SE_SELECT);
 	}
@@ -267,31 +271,31 @@ static void SelectMenu(void)
 		InitColorOption();		//選択肢の色を初期化
 
 		//選択肢を下にずらす
-		s_nSelectMenu = ((s_nSelectMenu + 1) + OPTION_MAX) % OPTION_MAX;
+		s_nSelectMenuNow = ((s_nSelectMenuNow + 1) + OPTION_MAX) % OPTION_MAX;
 
-		ChangeOption(s_nSelectMenu);	//選択肢を変更
+		ChangeOption(s_nSelectMenuNow);	//選択肢を変更
 
 		PlaySound(SOUND_LABEL_SE_SELECT);
 	}
 
-	switch (s_nSelectMenu)
+	switch (s_nSelectMenuNow)
 	{
 	case OPTION_TIMELIMIT:	//制限時間
 
 		//制限時間の選択
-		s_nSelectTimeLimit = SelectTimeLimit(s_nSelectMenu);
+		s_nSelectTimeLimit = SelectTimeLimit(s_nSelectMenuNow);
 		break;
 
 	case OPTION_POINT:	//ポイント数
 		
 		//ポイント数の選択
-		s_nSelectPoint = SelectPoint(s_nSelectMenu);
+		s_nSelectPoint = SelectPoint(s_nSelectMenuNow);
 		break;
 
 	case OPTION_SETCOUNT:	//セット数
 
 		//セット数の選択
-		s_nSelectSetCount = SelectSetCount(s_nSelectMenu);
+		s_nSelectSetCount = SelectSetCount(s_nSelectMenuNow);
 		break;
 
 	case OPTION_GOTOGAME:	//ゲームへ進む
@@ -319,4 +323,20 @@ static void SelectMenu(void)
 		ChangeMode(MODE_TITLE);
 		PlaySound(SOUND_LABEL_SE_NO);
 	}
+}
+
+//============================================
+//現在選択されているメニューを取得
+//============================================
+int GetSelectMenuNow(void)
+{
+	return s_nSelectMenuNow;
+}
+
+//============================================
+//前回選択されていたメニューを取得
+//============================================
+int GetSelectMenuBefore(void)
+{
+	return s_nSelectMenuBefore;
 }
