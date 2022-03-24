@@ -346,6 +346,7 @@ void SetDisk(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 acc, DISK_TYPE type,
 
 				SetLandingMark(g_aDisk[nCntDisk].pos, g_aDisk[nCntDisk].move, g_aDisk[nCntDisk].fHeight, g_aDisk[nCntDisk].fVerticalSpeed, GRAVITY_ACCELERATION, g_aDisk[nCntDisk].fSize);
 
+
 				break;
 
 			case DISK_TYPE_JUMP:

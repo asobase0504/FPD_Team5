@@ -13,6 +13,7 @@
 #include "mode.h"
 #include "game.h"
 #include "gear.h"
+#include "sound.h"
 
 #include <assert.h>
 
@@ -162,6 +163,12 @@ void InitOption(void)
 	SetGear(D3DXVECTOR3(565.0f, 45.0f, 0.0f), 100.0f, D3DX_PI * 0.03f, 4);
 	SetGear(D3DXVECTOR3(260.0f, 45.0f, 0.0f), 240.0f, D3DX_PI * 0.018f, 2);
 	//===============================================================================
+
+	// 初期値の入力
+	s_nSelectTimeLimit = SelectTimeLimit(s_nSelectMenu);
+	s_nSelectPoint = SelectPoint(s_nSelectMenu);
+	s_nSelectSetCount = SelectSetCount(s_nSelectMenu);
+
 }
 
 //============================================
@@ -248,6 +255,8 @@ static void SelectMenu(void)
 		s_nSelectMenu = ((s_nSelectMenu - 1) + OPTION_MAX) % OPTION_MAX;
 
 		ChangeOption(s_nSelectMenu);	//選択肢を変更
+
+		PlaySound(SOUND_LABEL_SE_SELECT);
 	}
 	else if (GetKeyboardTrigger(DIK_S) || GetJoypadTrigger(JOYKEY_DOWN, 0))
 	{// 下を入力( Sキー or 十字キー下 )
@@ -257,6 +266,8 @@ static void SelectMenu(void)
 		s_nSelectMenu = ((s_nSelectMenu + 1) + OPTION_MAX) % OPTION_MAX;
 
 		ChangeOption(s_nSelectMenu);	//選択肢を変更
+
+		PlaySound(SOUND_LABEL_SE_SELECT);
 	}
 
 	switch (s_nSelectMenu)
@@ -290,6 +301,7 @@ static void SelectMenu(void)
 
 			ChangeMode(MODE_GAME);
 
+			PlaySound(SOUND_LABEL_SE_GEARSTOP);
 		}
 		break;
 
@@ -301,5 +313,6 @@ static void SelectMenu(void)
 	if (GetKeyboardTrigger(DIK_BACKSPACE) || GetJoypadTrigger(JOYKEY_B, 0))
 	{
 		ChangeMode(MODE_TITLE);
+		PlaySound(SOUND_LABEL_SE_NO);
 	}
 }

@@ -4,11 +4,11 @@
 //Author:Kishimoto Eiji
 //
 //============================================
-
 #include "select.h"
 #include "option.h"
 #include "menu.h"
 #include "input.h"
+#include "sound.h"
 
 #include <assert.h>
 
@@ -171,12 +171,22 @@ void InitSelect(void)
 			//保存しておいた座標から、左側の矢印の位置を決める
 			fPosX = aPosArrow[i].x - ARROW_POS_X;
 			fPosY = aPosArrow[i].y;
+			//テクスチャ座標の設定
+			pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
+			pVtx[1].tex = D3DXVECTOR2(1.0f, 0.0f);
+			pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);
+			pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);
 		}
 		else if ((i >= (MAX_ARROW / 2)) && (i < MAX_ARROW))
 		{//右の縦列
 			//保存しておいた座標から、右側の矢印の位置を決める
 			fPosX = aPosArrow[i % MAX_SELECT].x + ARROW_POS_X;
 			fPosY = aPosArrow[i % MAX_SELECT].y;
+			//テクスチャ座標の設定
+			pVtx[0].tex = D3DXVECTOR2(1.0f, 0.0f);
+			pVtx[1].tex = D3DXVECTOR2(0.0f, 0.0f);
+			pVtx[2].tex = D3DXVECTOR2(1.0f, 1.0f);
+			pVtx[3].tex = D3DXVECTOR2(0.0f, 1.0f);
 		}
 
 		//変数にまとめて短くする
@@ -202,12 +212,6 @@ void InitSelect(void)
 		pVtx[1].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 		pVtx[2].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 		pVtx[3].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-
-		//テクスチャ座標の設定
-		pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
-		pVtx[1].tex = D3DXVECTOR2(1.0f, 0.0f);
-		pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);
-		pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);
 
 		pVtx += 4;		//4つ分進める
 	}
@@ -314,12 +318,14 @@ int SelectTimeLimit(int nSelectMenu)
 
 		//選択肢を一つ前(左)にする
 		s_nSelectTimeLimit = ((s_nSelectTimeLimit - 1) + TIMELIMIT_MAX) % TIMELIMIT_MAX;
+		PlaySound(SOUND_LABEL_SE_SELECT);
 	}
 	else if (GetKeyboardTrigger(DIK_D) || GetJoypadTrigger(JOYKEY_RIGHT, 0))
 	{// 右を入力( Dキー or 十字キー右 )
 		
 		//選択肢を一つ後(右)にする
 		s_nSelectTimeLimit = ((s_nSelectTimeLimit + 1) + TIMELIMIT_MAX) % TIMELIMIT_MAX;
+		PlaySound(SOUND_LABEL_SE_SELECT);
 	}
 
 	int nTimeLimit = 0;		//値を返す用
@@ -368,12 +374,14 @@ int SelectPoint(int nSelectMenu)
 
 		//選択肢を一つ前(左)にする
 		s_nSelectPoint = ((s_nSelectPoint - 1) + POINTCOUNT_MAX) % POINTCOUNT_MAX;
+		PlaySound(SOUND_LABEL_SE_SELECT);
 	}
 	else if (GetKeyboardTrigger(DIK_D) || GetJoypadTrigger(JOYKEY_RIGHT, 0))
 	{// 右を入力( Dキー or 十字キー右 )
 		
 		//選択肢を一つ後(右)にする
 		s_nSelectPoint = ((s_nSelectPoint + 1) + POINTCOUNT_MAX) % POINTCOUNT_MAX;
+		PlaySound(SOUND_LABEL_SE_SELECT);
 	}
 
 	int nPoint = 0; 	//値を返す用
@@ -418,12 +426,14 @@ int SelectSetCount(int nSelectMenu)
 
 		//選択肢を一つ前(左)にする
 		s_nSelectSetCount = ((s_nSelectSetCount - 1) + SETCOUNT_MAX) % SETCOUNT_MAX;
+		PlaySound(SOUND_LABEL_SE_SELECT);
 	}
 	else if (GetKeyboardTrigger(DIK_D) || GetJoypadTrigger(JOYKEY_RIGHT, 0))
 	{// 右を入力( Dキー or 十字キー右 )
 		
 		//選択肢を一つ後(右)にする
 		s_nSelectSetCount = ((s_nSelectSetCount + 1) + SETCOUNT_MAX) % SETCOUNT_MAX;
+		PlaySound(SOUND_LABEL_SE_SELECT);
 	}
 
 	int nSetCount = 0;	//値を返す用

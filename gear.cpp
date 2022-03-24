@@ -232,6 +232,14 @@ void DrawGear(void)
 	//頂点フォーマットの設定
 	pDevice->SetFVF(FVF_VERTEX_2D);
 
+	pDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_ALWAYS);
+	pDevice->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
+
+	//アルファテストを有効にする
+	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
+	pDevice->SetRenderState(D3DRS_ALPHAREF, 0);
+	pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
+
 	for (int nCntGear = 0; nCntGear < MAX_GEAR; nCntGear++)
 	{
 		if (g_aGear[nCntGear].bUse == true)
@@ -244,17 +252,11 @@ void DrawGear(void)
 		}
 	}
 
-	//頂点バッファをデータストリームに設定
-	pDevice->SetStreamSource(0, g_pVtxBuffLogo, 0, sizeof(VERTEX_2D));
+	//元の設定に戻す
+	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 
-	//頂点フォーマットの設定
-	pDevice->SetFVF(FVF_VERTEX_2D);
-
-	//テクスチャの設定
-	pDevice->SetTexture(0, g_apTexLogo);
-
-	//ロゴを描画する
-	//pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, 2);
+	pDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_LESSEQUAL);
+	pDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
 }
 
 //====================================
@@ -282,16 +284,59 @@ void SetGear(D3DXVECTOR3 pos, float size, float frameRot, int type)
 			g_aGear[nCntGear].nType = type;										//歯車の種類の設定
 			
 			//頂点座標の設定
-			pVtx[(nCntGear * 4) + 0].pos = D3DXVECTOR3(pos.x - (size * 0.5f), pos.y - (size * 0.5f), 0.0f);
-			pVtx[(nCntGear * 4) + 1].pos = D3DXVECTOR3(pos.x + (size * 0.5f), pos.y - (size * 0.5f), 0.0f);
-			pVtx[(nCntGear * 4) + 2].pos = D3DXVECTOR3(pos.x - (size * 0.5f), pos.y + (size * 0.5f), 0.0f);
-			pVtx[(nCntGear * 4) + 3].pos = D3DXVECTOR3(pos.x + (size * 0.5f), pos.y + (size * 0.5f), 0.0f);
+			pVtx[(nCntGear * 4) + 0].pos = D3DXVECTOR3(pos.x - (size * 0.5f), pos.y - (size * 0.5f), pos.z);
+			pVtx[(nCntGear * 4) + 1].pos = D3DXVECTOR3(pos.x + (size * 0.5f), pos.y - (size * 0.5f), pos.z);
+			pVtx[(nCntGear * 4) + 2].pos = D3DXVECTOR3(pos.x - (size * 0.5f), pos.y + (size * 0.5f), pos.z);
+			pVtx[(nCntGear * 4) + 3].pos = D3DXVECTOR3(pos.x + (size * 0.5f), pos.y + (size * 0.5f), pos.z);
 
 			//頂点カラーの設定
 			pVtx[(nCntGear * 4) + 0].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 			pVtx[(nCntGear * 4) + 1].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 			pVtx[(nCntGear * 4) + 2].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 			pVtx[(nCntGear * 4) + 3].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+
+			g_aGear[nCntGear].bUse = true;			//使用されている状態にする
+
+			break;
+		}
+	}
+
+	//頂点バッファをアンロックする
+	g_pVtxBuffGear->Unlock();
+}
+
+void SetDarkerGear(D3DXVECTOR3 pos, D3DXCOLOR col, float size, float frameRot, int type)
+{
+	VERTEX_2D *pVtx = NULL;							//頂点情報へのポインタ
+
+													//頂点バッファをロックし、頂点情報へのポインタを取得
+	g_pVtxBuffGear->Lock(0, 0, (void**)&pVtx, 0);
+
+	for (int nCntGear = 0; nCntGear < MAX_GEAR; nCntGear++)
+	{
+		if (g_aGear[nCntGear].bUse == false)
+		{
+			g_aGear[nCntGear].pos = pos;										//歯車の位置の設定
+			g_aGear[nCntGear].fSize = size;										//歯車のサイズの設定
+
+																				//回転用の変数の設定
+			g_aGear[nCntGear].fLenght = sqrtf((g_aGear[nCntGear].fSize * g_aGear[nCntGear].fSize) + (g_aGear[nCntGear].fSize * g_aGear[nCntGear].fSize)) * 0.5f;
+			g_aGear[nCntGear].fAngle = atan2f(g_aGear[nCntGear].fSize * 0.5f, g_aGear[nCntGear].fSize * 0.5f);
+
+			g_aGear[nCntGear].fFrameRot = frameRot;								//一フレームの回転角度の設定
+			g_aGear[nCntGear].nType = type;										//歯車の種類の設定
+
+																				//頂点座標の設定
+			pVtx[(nCntGear * 4) + 0].pos = D3DXVECTOR3(pos.x - (size * 0.5f), pos.y - (size * 0.5f), pos.z);
+			pVtx[(nCntGear * 4) + 1].pos = D3DXVECTOR3(pos.x + (size * 0.5f), pos.y - (size * 0.5f), pos.z);
+			pVtx[(nCntGear * 4) + 2].pos = D3DXVECTOR3(pos.x - (size * 0.5f), pos.y + (size * 0.5f), pos.z);
+			pVtx[(nCntGear * 4) + 3].pos = D3DXVECTOR3(pos.x + (size * 0.5f), pos.y + (size * 0.5f), pos.z);
+
+			//頂点カラーの設定
+			pVtx[(nCntGear * 4) + 0].col = col;
+			pVtx[(nCntGear * 4) + 1].col = col;
+			pVtx[(nCntGear * 4) + 2].col = col;
+			pVtx[(nCntGear * 4) + 3].col = col;
 
 			g_aGear[nCntGear].bUse = true;			//使用されている状態にする
 

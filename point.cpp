@@ -20,7 +20,7 @@
 //------------------------------------
 // 静的変数
 //------------------------------------
-static LPDIRECT3DTEXTURE9 g_pTextureNumber = NULL;			//テクスチャへのポインタ
+static LPDIRECT3DTEXTURE9 s_pTexture = NULL;			//テクスチャへのポインタ
 static Point s_aPoint[NUM_POINT];
 static bool s_bPointUse;
 static int s_nUseTime;
@@ -38,7 +38,7 @@ void InitPoint(void)
 	LPDIRECT3DDEVICE9 pDevice = GetDevice();	//デバイスへのポインタ
 
 	//テクスチャの読み込み
-	D3DXCreateTextureFromFile(pDevice, "data/TEXTURE/number.png", &g_pTextureNumber);
+	D3DXCreateTextureFromFile(pDevice, "data/TEXTURE/number2.png", &s_pTexture);
 
 	Point* pPoint = s_aPoint;
 
@@ -80,10 +80,10 @@ void InitPoint(void)
 			pVtx[3].rhw = 1.0f;
 
 			//頂点カラーの設定
-			pVtx[0].col = D3DXCOLOR(0.0f, 1.0f, 0.5f, 1.0f);
-			pVtx[1].col = D3DXCOLOR(0.0f, 1.0f, 0.5f, 1.0f);
-			pVtx[2].col = D3DXCOLOR(0.0f, 1.0f, 0.5f, 1.0f);
-			pVtx[3].col = D3DXCOLOR(0.0f, 1.0f, 0.5f, 1.0f);
+			pVtx[0].col = D3DXCOLOR(0.1f, 1.0f, 1.0f, 1.0f);
+			pVtx[1].col = D3DXCOLOR(0.1f, 1.0f, 1.0f, 1.0f);
+			pVtx[2].col = D3DXCOLOR(0.1f, 1.0f, 1.0f, 1.0f);
+			pVtx[3].col = D3DXCOLOR(0.1f, 1.0f, 1.0f, 1.0f);
 
 			//テクスチャの座標設定
 			pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
@@ -144,7 +144,7 @@ void DrawPoint(void)
 		pDevice->SetFVF(FVF_VERTEX_2D);
 
 		//テクスチャの設定
-		pDevice->SetTexture(0, g_pTextureNumber);
+		pDevice->SetTexture(0, s_pTexture);
 
 		for (int nCntDigit = 0; nCntDigit < DIGIT_POINT; nCntDigit++)
 		{
@@ -168,7 +168,7 @@ void SetPoint(void)
 
 	for (int i = 0; i < NUM_POINT; i++, pScore++, pPoint++)
 	{
-		pPoint->nScore = pScore->nScore[0];
+		pPoint->nScore = pScore->nScore;
 
 		int aNumDigit = pPoint->nScore;
 

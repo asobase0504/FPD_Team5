@@ -10,6 +10,7 @@
 //====================================
 #include "wall.h"
 #include "effect.h"
+#include "sound.h"
 
 //====================================
 //ÉOÉçÅ[ÉoÉãïœêî
@@ -302,6 +303,7 @@ void WallBounce(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pLastPos, D3DXVECTOR3 *pMove, D3
 					{
 						SetEffect(D3DXVECTOR3(impact.x, fY, 0.0f), fBeta, EFFECT_TYPE_WALL_IMPACT);
 					}
+					PlaySound(SOUND_LABEL_SE_BOUNCE_NORMAL);
 				}
 			}
 		}
@@ -364,7 +366,9 @@ bool SpecialWallBounce(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pLastPos, D3DXVECTOR3 *pM
 				////=========================================================================================================
 
 				*(pPos) = impact /*+ (g_aWall[nIdx].nor * fRadius)*/;	//
-				bImpact = true;										//
+				bImpact = true;	
+
+				PlaySound(SOUND_LABEL_SE_BOUNCE_SPECIAL);
 			}
 		}
 	}

@@ -15,7 +15,7 @@
 //====================================
 // マクロ定義
 //====================================
-#define MAX_EFFECT	(4800)		// エフェクトの最大数
+#define MAX_EFFECT	(12800)		// エフェクトの最大数
 
 //====================================
 // グローバル変数
@@ -61,6 +61,10 @@ void InitEffect(void)
 	D3DXCreateTextureFromFile(pDevice,
 		"data\\TEXTURE\\Effect\\effect105.png",
 		&s_pTexture[EFFECT_TYPE_SMOKE]);
+
+	D3DXCreateTextureFromFile(pDevice,
+		"data\\TEXTURE\\Effect\\effect105.png",
+		&s_pTexture[EFFECT_TYPE_SMOKE_VERTICAL]);
 
 	D3DXCreateTextureFromFile(pDevice,
 		"data\\TEXTURE\\Effect\\effect105.png",
@@ -401,6 +405,19 @@ void SetEffect(D3DXVECTOR3 pos, float rot, EFFECT_TYPE Type)
 
 			pEffect->pos.y -= (rand() % 501) * 0.03f;
 			pEffect->move = D3DXVECTOR3(((rand() % 101) + 50) * nX * 0.0067f * 3.5f, ((rand() % 201)) * -0.005f, 0.0f);
+			pEffect->fSize = D3DXVECTOR3(10.0f, 10.0f, 0.0f);
+			pEffect->fDeltaSize = D3DXVECTOR3(0.1f, 0.1f, 0.0f);
+			pEffect->col = D3DXCOLOR(0.9f, 0.9f, 0.9f, 0.4f);
+			pEffect->fDeltaCol = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0067f);
+			pEffect->nLife = 60;
+			pEffect->rot = 0.0f;
+		}
+		break;
+
+		case EFFECT_TYPE_SMOKE_VERTICAL:
+		{
+			pEffect->pos.y -= (rand() % 501) * 0.03f;
+			pEffect->move = D3DXVECTOR3(((rand() % 401) - 200) * 0.005f, ((rand() % 101) + 50) * 0.0067f * -2.0f, 0.0f);
 			pEffect->fSize = D3DXVECTOR3(10.0f, 10.0f, 0.0f);
 			pEffect->fDeltaSize = D3DXVECTOR3(0.1f, 0.1f, 0.0f);
 			pEffect->col = D3DXCOLOR(0.9f, 0.9f, 0.9f, 0.4f);

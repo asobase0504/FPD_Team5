@@ -28,6 +28,7 @@ typedef struct
 	int nDelay;						//アニメーション用の変数
 	int nCntAnim;					//アニメーションカウンター
 	int nCntMove;					//移動用の変数
+	float fRand;					//アニメーション移動用の変数
 	bool bUse;						//使用されているかどうか
 }Pipe;
 

@@ -15,6 +15,7 @@
 //#include "tutorial.h"
 #include "option.h"
 #include "game.h"
+#include "sound.h"
 
 #include <assert.h>
 
@@ -125,6 +126,8 @@ void SetMode(void)
 	switch (s_mode)
 	{// 現在のモードの終了
 	case MODE_TITLE:		// タイトル
+		//サウンドの停止
+		StopSound(SOUND_LABEL_BGM_TITLE);
 		UninitTitle();
 		break;
 
@@ -133,10 +136,12 @@ void SetMode(void)
 		break;
 
 	case MODE_OPTION:		// オプション
+		StopSound(SOUND_LABEL_BGM_OPSION);
 		UninitOption();
 		break;
 
 	case MODE_GAME:			// ゲーム
+		StopSound(SOUND_LABEL_BGM_GAME);
 		UninitGame();
 		break;
 
@@ -152,6 +157,7 @@ void SetMode(void)
 	switch (s_modeNext)
 	{// 次のモードの初期化
 	case MODE_TITLE:		// タイトル
+		PlaySound(SOUND_LABEL_BGM_TITLE);
 		InitTitle();
 		break;
 
@@ -160,10 +166,12 @@ void SetMode(void)
 		break;
 
 	case MODE_OPTION:		// オプション
+		PlaySound(SOUND_LABEL_BGM_OPSION);
 		InitOption();
 		break;
 
 	case MODE_GAME:			// ゲーム
+		PlaySound(SOUND_LABEL_BGM_GAME);
 		InitGame();
 		break;
 

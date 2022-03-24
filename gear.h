@@ -10,7 +10,7 @@
 #include "main.h" 
 
 //マクロ定義
-#define MAX_GEAR			(32)			//はぐるまの最大数
+#define MAX_GEAR			(128)			//はぐるまの最大数
 
 //構造体の定義
 typedef struct
@@ -33,5 +33,6 @@ void DrawGear(void);
 
 //位置・サイズ・一フレームの回転角度・種類
 void SetGear(D3DXVECTOR3 pos, float size, float frameRot, int type);
+void SetDarkerGear(D3DXVECTOR3 pos, D3DXCOLOR col, float size, float frameRot, int type);
 
 #endif

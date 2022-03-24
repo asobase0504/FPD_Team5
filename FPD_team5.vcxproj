@@ -170,6 +170,7 @@
     <ClCompile Include="pop.cpp" />
     <ClCompile Include="Referee.cpp" />
     <ClCompile Include="result.cpp" />
+    <ClCompile Include="round.cpp" />
     <ClCompile Include="score.cpp" />
     <ClCompile Include="option.cpp" />
     <ClCompile Include="select.cpp" />
@@ -201,6 +202,7 @@
     <ClInclude Include="pop.h" />
     <ClInclude Include="referee.h" />
     <ClInclude Include="result.h" />
+    <ClInclude Include="round.h" />
     <ClInclude Include="score.h" />
     <ClInclude Include="option.h" />
     <ClInclude Include="select.h" />

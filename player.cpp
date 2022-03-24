@@ -19,6 +19,8 @@
 #include "landingPoint.h"
 #include "effect.h"
 #include "game.h"
+#include "goal.h"
+#include "sound.h"
 
 //-----------------------------------------
 // マクロ定義
@@ -110,51 +112,24 @@ void UpdatePlayer(void)
 		// 影の位置の調整
 		SetPositionShadow(pPlayer->nIdxShadow, pPlayer->pos);
 
-		if (!*GetResetScore())
-		{ // リセット中ではない
-			if (pPlayer->bHaveDisk)
-			{ //ディスクを所持してる場合
+		if (pPlayer->bHaveDisk)
+		{ //ディスクを所持してる場合
 
-				pPlayer->move -= pPlayer->move * pPlayer->fAttenuationSlidingSpead;	// 移動量の減衰
+			pPlayer->move -= pPlayer->move * pPlayer->fAttenuationSlidingSpead;	// 移動量の減衰
 
-				// 投げる
-				ThrowPlayer(nIdxPlayer);
+			// 投げる
+			ThrowPlayer(nIdxPlayer);
 
-				if (pPlayer->jumpstate == JUMP_NOW)
-				{
-					if (pPlayer->fVerticalSpeed > 0.0f)
-					{
-						pPlayer->fHeight += pPlayer->fVerticalSpeed;
-						pPlayer->fVerticalSpeed -= 0.15f;
-					}
-
-					if (pPlayer->fThrowPower <= 4.0f)	// ここの条件式は後調整
-					{	// 一定時間の経過で床に戻る
-						pPlayer->fHeight += pPlayer->fVerticalSpeed;
-						pPlayer->fVerticalSpeed -= 0.15f;
-
-						if (pPlayer->fHeight <= 0.0f)
-						{
-							pPlayer->fVerticalSpeed = 5.0f;
-							pPlayer->fHeight = 0.0f;
-							pPlayer->jumpstate = JUMP_NONE;
-						}
-					}
-				}
-			}
-			else
+			if (pPlayer->jumpstate == JUMP_NOW)
 			{
-				switch (pPlayer->jumpstate)
+				if (pPlayer->fVerticalSpeed > 0.0f)
 				{
-				case JUMP_NONE:
-					// 移動
-					MovePlayer(nIdxPlayer);
-					// チャージ
-					ChargePlayer(nIdxPlayer);
-					// 跳躍
-					JumpPlayer(nIdxPlayer);
-					break;
-				case JUMP_NOW:
+					pPlayer->fHeight += pPlayer->fVerticalSpeed;
+					pPlayer->fVerticalSpeed -= 0.15f;
+				}
+
+				if (pPlayer->fThrowPower <= 4.0f)	// ここの条件式は後調整
+				{	// 一定時間の経過で床に戻る
 					pPlayer->fHeight += pPlayer->fVerticalSpeed;
 					pPlayer->fVerticalSpeed -= 0.15f;
 
@@ -164,12 +139,39 @@ void UpdatePlayer(void)
 						pPlayer->fHeight = 0.0f;
 						pPlayer->jumpstate = JUMP_NONE;
 					}
-
-					break;
-				default:
-					assert(false);
-					break;
 				}
+			}
+		}
+		else
+		{
+			switch (pPlayer->jumpstate)
+			{
+			case JUMP_NONE:
+				if (!*GetResetScore())
+				{ // リセット中ではない
+				  // 移動
+					MovePlayer(nIdxPlayer);
+					// チャージ
+					ChargePlayer(nIdxPlayer);
+					// 跳躍
+					JumpPlayer(nIdxPlayer);
+				}
+				break;
+			case JUMP_NOW:
+				pPlayer->fHeight += pPlayer->fVerticalSpeed;
+				pPlayer->fVerticalSpeed -= 0.15f;
+
+				if (pPlayer->fHeight <= 0.0f)
+				{
+					pPlayer->fVerticalSpeed = 5.0f;
+					pPlayer->fHeight = 0.0f;
+					pPlayer->jumpstate = JUMP_NONE;
+				}
+
+				break;
+			default:
+				assert(false);
+				break;
 			}
 		}
 
@@ -228,6 +230,7 @@ void MovePlayer(int nIdxPlayer)
 		if (GetJoypadTrigger(JOYKEY_A))
 		{ //スライディングの使用
 			pPlayer->bUseSliding = true;
+			PlaySound(SOUND_LABEL_SE_SLIDING);
 		}
 	}
 	else
@@ -235,6 +238,7 @@ void MovePlayer(int nIdxPlayer)
 		if (GetKeyboardTrigger(DIK_B))
 		{ //スライディングの使用
 			pPlayer->bUseSliding = true;
+			PlaySound(SOUND_LABEL_SE_SLIDING);
 		}
 	}
 
@@ -348,21 +352,25 @@ void ThrowPlayer(int nIdxPlayer)
 				if (pPlayer->nSpecialSkillCnt <= 100)
 				{
 					ThrowDisk(pPlayer->pos, move, moveCurve, DISK_TYPE_NORMAL, nIdxPlayer);
+					PlaySound(SOUND_LABEL_SE_THROW_NORMAL);
 				}
 				else
 				{
 					ThrowDisk(pPlayer->pos, move, ZERO_VECTOR, DISK_TYPE_SPECIAL_0, nIdxPlayer);
+					PlaySound(SOUND_LABEL_SE_THROW_SPECIAL);
 				}
 			}
 			else if (GetJoypadTrigger(JOYKEY_B, nIdxPlayer))
 			{
 				ThrowDisk(pPlayer->pos, move, ZERO_VECTOR, DISK_TYPE_LOB, nIdxPlayer);
+				PlaySound(SOUND_LABEL_SE_THROW_LOB);
 			}
 			break;
 		case JUMP_NOW:
 			if (GetJoypadTrigger(JOYKEY_A, nIdxPlayer))
 			{
 				ThrowDisk(pPlayer->pos, move, moveCurve, DISK_TYPE_JUMP, nIdxPlayer);
+				PlaySound(SOUND_LABEL_SE_THROW_NORMAL);
 			}
 			break;
 		case JUMP_MAX:
@@ -381,21 +389,25 @@ void ThrowPlayer(int nIdxPlayer)
 				if (pPlayer->nSpecialSkillCnt <= 100)
 				{
 					ThrowDisk(pPlayer->pos, move, ZERO_VECTOR, DISK_TYPE_NORMAL, nIdxPlayer);
+					PlaySound(SOUND_LABEL_SE_THROW_NORMAL);
 				}
 				else
 				{
 					ThrowDisk(pPlayer->pos, move, ZERO_VECTOR, DISK_TYPE_SPECIAL_1, nIdxPlayer);
+					PlaySound(SOUND_LABEL_SE_THROW_SPECIAL);
 				}
 			}
 			else if (GetKeyboardTrigger(DIK_SPACE))
 			{
 				ThrowDisk(pPlayer->pos, move, ZERO_VECTOR, DISK_TYPE_LOB, nIdxPlayer);
+				PlaySound(SOUND_LABEL_SE_THROW_LOB);
 			}
 			break;
 		case JUMP_NOW:
 			if (GetKeyboardTrigger(DIK_RETURN))
 			{
 				ThrowDisk(pPlayer->pos, move, moveCurve, DISK_TYPE_JUMP, nIdxPlayer);
+				PlaySound(SOUND_LABEL_SE_THROW_NORMAL);
 			}
 			break;
 		case JUMP_MAX:
@@ -452,10 +464,17 @@ void CatchDiscPlayer(int nIdxPlayer)
 			float fBack = D3DXVec3Length(&pDisk->move);
 			D3DXVECTOR3 nomal;
 			D3DXVec3Normalize(&nomal, &pDisk->move);
-			pPlayer->move += D3DXVECTOR3(pDisk->move.x, -nomal.y * fBack * 30.0f, pDisk->move.z);
+			pPlayer->move += nomal * fBack * 2.5f;
+
+			if (pDisk->type >= DISK_TYPE_SPECIAL_0)
+			{
+				ColisionGoal(&pPlayer->pos, &(pPlayer->pos + pPlayer->move));
+			}
+
 			DestroyDisk();	// ディスクの破棄
 			pPlayer->bHaveDisk = true;
 			pPlayer->fThrowPower = pPlayer->fMaxThrowPower;
+			PlaySound(SOUND_LABEL_SE_CATCH);
 		}
 
 		// 空中で取得
@@ -464,6 +483,7 @@ void CatchDiscPlayer(int nIdxPlayer)
 			DestroyDisk();	// ディスクの破棄
 			pPlayer->bHaveDisk = true;
 			pPlayer->fThrowPower = pPlayer->fMaxThrowPower;
+			PlaySound(SOUND_LABEL_SE_CATCH);
 		}
 	}
 }

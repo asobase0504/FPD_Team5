@@ -34,6 +34,26 @@ DWORD g_aSizeAudio[SOUND_LABEL_MAX] = {};					// オーディオデータサイズ
 SOUNDPARAM g_aParam[SOUND_LABEL_MAX] =
 {
 	{ "data/BGM/Title.wav", -1 },			// BGM0
+	{ "data/BGM/EDIT!.wav", -1 },			// BGM1
+	{ "data/BGM/soul drive.wav", -1 },			// BGM2
+	{ "data/SE/選択音/選択SE.wav", 0 },		// SE0
+	{ "data/SE/決定音/決定SE.wav", 0 },		// SE1
+	{ "data/SE/キャンセル音/キャンセルSE.wav", 0 },		// SE2
+	{ "data/SE/歯車/歯車・回転止まる.wav", 0 },		// SE3
+	{ "data/SE/笛/笛・開始.wav", 0 },		// SE4
+	{ "data/SE/笛/笛・停止.wav", 0 },		// SE5
+	{ "data/SE/笛/笛・終了.wav", 0 },		// SE6
+	{ "data/SE/投げる/通常投げSE.wav", 0 },	// SE7
+	{ "data/SE/投げる/上投げSE.wav", 0 },	// SE8
+	{ "data/SE/投げる/必殺投げSE.wav", 0 },	// SE9
+	{ "data/SE/スライディング/スライディングSE.wav", 0 },	// SE10
+	{ "data/SE/キャッチ音/キャッチ・軽SE.wav", 0 },	// SE11
+	{ "data/SE/壁音/壁SE1.wav", 0 },	// SE12
+	{ "data/SE/壁音/壁SE2.wav", 0 },	// SE13
+	{ "data/SE/ディスク着地音/ディスク着地SE.wav", 0 },	// SE14
+	{ "data/SE/ゴール音/ゴールSE.wav", 0 },	// SE15
+	{ "data/SE/歓声/歓声SE1.wav", 0 },	// SE16
+	{ "data/SE/歓声/歓声SE2.wav", 0 },	// SE17
 };
 
 //=============================================================================

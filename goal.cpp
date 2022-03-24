@@ -17,6 +17,8 @@
 #include "score.h"
 #include "game.h"
 #include "pop.h"
+#include "referee.h"
+#include "sound.h"
 
 //------------------------------------
 // スタティック変数
@@ -323,7 +325,9 @@ void ColisionGoal(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pLastPos)
 
 						SetPop(D3DXVECTOR3 (GOAL_POP_WIDTH / 2, pDisk->pos.y,0.0f), s_aGoal[nCntGoal].rot, s_aGoal[nCntGoal].bSide, POP_TYPE_NORMAL, nCntGoal);
 						AddScore(3, 1);
+						SetThoThrowRefreeIdx(0);	// 投げる方向の選択
 						*GetResetScore() = true;
+						PlaySound(SOUND_LABEL_SE_GOAL);
 					}
 					else
 					{
@@ -341,7 +345,9 @@ void ColisionGoal(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pLastPos)
 
 						SetPop(D3DXVECTOR3(SCREEN_WIDTH - GOAL_POP_WIDTH / 2, pDisk->pos.y, 0.0f), s_aGoal[nCntGoal].rot, s_aGoal[nCntGoal].bSide, POP_TYPE_NORMAL, nCntGoal);
 						AddScore(3, 0);
+						SetThoThrowRefreeIdx(1);	// 投げる方向の選択
 						*GetResetScore() = true;
+						PlaySound(SOUND_LABEL_SE_GOAL);
 					}
 					pDisk->move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 				}
@@ -368,7 +374,9 @@ void ColisionGoal(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pLastPos)
 						
 						SetPop(D3DXVECTOR3(GOAL_POP_WIDTH / 2, pDisk->pos.y, 0.0f), s_aGoal[nCntGoal].rot, s_aGoal[nCntGoal].bSide, POP_TYPE_STRIKE, nCntGoal);
 						AddScore(5,1);
+						SetThoThrowRefreeIdx(0);	// 投げる方向の選択
 						*GetResetScore() = true;
+						PlaySound(SOUND_LABEL_SE_GOAL);
 					}
 					else
 					{
@@ -382,7 +390,9 @@ void ColisionGoal(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pLastPos)
 
 						SetPop(D3DXVECTOR3(SCREEN_WIDTH - GOAL_POP_WIDTH / 2, pDisk->pos.y, 0.0f), s_aGoal[nCntGoal].rot, s_aGoal[nCntGoal].bSide, POP_TYPE_STRIKE, nCntGoal);
 						AddScore(5, 0);
+						SetThoThrowRefreeIdx(1);	// 投げる方向の選択
 						*GetResetScore() = true;
+						PlaySound(SOUND_LABEL_SE_GOAL);
 					}
 					pDisk->move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 				}
