@@ -115,7 +115,21 @@ void UpdatePipe(void)
 
 			if (g_aPipe[nCntPipe].nType == PIPE_TYPE_VERTICAL)
 			{
-				g_aPipe[nCntPipe].pos.y = 30.0f * sin((g_aPipe[nCntPipe].nCntMove + g_aPipe[nCntPipe].pos.x) * 0.03f) + 755.0f;
+				g_aPipe[nCntPipe].pos.y = (3.0f - (g_aPipe[nCntPipe].fRand * 2.0f)) * 25.0f * sin(g_aPipe[nCntPipe].fRand * (g_aPipe[nCntPipe].nCntMove + g_aPipe[nCntPipe].pos.x) * 0.025f) + 760.0f;
+
+				if (g_aPipe[nCntPipe].nCntAnim > g_aPipe[nCntPipe].nDelay - 30)
+				{
+					for (int nCntEffect = 0; nCntEffect < 30; nCntEffect++)
+					{
+						SetEffect(D3DXVECTOR3(g_aPipe[nCntPipe].pos.x, g_aPipe[nCntPipe].pos.y - g_aPipe[nCntPipe].size.y + 5.0f, 0.0f), 0.0f, EFFECT_TYPE_SMOKE_VERTICAL);
+					}
+
+					if (g_aPipe[nCntPipe].nCntAnim > g_aPipe[nCntPipe].nDelay)
+					{
+						g_aPipe[nCntPipe].nCntAnim = 0;
+						g_aPipe[nCntPipe].nDelay = ((rand() % 1001) + 300);
+					}
+				}
 			}
 			else
 			{
@@ -220,6 +234,7 @@ void SetPipe(D3DXVECTOR3 pos, D3DXVECTOR3 size, PIPE_TYPE type)
 			g_aPipe[nCntPipe].nType = type;
 			g_aPipe[nCntPipe].nCntMove = 0;
 			g_aPipe[nCntPipe].nDelay = ((rand() % 601) + 300);
+			g_aPipe[nCntPipe].fRand = ((rand() % 701) + 300) * 0.001;
 
 			//í∏ì_ç¿ïWÇÃê›íË
 			pVtx[(nCntPipe * 4) + 0].pos = D3DXVECTOR3(g_aPipe[nCntPipe].pos.x - g_aPipe[nCntPipe].size.x, g_aPipe[nCntPipe].pos.y - g_aPipe[nCntPipe].size.y, 0.0f);
@@ -249,6 +264,8 @@ void SetPipe(D3DXVECTOR3 pos, D3DXVECTOR3 size, PIPE_TYPE type)
 				break;
 
 			case PIPE_TYPE_VERTICAL:
+
+				g_aPipe[nCntPipe].nDelay = ((rand() % 1001) + 300);
 
 				pVtx[(nCntPipe * 4) + 0].tex = D3DXVECTOR2(0.0f, 0.05f);
 				pVtx[(nCntPipe * 4) + 1].tex = D3DXVECTOR2(1.0f, 0.05f);

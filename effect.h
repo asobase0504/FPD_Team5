@@ -21,6 +21,7 @@ typedef enum
 	EFFECT_TYPE_TRAIL,					//ディスクの軌跡エフェクト
 	EFFECT_TYPE_TRAIL_JUMP,				//ジャンプ投げの軌跡エフェクト
 	EFFECT_TYPE_SMOKE,					//普通の煙のエフェクト
+	EFFECT_TYPE_SMOKE_VERTICAL,			//普通の煙のエフェクト(上下)
 	EFFECT_TYPE_POINT_SMOKE_RED,		//赤い煙のエフェクト
 	EFFECT_TYPE_POINT_SMOKE_BLUE,		//青い煙のエフェクト
 	EFFECT_TYPE_SPECIAL_GENERAL,		//必殺技用の軌跡エフェクト
