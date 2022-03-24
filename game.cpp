@@ -249,6 +249,7 @@ void UpdateGame(void)
 				// １セットのリセット
 				s_nPlayerSet[i]++;	// セット数の取得
 				RoundReset();
+				PlaySound(SOUND_LABEL_SE_WHISTLE_FINISH);
 			}
 		}
 
@@ -366,4 +367,6 @@ void RoundReset(void)
 
 	SetTime(s_nNeedTime);				// タイムリセット
 	bIsResetGame = true;
+
+	PlaySound(SOUND_LABEL_SE_CHEERS2);
 }
