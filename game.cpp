@@ -28,6 +28,7 @@
 #include "pipe.h"
 #include "gear.h"
 #include "sound.h"
+#include "point.h"
 
 //------------------------------------
 // マクロ定義
@@ -192,6 +193,7 @@ void UpdateGame(void)
 			{ // 引き分け
 				RoundReset();
 			}
+			SetPointRound(s_nPlayerSet);
 		}
 
 		// セット数が一定以上か否か

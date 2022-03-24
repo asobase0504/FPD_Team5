@@ -13,8 +13,8 @@
 //マクロ定義
 //**************************************************
 #define MAX_WIN_LOSE		(2)			//「勝利」「敗北」
-#define WIN_LOSE_WIDTH		(160.0f)	//勝敗UIの幅
-#define WIN_LOSE_HEIGHT		(90.0f)		//勝敗UIの高さ
+#define WIN_LOSE_WIDTH		(184.0f)	//勝敗UIの幅
+#define WIN_LOSE_HEIGHT		(96.0f)		//勝敗UIの高さ
 #define LEFTSIDE_POS_X		(300.0f)	//左側のUIのX座標
 #define LEFTSIDE_POS_Y		(100.0f)	//左側のUIのY座標
 #define RIGHTSIDE_POS_X		(900.0f)	//右側のUIのX座標
