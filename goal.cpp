@@ -18,6 +18,7 @@
 #include "game.h"
 #include "pop.h"
 #include "referee.h"
+#include "sound.h"
 
 //------------------------------------
 // スタティック変数
@@ -326,6 +327,7 @@ void ColisionGoal(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pLastPos)
 						AddScore(3, 1);
 						SetThoThrowRefreeIdx(0);	// 投げる方向の選択
 						*GetResetScore() = true;
+						PlaySound(SOUND_LABEL_SE_GOAL);
 					}
 					else
 					{
@@ -345,6 +347,7 @@ void ColisionGoal(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pLastPos)
 						AddScore(3, 0);
 						SetThoThrowRefreeIdx(1);	// 投げる方向の選択
 						*GetResetScore() = true;
+						PlaySound(SOUND_LABEL_SE_GOAL);
 					}
 					pDisk->move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 				}
@@ -373,6 +376,7 @@ void ColisionGoal(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pLastPos)
 						AddScore(5,1);
 						SetThoThrowRefreeIdx(0);	// 投げる方向の選択
 						*GetResetScore() = true;
+						PlaySound(SOUND_LABEL_SE_GOAL);
 					}
 					else
 					{
@@ -388,6 +392,7 @@ void ColisionGoal(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pLastPos)
 						AddScore(5, 0);
 						SetThoThrowRefreeIdx(1);	// 投げる方向の選択
 						*GetResetScore() = true;
+						PlaySound(SOUND_LABEL_SE_GOAL);
 					}
 					pDisk->move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 				}
