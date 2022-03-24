@@ -75,110 +75,7 @@ void InitGame(void)
 	bIsResult = false;
 	RoundReset();
 
-	SetPipe(D3DXVECTOR3(125.0f, 70.0f, 0.0f), D3DXVECTOR3(18.21f, 50.0f, 0.0f), PIPE_TYPE_VERTICAL);
-	SetPipe(D3DXVECTOR3(250.0f, 70.0f, 0.0f), D3DXVECTOR3(18.21f, 50.0f, 0.0f), PIPE_TYPE_VERTICAL);
-	SetPipe(D3DXVECTOR3(375.0f, 70.0f, 0.0f), D3DXVECTOR3(18.21f, 50.0f, 0.0f), PIPE_TYPE_VERTICAL);
-	SetPipe(D3DXVECTOR3(500.0f, 70.0f, 0.0f), D3DXVECTOR3(18.21f, 50.0f, 0.0f), PIPE_TYPE_VERTICAL);
-
-	SetPipe(D3DXVECTOR3(775.0f, 70.0f, 0.0f), D3DXVECTOR3(18.21f, 50.0f, 0.0f), PIPE_TYPE_VERTICAL);
-	SetPipe(D3DXVECTOR3(900.0f, 70.0f, 0.0f), D3DXVECTOR3(18.21f, 50.0f, 0.0f), PIPE_TYPE_VERTICAL);
-	SetPipe(D3DXVECTOR3(1025.0f, 70.0f, 0.0f), D3DXVECTOR3(18.21f, 50.0f, 0.0f), PIPE_TYPE_VERTICAL);
-	SetPipe(D3DXVECTOR3(1150.0f, 70.0f, 0.0f), D3DXVECTOR3(18.21f, 50.0f, 0.0f), PIPE_TYPE_VERTICAL);
-
-	SetPipe(D3DXVECTOR3(420.0f, 35.0f, 0.0f), D3DXVECTOR3(70.0f, 21.85f, 0.0f), PIPE_TYPE_STEAM);
-	SetPipe(D3DXVECTOR3(420.0f, 90.0f, 0.0f), D3DXVECTOR3(70.0f, 21.85f, 0.0f), PIPE_TYPE_STEAM);
-	SetPipe(D3DXVECTOR3(820.0f, 35.0f, 0.0f), D3DXVECTOR3(70.0f, 21.85f, 0.0f), PIPE_TYPE_STEAM);
-	SetPipe(D3DXVECTOR3(820.0f, 90.0f, 0.0f), D3DXVECTOR3(70.0f, 21.85f, 0.0f), PIPE_TYPE_STEAM);
-
-	//========================================================================================================================
-	//左上の穴
-	SetDarkerGear(D3DXVECTOR3(50.0f, 20.0f, 0.0f), D3DXCOLOR(0.3f, 0.3f, 0.3f, 1.0f), 100.0f, -D3DX_PI * 0.01f, 1);
-	SetDarkerGear(D3DXVECTOR3(20.0f, 110.0f, 0.0f), D3DXCOLOR(0.3f, 0.3f, 0.3f, 1.0f), 80.0f, -D3DX_PI * 0.01f, 1);
-
-	SetDarkerGear(D3DXVECTOR3(110.0f, 100.0f, 0.0f), D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f), 155.0f, -D3DX_PI * 0.003f, 3);
-	SetDarkerGear(D3DXVECTOR3(-3.0f, 25.0f, 0.0f), D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f), 175.0f, D3DX_PI * 0.003f, 3);
-
-	SetGear(D3DXVECTOR3(90.0f, 30.0f, 0.0f), 90.0f, -D3DX_PI * 0.008f, 2);
-	SetGear(D3DXVECTOR3(46.0f, 81.0f, 0.0f), 65.0f,  D3DX_PI * 0.008f, 2);
-	SetGear(D3DXVECTOR3(10.0f, 45.0f, 0.0f), 50.0f, -D3DX_PI * 0.008f, 2);
-
-	//========================================================================================================================
-
-	//========================================================================================================================
-	//真ん中上の穴
-	SetDarkerGear(D3DXVECTOR3(290.0f, 108.0f, 0.0f), D3DXCOLOR(0.3f, 0.3f, 0.3f, 1.0f), 120.0f, -D3DX_PI * 0.01f, 1);
-	SetDarkerGear(D3DXVECTOR3(345.0f, 35.0f, 0.0f), D3DXCOLOR(0.3f, 0.3f, 0.3f, 1.0f), 90.0f, D3DX_PI * 0.01f, 1);
-	SetDarkerGear(D3DXVECTOR3(405.0f, 75.0f, 0.0f), D3DXCOLOR(0.3f, 0.3f, 0.3f, 1.0f), 110.0f, -D3DX_PI * 0.01f, 1);
-
-	SetDarkerGear(D3DXVECTOR3(450.0f, 40.0f, 0.0f), D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f), 115.0f, -D3DX_PI * 0.003f, 3);
-	SetDarkerGear(D3DXVECTOR3(400.0f, 107.0f, 0.0f), D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f), 95.0f, D3DX_PI * 0.003f, 3);
-	SetDarkerGear(D3DXVECTOR3(331.0f, 61.0f, 0.0f), D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f), 110.0f, -D3DX_PI * 0.003f, 3);
-	SetDarkerGear(D3DXVECTOR3(234.0f, 38.0f, 0.0f), D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f), 130.0f, D3DX_PI * 0.003f, 3);
-
-	SetGear(D3DXVECTOR3(430.0f, 60.0f, 0.0f), 130.0f, -D3DX_PI * 0.008f, 2);
-	SetGear(D3DXVECTOR3(330.0f, 130.0f, 0.0f), 150.0f,  D3DX_PI * 0.008f, 2);
-	SetGear(D3DXVECTOR3(248.0f, 48.0f, 0.0f), 120.0f, -D3DX_PI * 0.008f, 2);
-	SetGear(D3DXVECTOR3(328.0f, 0.0f, 0.0f), 90.0f, D3DX_PI * 0.008f, 2);
-	//========================================================================================================================
-
-	//========================================================================================================================
-	//右上の穴
-	SetDarkerGear(D3DXVECTOR3(988.0f, 30.0f, 0.0f), D3DXCOLOR(0.3f, 0.3f, 0.3f, 1.0f), 120.0f, -D3DX_PI * 0.01f, 1);
-	SetDarkerGear(D3DXVECTOR3(1108.0f, 30.0f, 0.0f), D3DXCOLOR(0.3f, 0.3f, 0.3f, 1.0f), 120.0f, D3DX_PI * 0.01f, 1);
-	SetDarkerGear(D3DXVECTOR3(1148.0f, 120.0f, 0.0f), D3DXCOLOR(0.3f, 0.3f, 0.3f, 1.0f), 80.0f, D3DX_PI * 0.01f, 1);
-	SetDarkerGear(D3DXVECTOR3(1060.0f, 85.0f, 0.0f), D3DXCOLOR(0.3f, 0.3f, 0.3f, 1.0f), 70.0f, D3DX_PI * 0.01f, 1);
-
-	SetDarkerGear(D3DXVECTOR3(1188.0f, 112.0f, 0.0f), D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f), 70.0f, -D3DX_PI * 0.003f, 3);
-	SetDarkerGear(D3DXVECTOR3(1175.0f, 47.0f, 0.0f), D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f), 90.0f, D3DX_PI * 0.003f, 3);
-	SetDarkerGear(D3DXVECTOR3(1114.0f, 86.0f, 0.0f), D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f), 85.0f, -D3DX_PI * 0.003f, 3);
-	SetDarkerGear(D3DXVECTOR3(1040.0f, 70.0f, 0.0f), D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f), 100.0f, D3DX_PI * 0.003f, 3);
-	SetDarkerGear(D3DXVECTOR3(970.0f, 81.0f, 0.0f), D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f), 70.0f, -D3DX_PI * 0.003f, 3);
-
-	SetGear(D3DXVECTOR3(1000.0f, 93.0f, 0.0f),  90.0f,  D3DX_PI * 0.008f, 2);
-	SetGear(D3DXVECTOR3(1060.0f, 40.0f, 0.0f), 100.0f, -D3DX_PI * 0.008f, 2);
-	SetGear(D3DXVECTOR3(1116.0f, 90.0f, 0.0f), 70.0f, D3DX_PI * 0.008f, 2);
-	SetGear(D3DXVECTOR3(1174.0f, 52.0f, 0.0f), 90.0f, -D3DX_PI * 0.008f, 2);
-	SetGear(D3DXVECTOR3(1265.0f, 81.0f, 0.0f), 130.0f, D3DX_PI * 0.008f, 2);
-	//========================================================================================================================
-
-	//========================================================================================================================
-
-	SetDarkerGear(D3DXVECTOR3(150.0f, 230.0f, 0.0f), D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f), 110.0f,  D3DX_PI * 0.003f, 3);
-	SetDarkerGear(D3DXVECTOR3(230.0f, 250.0f, 0.0f), D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f),  90.0f, -D3DX_PI * 0.003f, 3);
-	SetDarkerGear(D3DXVECTOR3(292.0f, 292.0f, 0.0f), D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f),  90.0f,  D3DX_PI * 0.003f, 3);
-	SetDarkerGear(D3DXVECTOR3(349.0f, 255.0f, 0.0f), D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f),  70.0f, -D3DX_PI * 0.003f, 3);
-
-	SetGear(D3DXVECTOR3(210.0f, 220.0f, 0.0f), 160.0f,  D3DX_PI * 0.008f, 2);
-	SetGear(D3DXVECTOR3(280.0f, 320.0f, 0.0f), 130.0f, -D3DX_PI * 0.008f, 2);
-	SetGear(D3DXVECTOR3(325.0f, 230.0f, 0.0f), 110.0f,  D3DX_PI * 0.008f, 2);
-	//========================================================================================================================
-
-	//========================================================================================================================
-
-	SetDarkerGear(D3DXVECTOR3(850.0f, 490.0f, 0.0f), D3DXCOLOR(0.3f, 0.3f, 0.3f, 1.0f), 140.0f, D3DX_PI * 0.01f, 1);
-
-	SetDarkerGear(D3DXVECTOR3(835.0f, 460.0f, 0.0f), D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f), 100.0f, -D3DX_PI * 0.003f, 3);
-	SetDarkerGear(D3DXVECTOR3(855.0f, 570.0f, 0.0f), D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f), 120.0f,  D3DX_PI * 0.003f, 3);
-
-	SetGear(D3DXVECTOR3(810.0f, 550.0f, 0.0f), 60.0f,  D3DX_PI * 0.008f, 2);
-	SetGear(D3DXVECTOR3(857.0f, 519.0f, 0.0f), 70.0f, -D3DX_PI * 0.008f, 2);
-	SetGear(D3DXVECTOR3(815.0f, 482.0f, 0.0f), 60.0f,  D3DX_PI * 0.008f, 2);
-	SetGear(D3DXVECTOR3(887.0f, 473.0f, 0.0f), 60.0f,  D3DX_PI * 0.008f, 2);
-
-	SetDarkerGear(D3DXVECTOR3(665.0f, 165.0f, 0.0f), D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f), 120.0f,  D3DX_PI * 0.003f, 3);
-	SetDarkerGear(D3DXVECTOR3(682.0f, 250.0f, 0.0f), D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f),  90.0f, -D3DX_PI * 0.003f, 3);
-
-	SetGear(D3DXVECTOR3(630.0f, 200.0f, 0.0f),  95.0f, -D3DX_PI * 0.008f, 2);
-	SetGear(D3DXVECTOR3(690.0f, 252.0f, 0.0f),  95.0f,  D3DX_PI * 0.008f, 2);
-	SetGear(D3DXVECTOR3(730.0f, 332.0f, 0.0f), 110.0f, -D3DX_PI * 0.008f, 2);
-
-	SetDarkerGear(D3DXVECTOR3(430.0f, 390.0f, 0.0f), D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f), 130.0f, -D3DX_PI * 0.003f, 3);
-	SetDarkerGear(D3DXVECTOR3(410.0f, 495.0f, 0.0f), D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f), 130.0f,  D3DX_PI * 0.003f, 3);
-
-	SetGear(D3DXVECTOR3(420.0f, 405.0f, 0.0f), 95.0f,  D3DX_PI * 0.008f, 2);
-	SetGear(D3DXVECTOR3(387.0f, 473.0f, 0.0f), 80.0f, -D3DX_PI * 0.008f, 2);
-	SetGear(D3DXVECTOR3(470.0f, 450.0f, 0.0f), 70.0f, -D3DX_PI * 0.008f, 2);
-	//========================================================================================================================
+	SetBackground();
 }
 
 //=========================================
@@ -371,4 +268,145 @@ void RoundReset(void)
 	bIsResetGame = true;
 
 	PlaySound(SOUND_LABEL_SE_CHEERS2);
+}
+
+//=========================================
+//背景のパイプと歯車の設定処理
+//=========================================
+void SetBackground(void)
+{
+	SetPipe(D3DXVECTOR3(125.0f, 70.0f, 0.0f), D3DXVECTOR3(18.21f, 50.0f, 0.0f), PIPE_TYPE_VERTICAL);
+	SetPipe(D3DXVECTOR3(250.0f, 70.0f, 0.0f), D3DXVECTOR3(18.21f, 50.0f, 0.0f), PIPE_TYPE_VERTICAL);
+	SetPipe(D3DXVECTOR3(375.0f, 70.0f, 0.0f), D3DXVECTOR3(18.21f, 50.0f, 0.0f), PIPE_TYPE_VERTICAL);
+	SetPipe(D3DXVECTOR3(500.0f, 70.0f, 0.0f), D3DXVECTOR3(18.21f, 50.0f, 0.0f), PIPE_TYPE_VERTICAL);
+
+	SetPipe(D3DXVECTOR3(775.0f, 70.0f, 0.0f), D3DXVECTOR3(18.21f, 50.0f, 0.0f), PIPE_TYPE_VERTICAL);
+	SetPipe(D3DXVECTOR3(900.0f, 70.0f, 0.0f), D3DXVECTOR3(18.21f, 50.0f, 0.0f), PIPE_TYPE_VERTICAL);
+	SetPipe(D3DXVECTOR3(1025.0f, 70.0f, 0.0f), D3DXVECTOR3(18.21f, 50.0f, 0.0f), PIPE_TYPE_VERTICAL);
+	SetPipe(D3DXVECTOR3(1150.0f, 70.0f, 0.0f), D3DXVECTOR3(18.21f, 50.0f, 0.0f), PIPE_TYPE_VERTICAL);
+
+	SetPipe(D3DXVECTOR3(420.0f, 35.0f, 0.0f), D3DXVECTOR3(70.0f, 21.85f, 0.0f), PIPE_TYPE_STEAM);
+	SetPipe(D3DXVECTOR3(420.0f, 90.0f, 0.0f), D3DXVECTOR3(70.0f, 21.85f, 0.0f), PIPE_TYPE_STEAM);
+	SetPipe(D3DXVECTOR3(820.0f, 35.0f, 0.0f), D3DXVECTOR3(70.0f, 21.85f, 0.0f), PIPE_TYPE_STEAM);
+	SetPipe(D3DXVECTOR3(820.0f, 90.0f, 0.0f), D3DXVECTOR3(70.0f, 21.85f, 0.0f), PIPE_TYPE_STEAM);
+
+	//========================================================================================================================
+	//左上の穴
+	SetDarkerGear(D3DXVECTOR3(50.0f, 20.0f, 0.0f), D3DXCOLOR(0.3f, 0.3f, 0.3f, 1.0f), 100.0f, -D3DX_PI * 0.01f, 1);
+	SetDarkerGear(D3DXVECTOR3(20.0f, 110.0f, 0.0f), D3DXCOLOR(0.3f, 0.3f, 0.3f, 1.0f), 80.0f, -D3DX_PI * 0.01f, 1);
+
+	SetDarkerGear(D3DXVECTOR3(110.0f, 100.0f, 0.0f), D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f), 155.0f, -D3DX_PI * 0.003f, 3);
+	SetDarkerGear(D3DXVECTOR3(-3.0f, 25.0f, 0.0f), D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f), 175.0f, D3DX_PI * 0.003f, 3);
+
+	SetGear(D3DXVECTOR3(90.0f, 30.0f, 0.0f), 90.0f, -D3DX_PI * 0.008f, 2);
+	SetGear(D3DXVECTOR3(46.0f, 81.0f, 0.0f), 65.0f, D3DX_PI * 0.008f, 2);
+	SetGear(D3DXVECTOR3(10.0f, 45.0f, 0.0f), 50.0f, -D3DX_PI * 0.008f, 2);
+
+	//========================================================================================================================
+
+	//========================================================================================================================
+	//真ん中上の穴
+	SetDarkerGear(D3DXVECTOR3(290.0f, 108.0f, 0.0f), D3DXCOLOR(0.3f, 0.3f, 0.3f, 1.0f), 120.0f, -D3DX_PI * 0.01f, 1);
+	SetDarkerGear(D3DXVECTOR3(345.0f, 35.0f, 0.0f), D3DXCOLOR(0.3f, 0.3f, 0.3f, 1.0f), 90.0f, D3DX_PI * 0.01f, 1);
+	SetDarkerGear(D3DXVECTOR3(405.0f, 75.0f, 0.0f), D3DXCOLOR(0.3f, 0.3f, 0.3f, 1.0f), 110.0f, -D3DX_PI * 0.01f, 1);
+
+	SetDarkerGear(D3DXVECTOR3(450.0f, 40.0f, 0.0f), D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f), 115.0f, -D3DX_PI * 0.003f, 3);
+	SetDarkerGear(D3DXVECTOR3(400.0f, 107.0f, 0.0f), D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f), 95.0f, D3DX_PI * 0.003f, 3);
+	SetDarkerGear(D3DXVECTOR3(331.0f, 61.0f, 0.0f), D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f), 110.0f, -D3DX_PI * 0.003f, 3);
+	SetDarkerGear(D3DXVECTOR3(234.0f, 38.0f, 0.0f), D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f), 130.0f, D3DX_PI * 0.003f, 3);
+
+	SetGear(D3DXVECTOR3(430.0f, 60.0f, 0.0f), 130.0f, -D3DX_PI * 0.008f, 2);
+	SetGear(D3DXVECTOR3(330.0f, 130.0f, 0.0f), 150.0f, D3DX_PI * 0.008f, 2);
+	SetGear(D3DXVECTOR3(248.0f, 48.0f, 0.0f), 120.0f, -D3DX_PI * 0.008f, 2);
+	SetGear(D3DXVECTOR3(328.0f, 0.0f, 0.0f), 90.0f, D3DX_PI * 0.008f, 2);
+	//========================================================================================================================
+
+	//========================================================================================================================
+	//右上の穴
+	SetDarkerGear(D3DXVECTOR3(988.0f, 30.0f, 0.0f), D3DXCOLOR(0.3f, 0.3f, 0.3f, 1.0f), 120.0f, -D3DX_PI * 0.01f, 1);
+	SetDarkerGear(D3DXVECTOR3(1108.0f, 30.0f, 0.0f), D3DXCOLOR(0.3f, 0.3f, 0.3f, 1.0f), 120.0f, D3DX_PI * 0.01f, 1);
+	SetDarkerGear(D3DXVECTOR3(1148.0f, 120.0f, 0.0f), D3DXCOLOR(0.3f, 0.3f, 0.3f, 1.0f), 80.0f, D3DX_PI * 0.01f, 1);
+	SetDarkerGear(D3DXVECTOR3(1060.0f, 85.0f, 0.0f), D3DXCOLOR(0.3f, 0.3f, 0.3f, 1.0f), 70.0f, D3DX_PI * 0.01f, 1);
+
+	SetDarkerGear(D3DXVECTOR3(1188.0f, 112.0f, 0.0f), D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f), 70.0f, -D3DX_PI * 0.003f, 3);
+	SetDarkerGear(D3DXVECTOR3(1175.0f, 47.0f, 0.0f), D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f), 90.0f, D3DX_PI * 0.003f, 3);
+	SetDarkerGear(D3DXVECTOR3(1114.0f, 86.0f, 0.0f), D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f), 85.0f, -D3DX_PI * 0.003f, 3);
+	SetDarkerGear(D3DXVECTOR3(1040.0f, 70.0f, 0.0f), D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f), 100.0f, D3DX_PI * 0.003f, 3);
+	SetDarkerGear(D3DXVECTOR3(970.0f, 81.0f, 0.0f), D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f), 70.0f, -D3DX_PI * 0.003f, 3);
+
+	SetGear(D3DXVECTOR3(1000.0f, 93.0f, 0.0f), 90.0f, D3DX_PI * 0.008f, 2);
+	SetGear(D3DXVECTOR3(1060.0f, 40.0f, 0.0f), 100.0f, -D3DX_PI * 0.008f, 2);
+	SetGear(D3DXVECTOR3(1116.0f, 90.0f, 0.0f), 70.0f, D3DX_PI * 0.008f, 2);
+	SetGear(D3DXVECTOR3(1174.0f, 52.0f, 0.0f), 90.0f, -D3DX_PI * 0.008f, 2);
+	SetGear(D3DXVECTOR3(1265.0f, 81.0f, 0.0f), 130.0f, D3DX_PI * 0.008f, 2);
+	//========================================================================================================================
+
+	//========================================================================================================================
+
+	SetDarkerGear(D3DXVECTOR3(150.0f, 230.0f, 0.0f), D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f), 110.0f, D3DX_PI * 0.003f, 3);
+	SetDarkerGear(D3DXVECTOR3(230.0f, 250.0f, 0.0f), D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f), 90.0f, -D3DX_PI * 0.003f, 3);
+	SetDarkerGear(D3DXVECTOR3(292.0f, 292.0f, 0.0f), D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f), 90.0f, D3DX_PI * 0.003f, 3);
+	SetDarkerGear(D3DXVECTOR3(349.0f, 255.0f, 0.0f), D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f), 70.0f, -D3DX_PI * 0.003f, 3);
+
+	SetGear(D3DXVECTOR3(210.0f, 220.0f, 0.0f), 160.0f, D3DX_PI * 0.008f, 2);
+	SetGear(D3DXVECTOR3(280.0f, 320.0f, 0.0f), 130.0f, -D3DX_PI * 0.008f, 2);
+	SetGear(D3DXVECTOR3(325.0f, 230.0f, 0.0f), 110.0f, D3DX_PI * 0.008f, 2);
+	//========================================================================================================================
+
+	//========================================================================================================================
+
+	SetDarkerGear(D3DXVECTOR3(850.0f, 490.0f, 0.0f), D3DXCOLOR(0.3f, 0.3f, 0.3f, 1.0f), 140.0f, D3DX_PI * 0.01f, 1);
+
+	SetDarkerGear(D3DXVECTOR3(835.0f, 460.0f, 0.0f), D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f), 100.0f, -D3DX_PI * 0.003f, 3);
+	SetDarkerGear(D3DXVECTOR3(855.0f, 570.0f, 0.0f), D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f), 120.0f, D3DX_PI * 0.003f, 3);
+
+	SetGear(D3DXVECTOR3(810.0f, 550.0f, 0.0f), 60.0f, D3DX_PI * 0.008f, 2);
+	SetGear(D3DXVECTOR3(857.0f, 519.0f, 0.0f), 70.0f, -D3DX_PI * 0.008f, 2);
+	SetGear(D3DXVECTOR3(815.0f, 482.0f, 0.0f), 60.0f, D3DX_PI * 0.008f, 2);
+	SetGear(D3DXVECTOR3(887.0f, 473.0f, 0.0f), 60.0f, D3DX_PI * 0.008f, 2);
+
+	SetDarkerGear(D3DXVECTOR3(665.0f, 165.0f, 0.0f), D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f), 120.0f, D3DX_PI * 0.003f, 3);
+	SetDarkerGear(D3DXVECTOR3(682.0f, 250.0f, 0.0f), D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f), 90.0f, -D3DX_PI * 0.003f, 3);
+
+	SetGear(D3DXVECTOR3(630.0f, 200.0f, 0.0f), 95.0f, -D3DX_PI * 0.008f, 2);
+	SetGear(D3DXVECTOR3(690.0f, 252.0f, 0.0f), 95.0f, D3DX_PI * 0.008f, 2);
+	SetGear(D3DXVECTOR3(730.0f, 332.0f, 0.0f), 110.0f, -D3DX_PI * 0.008f, 2);
+
+	SetDarkerGear(D3DXVECTOR3(430.0f, 390.0f, 0.0f), D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f), 130.0f, -D3DX_PI * 0.003f, 3);
+	SetDarkerGear(D3DXVECTOR3(410.0f, 495.0f, 0.0f), D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f), 130.0f, D3DX_PI * 0.003f, 3);
+
+	SetGear(D3DXVECTOR3(420.0f, 405.0f, 0.0f), 95.0f, D3DX_PI * 0.008f, 2);
+	SetGear(D3DXVECTOR3(387.0f, 473.0f, 0.0f), 80.0f, -D3DX_PI * 0.008f, 2);
+	SetGear(D3DXVECTOR3(470.0f, 450.0f, 0.0f), 70.0f, -D3DX_PI * 0.008f, 2);
+	//========================================================================================================================
+
+	//========================================================================================================================
+	//左下側にある穴
+
+	SetDarkerGear(D3DXVECTOR3(360.0f, 640.0f, 0.0f), D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f), 110.0f, -D3DX_PI * 0.003f, 3);
+	SetDarkerGear(D3DXVECTOR3(431.0f, 688.0f, 0.0f), D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f), 95.0f, D3DX_PI * 0.003f, 3);
+	SetDarkerGear(D3DXVECTOR3(495.0f, 650.0f, 0.0f), D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f), 85.0f, -D3DX_PI * 0.003f, 3);
+	SetDarkerGear(D3DXVECTOR3(538.0f, 713.0f, 0.0f), D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f), 100.0f, D3DX_PI * 0.003f, 3);
+	SetDarkerGear(D3DXVECTOR3(604.0f, 671.0f, 0.0f), D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f), 90.0f, -D3DX_PI * 0.003f, 3);
+
+	SetGear(D3DXVECTOR3(350.0f, 630.0f, 0.0f), 110.0f, -D3DX_PI * 0.008f, 2);
+	SetGear(D3DXVECTOR3(388.0f, 707.0f, 0.0f), 90.0f, D3DX_PI * 0.008f, 2);
+	SetGear(D3DXVECTOR3(460.0f, 700.0f, 0.0f), 80.0f, -D3DX_PI * 0.008f, 2);
+	SetGear(D3DXVECTOR3(520.0f, 670.0f, 0.0f), 80.0f, D3DX_PI * 0.008f, 2);
+	SetGear(D3DXVECTOR3(582.0f, 660.0f, 0.0f), 65.0f, -D3DX_PI * 0.008f, 2);
+	//========================================================================================================================
+
+	//========================================================================================================================
+	//右下側にある穴
+
+	SetDarkerGear(D3DXVECTOR3(1075.0f, 705.0f, 0.0f), D3DXCOLOR(0.3f, 0.3f, 0.3f, 1.0f), 105.0f, D3DX_PI * 0.01f, 1);
+
+	SetDarkerGear(D3DXVECTOR3(978.0f, 685.0f, 0.0f), D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f), 95.0f, -D3DX_PI * 0.003f, 3);
+	SetDarkerGear(D3DXVECTOR3(1050.0f, 640.0f, 0.0f), D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f), 110.0f, D3DX_PI * 0.003f, 3);
+	SetDarkerGear(D3DXVECTOR3(1095.0f, 710.0f, 0.0f), D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f), 100.0f, -D3DX_PI * 0.003f, 3);
+
+	SetGear(D3DXVECTOR3(960.0f, 680.0f, 0.0f), 75.0f, D3DX_PI * 0.008f, 2);
+	SetGear(D3DXVECTOR3(1018.0f, 708.0f, 0.0f), 65.0f, -D3DX_PI * 0.008f, 2);
+	SetGear(D3DXVECTOR3(1050.0f, 660.0f, 0.0f), 70.0f, D3DX_PI * 0.008f, 2);
+	//========================================================================================================================
 }
