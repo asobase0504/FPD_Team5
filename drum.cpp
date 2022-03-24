@@ -138,7 +138,7 @@ void InitDrum(void)
 		NULL
 	);
 
-	s_posPost = D3DXVECTOR3(GOAL_WIDTH * 0.5f + 30.0f,SCREEN_HEIGHT * 0.5f - 20.0f,0.0f);
+	s_posPost = D3DXVECTOR3(GOAL_WIDTH * 0.5f + 50.0f,SCREEN_HEIGHT * 0.5f - 20.0f,0.0f);
 
 	//頂点バッファをロックし、頂点情報へのポインタを取得
 	s_pVtxBuffPost->Lock(0, 0, (void**)&pVtx, 0);
@@ -175,10 +175,10 @@ void InitDrum(void)
 		pVtx[3].col = D3DCOLOR_RGBA(255, 255, 255, 255);
 
 		//テクスチャ座標の設定(0.0f ~ (1 / xパターン数)f)
-		pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
-		pVtx[1].tex = D3DXVECTOR2(1.0f, 0.0f);
-		pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);
-		pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);
+		pVtx[0].tex = D3DXVECTOR2(1.0f, 0.0f);
+		pVtx[1].tex = D3DXVECTOR2(0.0f, 0.0f);
+		pVtx[2].tex = D3DXVECTOR2(1.0f, 1.0f);
+		pVtx[3].tex = D3DXVECTOR2(0.0f, 1.0f);
 	}
 	//頂点バッファをアンロックする
 	s_pVtxBuffPost->Unlock();
@@ -301,25 +301,6 @@ void UpdateDrum(void)
 		pVtx[3].pos.x = s_posPost.x + GOAL_WIDTH * 0.75f;
 		pVtx[3].pos.y = s_posPost.y + GOAL_HEIGHT * 2.0f;
 		pVtx[3].pos.z = s_posPost.z + 0.0f;
-
-
-		//rhwの設定
-		pVtx[0].rhw = 1.0f;
-		pVtx[1].rhw = 1.0f;
-		pVtx[2].rhw = 1.0f;
-		pVtx[3].rhw = 1.0f;
-
-		//頂点カラーの設定
-		pVtx[0].col = D3DCOLOR_RGBA(255, 255, 255, 255);
-		pVtx[1].col = D3DCOLOR_RGBA(255, 255, 255, 255);
-		pVtx[2].col = D3DCOLOR_RGBA(255, 255, 255, 255);
-		pVtx[3].col = D3DCOLOR_RGBA(255, 255, 255, 255);
-
-		//テクスチャ座標の設定(0.0f ~ (1 / xパターン数)f)
-		pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
-		pVtx[1].tex = D3DXVECTOR2(1.0f, 0.0f);
-		pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);
-		pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);
 	}
 	//頂点バッファをアンロックする
 	s_pVtxBuffPost->Unlock();
@@ -332,6 +313,23 @@ void UpdateDrum(void)
 void DrawDrum()
 {
 	LPDIRECT3DDEVICE9 pDevice = GetDevice();	//デバイスへのポインタ
+
+	//頂点バッファをデータストリームに設定
+	pDevice->SetStreamSource(0, s_pVtxBuffPost, 0, sizeof(VERTEX_2D));
+
+	//頂点フォーマットの設定
+	pDevice->SetFVF(FVF_VERTEX_2D);
+
+	//テクスチャの設定
+	pDevice->SetTexture(0, s_pTexturePost);
+
+	//ポリゴンの描画
+	pDevice->DrawPrimitive
+	(
+		D3DPT_TRIANGLESTRIP,	//プリミティブの種類
+		0,			//描画する最初の頂点インデックス
+		2						//プリミティブアイコンの個数
+	);
 
 	//頂点バッファをデータストリームに設定
 	pDevice->SetStreamSource
@@ -362,22 +360,6 @@ void DrawDrum()
 		}
 	}
 
-	//頂点バッファをデータストリームに設定
-	pDevice->SetStreamSource(0, s_pVtxBuffPost, 0, sizeof(VERTEX_2D));
-
-	//頂点フォーマットの設定
-	pDevice->SetFVF(FVF_VERTEX_2D);
-
-	//テクスチャの設定
-	pDevice->SetTexture(0, s_pTexturePost);
-
-	//ポリゴンの描画
-	pDevice->DrawPrimitive
-	(
-		D3DPT_TRIANGLESTRIP,	//プリミティブの種類
-		0,			//描画する最初の頂点インデックス
-		2						//プリミティブアイコンの個数
-	);
 }
 
 //=========================================

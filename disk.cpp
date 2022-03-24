@@ -374,11 +374,11 @@ void SetDisk(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 acc, DISK_TYPE type,
 
 				if (pos.x < SCREEN_WIDTH * 0.5f)
 				{
-					g_aDisk[nCntDisk].move.x = 7.5f;
+					g_aDisk[nCntDisk].move.x = 15.5f;
 				}
 				else
 				{
-					g_aDisk[nCntDisk].move.x = -7.5f;
+					g_aDisk[nCntDisk].move.x = -15.5f;
 				}
 
 				if (pos.y <= SCREEN_HEIGHT * 0.5f)
@@ -402,11 +402,11 @@ void SetDisk(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 acc, DISK_TYPE type,
 
 				if (pos.x < SCREEN_WIDTH * 0.5f)
 				{
-					g_aDisk[nCntDisk].move.x = 7.5f;
+					g_aDisk[nCntDisk].move.x = 15.5f;
 				}
 				else
 				{
-					g_aDisk[nCntDisk].move.x = -7.5f;
+					g_aDisk[nCntDisk].move.x = -15.5f;
 				}
 
 				g_aDisk[nCntDisk].move.y = 0.0f;
@@ -420,11 +420,11 @@ void SetDisk(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 acc, DISK_TYPE type,
 
 				if (pos.x < SCREEN_WIDTH * 0.5f)
 				{
-					g_aDisk[nCntDisk].move.x = 7.5f;
+					g_aDisk[nCntDisk].move.x = 15.5f;
 				}
 				else
 				{
-					g_aDisk[nCntDisk].move.x = -7.5f;
+					g_aDisk[nCntDisk].move.x = -15.5f;
 				}
 
 				g_aDisk[nCntDisk].move.y = 0.0f;
@@ -438,12 +438,12 @@ void SetDisk(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 acc, DISK_TYPE type,
 
 				if (pos.x < SCREEN_WIDTH * 0.5f)
 				{
-					g_aDisk[nCntDisk].move.x = 7.5f;
+					g_aDisk[nCntDisk].move.x = 15.5f;
 					g_aDisk[nCntDisk].acc.x = 0.05f;
 				}
 				else
 				{
-					g_aDisk[nCntDisk].move.x = -7.5f;
+					g_aDisk[nCntDisk].move.x = -15.5f;
 					g_aDisk[nCntDisk].acc.x = -0.05f;
 				}
 
@@ -470,11 +470,11 @@ void SetDisk(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 acc, DISK_TYPE type,
 
 				if (pos.x < SCREEN_WIDTH * 0.5f)
 				{
-					g_aDisk[nCntDisk].move.x = 15.0f;
+					g_aDisk[nCntDisk].move.x = 25.0f;
 				}
 				else
 				{
-					g_aDisk[nCntDisk].move.x = -15.0f;
+					g_aDisk[nCntDisk].move.x = -25.0f;
 				}
 
 				g_aDisk[nCntDisk].move.y = 0.0f;

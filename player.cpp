@@ -349,14 +349,15 @@ void ThrowPlayer(int nIdxPlayer)
 		case JUMP_NONE:
 			if (GetJoypadTrigger(JOYKEY_A, nIdxPlayer))
 			{
-				if (pPlayer->nSpecialSkillCnt <= 100)
+				if (pPlayer->nSpecialSkillCnt <= 40)
 				{
 					ThrowDisk(pPlayer->pos, move, moveCurve, DISK_TYPE_NORMAL, nIdxPlayer);
 					PlaySound(SOUND_LABEL_SE_THROW_NORMAL);
 				}
 				else
 				{
-					ThrowDisk(pPlayer->pos, move, ZERO_VECTOR, DISK_TYPE_SPECIAL_0, nIdxPlayer);
+					DISK_TYPE special = (DISK_TYPE)((rand() / RAND_MAX) * (DISK_TYPE_SPECIAL_4 - DISK_TYPE_SPECIAL_0) + DISK_TYPE_SPECIAL_0);
+					ThrowDisk(pPlayer->pos, move * 2.0f, ZERO_VECTOR, special, nIdxPlayer);
 					PlaySound(SOUND_LABEL_SE_THROW_SPECIAL);
 				}
 			}
@@ -386,14 +387,15 @@ void ThrowPlayer(int nIdxPlayer)
 		case JUMP_NONE:
 			if (GetKeyboardTrigger(DIK_RETURN))
 			{
-				if (pPlayer->nSpecialSkillCnt <= 100)
+				if (pPlayer->nSpecialSkillCnt <= 40)
 				{
 					ThrowDisk(pPlayer->pos, move, ZERO_VECTOR, DISK_TYPE_NORMAL, nIdxPlayer);
 					PlaySound(SOUND_LABEL_SE_THROW_NORMAL);
 				}
 				else
 				{
-					ThrowDisk(pPlayer->pos, move, ZERO_VECTOR, DISK_TYPE_SPECIAL_1, nIdxPlayer);
+					DISK_TYPE special = (DISK_TYPE)((int)((rand() / (float)RAND_MAX) * (DISK_TYPE_SPECIAL_4 - DISK_TYPE_SPECIAL_0) + DISK_TYPE_SPECIAL_0));
+					ThrowDisk(pPlayer->pos, move * 2.0f, ZERO_VECTOR, special, nIdxPlayer);
 					PlaySound(SOUND_LABEL_SE_THROW_SPECIAL);
 				}
 			}
