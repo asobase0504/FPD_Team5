@@ -161,13 +161,13 @@ void UpdateGame(void)
 		if (GetTime()->nTime <= 0)
 		{
 			DestroyDisk();	// ディスクの削除
-			if (s_nPlayerSet[0] > s_nPlayerSet[1])
+			if (GetScore()[0].nScore > GetScore()[1].nScore)
 			{ // P1の勝ち
 				s_nPlayerSet[0]++;	// セット数の取得
 				SetThoThrowRefreeIdx(1);	// 投げる方向の選択
 				RoundReset();
 			}
-			else if (s_nPlayerSet[0] < s_nPlayerSet[1])
+			else if (GetScore()[0].nScore < GetScore()[1].nScore)
 			{ // P2の勝ち
 				s_nPlayerSet[1]++;	// セット数の取得
 				SetThoThrowRefreeIdx(0);	// 投げる方向の選択
@@ -260,12 +260,11 @@ bool* GetResetScore(void)
 //=========================================
 void RoundReset(void)
 {
-	SCORE* pScore = GetScore();
 	Player * pPlayer = GetPlayer();
 
 	for (int nIdxPlayer = 0; nIdxPlayer < 2; nIdxPlayer++, pPlayer++)
 	{
-		AddScore(-pScore[nIdxPlayer].nScore, 0);	// スコアのリセット
+		ResetScore();
 		pPlayer->bHaveDisk = false;
 	}
 
