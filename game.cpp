@@ -29,6 +29,8 @@
 #include "gear.h"
 #include "sound.h"
 #include "point.h"
+#include "menu.h"
+#include "pause.h"
 
 //------------------------------------
 // マクロ定義
@@ -45,6 +47,7 @@ static int s_nPlayerSet[2];		// プレイヤーがどれほどセットを取っているか
 static bool bIsResult;			// リザルトの表示中か
 static bool bIsResetGame;		// スコアリセット中か
 static int s_nResetGamePosCnt;	// 所定の位置に戻ってどれほど経過したか
+static bool s_bPause;			// ポーズ中かどうか
 
 //------------------------------------
 // プロトタイプ宣言
@@ -67,12 +70,14 @@ void InitGame(void)
 	InitResult();		// リザルト
 	InitPipe();			// 配管
 	InitGear();			// 歯車
+	InitPause();		// ポーズ
 
 	// 初期化
 	s_nPlayerSet[0] = 0;
 	s_nPlayerSet[1] = 0;
 	s_nResetGamePosCnt = 0;
 	bIsResult = false;
+	s_bPause = false;
 	RoundReset();
 
 	SetBackground();
@@ -94,6 +99,7 @@ void UninitGame(void)
 	UninitResult();			// リザルト
 	UninitPipe();			// 配管
 	UninitGear();			// 歯車
+	UninitPause();			// ポーズ
 }
 
 //=========================================
@@ -101,6 +107,24 @@ void UninitGame(void)
 //=========================================
 void UpdateGame(void)
 {
+	if (GetKeyboardTrigger(DIK_P) || GetJoypadTrigger(JOYKEY_START, 0))
+	{
+		s_bPause = !s_bPause;
+
+		if (s_bPause)
+		{// ポーズしてる
+			SetPause();		// メニューの設定
+		}
+	}
+
+	// ポーズ中ならポーズ以外を更新しない
+	if (s_bPause)
+	{
+		UpdateMenu();		// メニュー
+		UpdatePause();		// ポーズ
+		return;
+	}
+
 	if (bIsResult)
 	{ // リザルト中
 		UpdateResult();			// リザルト
@@ -216,6 +240,12 @@ void DrawGame()
 	if (bIsResult)
 	{
 		DrawResult();		// リザルト
+	}
+
+	if (s_bPause)
+	{
+		DrawPause();		// ポーズ
+		DrawMenu();			// メニュー
 	}
 }
 
@@ -421,4 +451,12 @@ void SetBackground(void)
 	SetGear(D3DXVECTOR3(1018.0f, 708.0f, 0.0f), 65.0f, -D3DX_PI * 0.008f, 2);
 	SetGear(D3DXVECTOR3(1050.0f, 660.0f, 0.0f), 70.0f, D3DX_PI * 0.008f, 2);
 	//========================================================================================================================
+}
+
+//=========================================
+// ポーズの設定処理
+//=========================================
+void SetEnablePause(bool bUse)
+{
+	s_bPause = bUse;
 }
