@@ -16,6 +16,7 @@
 #include "option.h"
 #include "game.h"
 #include "sound.h"
+#include "bgm.h"
 
 #include <assert.h>
 
@@ -141,7 +142,7 @@ void SetMode(void)
 		break;
 
 	case MODE_GAME:			// ÉQÅ[ÉÄ
-		StopSound(SOUND_LABEL_BGM_GAME);
+		UninitBgm();
 		UninitGame();
 		break;
 
@@ -171,7 +172,7 @@ void SetMode(void)
 		break;
 
 	case MODE_GAME:			// ÉQÅ[ÉÄ
-		PlaySound(SOUND_LABEL_BGM_GAME);
+		SetBgm();
 		InitGame();
 		break;
 

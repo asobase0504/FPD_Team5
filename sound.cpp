@@ -36,6 +36,8 @@ SOUNDPARAM g_aParam[SOUND_LABEL_MAX] =
 	{ "data/BGM/Title.wav", -1 },			// BGM0
 	{ "data/BGM/EDIT!.wav", -1 },			// BGM1
 	{ "data/BGM/soul drive.wav", -1 },			// BGM2
+	{ "data/BGM/MusMus.wav", -1 },			// BGM2
+	{ "data/BGM/neo rock.wav", -1 },			// BGM2
 	{ "data/SE/選択音/選択SE.wav", 0 },		// SE0
 	{ "data/SE/決定音/決定SE.wav", 0 },		// SE1
 	{ "data/SE/キャンセル音/キャンセルSE.wav", 0 },		// SE2
