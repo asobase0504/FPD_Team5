@@ -353,12 +353,12 @@ void SetEffect(D3DXVECTOR3 pos, float rot, EFFECT_TYPE Type)
 		case EFFECT_TYPE_WALL_IMPACT:
 			pEffect->pos.x = pos.x;
 			pEffect->pos.y = pos.y;
-			pEffect->move = D3DXVECTOR3(sinf(rot), cosf(rot), 0.0f);
-			pEffect->fSize = D3DXVECTOR3(10.0f, 10.0f, 0.0f);
-			pEffect->fDeltaSize = D3DXVECTOR3(-0.5f, -0.5f, 0.0f);
-			pEffect->col = D3DXCOLOR(0.25f, 0.75f, 0.75f, 1.0f);
-			pEffect->fDeltaCol = D3DXCOLOR(-0.02f, 0.0f, 0.01f, 0.0025f);
-			pEffect->nLife = 30;
+			pEffect->move = D3DXVECTOR3(1.5f * sinf(rot), 1.5f *  cosf(rot), 0.0f);
+			pEffect->fSize = D3DXVECTOR3(8.0f, 8.0f, 0.0f);
+			pEffect->fDeltaSize = D3DXVECTOR3(0.15f, 0.15f, 0.0f);
+			pEffect->col = D3DXCOLOR(0.8f, 0.6f, 0.10f, 0.8f);
+			pEffect->fDeltaCol = D3DXCOLOR(0.01f, 0.015f, 0.01f, -0.002f);
+			pEffect->nLife = 40;
 
 			if (pos.y < SCREEN_HEIGHT * 0.5f)
 			{

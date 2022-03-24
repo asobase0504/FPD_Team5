@@ -20,6 +20,7 @@
 #define MAX_GOAL				(6)		//ゴールの最大数
 #define MAX_IMAGE_DRUM			(2)		//ゴール画像の最大数
 #define MAX_POST				(2)		//ポスト画像の最大数
+#define GOAL_FLASH				(15)	//ゴールの点滅速度
 
 //****************************************************************************
 //ゴールの種類
@@ -42,10 +43,14 @@ typedef struct
 	D3DXVECTOR3 nor;	//法線
 	D3DXCOLOR	col;	//色
 	GOAL_TYPE type;		//種類
-	bool bSide;			//どっち側判定(false:左側 true:右側)
 	float fAngle;		//角度(アークタンジェント)
 	float fLength;		//長さ(スクウェアルート)
+	float fGoalCounter;	//ゴールカウンター
+	float fFlashCounter;//点滅カウンター
 	bool bUse;			//使用判定
+	bool bGoal;			//ゴール判定
+	bool bAddFlash;		//点滅判定
+	bool bSide;			//どっち側判定(false:左側 true:右側)
 }Goal;
 
 //****************************************************************************

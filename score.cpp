@@ -228,10 +228,10 @@ void AddScore(int nValse, int nPlayerIdx)
 	}
 
 	//得点時、中央にスコアポップを表示する処理
-	if (nValse > 0)
-	{
-		SetPoint();
-	}
+	//if (nValse > 0)
+	//{
+	//	SetPoint();
+	//}
 }
 
 //スコアの取得

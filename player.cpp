@@ -67,10 +67,10 @@ void InitPlayer(void)
 
 	// プレイヤーの設定
 	SetPlayer(D3DXVECTOR3(200.0f, SCREEN_HEIGHT * 0.5f, 0.0f), PLAYERTYPE_1);
-	s_player[0].nIdxShadow = SetShadow(s_player[0].pos, PLAYER_SIZ * 3.0f);
+	//s_player[0].nIdxShadow = SetShadow(s_player[0].pos, PLAYER_SIZ * 3.0f);
 
 	SetPlayer(D3DXVECTOR3(SCREEN_WIDTH - 200.0f, SCREEN_HEIGHT * 0.5f, 0.0f), PLAYERTYPE_2);
-	s_player[1].nIdxShadow = SetShadow(s_player[1].pos, PLAYER_SIZ * 3.0f);
+	//s_player[1].nIdxShadow = SetShadow(s_player[1].pos, PLAYER_SIZ * 3.0f);
 }
 
 //=========================================
@@ -110,7 +110,7 @@ void UpdatePlayer(void)
 		pPlayer->pos += pPlayer->move;
 
 		// 影の位置の調整
-		SetPositionShadow(pPlayer->nIdxShadow, pPlayer->pos);
+		//SetPositionShadow(pPlayer->nIdxShadow, pPlayer->pos);
 
 		if (pPlayer->bHaveDisk)
 		{ //ディスクを所持してる場合
@@ -349,14 +349,15 @@ void ThrowPlayer(int nIdxPlayer)
 		case JUMP_NONE:
 			if (GetJoypadTrigger(JOYKEY_A, nIdxPlayer))
 			{
-				if (pPlayer->nSpecialSkillCnt <= 100)
+				if (pPlayer->nSpecialSkillCnt <= 40)
 				{
 					ThrowDisk(pPlayer->pos, move, moveCurve, DISK_TYPE_NORMAL, nIdxPlayer);
 					PlaySound(SOUND_LABEL_SE_THROW_NORMAL);
 				}
 				else
 				{
-					ThrowDisk(pPlayer->pos, move, ZERO_VECTOR, DISK_TYPE_SPECIAL_0, nIdxPlayer);
+					DISK_TYPE special = (DISK_TYPE)((rand() / RAND_MAX) * (DISK_TYPE_SPECIAL_4 - DISK_TYPE_SPECIAL_0) + DISK_TYPE_SPECIAL_0);
+					ThrowDisk(pPlayer->pos, move * 2.0f, ZERO_VECTOR, special, nIdxPlayer);
 					PlaySound(SOUND_LABEL_SE_THROW_SPECIAL);
 				}
 			}
@@ -386,14 +387,15 @@ void ThrowPlayer(int nIdxPlayer)
 		case JUMP_NONE:
 			if (GetKeyboardTrigger(DIK_RETURN))
 			{
-				if (pPlayer->nSpecialSkillCnt <= 100)
+				if (pPlayer->nSpecialSkillCnt <= 40)
 				{
 					ThrowDisk(pPlayer->pos, move, ZERO_VECTOR, DISK_TYPE_NORMAL, nIdxPlayer);
 					PlaySound(SOUND_LABEL_SE_THROW_NORMAL);
 				}
 				else
 				{
-					ThrowDisk(pPlayer->pos, move, ZERO_VECTOR, DISK_TYPE_SPECIAL_1, nIdxPlayer);
+					DISK_TYPE special = (DISK_TYPE)((int)((rand() / (float)RAND_MAX) * (DISK_TYPE_SPECIAL_4 - DISK_TYPE_SPECIAL_0) + DISK_TYPE_SPECIAL_0));
+					ThrowDisk(pPlayer->pos, move * 2.0f, ZERO_VECTOR, special, nIdxPlayer);
 					PlaySound(SOUND_LABEL_SE_THROW_SPECIAL);
 				}
 			}

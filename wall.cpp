@@ -299,7 +299,7 @@ void WallBounce(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pLastPos, D3DXVECTOR3 *pMove, D3
 						fBeta = D3DX_PI * 0.55f;
 					}
 					
-					for (int nCntAngle = 0; nCntAngle < 10; nCntAngle++, fBeta += D3DX_PI * 0.1f)
+					for (int nCntAngle = 0; nCntAngle < 20; nCntAngle++, fBeta += D3DX_PI * 0.05f)
 					{
 						SetEffect(D3DXVECTOR3(impact.x, fY, 0.0f), fBeta, EFFECT_TYPE_WALL_IMPACT);
 					}

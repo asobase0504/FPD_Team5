@@ -15,6 +15,7 @@
 #include "stage.h"
 #include "score.h"
 #include "goal.h"
+#include "point.h"
 
 //------------------------------------
 // スタティック変数
@@ -248,10 +249,12 @@ void SetPop(D3DXVECTOR3 pos, D3DXVECTOR3 rot, bool side, POP_TYPE type, int nIdx
 //============================================================================
 void PopCounter(int nIdxPop)
 {
+	SCORE *pScore = GetScore();
+
 	if (s_aPop[nIdxPop].type == POP_TYPE_NORMAL || s_aPop[nIdxPop].type == POP_TYPE_STRIKE)
 	{
 		//ポップ時間
-		if (s_aPop[nIdxPop].fPopCounter >= 80)
+		if (s_aPop[nIdxPop].fPopCounter >= 40)
 		{
 			if (s_aPop[nIdxPop].bSide == 0)
 			{
@@ -260,6 +263,12 @@ void PopCounter(int nIdxPop)
 			else
 			{
 				s_aPop[nIdxPop].move.x = POP_SPEAD;
+			}
+
+			if (s_aPop[nIdxPop].fPopCounter == 40 
+				&& pScore[0].nScore != 0 && pScore[0].nScore != 0)
+			{
+				SetPoint();
 			}
 		}
 		if (s_aPop[nIdxPop].fPopCounter >= 120)

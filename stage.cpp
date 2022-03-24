@@ -20,6 +20,7 @@
 #include "drum.h"
 #include "score.h"
 #include "sound.h"
+#include "pipe.h"
 
 //------------------------------------
 // スタティック変数
@@ -99,6 +100,8 @@ void InitStage(void)
 	s_aStage[2].fAngle = atan2f(STAGE_NET_WIDTH, STAGE_NET_HEIGHT);
 	s_aStage[2].fLength = sqrtf((STAGE_NET_WIDTH * STAGE_NET_WIDTH) + (STAGE_NET_HEIGHT * STAGE_NET_HEIGHT)) / 2.0f;
 	s_aStage[2].type = STAGE_TYPE_NET;
+
+	s_aStage[2].pos.x = 5000.0f;
 
 	//壁(上側)
 	s_aStage[3].pos = D3DXVECTOR3(SCREEN_WIDTH / 2, MIN_HEIGHT - 20, 0.0f);
@@ -267,10 +270,12 @@ void UpdateStage(void)
 			if (pDisk->pos.x >= SCREEN_WIDTH / 2)
 			{
 				AddScore(2, 0);
+				PointSmokeAnimation(0);
 			}
 			else
 			{
 				AddScore(2, 1);
+				PointSmokeAnimation(1);
 			}
 		}
 		PlaySound(SOUND_LABEL_SE_CHEERS1);
