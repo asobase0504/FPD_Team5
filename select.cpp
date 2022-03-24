@@ -27,10 +27,10 @@
 #define ARROW_SIZE		(25.0f)		//矢印のサイズ
 #define ARROW_POS_X		(100.0f)	//選択部分から見た矢印のX座標
 
-#define TEXTURE_TIMELIMIT	("data/TEXTURE/WORD/FPD_SelectUI_TimeLimit.png")		//制限時間のテクスチャ
-#define TEXTURE_POINT		("data/TEXTURE/WORD/FPD_SelectUI_Point.png")		//ポイント数のテクスチャ
-#define TEXTURE_SETCOUNT	("data/TEXTURE/WORD/FPD_SelectUI_SetCount.png")		//セット数のテクスチャ
-#define TEXTURE_ARROW		("data/TEXTURE/WORD/FPD_SelectUI_Arrow.png")			//矢印のテクスチャ
+#define TEXTURE_TIMELIMIT	("data/TEXTURE/WORD/FPD_SelectUI_TimeLimit_Re.png")	//制限時間のテクスチャ
+#define TEXTURE_POINT		("data/TEXTURE/WORD/FPD_SelectUI_Point_Re.png")		//ポイント数のテクスチャ
+#define TEXTURE_SETCOUNT	("data/TEXTURE/WORD/FPD_SelectUI_SetCount_Re.png")		//セット数のテクスチャ
+#define TEXTURE_ARROW		("data/TEXTURE/WORD/FPD_SelectUI_Arrow_Re.png")		//矢印のテクスチャ
 
 //***********************************
 //スタティック変数
@@ -148,8 +148,8 @@ void InitSelect(void)
 		//テクスチャ座標の設定
 		pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
 		pVtx[1].tex = D3DXVECTOR2(1.0f, 0.0f);
-		pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);
-		pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);
+		pVtx[2].tex = D3DXVECTOR2(0.0f, 0.25f);
+		pVtx[3].tex = D3DXVECTOR2(1.0f, 0.25f);
 
 		pVtx += 4;		//4つ分進める
 	}
@@ -171,12 +171,22 @@ void InitSelect(void)
 			//保存しておいた座標から、左側の矢印の位置を決める
 			fPosX = aPosArrow[i].x - ARROW_POS_X;
 			fPosY = aPosArrow[i].y;
+			//テクスチャ座標の設定
+			pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
+			pVtx[1].tex = D3DXVECTOR2(1.0f, 0.0f);
+			pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);
+			pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);
 		}
 		else if ((i >= (MAX_ARROW / 2)) && (i < MAX_ARROW))
 		{//右の縦列
 			//保存しておいた座標から、右側の矢印の位置を決める
 			fPosX = aPosArrow[i % MAX_SELECT].x + ARROW_POS_X;
 			fPosY = aPosArrow[i % MAX_SELECT].y;
+			//テクスチャ座標の設定
+			pVtx[0].tex = D3DXVECTOR2(1.0f, 0.0f);
+			pVtx[1].tex = D3DXVECTOR2(0.0f, 0.0f);
+			pVtx[2].tex = D3DXVECTOR2(1.0f, 1.0f);
+			pVtx[3].tex = D3DXVECTOR2(0.0f, 1.0f);
 		}
 
 		//変数にまとめて短くする
@@ -202,12 +212,6 @@ void InitSelect(void)
 		pVtx[1].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 		pVtx[2].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 		pVtx[3].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-
-		//テクスチャ座標の設定
-		pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
-		pVtx[1].tex = D3DXVECTOR2(1.0f, 0.0f);
-		pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);
-		pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);
 
 		pVtx += 4;		//4つ分進める
 	}

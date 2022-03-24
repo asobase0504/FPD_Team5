@@ -42,7 +42,7 @@ void InitStage(void)
 	D3DXCreateTextureFromFile
 	(
 		pDevice,
-		"data\\TEXTURE\\stage\\Map06.png",	//テクスチャのファイル名
+		"data\\TEXTURE\\stage\\Map09.png",	//テクスチャのファイル名
 		&s_pTextureStage[STAGE_TYPE_FRONT]
 	);
 
@@ -50,7 +50,7 @@ void InitStage(void)
 	D3DXCreateTextureFromFile
 	(
 		pDevice,
-		"data\\TEXTURE\\stage\\Map06.png",	//テクスチャのファイル名
+		"data\\TEXTURE\\stage\\Map11.png",	//テクスチャのファイル名
 		&s_pTextureStage[STAGE_TYPE_BACK]
 	);
 

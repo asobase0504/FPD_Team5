@@ -26,11 +26,11 @@ void InitPipe(void)
 
 	//テクスチャの読み込み
 	D3DXCreateTextureFromFile(pDevice,
-		"data\\TEXTURE\\Pipes\\SteamPipe.png",
+		"data\\TEXTURE\\Pipes\\SteamPipe1.png",
 		&g_apTexPipe[0]);
 
 	D3DXCreateTextureFromFile(pDevice,
-		"data\\TEXTURE\\Pipes\\SteamPipeVertical.png",
+		"data\\TEXTURE\\Pipes\\SteamPipeVertical1.png",
 		&g_apTexPipe[1]);
 
 	//頂点バッファの生成

@@ -150,7 +150,7 @@ void UpdateGame(void)
 		// スコアが一定以上か否か
 		for (int i = 0; i < 2; i++)
 		{
-			if (pScore[i].nScore[0] >= s_nNeedPoint)
+			if (pScore[i].nScore >= s_nNeedPoint)
 			{
 				// １セットのリセット
 				s_nPlayerSet[i]++;	// セット数の取得
@@ -164,11 +164,13 @@ void UpdateGame(void)
 			if (s_nPlayerSet[0] > s_nPlayerSet[1])
 			{ // P1の勝ち
 				s_nPlayerSet[0]++;	// セット数の取得
+				SetThoThrowRefreeIdx(1);	// 投げる方向の選択
 				RoundReset();
 			}
 			else if (s_nPlayerSet[0] < s_nPlayerSet[1])
 			{ // P2の勝ち
 				s_nPlayerSet[1]++;	// セット数の取得
+				SetThoThrowRefreeIdx(0);	// 投げる方向の選択
 				RoundReset();
 			}
 			else
@@ -263,7 +265,7 @@ void RoundReset(void)
 
 	for (int nIdxPlayer = 0; nIdxPlayer < 2; nIdxPlayer++, pPlayer++)
 	{
-		AddScore(-pScore[nIdxPlayer].nScore[0], 0);	// スコアのリセット
+		AddScore(-pScore[nIdxPlayer].nScore, 0);	// スコアのリセット
 		pPlayer->bHaveDisk = false;
 	}
 

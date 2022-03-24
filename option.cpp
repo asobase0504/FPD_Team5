@@ -54,19 +54,19 @@ void InitOption(void)
 								&s_pTexture);
 
 	D3DXCreateTextureFromFile(pDevice,
-								"data/TEXTURE/WORD/FPD_OptionUI_TimeLimit.png",
+								"data/TEXTURE/WORD/Option/FPD_OptionUI_TimenLimit_HGPmintyou.png",
 								&s_apTextureMenu[0]);
 
 	D3DXCreateTextureFromFile(pDevice,
-								"data/TEXTURE/WORD/FPD_OptionUI_Point.png",
+								"data/TEXTURE/WORD/Option/FPD_OptionUI_Point_HGPmintyou.png",
 								&s_apTextureMenu[1]);
 
 	D3DXCreateTextureFromFile(pDevice,
-								"data/TEXTURE/WORD/FPD_OptionUI_SetCount.png",
+								"data/TEXTURE/WORD/Option/FPD_OptionUI_SetCount_HGPmintyou.png",
 								&s_apTextureMenu[2]);
 
 	D3DXCreateTextureFromFile(pDevice,
-								"data/TEXTURE/タイトルへ戻る",
+								"data/TEXTURE/WORD/Option/FPD_OptionUI_BattleStart_HGPmintyou.png",
 								&s_apTextureMenu[3]);
 
 	//変数の初期化
@@ -162,6 +162,12 @@ void InitOption(void)
 	SetGear(D3DXVECTOR3(565.0f, 45.0f, 0.0f), 100.0f, D3DX_PI * 0.03f, 4);
 	SetGear(D3DXVECTOR3(260.0f, 45.0f, 0.0f), 240.0f, D3DX_PI * 0.018f, 2);
 	//===============================================================================
+
+	// 初期値の入力
+	s_nSelectTimeLimit = SelectTimeLimit(s_nSelectMenu);
+	s_nSelectPoint = SelectPoint(s_nSelectMenu);
+	s_nSelectSetCount = SelectSetCount(s_nSelectMenu);
+
 }
 
 //============================================
@@ -296,5 +302,10 @@ static void SelectMenu(void)
 	default:
 		assert(false);
 		break;
+	}
+
+	if (GetKeyboardTrigger(DIK_BACKSPACE) || GetJoypadTrigger(JOYKEY_B, 0))
+	{
+		ChangeMode(MODE_TITLE);
 	}
 }

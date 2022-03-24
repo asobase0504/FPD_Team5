@@ -19,6 +19,7 @@
 #include "landingPoint.h"
 #include "effect.h"
 #include "game.h"
+#include "goal.h"
 
 //-----------------------------------------
 // マクロ定義
@@ -110,51 +111,24 @@ void UpdatePlayer(void)
 		// 影の位置の調整
 		SetPositionShadow(pPlayer->nIdxShadow, pPlayer->pos);
 
-		if (!*GetResetScore())
-		{ // リセット中ではない
-			if (pPlayer->bHaveDisk)
-			{ //ディスクを所持してる場合
+		if (pPlayer->bHaveDisk)
+		{ //ディスクを所持してる場合
 
-				pPlayer->move -= pPlayer->move * pPlayer->fAttenuationSlidingSpead;	// 移動量の減衰
+			pPlayer->move -= pPlayer->move * pPlayer->fAttenuationSlidingSpead;	// 移動量の減衰
 
-				// 投げる
-				ThrowPlayer(nIdxPlayer);
+			// 投げる
+			ThrowPlayer(nIdxPlayer);
 
-				if (pPlayer->jumpstate == JUMP_NOW)
-				{
-					if (pPlayer->fVerticalSpeed > 0.0f)
-					{
-						pPlayer->fHeight += pPlayer->fVerticalSpeed;
-						pPlayer->fVerticalSpeed -= 0.15f;
-					}
-
-					if (pPlayer->fThrowPower <= 4.0f)	// ここの条件式は後調整
-					{	// 一定時間の経過で床に戻る
-						pPlayer->fHeight += pPlayer->fVerticalSpeed;
-						pPlayer->fVerticalSpeed -= 0.15f;
-
-						if (pPlayer->fHeight <= 0.0f)
-						{
-							pPlayer->fVerticalSpeed = 5.0f;
-							pPlayer->fHeight = 0.0f;
-							pPlayer->jumpstate = JUMP_NONE;
-						}
-					}
-				}
-			}
-			else
+			if (pPlayer->jumpstate == JUMP_NOW)
 			{
-				switch (pPlayer->jumpstate)
+				if (pPlayer->fVerticalSpeed > 0.0f)
 				{
-				case JUMP_NONE:
-					// 移動
-					MovePlayer(nIdxPlayer);
-					// チャージ
-					ChargePlayer(nIdxPlayer);
-					// 跳躍
-					JumpPlayer(nIdxPlayer);
-					break;
-				case JUMP_NOW:
+					pPlayer->fHeight += pPlayer->fVerticalSpeed;
+					pPlayer->fVerticalSpeed -= 0.15f;
+				}
+
+				if (pPlayer->fThrowPower <= 4.0f)	// ここの条件式は後調整
+				{	// 一定時間の経過で床に戻る
 					pPlayer->fHeight += pPlayer->fVerticalSpeed;
 					pPlayer->fVerticalSpeed -= 0.15f;
 
@@ -164,12 +138,39 @@ void UpdatePlayer(void)
 						pPlayer->fHeight = 0.0f;
 						pPlayer->jumpstate = JUMP_NONE;
 					}
-
-					break;
-				default:
-					assert(false);
-					break;
 				}
+			}
+		}
+		else
+		{
+			switch (pPlayer->jumpstate)
+			{
+			case JUMP_NONE:
+				if (!*GetResetScore())
+				{ // リセット中ではない
+				  // 移動
+					MovePlayer(nIdxPlayer);
+					// チャージ
+					ChargePlayer(nIdxPlayer);
+					// 跳躍
+					JumpPlayer(nIdxPlayer);
+				}
+				break;
+			case JUMP_NOW:
+				pPlayer->fHeight += pPlayer->fVerticalSpeed;
+				pPlayer->fVerticalSpeed -= 0.15f;
+
+				if (pPlayer->fHeight <= 0.0f)
+				{
+					pPlayer->fVerticalSpeed = 5.0f;
+					pPlayer->fHeight = 0.0f;
+					pPlayer->jumpstate = JUMP_NONE;
+				}
+
+				break;
+			default:
+				assert(false);
+				break;
 			}
 		}
 
@@ -452,7 +453,13 @@ void CatchDiscPlayer(int nIdxPlayer)
 			float fBack = D3DXVec3Length(&pDisk->move);
 			D3DXVECTOR3 nomal;
 			D3DXVec3Normalize(&nomal, &pDisk->move);
-			pPlayer->move += D3DXVECTOR3(pDisk->move.x, -nomal.y * fBack * 30.0f, pDisk->move.z);
+			pPlayer->move += nomal * fBack * 2.5f;
+
+			if (pDisk->type >= DISK_TYPE_SPECIAL_0)
+			{
+				ColisionGoal(&pPlayer->pos, &(pPlayer->pos + pPlayer->move));
+			}
+
 			DestroyDisk();	// ディスクの破棄
 			pPlayer->bHaveDisk = true;
 			pPlayer->fThrowPower = pPlayer->fMaxThrowPower;
@@ -477,21 +484,21 @@ void MoveLimitPlayer(int nIdxPlayer)
 
 	STAGE_LENGTH stageLength = nIdxPlayer == 0 ? *GetP1StgLng() : *GetP2StgLng();
 
-	if (stageLength.max.y - 5.0f <= pPlayer->pos.y + PLAYER_SIZ)
+	if (stageLength.max.y - 10.0f <= pPlayer->pos.y + PLAYER_SIZ)
 	{
-		pPlayer->pos.y = stageLength.max.y - PLAYER_SIZ - 5.0f;
+		pPlayer->pos.y = stageLength.max.y - PLAYER_SIZ - 10.0f;
 	}
-	if (stageLength.max.x - 5.0f <= pPlayer->pos.x + PLAYER_SIZ)
+	if (stageLength.max.x - 10.0f <= pPlayer->pos.x + PLAYER_SIZ)
 	{
-		pPlayer->pos.x = stageLength.max.x - PLAYER_SIZ - 5.0f;
+		pPlayer->pos.x = stageLength.max.x - PLAYER_SIZ - 10.0f;
 	}
-	if (stageLength.min.y + 5.0f >= pPlayer->pos.y - PLAYER_SIZ)
+	if (stageLength.min.y + 10.0f >= pPlayer->pos.y - PLAYER_SIZ)
 	{
-		pPlayer->pos.y = stageLength.min.y + PLAYER_SIZ + 5.0f;
+		pPlayer->pos.y = stageLength.min.y + PLAYER_SIZ + 10.0f;
 	}
-	if (stageLength.min.x + 5.0f >= pPlayer->pos.x - PLAYER_SIZ)
+	if (stageLength.min.x + 10.0f >= pPlayer->pos.x - PLAYER_SIZ)
 	{
-		pPlayer->pos.x = stageLength.min.x + PLAYER_SIZ + 5.0f;
+		pPlayer->pos.x = stageLength.min.x + PLAYER_SIZ + 10.0f;
 	}
 }
 
