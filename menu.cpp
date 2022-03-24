@@ -22,6 +22,8 @@
 #define DECISION_BLINK_SPEED		(0.1f)		// 決定時の点滅速度
 #define MIN_ALPHA					(0.6f)		// α値の最小値
 
+#define NO_SELECT_COLOR		(D3DXCOLOR(0.5f, 0.5f, 0.5f, 1.0f))		//選択されていない時の色
+
 //--------------------------------------------------
 // スタティック変数
 //--------------------------------------------------
@@ -90,10 +92,10 @@ void InitMenu(void)
 		pVtx[3].rhw = 1.0f;
 
 		// 頂点カラーの設定
-		pVtx[0].col = D3DXCOLOR(1.0f, 0.0f, 1.0f, 1.0f);
-		pVtx[1].col = D3DXCOLOR(1.0f, 0.0f, 1.0f, 1.0f);
-		pVtx[2].col = D3DXCOLOR(1.0f, 0.0f, 1.0f, 1.0f);
-		pVtx[3].col = D3DXCOLOR(1.0f, 0.0f, 1.0f, 1.0f);
+		pVtx[0].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+		pVtx[1].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+		pVtx[2].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+		pVtx[3].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 
 		// テクスチャ座標の設定
 		pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
@@ -127,10 +129,10 @@ void InitMenu(void)
 			pVtx[3].rhw = 1.0f;
 
 			// 頂点カラーの設定
-			pVtx[0].col = D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f);
-			pVtx[1].col = D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f);
-			pVtx[2].col = D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f);
-			pVtx[3].col = D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f);
+			pVtx[0].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+			pVtx[1].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+			pVtx[2].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+			pVtx[3].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 
 			// テクスチャ座標の設定
 			pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
@@ -331,7 +333,7 @@ int SetMenu(const MenuArgument &menu, const FrameArgument &Frame)
 			pOption->pos = D3DXVECTOR3(menu.fLeft + (pMenu->fInterval * (j + 1)), pMenu->pos.y, 0.0f);
 		}
 
-		pOption->col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+		pOption->col = NO_SELECT_COLOR;
 		pOption->fWidth = menu.fWidth;
 		pOption->fHeight = menu.fHeight;
 		pOption->pTexture = menu.pTexture[j];
@@ -377,10 +379,10 @@ void InitColorOption(void)
 	pVtx += (s_nIdxMenu * MAX_MENU) + (s_nIdxOption * 4);
 
 	// 頂点カラーの設定
-	pVtx[0].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-	pVtx[1].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-	pVtx[2].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-	pVtx[3].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	pVtx[0].col = NO_SELECT_COLOR;
+	pVtx[1].col = NO_SELECT_COLOR;
+	pVtx[2].col = NO_SELECT_COLOR;
+	pVtx[3].col = NO_SELECT_COLOR;
 
 	// 頂点バッファをアンロックする
 	s_pVtxBuffOption->Unlock();
@@ -425,7 +427,7 @@ static void ChangeColor(Menu *pMenu)
 	float fCurve = cosf((s_nAlphaTime * pMenu->fBlinkSpeed) * (D3DX_PI * 2.0f));
 	float fAlpha = (fCurve * (1.0f - MIN_ALPHA)) + MIN_ALPHA;
 
-	pOption->col = D3DXCOLOR(0.0f, 1.0f, 0.0f, fAlpha);
+	pOption->col = D3DXCOLOR(1.0f, 1.0f, 1.0f, fAlpha);
 
 	VERTEX_2D *pVtx = NULL;		// 頂点情報へのポインタ
 
