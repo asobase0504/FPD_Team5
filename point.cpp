@@ -10,6 +10,7 @@
 //------------------------------------
 #include "point.h"
 #include "score.h"
+#include "sound.h"
 
 //------------------------------------
 // É}ÉNÉçíËã`
@@ -165,6 +166,8 @@ void SetPoint(void)
 	SCORE* pScore = GetScore();
 	Point* pPoint = s_aPoint;
 	s_bPointUse = true;
+
+	PlaySound(SOUND_LABEL_SE_POINT);
 
 	for (int i = 0; i < NUM_POINT; i++, pScore++, pPoint++)
 	{
