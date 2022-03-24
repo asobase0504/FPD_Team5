@@ -13,6 +13,7 @@
 #include "mode.h"
 #include "game.h"
 #include "gear.h"
+#include "sound.h"
 
 #include <assert.h>
 
@@ -254,6 +255,8 @@ static void SelectMenu(void)
 		s_nSelectMenu = ((s_nSelectMenu - 1) + OPTION_MAX) % OPTION_MAX;
 
 		ChangeOption(s_nSelectMenu);	//選択肢を変更
+
+		PlaySound(SOUND_LABEL_SE_SELECT);
 	}
 	else if (GetKeyboardTrigger(DIK_S) || GetJoypadTrigger(JOYKEY_DOWN, 0))
 	{// 下を入力( Sキー or 十字キー下 )
@@ -263,6 +266,8 @@ static void SelectMenu(void)
 		s_nSelectMenu = ((s_nSelectMenu + 1) + OPTION_MAX) % OPTION_MAX;
 
 		ChangeOption(s_nSelectMenu);	//選択肢を変更
+
+		PlaySound(SOUND_LABEL_SE_SELECT);
 	}
 
 	switch (s_nSelectMenu)
@@ -296,6 +301,7 @@ static void SelectMenu(void)
 
 			ChangeMode(MODE_GAME);
 
+			PlaySound(SOUND_LABEL_SE_GEARSTOP);
 		}
 		break;
 
@@ -307,5 +313,6 @@ static void SelectMenu(void)
 	if (GetKeyboardTrigger(DIK_BACKSPACE) || GetJoypadTrigger(JOYKEY_B, 0))
 	{
 		ChangeMode(MODE_TITLE);
+		PlaySound(SOUND_LABEL_SE_NO);
 	}
 }

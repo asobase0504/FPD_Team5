@@ -11,6 +11,7 @@
 #include "input.h"
 #include "mode.h"
 #include "gear.h"
+#include "sound.h"
 
 #include <assert.h>
 
@@ -65,7 +66,7 @@ void InitTitle(void)
 
 	//テクスチャの読み込み
 	D3DXCreateTextureFromFile(pDevice,
-								NULL,
+								"data/TEXTURE/TitleUI/FPD_TitleLogo.png",
 								&s_pTextureTitle);
 
 	D3DXCreateTextureFromFile(pDevice,
@@ -170,7 +171,7 @@ void InitTitle(void)
 	menu.nNumUse	= MENU_MAX;
 	menu.fLeft		= 0.0f;
 	menu.fRight		= SCREEN_WIDTH;
-	menu.fTop		= SCREEN_HEIGHT * 0.5f;
+	menu.fTop		= SCREEN_HEIGHT * 0.35f;
 	menu.fBottom	= SCREEN_HEIGHT;
 	menu.fWidth		= MENU_WIDTH;
 	menu.fHeight	= MENU_HEIGHT;
@@ -230,8 +231,6 @@ void InitTitle(void)
 	SetGear(D3DXVECTOR3(65.0f, 280.0f, 0.0f), 170.0f, D3DX_PI * 0.008f, 4);
 	SetGear(D3DXVECTOR3(65.0f, 440.0f, 0.0f), 170.0f, D3DX_PI * 0.008f, 4);
 	SetGear(D3DXVECTOR3(170.0f, 360.0f, 0.0f), 150.0f, -D3DX_PI * 0.008f, 4);
-	
-
 }
 
 //==================================================
@@ -321,6 +320,8 @@ static void SelectMenu(void)
 		s_nSelectMenu = ((s_nSelectMenu - 1) + MENU_MAX) % MENU_MAX;
 
 		ChangeOption(s_nSelectMenu);
+
+		PlaySound(SOUND_LABEL_SE_SELECT);
 	}
 	else if (GetKeyboardTrigger(DIK_S) || GetJoypadTrigger(JOYKEY_DOWN, 0))
 	{// Sキーが押されたかどうか
@@ -329,6 +330,8 @@ static void SelectMenu(void)
 		s_nSelectMenu = ((s_nSelectMenu + 1) + MENU_MAX) % MENU_MAX;
 
 		ChangeOption(s_nSelectMenu);
+
+		PlaySound(SOUND_LABEL_SE_SELECT);
 	}
 
 	if (GetKeyboardTrigger(DIK_RETURN) || GetJoypadTrigger(JOYKEY_START, 0))
@@ -357,5 +360,6 @@ static void SelectMenu(void)
 			assert(false);
 			break;
 		}
+		PlaySound(SOUND_LABEL_SE_YES);
 	}
 }

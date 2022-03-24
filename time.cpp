@@ -8,7 +8,7 @@
 #include "math.h"								//∞を生み出す変数
 
 //グローバル変数
-static LPDIRECT3DTEXTURE9 g_pTexture = NULL;			//テクスチャヘノポインタ
+static LPDIRECT3DTEXTURE9 s_pTexture = NULL;			//テクスチャヘノポインタ
 static LPDIRECT3DVERTEXBUFFER9 g_pVtxBuff = NULL;		//頂点バッファへのポインタ
 static TIME g_Time;										//タイム構造体
 
@@ -19,8 +19,8 @@ void InitTime(void)
 
 	//テクスチャの読み込み
 	D3DXCreateTextureFromFile(pDevice,
-		"data/TEXTURE/number.png",
-		&g_pTexture);
+		"data/TEXTURE/number2.png",
+		&s_pTexture);
 
 	g_Time.nTime = 30;			//タイムの値
 	g_Time.nMinusTime =0;		//タイムを引く数
@@ -47,10 +47,10 @@ void InitTime(void)
 	for (int i = 0; i < MAX_CNT_TIME; i++)
 	{
 		//頂点座標の設定
-		pVtx[0].pos = D3DXVECTOR3(g_Time.pos[i].x - 20.0f, g_Time.pos[i].y - 35.0f, 0.0f);
-		pVtx[1].pos = D3DXVECTOR3(g_Time.pos[i].x + 20.0f, g_Time.pos[i].y - 35.0f, 0.0f);
-		pVtx[2].pos = D3DXVECTOR3(g_Time.pos[i].x - 20.0f, g_Time.pos[i].y + 35.0f, 0.0f);
-		pVtx[3].pos = D3DXVECTOR3(g_Time.pos[i].x + 20.0f, g_Time.pos[i].y + 35.0f, 0.0f);
+		pVtx[0].pos = D3DXVECTOR3(g_Time.pos[i].x - 20.0f, g_Time.pos[i].y - 20.0f, 0.0f);
+		pVtx[1].pos = D3DXVECTOR3(g_Time.pos[i].x + 20.0f, g_Time.pos[i].y - 20.0f, 0.0f);
+		pVtx[2].pos = D3DXVECTOR3(g_Time.pos[i].x - 20.0f, g_Time.pos[i].y + 20.0f, 0.0f);
+		pVtx[3].pos = D3DXVECTOR3(g_Time.pos[i].x + 20.0f, g_Time.pos[i].y + 20.0f, 0.0f);
 
 		//rhwの設定
 		pVtx[0].rhw = 1.0f;
@@ -79,10 +79,10 @@ void InitTime(void)
 void UninitTime(void)
 {
 	//テクスチャの破棄
-	if (g_pTexture != NULL)
+	if (s_pTexture != NULL)
 	{
-		g_pTexture->Release();
-		g_pTexture = NULL;
+		s_pTexture->Release();
+		s_pTexture = NULL;
 	}
 	//頂点バッファの破棄
 	if (g_pVtxBuff != NULL)
@@ -140,7 +140,7 @@ void DrawTime(void)
 	for (int i = 0; i < MAX_CNT_TIME; i++)
 	{
 		//テクスチャの設定
-		pDevice->SetTexture(0, g_pTexture);
+		pDevice->SetTexture(0, s_pTexture);
 
 		//ポリゴンの描画
 		pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, 4 * i, 2);

@@ -33,5 +33,6 @@ void DrawGear(void);
 
 //位置・サイズ・一フレームの回転角度・種類
 void SetGear(D3DXVECTOR3 pos, float size, float frameRot, int type);
+void SetDarkerGear(D3DXVECTOR3 pos, D3DXCOLOR col, float size, float frameRot, int type);
 
 #endif
