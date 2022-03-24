@@ -100,6 +100,8 @@ void InitStage(void)
 	s_aStage[2].fLength = sqrtf((STAGE_NET_WIDTH * STAGE_NET_WIDTH) + (STAGE_NET_HEIGHT * STAGE_NET_HEIGHT)) / 2.0f;
 	s_aStage[2].type = STAGE_TYPE_NET;
 
+	s_aStage[2].pos.x = 5000.0f;
+
 	//ï«(è„ë§)
 	s_aStage[3].pos = D3DXVECTOR3(SCREEN_WIDTH / 2, MIN_HEIGHT - 20, 0.0f);
 	s_aStage[3].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
