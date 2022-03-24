@@ -26,8 +26,6 @@
 //------------------------------------
 static LPDIRECT3DTEXTURE9		s_pTextureGoal[MAX_IMAGE_DRUM] = {};	//テクスチャへのポインタ
 static LPDIRECT3DVERTEXBUFFER9	s_pVtxBuffGoal = NULL;	//頂点バッファへのポインタ
-static LPDIRECT3DTEXTURE9		s_pTexturePost = {};	//テクスチャへのポインタ
-static LPDIRECT3DVERTEXBUFFER9	s_pVtxBuffPost = NULL;	//頂点バッファへのポインタ
 static Goal s_aGoal[MAX_GOAL];							//ゴールの情報
 
 //=========================================
@@ -50,13 +48,6 @@ void InitGoal(void)
 		pDevice,
 		"data\\TEXTURE\\goal\\stripe04.png",	//テクスチャのファイル名
 		&s_pTextureGoal[GOAL_TYPE_STRIKE]
-	);
-
-	D3DXCreateTextureFromFile
-	(
-		pDevice,
-		"data\\TEXTURE\\goal\\stripe04.png",	//テクスチャのファイル名
-		&s_pTexturePost
 	);
 
 	//ゴールの位置
@@ -149,61 +140,6 @@ void InitGoal(void)
 			}
 		}
 	}
-
-	//頂点バッファをアンロックする
-	s_pVtxBuffGoal->Unlock();
-
-	//頂点バッファの生成
-	pDevice->CreateVertexBuffer
-	(
-		sizeof(VERTEX_2D) * 4 * MAX_GOAL,
-		D3DUSAGE_WRITEONLY,
-		FVF_VERTEX_2D,
-		D3DPOOL_MANAGED,
-		&s_pVtxBuffPost,
-		NULL
-	);
-
-	//頂点バッファをロックし、頂点情報へのポインタを取得
-	s_pVtxBuffGoal->Lock(0, 0, (void**)&pVtx, 0);
-
-	//頂点座標の設定 = (配置位置 ± 正弦(対角線の角度 ± 向き) * 対角線の長さ)
-	pVtx[0].pos.x = -GOAL_WIDTH;
-	pVtx[0].pos.y = -GOAL_HEIGHT;
-	pVtx[0].pos.z = 0.0f;
-
-	pVtx[1].pos.x = GOAL_WIDTH;
-	pVtx[1].pos.y = -GOAL_HEIGHT;
-	pVtx[1].pos.z = 0.0f;
-
-	pVtx[2].pos.x = -GOAL_WIDTH;
-	pVtx[2].pos.y = GOAL_HEIGHT;
-	pVtx[2].pos.z = 0.0f;
-
-	pVtx[3].pos.x = GOAL_WIDTH;
-	pVtx[3].pos.y = GOAL_HEIGHT;
-	pVtx[3].pos.z = 0.0f;
-
-	//rhwの設定
-	pVtx[0].rhw = 1.0f;
-	pVtx[1].rhw = 1.0f;
-	pVtx[2].rhw = 1.0f;
-	pVtx[3].rhw = 1.0f;
-
-	//頂点カラーの設定
-	pVtx[0].col = D3DCOLOR_RGBA(255, 255, 255, 255);
-	pVtx[1].col = D3DCOLOR_RGBA(255, 255, 255, 255);
-	pVtx[2].col = D3DCOLOR_RGBA(255, 255, 255, 255);
-	pVtx[3].col = D3DCOLOR_RGBA(255, 255, 255, 255);
-
-	//テクスチャ座標の設定(0.0f ~ (1 / xパターン数)f)
-	pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
-	pVtx[1].tex = D3DXVECTOR2(1.0f, 0.0f);
-	pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);
-	pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);
-
-	//頂点バッファをアンロックする
-	s_pVtxBuffGoal->Unlock();
 }
 
 //=========================================
@@ -225,19 +161,6 @@ void UninitGoal(void)
 			s_pVtxBuffGoal->Release();
 			s_pVtxBuffGoal = NULL;
 		}
-	}
-
-	//テクスチャの破棄
-	if (s_pTexturePost != NULL)
-	{
-		s_pTexturePost->Release();
-		s_pTexturePost = NULL;
-	}
-	//頂点バッファの破棄
-	if (s_pVtxBuffPost != NULL)
-	{
-		s_pVtxBuffPost->Release();
-		s_pVtxBuffPost = NULL;
 	}
 }
 
@@ -337,23 +260,6 @@ void DrawGoal()
 			);
 		}
 	}
-
-	//頂点バッファをデータストリームに設定
-	pDevice->SetStreamSource(0, s_pVtxBuffPost, 0, sizeof(VERTEX_2D));
-
-	//頂点フォーマットの設定
-	pDevice->SetFVF(FVF_VERTEX_2D);
-
-	//テクスチャの設定
-	pDevice->SetTexture(0, s_pTexturePost);
-
-	//ポリゴンの描画
-	pDevice->DrawPrimitive
-	(
-		D3DPT_TRIANGLESTRIP,	//プリミティブの種類
-		0,			//描画する最初の頂点インデックス
-		2						//プリミティブアイコンの個数
-	);
 }
 
 //=========================================
