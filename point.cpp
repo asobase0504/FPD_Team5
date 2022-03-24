@@ -55,7 +55,7 @@ void InitPoint(void)
 
 		//pos.x = ((‰æ–Ê”¼•ª) - (’·‚³‰¡ * (Œ…” + 2ŒÂ•ª))) + ((’·‚³‰¡ * (•\Ž¦” + Œ…” + 1.5ŒÂ•ª)) * ‰½ŒÂ–Ú)
 		pPoint->pos = D3DXVECTOR3(((SCREEN_WIDTH / 2) - (POINT_WIDTH * (DIGIT_POINT + 1.5))) + ((POINT_WIDTH * (NUM_POINT + DIGIT_POINT + 1)) * nCntScore),
-			SCREEN_HEIGHT * 0.5f, 0.0f);
+			SCREEN_HEIGHT * 0.425f, 0.0f);
 		pPoint->bUse = false;
 		s_bPointUse = false;
 		s_nUseTime = 0;
