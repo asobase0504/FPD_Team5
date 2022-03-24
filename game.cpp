@@ -232,11 +232,11 @@ void UpdateGame(void)
 		UpdateDisk();			// ディスク
 		UpdateLandingMark();	// ディスクの落下地点
 		UpdateShadow();			// 影
-		UpdateEffect();			// エフェクト
+	}
 		UpdateUI();				// UI
 		UpdatePipe();			// 配管
 		UpdateGear();			// 歯車
-	}
+		UpdateEffect();			// エフェクト
 
 	// スコア関係の処理
 	{
@@ -303,7 +303,6 @@ void DrawGame()
 
 	DrawStgFg();		// ステージ前景
 
-	DrawUI();			// UI
 	if (GetDisk()->type == DISK_TYPE_LOB)
 	{
 		DrawPlayer();		// プレイヤー
@@ -314,6 +313,7 @@ void DrawGame()
 		DrawDisk();			// ディスク
 		DrawPlayer();		// プレイヤー
 	}
+	DrawUI();			// UI
 	DrawEffect();		// エフェクト
 
 	if (bIsResult)
