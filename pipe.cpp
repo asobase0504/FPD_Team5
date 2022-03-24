@@ -115,7 +115,7 @@ void UpdatePipe(void)
 
 			if (g_aPipe[nCntPipe].nType == PIPE_TYPE_VERTICAL)
 			{
-				g_aPipe[nCntPipe].pos.y = (3.0f - (g_aPipe[nCntPipe].fRand * 2.0f)) * 25.0f * sin(g_aPipe[nCntPipe].fRand * (g_aPipe[nCntPipe].nCntMove + g_aPipe[nCntPipe].pos.x) * 0.025f) + 760.0f;
+				g_aPipe[nCntPipe].pos.y = (3.0f - (g_aPipe[nCntPipe].fRand * 2.0f)) * 10.0f * sin(g_aPipe[nCntPipe].fRand * (g_aPipe[nCntPipe].nCntMove + g_aPipe[nCntPipe].pos.x) * 0.025f) + 730.0f;
 
 				if (g_aPipe[nCntPipe].nCntAnim > g_aPipe[nCntPipe].nDelay - 30)
 				{

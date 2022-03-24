@@ -20,6 +20,7 @@
 #include "effect.h"
 #include "game.h"
 #include "goal.h"
+#include "sound.h"
 
 //-----------------------------------------
 // マクロ定義
@@ -229,6 +230,7 @@ void MovePlayer(int nIdxPlayer)
 		if (GetJoypadTrigger(JOYKEY_A))
 		{ //スライディングの使用
 			pPlayer->bUseSliding = true;
+			PlaySound(SOUND_LABEL_SE_SLIDING);
 		}
 	}
 	else
@@ -236,6 +238,7 @@ void MovePlayer(int nIdxPlayer)
 		if (GetKeyboardTrigger(DIK_B))
 		{ //スライディングの使用
 			pPlayer->bUseSliding = true;
+			PlaySound(SOUND_LABEL_SE_SLIDING);
 		}
 	}
 
@@ -349,21 +352,25 @@ void ThrowPlayer(int nIdxPlayer)
 				if (pPlayer->nSpecialSkillCnt <= 100)
 				{
 					ThrowDisk(pPlayer->pos, move, moveCurve, DISK_TYPE_NORMAL, nIdxPlayer);
+					PlaySound(SOUND_LABEL_SE_THROW_NORMAL);
 				}
 				else
 				{
 					ThrowDisk(pPlayer->pos, move, ZERO_VECTOR, DISK_TYPE_SPECIAL_0, nIdxPlayer);
+					PlaySound(SOUND_LABEL_SE_THROW_SPECIAL);
 				}
 			}
 			else if (GetJoypadTrigger(JOYKEY_B, nIdxPlayer))
 			{
 				ThrowDisk(pPlayer->pos, move, ZERO_VECTOR, DISK_TYPE_LOB, nIdxPlayer);
+				PlaySound(SOUND_LABEL_SE_THROW_LOB);
 			}
 			break;
 		case JUMP_NOW:
 			if (GetJoypadTrigger(JOYKEY_A, nIdxPlayer))
 			{
 				ThrowDisk(pPlayer->pos, move, moveCurve, DISK_TYPE_JUMP, nIdxPlayer);
+				PlaySound(SOUND_LABEL_SE_THROW_NORMAL);
 			}
 			break;
 		case JUMP_MAX:
@@ -382,21 +389,25 @@ void ThrowPlayer(int nIdxPlayer)
 				if (pPlayer->nSpecialSkillCnt <= 100)
 				{
 					ThrowDisk(pPlayer->pos, move, ZERO_VECTOR, DISK_TYPE_NORMAL, nIdxPlayer);
+					PlaySound(SOUND_LABEL_SE_THROW_NORMAL);
 				}
 				else
 				{
 					ThrowDisk(pPlayer->pos, move, ZERO_VECTOR, DISK_TYPE_SPECIAL_1, nIdxPlayer);
+					PlaySound(SOUND_LABEL_SE_THROW_SPECIAL);
 				}
 			}
 			else if (GetKeyboardTrigger(DIK_SPACE))
 			{
 				ThrowDisk(pPlayer->pos, move, ZERO_VECTOR, DISK_TYPE_LOB, nIdxPlayer);
+				PlaySound(SOUND_LABEL_SE_THROW_LOB);
 			}
 			break;
 		case JUMP_NOW:
 			if (GetKeyboardTrigger(DIK_RETURN))
 			{
 				ThrowDisk(pPlayer->pos, move, moveCurve, DISK_TYPE_JUMP, nIdxPlayer);
+				PlaySound(SOUND_LABEL_SE_THROW_NORMAL);
 			}
 			break;
 		case JUMP_MAX:
@@ -463,6 +474,7 @@ void CatchDiscPlayer(int nIdxPlayer)
 			DestroyDisk();	// ディスクの破棄
 			pPlayer->bHaveDisk = true;
 			pPlayer->fThrowPower = pPlayer->fMaxThrowPower;
+			PlaySound(SOUND_LABEL_SE_CATCH);
 		}
 
 		// 空中で取得
@@ -471,6 +483,7 @@ void CatchDiscPlayer(int nIdxPlayer)
 			DestroyDisk();	// ディスクの破棄
 			pPlayer->bHaveDisk = true;
 			pPlayer->fThrowPower = pPlayer->fMaxThrowPower;
+			PlaySound(SOUND_LABEL_SE_CATCH);
 		}
 	}
 }
