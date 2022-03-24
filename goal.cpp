@@ -50,13 +50,6 @@ void InitGoal(void)
 		&s_pTextureGoal[GOAL_TYPE_STRIKE]
 	);
 
-	//ゴールの位置
-	SetGoal(D3DXVECTOR3(GOAL_WIDTH / 2 + 25, 200.0f + (STAGE_HEIGHT_DOWN / 2), 0.1f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false, GOAL_TYPE_NORMAL, 0);
-	SetGoal(D3DXVECTOR3(GOAL_WIDTH / 2 + 25, SCREEN_HEIGHT / 2 + (STAGE_HEIGHT_DOWN / 2), 0.1f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false, GOAL_TYPE_STRIKE, 1);
-	SetGoal(D3DXVECTOR3(GOAL_WIDTH / 2 + 25, SCREEN_HEIGHT - 200.0f + (STAGE_HEIGHT_DOWN / 2), 0.1f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false, GOAL_TYPE_NORMAL, 2);
-	SetGoal(D3DXVECTOR3(SCREEN_WIDTH - GOAL_WIDTH / 2 - 25, 200.0f + (STAGE_HEIGHT_DOWN / 2), 0.1f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), true, GOAL_TYPE_NORMAL, 3);
-	SetGoal(D3DXVECTOR3(SCREEN_WIDTH - GOAL_WIDTH / 2 - 25, SCREEN_HEIGHT / 2 + (STAGE_HEIGHT_DOWN / 2), 0.1f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), true, GOAL_TYPE_STRIKE, 4);
-	SetGoal(D3DXVECTOR3(SCREEN_WIDTH - GOAL_WIDTH / 2 - 25, SCREEN_HEIGHT - 200.0f + (STAGE_HEIGHT_DOWN / 2), 0.1f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), true, GOAL_TYPE_NORMAL, 5);
 
 	//頂点バッファの生成
 	pDevice->CreateVertexBuffer
@@ -78,9 +71,13 @@ void InitGoal(void)
 	//構造体の初期化処理
 	for (int nCntGoal = 0; nCntGoal < MAX_GOAL; nCntGoal++, pVtx += 4)
 	{
+		s_aGoal[nCntGoal].fGoalCounter = 0;
+		s_aGoal[nCntGoal].fFlashCounter = 0;
 		s_aGoal[nCntGoal].nor = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 		s_aGoal[nCntGoal].col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
-		s_aGoal[nCntGoal].bUse = true;
+		s_aGoal[nCntGoal].bUse = false;
+		s_aGoal[nCntGoal].bGoal = false;
+		s_aGoal[nCntGoal].bAddFlash = false;
 
 		//頂点座標の設定 = (配置位置 ± 正弦(対角線の角度 ± 向き) * 対角線の長さ)
 		pVtx[0].pos.x = s_aGoal[nCntGoal].pos.x - sinf(s_aGoal[nCntGoal].fAngle + s_aGoal[nCntGoal].rot.x) * s_aGoal[nCntGoal].fLength;
@@ -116,7 +113,18 @@ void InitGoal(void)
 		pVtx[1].tex = D3DXVECTOR2(1.0f, 0.0f);
 		pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);
 		pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);
+	}
 
+	//ゴールの位置
+	SetGoal(D3DXVECTOR3(GOAL_WIDTH / 2 + 25, 200.0f + (STAGE_HEIGHT_DOWN / 2), 0.1f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false, GOAL_TYPE_NORMAL, 0);
+	SetGoal(D3DXVECTOR3(GOAL_WIDTH / 2 + 25, SCREEN_HEIGHT / 2 + (STAGE_HEIGHT_DOWN / 2), 0.1f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false, GOAL_TYPE_STRIKE, 1);
+	SetGoal(D3DXVECTOR3(GOAL_WIDTH / 2 + 25, SCREEN_HEIGHT - 200.0f + (STAGE_HEIGHT_DOWN / 2), 0.1f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false, GOAL_TYPE_NORMAL, 2);
+	SetGoal(D3DXVECTOR3(SCREEN_WIDTH - GOAL_WIDTH / 2 - 25, 200.0f + (STAGE_HEIGHT_DOWN / 2), 0.1f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), true, GOAL_TYPE_NORMAL, 3);
+	SetGoal(D3DXVECTOR3(SCREEN_WIDTH - GOAL_WIDTH / 2 - 25, SCREEN_HEIGHT / 2 + (STAGE_HEIGHT_DOWN / 2), 0.1f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), true, GOAL_TYPE_STRIKE, 4);
+	SetGoal(D3DXVECTOR3(SCREEN_WIDTH - GOAL_WIDTH / 2 - 25, SCREEN_HEIGHT - 200.0f + (STAGE_HEIGHT_DOWN / 2), 0.1f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), true, GOAL_TYPE_NORMAL, 5);
+
+	for (int nCntGoal = 0; nCntGoal < MAX_GOAL; nCntGoal++, pVtx += 4)
+	{
 		if (s_aGoal[nCntGoal].bSide == 0)
 		{
 			if (s_aGoal[nCntGoal].type == POP_TYPE_NORMAL)
@@ -217,6 +225,53 @@ void UpdateGoal(void)
 				pVtx[1].tex = D3DXVECTOR2(0.0f, 0.0f);
 				pVtx[2].tex = D3DXVECTOR2(1.0f, 1.0f);
 				pVtx[3].tex = D3DXVECTOR2(0.0f, 1.0f);
+			}
+
+			if (s_aGoal[nCntGoal].bGoal == true)
+			{
+				//点滅処理
+				if (((int)s_aGoal[nCntGoal].fFlashCounter * GOAL_FLASH) == 255)
+				{
+					s_aGoal[nCntGoal].bAddFlash = false;
+				}
+				else if (((int)s_aGoal[nCntGoal].fFlashCounter * GOAL_FLASH) == 0)
+				{
+					s_aGoal[nCntGoal].bAddFlash = true;
+				}
+
+				//頂点カラーの設定
+				pVtx[0].col = D3DCOLOR_RGBA(255, 255, 255, ((int)s_aGoal[nCntGoal].fFlashCounter * GOAL_FLASH));
+				pVtx[1].col = D3DCOLOR_RGBA(255, 255, 255, ((int)s_aGoal[nCntGoal].fFlashCounter * GOAL_FLASH));
+				pVtx[2].col = D3DCOLOR_RGBA(255, 255, 255, ((int)s_aGoal[nCntGoal].fFlashCounter * GOAL_FLASH));
+				pVtx[3].col = D3DCOLOR_RGBA(255, 255, 255, ((int)s_aGoal[nCntGoal].fFlashCounter * GOAL_FLASH));
+
+				//点滅の増減
+				if (s_aGoal[nCntGoal].bAddFlash == false)
+				{
+					s_aGoal[nCntGoal].fFlashCounter--;
+				}
+				else
+				{
+					s_aGoal[nCntGoal].fFlashCounter++;
+				}
+
+				//ゴール秒カウント
+				s_aGoal[nCntGoal].fGoalCounter++;
+
+				if (s_aGoal[nCntGoal].fGoalCounter >= 80)
+				{
+					s_aGoal[nCntGoal].fGoalCounter = 0;
+					s_aGoal[nCntGoal].fFlashCounter = 0;
+					s_aGoal[nCntGoal].bGoal = false;
+				}
+			}
+			else
+			{
+				//頂点カラーの設定
+				pVtx[0].col = D3DCOLOR_RGBA(255, 255, 255, 255);
+				pVtx[1].col = D3DCOLOR_RGBA(255, 255, 255, 255);
+				pVtx[2].col = D3DCOLOR_RGBA(255, 255, 255, 255);
+				pVtx[3].col = D3DCOLOR_RGBA(255, 255, 255, 255);
 			}
 		}
 	}
@@ -325,7 +380,6 @@ void ColisionGoal(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pLastPos)
 						AddScore(3, 1);
 						SetThoThrowRefreeIdx(0);	// 投げる方向の選択
 						*GetResetScore() = true;
-						PlaySound(SOUND_LABEL_SE_GOAL);
 					}
 					else
 					{
@@ -345,8 +399,9 @@ void ColisionGoal(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pLastPos)
 						AddScore(3, 0);
 						SetThoThrowRefreeIdx(1);	// 投げる方向の選択
 						*GetResetScore() = true;
-						PlaySound(SOUND_LABEL_SE_GOAL);
 					}
+					PlaySound(SOUND_LABEL_SE_GOAL);
+					s_aGoal[nCntGoal].bGoal = true;
 					pDisk->move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 				}
 			}
@@ -363,7 +418,6 @@ void ColisionGoal(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pLastPos)
 						AddScore(5,1);
 						SetThoThrowRefreeIdx(0);	// 投げる方向の選択
 						*GetResetScore() = true;
-						PlaySound(SOUND_LABEL_SE_GOAL);
 
 						PointSmokeAnimation(1);
 
@@ -377,8 +431,9 @@ void ColisionGoal(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pLastPos)
 						AddScore(5, 0);
 						SetThoThrowRefreeIdx(1);	// 投げる方向の選択
 						*GetResetScore() = true;
-						PlaySound(SOUND_LABEL_SE_GOAL);
 					}
+					PlaySound(SOUND_LABEL_SE_GOAL);
+					s_aGoal[nCntGoal].bGoal = true;
 					pDisk->move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 				}
 			}
