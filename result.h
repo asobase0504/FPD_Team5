@@ -23,5 +23,6 @@ void InitResult(void);
 void UninitResult(void);
 void UpdateResult(void);
 void DrawResult(void);
+void SetWInPlayerIdx(int nIdx);
 
 #endif

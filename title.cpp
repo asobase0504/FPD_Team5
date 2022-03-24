@@ -28,7 +28,7 @@
 typedef enum
 {
 	MENU_GAMESTART = 0,	//ゲーム開始
-	MENU_TUTORIAL,		//チュートリアル
+	//MENU_TUTORIAL,		//チュートリアル
 	MENU_EXIT,			//終了
 	MENU_MAX
 }MENU;
@@ -73,9 +73,9 @@ void InitTitle(void)
 								"data/TEXTURE/TitleUI/FPD_TitleUI_GameStart.png",
 								&s_apTextureMenu[MENU_GAMESTART]);
 
-	D3DXCreateTextureFromFile(pDevice,
-								"data/TEXTURE/TitleUI/FPD_TitleUI_Tutorial.png",
-								&s_apTextureMenu[MENU_TUTORIAL]);
+	//D3DXCreateTextureFromFile(pDevice,
+	//							"data/TEXTURE/TitleUI/FPD_TitleUI_Tutorial.png",
+	//							&s_apTextureMenu[MENU_TUTORIAL]);
 
 	D3DXCreateTextureFromFile(pDevice,
 								"data/TEXTURE/TitleUI/FPD_TitleUI_GameEnd.png",
@@ -344,7 +344,7 @@ static void SelectMenu(void)
 
 			break;
 
-		case MENU_TUTORIAL:		//設定
+		//case MENU_TUTORIAL:		//設定
 
 			//SetFade(MODE_RANKING);	//設定画面へ
 
