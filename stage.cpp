@@ -20,6 +20,7 @@
 #include "drum.h"
 #include "score.h"
 #include "sound.h"
+#include "pipe.h"
 
 //------------------------------------
 // スタティック変数
@@ -269,10 +270,12 @@ void UpdateStage(void)
 			if (pDisk->pos.x >= SCREEN_WIDTH / 2)
 			{
 				AddScore(2, 0);
+				PointSmokeAnimation(0);
 			}
 			else
 			{
 				AddScore(2, 1);
+				PointSmokeAnimation(1);
 			}
 		}
 		PlaySound(SOUND_LABEL_SE_CHEERS1);
