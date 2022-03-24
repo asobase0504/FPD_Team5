@@ -81,6 +81,18 @@ void InitGame(void)
 	SetPipe(D3DXVECTOR3(420.0f, 35.0f, 0.0f), D3DXVECTOR3(70.0f, 21.85f, 0.0f), PIPE_TYPE_STEAM);
 	SetPipe(D3DXVECTOR3(420.0f, 90.0f, 0.0f), D3DXVECTOR3(70.0f, 21.85f, 0.0f), PIPE_TYPE_STEAM);
 	SetPipe(D3DXVECTOR3(820.0f, 70.0f, 0.0f), D3DXVECTOR3(60.0f, 21.85f, 0.0f), PIPE_TYPE_STEAM);
+
+	SetDarkerGear(D3DXVECTOR3(988.0f, 30.0f, 0.0f), D3DXCOLOR(0.3f, 0.3f, 0.3f, 1.0f), 120.0f, -D3DX_PI * 0.01f, 1);
+	SetDarkerGear(D3DXVECTOR3(1108.0f, 30.0f, 0.0f), D3DXCOLOR(0.3f, 0.3f, 0.3f, 1.0f), 120.0f, D3DX_PI * 0.01f, 1);
+	SetDarkerGear(D3DXVECTOR3(1148.0f, 120.0f, 0.0f), D3DXCOLOR(0.3f, 0.3f, 0.3f, 1.0f), 80.0f, D3DX_PI * 0.01f, 1);
+	SetDarkerGear(D3DXVECTOR3(1060.0f, 85.0f, 0.0f), D3DXCOLOR(0.3f, 0.3f, 0.3f, 1.0f), 70.0f, D3DX_PI * 0.01f, 1);
+
+	SetDarkerGear(D3DXVECTOR3(1188.0f, 112.0f, 0.0f), D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f), 70.0f, -D3DX_PI * 0.003f, 3);
+	SetDarkerGear(D3DXVECTOR3(1175.0f, 47.0f, 0.0f), D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f), 90.0f, D3DX_PI * 0.003f, 3);
+	SetDarkerGear(D3DXVECTOR3(1114.0f, 86.0f, 0.0f), D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f), 85.0f, -D3DX_PI * 0.003f, 3);
+	SetDarkerGear(D3DXVECTOR3(1040.0f, 70.0f, 0.0f), D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f), 100.0f, D3DX_PI * 0.003f, 3);
+	SetDarkerGear(D3DXVECTOR3(970.0f, 81.0f, 0.0f), D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f), 70.0f, -D3DX_PI * 0.003f, 3);
+
 	SetGear(D3DXVECTOR3(1060.0f, 40.0f, 0.0f), 100.0f, -D3DX_PI * 0.008f, 2);
 	SetGear(D3DXVECTOR3(1116.0f, 90.0f, 0.0f), 70.0f, D3DX_PI * 0.008f, 2);
 	SetGear(D3DXVECTOR3(1174.0f, 52.0f, 0.0f), 90.0f, -D3DX_PI * 0.008f, 2);
@@ -164,13 +176,13 @@ void UpdateGame(void)
 			DestroyDisk();	// ディスクの削除
 			PlaySound(SOUND_LABEL_SE_WHISTLE_STOP);
 
-			if (s_nPlayerSet[0] > s_nPlayerSet[1])
+			if (GetScore()[0].nScore > GetScore()[1].nScore)
 			{ // P1の勝ち
 				s_nPlayerSet[0]++;	// セット数の取得
 				SetThoThrowRefreeIdx(1);	// 投げる方向の選択
 				RoundReset();
 			}
-			else if (s_nPlayerSet[0] < s_nPlayerSet[1])
+			else if (GetScore()[0].nScore < GetScore()[1].nScore)
 			{ // P2の勝ち
 				s_nPlayerSet[1]++;	// セット数の取得
 				SetThoThrowRefreeIdx(0);	// 投げる方向の選択
@@ -199,8 +211,8 @@ void UpdateGame(void)
 //=========================================
 void DrawGame()
 {
-	DrawStage();		// ステージ
 	DrawGear();			// 歯車
+	DrawStage();		// ステージ
 	DrawShadow();		// 影
 	DrawLandingMark();	// ディスクの落下地点
 	DrawEffect();		// エフェクト
@@ -263,12 +275,11 @@ bool* GetResetScore(void)
 //=========================================
 void RoundReset(void)
 {
-	SCORE* pScore = GetScore();
 	Player * pPlayer = GetPlayer();
 
 	for (int nIdxPlayer = 0; nIdxPlayer < 2; nIdxPlayer++, pPlayer++)
 	{
-		AddScore(-pScore[nIdxPlayer].nScore, 0);	// スコアのリセット
+		ResetScore();
 		pPlayer->bHaveDisk = false;
 	}
 
