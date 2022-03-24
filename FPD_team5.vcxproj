@@ -152,6 +152,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="bgm.cpp" />
     <ClCompile Include="disk.cpp" />
     <ClCompile Include="drum.cpp" />
     <ClCompile Include="effect.cpp" />
@@ -184,6 +185,7 @@
     <ClCompile Include="wall.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="bgm.h" />
     <ClInclude Include="disk.h" />
     <ClInclude Include="drum.h" />
     <ClInclude Include="effect.h" />
