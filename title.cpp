@@ -65,7 +65,7 @@ void InitTitle(void)
 
 	//テクスチャの読み込み
 	D3DXCreateTextureFromFile(pDevice,
-								NULL,
+								"data/TEXTURE/TitleUI/FPD_TitleLogo.png",
 								&s_pTextureTitle);
 
 	D3DXCreateTextureFromFile(pDevice,
@@ -170,7 +170,7 @@ void InitTitle(void)
 	menu.nNumUse	= MENU_MAX;
 	menu.fLeft		= 0.0f;
 	menu.fRight		= SCREEN_WIDTH;
-	menu.fTop		= SCREEN_HEIGHT * 0.5f;
+	menu.fTop		= SCREEN_HEIGHT * 0.35f;
 	menu.fBottom	= SCREEN_HEIGHT;
 	menu.fWidth		= MENU_WIDTH;
 	menu.fHeight	= MENU_HEIGHT;

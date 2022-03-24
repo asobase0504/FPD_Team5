@@ -38,7 +38,7 @@ void InitPoint(void)
 	LPDIRECT3DDEVICE9 pDevice = GetDevice();	//デバイスへのポインタ
 
 	//テクスチャの読み込み
-	D3DXCreateTextureFromFile(pDevice, "data/TEXTURE/number.png", &s_pTexture);
+	D3DXCreateTextureFromFile(pDevice, "data/TEXTURE/number2.png", &s_pTexture);
 
 	Point* pPoint = s_aPoint;
 

@@ -19,7 +19,7 @@ void InitTime(void)
 
 	//テクスチャの読み込み
 	D3DXCreateTextureFromFile(pDevice,
-		"data/TEXTURE/number.png",
+		"data/TEXTURE/number2.png",
 		&s_pTexture);
 
 	g_Time.nTime = 30;			//タイムの値
@@ -47,10 +47,10 @@ void InitTime(void)
 	for (int i = 0; i < MAX_CNT_TIME; i++)
 	{
 		//頂点座標の設定
-		pVtx[0].pos = D3DXVECTOR3(g_Time.pos[i].x - 20.0f, g_Time.pos[i].y - 35.0f, 0.0f);
-		pVtx[1].pos = D3DXVECTOR3(g_Time.pos[i].x + 20.0f, g_Time.pos[i].y - 35.0f, 0.0f);
-		pVtx[2].pos = D3DXVECTOR3(g_Time.pos[i].x - 20.0f, g_Time.pos[i].y + 35.0f, 0.0f);
-		pVtx[3].pos = D3DXVECTOR3(g_Time.pos[i].x + 20.0f, g_Time.pos[i].y + 35.0f, 0.0f);
+		pVtx[0].pos = D3DXVECTOR3(g_Time.pos[i].x - 20.0f, g_Time.pos[i].y - 20.0f, 0.0f);
+		pVtx[1].pos = D3DXVECTOR3(g_Time.pos[i].x + 20.0f, g_Time.pos[i].y - 20.0f, 0.0f);
+		pVtx[2].pos = D3DXVECTOR3(g_Time.pos[i].x - 20.0f, g_Time.pos[i].y + 20.0f, 0.0f);
+		pVtx[3].pos = D3DXVECTOR3(g_Time.pos[i].x + 20.0f, g_Time.pos[i].y + 20.0f, 0.0f);
 
 		//rhwの設定
 		pVtx[0].rhw = 1.0f;
