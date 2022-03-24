@@ -375,7 +375,6 @@ void ColisionGoal(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pLastPos)
 							SetEffect(D3DXVECTOR3(SCREEN_WIDTH - 300.0f, 150.0f, 0.0f), 0.0f, EFFECT_TYPE_POINT_SMOKE_BLUE);
 							SetEffect(D3DXVECTOR3(SCREEN_WIDTH - 300.0f, SCREEN_HEIGHT - 100.0f, 0.0f), 0.0f, EFFECT_TYPE_POINT_SMOKE_BLUE);
 						}
-
 						SetPop(D3DXVECTOR3 (GOAL_POP_WIDTH / 2, pDisk->pos.y,0.0f), s_aGoal[nCntGoal].rot, s_aGoal[nCntGoal].bSide, POP_TYPE_NORMAL, nCntGoal);
 						AddScore(3, 1);
 						SetThoThrowRefreeIdx(0);	// 投げる方向の選択
@@ -394,13 +393,12 @@ void ColisionGoal(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pLastPos)
 							SetEffect(D3DXVECTOR3(SCREEN_WIDTH - 300.0f, 150.0f, 0.0f), 0.0f, EFFECT_TYPE_POINT_SMOKE_RED);
 							SetEffect(D3DXVECTOR3(SCREEN_WIDTH - 300.0f, SCREEN_HEIGHT - 100.0f, 0.0f), 0.0f, EFFECT_TYPE_POINT_SMOKE_RED);
 						}
-
 						SetPop(D3DXVECTOR3(SCREEN_WIDTH - GOAL_POP_WIDTH / 2, pDisk->pos.y, 0.0f), s_aGoal[nCntGoal].rot, s_aGoal[nCntGoal].bSide, POP_TYPE_NORMAL, nCntGoal);
 						AddScore(3, 0);
 						SetThoThrowRefreeIdx(1);	// 投げる方向の選択
 						*GetResetScore() = true;
 					}
-					PlaySound(SOUND_LABEL_SE_GOAL);
+					PlaySound(SOUND_LABEL_SE_GOAL1);
 					s_aGoal[nCntGoal].bGoal = true;
 					pDisk->move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 				}
@@ -412,8 +410,7 @@ void ColisionGoal(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pLastPos)
 					(s_aGoal[nCntGoal].pos + D3DXVECTOR3(0.0f, (STRIKE_GOAL_HEIGHT / 2), 0.0f)) - (s_aGoal[nCntGoal].pos - D3DXVECTOR3(0.0f, (STRIKE_GOAL_HEIGHT / 2), 0.0f))) == true)
 				{
 					if (s_aGoal[nCntGoal].bSide == false)
-					{
-						
+					{		
 						SetPop(D3DXVECTOR3(GOAL_POP_WIDTH / 2, pDisk->pos.y, 0.0f), s_aGoal[nCntGoal].rot, s_aGoal[nCntGoal].bSide, POP_TYPE_STRIKE, nCntGoal);
 						AddScore(5,1);
 						SetThoThrowRefreeIdx(0);	// 投げる方向の選択
@@ -424,7 +421,6 @@ void ColisionGoal(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pLastPos)
 					}
 					else
 					{
-
 						PointSmokeAnimation(0);
 						
 						SetPop(D3DXVECTOR3(SCREEN_WIDTH - GOAL_POP_WIDTH / 2, pDisk->pos.y, 0.0f), s_aGoal[nCntGoal].rot, s_aGoal[nCntGoal].bSide, POP_TYPE_STRIKE, nCntGoal);
@@ -432,7 +428,7 @@ void ColisionGoal(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pLastPos)
 						SetThoThrowRefreeIdx(1);	// 投げる方向の選択
 						*GetResetScore() = true;
 					}
-					PlaySound(SOUND_LABEL_SE_GOAL);
+					PlaySound(SOUND_LABEL_SE_GOAL2);
 					s_aGoal[nCntGoal].bGoal = true;
 					pDisk->move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 				}
