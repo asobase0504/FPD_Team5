@@ -301,6 +301,9 @@ void DrawGame()
 	DrawLandingMark();	// ディスクの落下地点
 	DrawPipe();			// 配管
 
+	DrawStgFg();		// ステージ前景
+
+	DrawUI();			// UI
 	if (GetDisk()->type == DISK_TYPE_LOB)
 	{
 		DrawPlayer();		// プレイヤー
@@ -311,9 +314,6 @@ void DrawGame()
 		DrawDisk();			// ディスク
 		DrawPlayer();		// プレイヤー
 	}
-	DrawStgFg();		// ステージ前景
-
-	DrawUI();			// UI
 	DrawEffect();		// エフェクト
 
 	if (bIsResult)
