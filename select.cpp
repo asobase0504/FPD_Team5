@@ -53,6 +53,8 @@ static int s_nSetCount;		//セット数を保存する
 //***********************************
 
 static void ChangeTexture(int nSelectMenu,int nSelectOption);
+static void ChangeColorSelectNow(void);
+static void ChangeColorSelectBefore(void);
 
 //============================================
 //セレクトの初期化
@@ -264,108 +266,11 @@ void UninitSelect(void)
 //============================================
 void UpdateSelect(void)
 {
-	VERTEX_2D *pVtx = NULL;								//頂点情報へのポインタ
+	//現在選択されている部分の色を変える
+	ChangeColorSelectNow();
 
-	if (GetSelectMenuNow() != OPTION_GOTOGAME)
-	{//「ゲーム開始」以外を先手くしている場合
-
-		D3DXCOLOR col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);	//設定用
-
-		/**************** 選択部分 ****************/
-
-		//頂点バッファをロックし、頂点データへのポインタを取得
-		s_pVtxBuffSelect->Lock(0, 0, (void**)&pVtx, 0);
-
-		pVtx += (GetSelectMenuNow() * 4);		//指定の位置まで進める
-
-		//頂点カラーの設定
-		pVtx[0].col = col;
-		pVtx[1].col = col;
-		pVtx[2].col = col;
-		pVtx[3].col = col;
-
-		//頂点バッファをアンロックする
-		s_pVtxBuffSelect->Unlock();
-
-		/**************** 矢印 ****************/
-
-		//頂点バッファをロックし、頂点データへのポインタを取得
-		s_pVtxBuffArrow->Lock(0, 0, (void**)&pVtx, 0);
-
-		pVtx += (GetSelectMenuNow() * 4);	//左側の矢印
-
-		//頂点カラーの設定
-		pVtx[0].col = col;
-		pVtx[1].col = col;
-		pVtx[2].col = col;
-		pVtx[3].col = col;
-
-		//頂点バッファをアンロックする
-		s_pVtxBuffArrow->Unlock();
-
-		//頂点バッファをロックし、頂点データへのポインタを取得
-		s_pVtxBuffArrow->Lock(0, 0, (void**)&pVtx, 0);
-
-		pVtx += ((GetSelectMenuNow() + 3) * 4);	//右側の矢印
-
-		//頂点カラーの設定
-		pVtx[0].col = col;
-		pVtx[1].col = col;
-		pVtx[2].col = col;
-		pVtx[3].col = col;
-
-		//頂点バッファをアンロックする
-		s_pVtxBuffArrow->Unlock();
-	}
-
-	if (GetSelectMenuBefore() != GetSelectMenuNow())
-	{
-		/**************** 選択部分 ****************/
-
-		//頂点バッファをロックし、頂点データへのポインタを取得
-		s_pVtxBuffSelect->Lock(0, 0, (void**)&pVtx, 0);
-
-		pVtx += (GetSelectMenuBefore() * 4);		//指定の位置まで進める
-
-		//頂点カラーの設定
-		pVtx[0].col = NO_SELECT_COLOR;
-		pVtx[1].col = NO_SELECT_COLOR;
-		pVtx[2].col = NO_SELECT_COLOR;
-		pVtx[3].col = NO_SELECT_COLOR;
-
-		//頂点バッファをアンロックする
-		s_pVtxBuffSelect->Unlock();
-
-		/**************** 矢印 ****************/
-
-		//頂点バッファをロックし、頂点データへのポインタを取得
-		s_pVtxBuffArrow->Lock(0, 0, (void**)&pVtx, 0);
-
-		pVtx += (GetSelectMenuBefore() * 4);	//左側の矢印
-
-		//頂点カラーの設定
-		pVtx[0].col = NO_SELECT_COLOR;
-		pVtx[1].col = NO_SELECT_COLOR;
-		pVtx[2].col = NO_SELECT_COLOR;
-		pVtx[3].col = NO_SELECT_COLOR;
-
-		//頂点バッファをアンロックする
-		s_pVtxBuffArrow->Unlock();
-
-		//頂点バッファをロックし、頂点データへのポインタを取得
-		s_pVtxBuffArrow->Lock(0, 0, (void**)&pVtx, 0);
-
-		pVtx += ((GetSelectMenuBefore() + 3) * 4);	//右側の矢印
-
-		//頂点カラーの設定
-		pVtx[0].col = NO_SELECT_COLOR;
-		pVtx[1].col = NO_SELECT_COLOR;
-		pVtx[2].col = NO_SELECT_COLOR;
-		pVtx[3].col = NO_SELECT_COLOR;
-
-		//頂点バッファをアンロックする
-		s_pVtxBuffArrow->Unlock();
-	}
+	//前回選択されていた部分の色を戻す
+	ChangeColorSelectBefore();
 }
 
 //============================================
@@ -623,4 +528,121 @@ static void ChangeTexture(int nSelectMenu, int nSelectOption)
 
 	//頂点バッファをアンロックする
 	s_pVtxBuffSelect->Unlock();
+}
+
+//--------------------------------------------
+// 現在選択されている部分の色を変える
+//--------------------------------------------
+static void ChangeColorSelectNow(void)
+{
+	if (GetSelectMenuNow() != OPTION_GOTOGAME)
+	{//「ゲーム開始」以外を選択している場合
+
+		VERTEX_2D *pVtx = NULL;								//頂点情報へのポインタ
+		D3DXCOLOR col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);	//設定用
+
+		/**************** 選択部分 ****************/
+
+		//頂点バッファをロックし、頂点データへのポインタを取得
+		s_pVtxBuffSelect->Lock(0, 0, (void**)&pVtx, 0);
+
+		pVtx += (GetSelectMenuNow() * 4);		//指定の位置まで進める
+
+		//頂点カラーの設定
+		pVtx[0].col = col;
+		pVtx[1].col = col;
+		pVtx[2].col = col;
+		pVtx[3].col = col;
+
+		//頂点バッファをアンロックする
+		s_pVtxBuffSelect->Unlock();
+
+		/**************** 矢印 ****************/
+
+		//頂点バッファをロックし、頂点データへのポインタを取得
+		s_pVtxBuffArrow->Lock(0, 0, (void**)&pVtx, 0);
+
+		pVtx += (GetSelectMenuNow() * 4);	//左側の矢印
+
+		//頂点カラーの設定
+		pVtx[0].col = col;
+		pVtx[1].col = col;
+		pVtx[2].col = col;
+		pVtx[3].col = col;
+
+		//頂点バッファをアンロックする
+		s_pVtxBuffArrow->Unlock();
+
+		//頂点バッファをロックし、頂点データへのポインタを取得
+		s_pVtxBuffArrow->Lock(0, 0, (void**)&pVtx, 0);
+
+		pVtx += ((GetSelectMenuNow() + 3) * 4);	//右側の矢印
+
+		//頂点カラーの設定
+		pVtx[0].col = col;
+		pVtx[1].col = col;
+		pVtx[2].col = col;
+		pVtx[3].col = col;
+
+		//頂点バッファをアンロックする
+		s_pVtxBuffArrow->Unlock();
+	}
+}
+
+//--------------------------------------------
+// 前回選択されていた部分の色を戻す
+//--------------------------------------------
+static void ChangeColorSelectBefore(void)
+{
+	if (GetSelectMenuBefore() != GetSelectMenuNow())
+	{//前回とは別のものを選択したとき
+
+		VERTEX_2D *pVtx = NULL;		//頂点情報へのポインタ
+
+		/**************** 選択部分 ****************/
+
+		//頂点バッファをロックし、頂点データへのポインタを取得
+		s_pVtxBuffSelect->Lock(0, 0, (void**)&pVtx, 0);
+
+		pVtx += (GetSelectMenuBefore() * 4);		//指定の位置まで進める
+
+		//頂点カラーの設定
+		pVtx[0].col = NO_SELECT_COLOR;
+		pVtx[1].col = NO_SELECT_COLOR;
+		pVtx[2].col = NO_SELECT_COLOR;
+		pVtx[3].col = NO_SELECT_COLOR;
+
+		//頂点バッファをアンロックする
+		s_pVtxBuffSelect->Unlock();
+
+		/**************** 矢印 ****************/
+
+		//頂点バッファをロックし、頂点データへのポインタを取得
+		s_pVtxBuffArrow->Lock(0, 0, (void**)&pVtx, 0);
+
+		pVtx += (GetSelectMenuBefore() * 4);	//左側の矢印
+
+		//頂点カラーの設定
+		pVtx[0].col = NO_SELECT_COLOR;
+		pVtx[1].col = NO_SELECT_COLOR;
+		pVtx[2].col = NO_SELECT_COLOR;
+		pVtx[3].col = NO_SELECT_COLOR;
+
+		//頂点バッファをアンロックする
+		s_pVtxBuffArrow->Unlock();
+
+		//頂点バッファをロックし、頂点データへのポインタを取得
+		s_pVtxBuffArrow->Lock(0, 0, (void**)&pVtx, 0);
+
+		pVtx += ((GetSelectMenuBefore() + 3) * 4);	//右側の矢印
+
+		//頂点カラーの設定
+		pVtx[0].col = NO_SELECT_COLOR;
+		pVtx[1].col = NO_SELECT_COLOR;
+		pVtx[2].col = NO_SELECT_COLOR;
+		pVtx[3].col = NO_SELECT_COLOR;
+
+		//頂点バッファをアンロックする
+		s_pVtxBuffArrow->Unlock();
+	}
 }

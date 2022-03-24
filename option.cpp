@@ -202,8 +202,8 @@ void UninitOption(void)
 		s_pVtxBuff = NULL;
 	}
 
-	UninitSelect();
-	UninitGear();					//歯車の終了処理
+	UninitGear();		//歯車の終了処理
+	UninitSelect();		//選択部分の終了処理
 }
 
 //============================================
