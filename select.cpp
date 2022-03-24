@@ -620,31 +620,33 @@ static void ChangeColorSelectBefore(void)
 
 			/**************** 矢印 ****************/
 
-		//	int nIdx = (GetSelectMenuBefore() * 4);
-		//	pVtx += nIdx;	//左側の矢印
+			//頂点バッファをロックし、頂点データへのポインタを取得
+			s_pVtxBuffArrow->Lock(0, 0, (void**)&pVtx, 0);
 
-		//	//頂点カラーの設定
-		//	pVtx[0].col = NO_SELECT_COLOR;
-		//	pVtx[1].col = NO_SELECT_COLOR;
-		//	pVtx[2].col = NO_SELECT_COLOR;
-		//	pVtx[3].col = NO_SELECT_COLOR;
+			pVtx += (GetSelectMenuBefore() * 4);	//左側の矢印
 
-		//	//頂点バッファをアンロックする
-		//	s_pVtxBuffArrow->Unlock();
+			//頂点カラーの設定
+			pVtx[0].col = NO_SELECT_COLOR;
+			pVtx[1].col = NO_SELECT_COLOR;
+			pVtx[2].col = NO_SELECT_COLOR;
+			pVtx[3].col = NO_SELECT_COLOR;
 
-		//	//頂点バッファをロックし、頂点データへのポインタを取得
-		//	s_pVtxBuffArrow->Lock(0, 0, (void**)&pVtx, 0);
+			//頂点バッファをアンロックする
+			s_pVtxBuffArrow->Unlock();
 
-		//	pVtx += ((GetSelectMenuBefore() + 3) * 4);	//右側の矢印
+			//頂点バッファをロックし、頂点データへのポインタを取得
+			s_pVtxBuffArrow->Lock(0, 0, (void**)&pVtx, 0);
 
-		//	//頂点カラーの設定
-		//	pVtx[0].col = NO_SELECT_COLOR;
-		//	pVtx[1].col = NO_SELECT_COLOR;
-		//	pVtx[2].col = NO_SELECT_COLOR;
-		//	pVtx[3].col = NO_SELECT_COLOR;
+			pVtx += ((GetSelectMenuBefore() + 3) * 4);	//右側の矢印
 
-		//	//頂点バッファをアンロックする
-		//	s_pVtxBuffArrow->Unlock();
-		//}
+			//頂点カラーの設定
+			pVtx[0].col = NO_SELECT_COLOR;
+			pVtx[1].col = NO_SELECT_COLOR;
+			pVtx[2].col = NO_SELECT_COLOR;
+			pVtx[3].col = NO_SELECT_COLOR;
+
+			//頂点バッファをアンロックする
+			s_pVtxBuffArrow->Unlock();
+		}
 	}
 }
