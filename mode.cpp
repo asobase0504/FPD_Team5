@@ -136,11 +136,12 @@ void SetMode(void)
 		break;
 
 	case MODE_OPTION:		// オプション
-		StopSound(SOUND_LABEL_BGM_TITLE);
+		StopSound(SOUND_LABEL_BGM_OPSION);
 		UninitOption();
 		break;
 
 	case MODE_GAME:			// ゲーム
+		StopSound(SOUND_LABEL_BGM_GAME);
 		UninitGame();
 		break;
 
@@ -165,11 +166,12 @@ void SetMode(void)
 		break;
 
 	case MODE_OPTION:		// オプション
-		PlaySound(SOUND_LABEL_BGM_TITLE);
+		PlaySound(SOUND_LABEL_BGM_OPSION);
 		InitOption();
 		break;
 
 	case MODE_GAME:			// ゲーム
+		PlaySound(SOUND_LABEL_BGM_GAME);
 		InitGame();
 		break;
 
