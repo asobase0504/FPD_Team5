@@ -10,7 +10,7 @@
 #include "main.h" 
 
 //マクロ定義
-#define MAX_GEAR			(32)			//はぐるまの最大数
+#define MAX_GEAR			(128)			//はぐるまの最大数
 
 //構造体の定義
 typedef struct

@@ -3,7 +3,7 @@
 // ステージ処理
 // Author Tanimoto_Kosuke
 //
-// Update 22/03/23
+// Update 22/03/24
 // 
 //=========================================
 //------------------------------------
@@ -19,6 +19,7 @@
 #include "game.h"
 #include "drum.h"
 #include "score.h"
+#include "sound.h"
 
 //------------------------------------
 // スタティック変数
@@ -261,6 +262,8 @@ void UpdateStage(void)
 			SetPop(D3DXVECTOR3(pDisk->pos.x, pDisk->pos.y - FELL_POP_HEIGHT, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false, POP_TYPE_FELL, 6);
 			*GetResetScore() = true;
 
+			PlaySound(SOUND_LABEL_SE_DISKFELL);
+
 			if (pDisk->pos.x >= SCREEN_WIDTH / 2)
 			{
 				AddScore(2, 0);
@@ -270,7 +273,7 @@ void UpdateStage(void)
 				AddScore(2, 1);
 			}
 		}
-
+		PlaySound(SOUND_LABEL_SE_CHEERS1);
 		DestroyDisk();
 	}
 
