@@ -120,8 +120,8 @@ void InitOption(void)
 	menu.nNumUse = OPTION_MAX;
 	menu.fLeft = 0.0f;
 	menu.fRight = SCREEN_WIDTH;
-	menu.fTop = SCREEN_HEIGHT * 0.2f;
-	menu.fBottom = SCREEN_HEIGHT * 0.8f;
+	menu.fTop = 0.0f;
+	menu.fBottom = SCREEN_HEIGHT;
 	menu.fWidth = MENU_WIDTH;
 	menu.fHeight = MENU_HEIGHT;
 
@@ -169,6 +169,10 @@ void InitOption(void)
 	s_nSelectPoint = SelectPoint(s_nSelectMenu);
 	s_nSelectSetCount = SelectSetCount(s_nSelectMenu);
 
+	//•Ï”‚Ì‰Šú‰»
+	s_nSelectMenu = 3;
+
+	ChangeOption(s_nSelectMenu);	//‘I‘ğˆ‚ğ•ÏX
 }
 
 //============================================

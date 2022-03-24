@@ -13,12 +13,12 @@
 //マクロ定義
 //**************************************************
 #define MAX_WIN_LOSE		(2)			//「勝利」「敗北」
-#define WIN_LOSE_WIDTH		(160.0f)	//勝敗UIの幅
-#define WIN_LOSE_HEIGHT		(90.0f)		//勝敗UIの高さ
-#define LEFTSIDE_POS_X		(300.0f)	//左側のUIのX座標
-#define LEFTSIDE_POS_Y		(100.0f)	//左側のUIのY座標
-#define RIGHTSIDE_POS_X		(900.0f)	//右側のUIのX座標
-#define RIGHTSIDE_POS_Y		(100.0f)	//右側のUIのY座標
+#define WIN_LOSE_WIDTH		(184.0f)	//勝敗UIの幅
+#define WIN_LOSE_HEIGHT		(96.0f)		//勝敗UIの高さ
+#define LEFTSIDE_POS_X		(SCREEN_WIDTH * 0.3f)	//左側のUIのX座標
+#define LEFTSIDE_POS_Y		(250.0f)	//左側のUIのY座標
+#define RIGHTSIDE_POS_X		(SCREEN_WIDTH * 0.7f)	//右側のUIのX座標
+#define RIGHTSIDE_POS_Y		(250.0f)	//右側のUIのY座標
 
 //**************************************************
 //スタティック変数
@@ -39,11 +39,11 @@ void InitResult(void)
 	
 	//テクスチャの読み込み
 	D3DXCreateTextureFromFile(pDevice,
-								"data/TEXTURE/後でなんか入れる.png",
+								"data/TEXTURE/WORD/FPD_ResultUI_LOSE.png",
 								&s_apTexture[0]);
 
 	D3DXCreateTextureFromFile(pDevice,
-								"data/TEXTURE/後でなんか入れる.png",
+								"data/TEXTURE/WORD/FPD_ResultUI_WIN.png",
 								&s_apTexture[1]);
 
 	//頂点バッファの生成
@@ -132,7 +132,7 @@ void UninitResult(void)
 //============================
 void UpdateResult(void)
 {
-	if (GetKeyboardTrigger(DIK_RETURN))
+	if (GetKeyboardTrigger(DIK_RETURN) || GetJoypadTrigger(JOYKEY_A))
 	{
 		ChangeMode(MODE_OPTION);
 	}

@@ -17,7 +17,7 @@
 //***********************************
 #define MAX_SELECT		(3)			//選択肢の最大数
 #define SELECT_SIZE		(35.0f)		//選択部分のサイズ
-#define SELECT_POS_X	(200.0f)	//選択肢の位置から見た選択部分のX座標
+#define SELECT_POS_X	(260.0f)	//選択肢の位置から見た選択部分のX座標
 
 #define MAX_TIMELIMIT	(5)			//制限時間の選択肢の最大数
 #define MAX_POINT		(4)			//ポイント数の選択肢の最大数

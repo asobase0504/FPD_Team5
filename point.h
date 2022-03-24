@@ -23,6 +23,7 @@ typedef struct
 {
 	LPDIRECT3DVERTEXBUFFER9 pVtxBuff;	//頂点バッファへのポインタ
 	D3DXVECTOR3 pos;					//現在の位置
+	D3DXCOLOR col;
 	int nScore;							//スコアの値
 	bool bUse;
 }Point;
@@ -35,5 +36,6 @@ void UninitPoint(void);
 void UpdatePoint(void);
 void DrawPoint(void);
 void SetPoint(void);
+void SetPointRound(int* nIdx);
 
 #endif

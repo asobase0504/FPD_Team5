@@ -24,7 +24,7 @@ void InitLandingMark(void)
 
 													//テクスチャの読み込み
 	D3DXCreateTextureFromFile(pDevice,
-		"data\\TEXTURE\\target.png",
+		"data\\TEXTURE\\SilverGear.png",
 		&g_apTexLandingMark);
 
 	//頂点バッファの生成
