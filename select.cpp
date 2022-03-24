@@ -535,7 +535,7 @@ static void ChangeTexture(int nSelectMenu, int nSelectOption)
 //--------------------------------------------
 static void ChangeColorSelectNow(void)
 {
-	if (GetSelectMenuNow() != OPTION_GOTOGAME)
+	if ((GetSelectMenuNow() >= OPTION_TIMELIMIT) && (GetSelectMenuNow() <= OPTION_SETCOUNT))
 	{//「ゲーム開始」以外を選択している場合
 
 		VERTEX_2D *pVtx = NULL;								//頂点情報へのポインタ
@@ -594,8 +594,8 @@ static void ChangeColorSelectNow(void)
 //--------------------------------------------
 static void ChangeColorSelectBefore(void)
 {
-	if (GetSelectMenuBefore() != GetSelectMenuNow())
-	{//前回とは別のものを選択したとき
+	if ((GetSelectMenuBefore() != OPTION_GOTOGAME) && (GetSelectMenuBefore() != GetSelectMenuNow()))
+	{//「試合開始」以外を選択していた & 前回とは別のものを選択したとき
 
 		VERTEX_2D *pVtx = NULL;		//頂点情報へのポインタ
 
@@ -615,34 +615,38 @@ static void ChangeColorSelectBefore(void)
 		//頂点バッファをアンロックする
 		s_pVtxBuffSelect->Unlock();
 
-		/**************** 矢印 ****************/
+		if ((GetSelectMenuNow() != OPTION_GOTOGAME) || (GetSelectMenuNow() == OPTION_GOTOGAME))
+		{//「試合開始」以外を選択中 or 「試合開始」を選択中
 
-		//頂点バッファをロックし、頂点データへのポインタを取得
-		s_pVtxBuffArrow->Lock(0, 0, (void**)&pVtx, 0);
+			/**************** 矢印 ****************/
 
-		pVtx += (GetSelectMenuBefore() * 4);	//左側の矢印
+			//頂点バッファをロックし、頂点データへのポインタを取得
+			s_pVtxBuffArrow->Lock(0, 0, (void**)&pVtx, 0);
 
-		//頂点カラーの設定
-		pVtx[0].col = NO_SELECT_COLOR;
-		pVtx[1].col = NO_SELECT_COLOR;
-		pVtx[2].col = NO_SELECT_COLOR;
-		pVtx[3].col = NO_SELECT_COLOR;
+			pVtx += (GetSelectMenuBefore() * 4);	//左側の矢印
 
-		//頂点バッファをアンロックする
-		s_pVtxBuffArrow->Unlock();
+			//頂点カラーの設定
+			pVtx[0].col = NO_SELECT_COLOR;
+			pVtx[1].col = NO_SELECT_COLOR;
+			pVtx[2].col = NO_SELECT_COLOR;
+			pVtx[3].col = NO_SELECT_COLOR;
 
-		//頂点バッファをロックし、頂点データへのポインタを取得
-		s_pVtxBuffArrow->Lock(0, 0, (void**)&pVtx, 0);
+			//頂点バッファをアンロックする
+			s_pVtxBuffArrow->Unlock();
 
-		pVtx += ((GetSelectMenuBefore() + 3) * 4);	//右側の矢印
+			//頂点バッファをロックし、頂点データへのポインタを取得
+			s_pVtxBuffArrow->Lock(0, 0, (void**)&pVtx, 0);
 
-		//頂点カラーの設定
-		pVtx[0].col = NO_SELECT_COLOR;
-		pVtx[1].col = NO_SELECT_COLOR;
-		pVtx[2].col = NO_SELECT_COLOR;
-		pVtx[3].col = NO_SELECT_COLOR;
+			pVtx += ((GetSelectMenuBefore() + 3) * 4);	//右側の矢印
 
-		//頂点バッファをアンロックする
-		s_pVtxBuffArrow->Unlock();
+			//頂点カラーの設定
+			pVtx[0].col = NO_SELECT_COLOR;
+			pVtx[1].col = NO_SELECT_COLOR;
+			pVtx[2].col = NO_SELECT_COLOR;
+			pVtx[3].col = NO_SELECT_COLOR;
+
+			//頂点バッファをアンロックする
+			s_pVtxBuffArrow->Unlock();
+		}
 	}
 }
