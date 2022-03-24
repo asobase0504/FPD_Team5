@@ -33,21 +33,21 @@ void InitPop(void)
 	D3DXCreateTextureFromFile
 	(
 		pDevice,
-		"data\\TEXTURE\\goal\\Arrow.png",	//テクスチャのファイル名
+		"data\\TEXTURE\\WORD\\FPD_GameUI_Point_3pt.png",	//テクスチャのファイル名
 		&s_pTexturePop[POP_TYPE_NORMAL]
 	);
 
 	D3DXCreateTextureFromFile
 	(
 		pDevice,
-		"data\\TEXTURE\\goal\\Arrow.png",	//テクスチャのファイル名
+		"data\\TEXTURE\\WORD\\FPD_GameUI_Point_5pt.png",	//テクスチャのファイル名
 		&s_pTexturePop[POP_TYPE_STRIKE]
 	);
 
 	D3DXCreateTextureFromFile
 	(
 		pDevice,
-		"data\\TEXTURE\\pop\\life000.png",	//テクスチャのファイル名
+		"data\\TEXTURE\\WORD\\FPD_GameUI_Point_2pt.png",	//テクスチャのファイル名
 		&s_pTexturePop[POP_TYPE_FELL]
 	);
 
@@ -108,10 +108,10 @@ void InitPop(void)
 		pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);
 
 		//頂点カラーの設定
-		pVtx[0].col = D3DCOLOR_RGBA(255, 255, 255, 255);
-		pVtx[1].col = D3DCOLOR_RGBA(255, 255, 255, 255);
-		pVtx[2].col = D3DCOLOR_RGBA(255, 255, 255, 255);
-		pVtx[3].col = D3DCOLOR_RGBA(255, 255, 255, 255);
+		pVtx[0].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+		pVtx[1].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+		pVtx[2].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+		pVtx[3].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 	}
 
 	//頂点バッファをアンロックする
@@ -178,31 +178,6 @@ void UpdatePop(void)
 			pVtx[3].pos.x = s_aPop[nCntPop].pos.x + sinf(s_aPop[nCntPop].fAngle + s_aPop[nCntPop].rot.x) * s_aPop[nCntPop].fLength;
 			pVtx[3].pos.y = s_aPop[nCntPop].pos.y + cosf(s_aPop[nCntPop].fAngle + s_aPop[nCntPop].rot.y) * s_aPop[nCntPop].fLength;
 			pVtx[3].pos.z = s_aPop[nCntPop].pos.z;
-
-			if (s_aPop[nCntPop].type == POP_TYPE_NORMAL)
-			{
-				//頂点カラーの設定
-				pVtx[0].col = D3DCOLOR_RGBA(0, 255, 255, 255);
-				pVtx[1].col = D3DCOLOR_RGBA(255, 255, 255, 255);
-				pVtx[2].col = D3DCOLOR_RGBA(255, 255, 255, 255);
-				pVtx[3].col = D3DCOLOR_RGBA(255, 255, 255, 255);
-			}
-			else if (s_aPop[nCntPop].type == POP_TYPE_STRIKE)
-			{
-				//頂点カラーの設定
-				pVtx[0].col = D3DCOLOR_RGBA(255, 0, 255, 255);
-				pVtx[1].col = D3DCOLOR_RGBA(255, 255, 255, 255);
-				pVtx[2].col = D3DCOLOR_RGBA(255, 255, 255, 255);
-				pVtx[3].col = D3DCOLOR_RGBA(255, 255, 255, 255);
-			}
-
-			if (s_aPop[nCntPop].bSide == true)
-			{//右側のテクスチャを逆向き
-				pVtx[0].tex = D3DXVECTOR2(1.0f, 0.0f);
-				pVtx[1].tex = D3DXVECTOR2(0.0f, 0.0f);
-				pVtx[2].tex = D3DXVECTOR2(1.0f, 1.0f);
-				pVtx[3].tex = D3DXVECTOR2(0.0f, 1.0f);
-			}
 		}
 	}
 	//頂点バッファをアンロックする

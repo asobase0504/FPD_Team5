@@ -68,6 +68,14 @@ void InitEffect(void)
 
 	D3DXCreateTextureFromFile(pDevice,
 		"data\\TEXTURE\\Effect\\effect105.png",
+		&s_pTexture[EFFECT_TYPE_RED_SMOKE_HORIZONTAL]);
+
+	D3DXCreateTextureFromFile(pDevice,
+		"data\\TEXTURE\\Effect\\effect105.png",
+		&s_pTexture[EFFECT_TYPE_BLUE_SMOKE_HORIZONTAL]);
+
+	D3DXCreateTextureFromFile(pDevice,
+		"data\\TEXTURE\\Effect\\effect105.png",
 		&s_pTexture[EFFECT_TYPE_POINT_SMOKE_RED]);
 
 	D3DXCreateTextureFromFile(pDevice,
@@ -427,6 +435,54 @@ void SetEffect(D3DXVECTOR3 pos, float rot, EFFECT_TYPE Type)
 		}
 		break;
 
+		case EFFECT_TYPE_RED_SMOKE_HORIZONTAL:
+		{
+			int nX;
+
+			if (pos.x > SCREEN_WIDTH * 0.5f)
+			{
+				nX = 1;
+			}
+			else
+			{
+				nX = -1;
+			}
+
+			pEffect->pos.y -= (rand() % 501) * 0.03f;
+			pEffect->move = D3DXVECTOR3(((rand() % 101) + 50) * nX * 0.0067f * 3.5f, ((rand() % 201)) * -0.005f, 0.0f);
+			pEffect->fSize = D3DXVECTOR3(10.0f, 10.0f, 0.0f);
+			pEffect->fDeltaSize = D3DXVECTOR3(0.1f, 0.1f, 0.0f);
+			pEffect->col = D3DXCOLOR(1.0f, 0.3f, 0.13f, 0.25f);
+			pEffect->fDeltaCol = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.001f);
+			pEffect->nLife = 60;
+			pEffect->rot = 0.0f;
+		}
+		break;
+
+		case EFFECT_TYPE_BLUE_SMOKE_HORIZONTAL:
+		{
+			int nX;
+
+			if (pos.x > SCREEN_WIDTH * 0.5f)
+			{
+				nX = 1;
+			}
+			else
+			{
+				nX = -1;
+			}
+
+			pEffect->pos.y -= (rand() % 501) * 0.03f;
+			pEffect->move = D3DXVECTOR3(((rand() % 101) + 50) * nX * 0.0067f * 3.5f, ((rand() % 201)) * -0.005f, 0.0f);
+			pEffect->fSize = D3DXVECTOR3(10.0f, 10.0f, 0.0f);
+			pEffect->fDeltaSize = D3DXVECTOR3(0.1f, 0.1f, 0.0f);
+			pEffect->col = D3DXCOLOR(0.13f, 0.3f, 1.0f, 0.25f);
+			pEffect->fDeltaCol = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.001f);
+			pEffect->nLife = 60;
+			pEffect->rot = 0.0f;
+		}
+		break;
+
 		case EFFECT_TYPE_POINT_SMOKE_RED:
 		{
 			float fY;
@@ -586,6 +642,11 @@ void SetEffect(D3DXVECTOR3 pos, float rot, EFFECT_TYPE Type)
 		pVtx[nCntIdxVtx + 3].pos.x = pEffect->pos.x + sinf(pEffect->rot + pEffect->fAngle + (-D3DX_PI * 0.25f)) * pEffect->fLenght;
 		pVtx[nCntIdxVtx + 3].pos.y = pEffect->pos.y + cosf(pEffect->rot + pEffect->fAngle + (-D3DX_PI * 0.25f)) * pEffect->fLenght;
 		pVtx[nCntIdxVtx + 3].pos.z = 0.0f;
+
+		pVtx[nCntIdxVtx + 0].col = pEffect->col;
+		pVtx[nCntIdxVtx + 1].col = pEffect->col;
+		pVtx[nCntIdxVtx + 2].col = pEffect->col;
+		pVtx[nCntIdxVtx + 3].col = pEffect->col;
 
 		break;
 	}
