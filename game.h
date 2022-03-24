@@ -18,5 +18,6 @@ void SetNeedTime(int nPoint);
 void SetNeedPoint(int nPoint);
 void SetNeedSet(int nPoint);
 bool* GetResetScore(void);
+void SetBackground(void);
 
 #endif // !_GAME_H_
