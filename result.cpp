@@ -132,7 +132,7 @@ void UninitResult(void)
 //============================
 void UpdateResult(void)
 {
-	if (GetKeyboardTrigger(DIK_RETURN))
+	if (GetKeyboardTrigger(DIK_RETURN) || GetJoypadTrigger(JOYKEY_A))
 	{
 		ChangeMode(MODE_OPTION);
 	}

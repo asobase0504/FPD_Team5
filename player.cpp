@@ -227,7 +227,7 @@ void MovePlayer(int nIdxPlayer)
 
 	if (IsJoyPadUse(nIdxPlayer))
 	{ // JoyPadの有無
-		if (GetJoypadTrigger(JOYKEY_A))
+		if (GetJoypadTrigger(JOYKEY_A, nIdxPlayer))
 		{ //スライディングの使用
 			pPlayer->bUseSliding = true;
 			PlaySound(SOUND_LABEL_SE_SLIDING);
@@ -369,7 +369,7 @@ void ThrowPlayer(int nIdxPlayer)
 		case JUMP_NOW:
 			if (GetJoypadTrigger(JOYKEY_A, nIdxPlayer))
 			{
-				ThrowDisk(pPlayer->pos, move, moveCurve, DISK_TYPE_JUMP, nIdxPlayer);
+				ThrowDisk(pPlayer->pos, move, ZERO_VECTOR, DISK_TYPE_JUMP, nIdxPlayer);
 				PlaySound(SOUND_LABEL_SE_THROW_NORMAL);
 			}
 			break;
@@ -406,7 +406,7 @@ void ThrowPlayer(int nIdxPlayer)
 		case JUMP_NOW:
 			if (GetKeyboardTrigger(DIK_RETURN))
 			{
-				ThrowDisk(pPlayer->pos, move, moveCurve, DISK_TYPE_JUMP, nIdxPlayer);
+				ThrowDisk(pPlayer->pos, move, ZERO_VECTOR, DISK_TYPE_JUMP, nIdxPlayer);
 				PlaySound(SOUND_LABEL_SE_THROW_NORMAL);
 			}
 			break;
