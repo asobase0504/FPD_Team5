@@ -34,7 +34,7 @@ void InitStgFg(void)
 	D3DXCreateTextureFromFile
 	(
 		pDevice,
-		"data\\TEXTURE\\stage\\wall.png",	//テクスチャのファイル名
+		"data\\TEXTURE\\stage\\wall3.png",	//テクスチャのファイル名
 		&s_pTextureStgFg[STGFG_TYPE_WALL]
 	);
 

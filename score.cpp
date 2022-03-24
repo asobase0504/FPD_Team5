@@ -24,7 +24,7 @@ void InitScore(void)
 
 	//テクスチャの読み込み
 	D3DXCreateTextureFromFile(pDevice,
-		"data/TEXTURE/number.png",
+		"data/TEXTURE/number2.png",
 		&g_pTextureScore);
 
 	for (int nScoreCnt = 0; nScoreCnt < 2; nScoreCnt++)
@@ -51,10 +51,10 @@ void InitScore(void)
 		for (int nPosCnt = 0; nPosCnt < NUM_SCORE; nPosCnt++)
 		{
 			//頂点座標
-			pVtx[0].pos = D3DXVECTOR3(g_nScore[nScoreCnt].pos.x - 25.0f + nPosCnt * 55.0f, g_nScore[nScoreCnt].pos.y - 35.0f, 0.0f);
-			pVtx[1].pos = D3DXVECTOR3(g_nScore[nScoreCnt].pos.x + 25.0f + nPosCnt * 55.0f, g_nScore[nScoreCnt].pos.y - 35.0f, 0.0f);
-			pVtx[2].pos = D3DXVECTOR3(g_nScore[nScoreCnt].pos.x - 25.0f + nPosCnt * 55.0f, g_nScore[nScoreCnt].pos.y + 35.0f, 0.0f);
-			pVtx[3].pos = D3DXVECTOR3(g_nScore[nScoreCnt].pos.x + 25.0f + nPosCnt * 55.0f, g_nScore[nScoreCnt].pos.y + 35.0f, 0.0f);
+			pVtx[0].pos = D3DXVECTOR3(g_nScore[nScoreCnt].pos.x - 25.0f + nPosCnt * 55.0f, g_nScore[nScoreCnt].pos.y - 25.0f, 0.0f);
+			pVtx[1].pos = D3DXVECTOR3(g_nScore[nScoreCnt].pos.x + 25.0f + nPosCnt * 55.0f, g_nScore[nScoreCnt].pos.y - 25.0f, 0.0f);
+			pVtx[2].pos = D3DXVECTOR3(g_nScore[nScoreCnt].pos.x - 25.0f + nPosCnt * 55.0f, g_nScore[nScoreCnt].pos.y + 25.0f, 0.0f);
+			pVtx[3].pos = D3DXVECTOR3(g_nScore[nScoreCnt].pos.x + 25.0f + nPosCnt * 55.0f, g_nScore[nScoreCnt].pos.y + 25.0f, 0.0f);
 
 			if (nPosCnt == 1 || nPosCnt == 2)
 			{
@@ -72,10 +72,10 @@ void InitScore(void)
 			pVtx[3].rhw = 1.0f;
 
 			//頂点カラーの設定
-			pVtx[0].col = D3DXCOLOR(0.0f, 1.0f, 0.5f, 1.0f);
-			pVtx[1].col = D3DXCOLOR(0.0f, 1.0f, 0.5f, 1.0f);
-			pVtx[2].col = D3DXCOLOR(0.0f, 1.0f, 0.5f, 1.0f);
-			pVtx[3].col = D3DXCOLOR(0.0f, 1.0f, 0.5f, 1.0f);
+			pVtx[0].col = D3DXCOLOR(0.1f, 1.0f, 1.0f, 1.0f);
+			pVtx[1].col = D3DXCOLOR(0.1f, 1.0f, 1.0f, 1.0f);
+			pVtx[2].col = D3DXCOLOR(0.1f, 1.0f, 1.0f, 1.0f);
+			pVtx[3].col = D3DXCOLOR(0.1f, 1.0f, 1.0f, 1.0f);
 
 			//テクスチャの座標設定
 			pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
@@ -238,4 +238,30 @@ void AddScore(int nValse, int nPlayerIdx)
 SCORE* GetScore(void)
 {
 	return g_nScore;
+}
+
+void ResetScore(void)
+{
+	for (int nScoreCnt = 0; nScoreCnt < 2; nScoreCnt++)
+	{
+		g_nScore[nScoreCnt].nScore = 0;
+
+		VERTEX_2D*pVtx; //頂点へのポインタ
+
+		//頂点バッファをロックし頂点情報へのポインタを取得
+		g_nScore[nScoreCnt].pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
+		for (int nCntScore = 0; nCntScore < NUM_SCORE; nCntScore++)
+		{
+			//テクスチャの座標設定
+			pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
+			pVtx[1].tex = D3DXVECTOR2(0.1f, 0.0f);
+			pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);
+			pVtx[3].tex = D3DXVECTOR2(0.1f, 1.0f);
+			pVtx += 4; //頂点ポイントを四つ進む
+		}
+		//頂点バッファをアンロック
+		g_nScore[nScoreCnt].pVtxBuff->Unlock();
+
+	}
 }

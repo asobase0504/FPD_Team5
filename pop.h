@@ -14,10 +14,10 @@
 //****************************************************************************
 //マクロ定義
 //****************************************************************************
-#define GOAL_POP_WIDTH		(150)				//ゴールポップの横サイズ
-#define GOAL_POP_HEIGHT		(50)				//ゴールポップの縦サイズ
-#define FELL_POP_WIDTH		(50)				//フォールポップの横サイズ
-#define FELL_POP_HEIGHT		(100)				//フォールポップの縦サイズ
+#define GOAL_POP_WIDTH		(160)				//ゴールポップの横サイズ
+#define GOAL_POP_HEIGHT		(48)				//ゴールポップの縦サイズ
+#define FELL_POP_WIDTH		(160)				//フォールポップの横サイズ
+#define FELL_POP_HEIGHT		(48)				//フォールポップの縦サイズ
 #define MAX_POP				(11)				//ポップの最大数
 #define MAX_IMAGE_POP		(3)					//ポップ画像の最大数
 #define POP_SPEAD			(8)					//ポップの移動速度

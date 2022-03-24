@@ -15,6 +15,7 @@
 #include <stdio.h>
 #include "disk.h"
 #include "player.h"
+#include "sound.h"
 
 //------------------------------------
 // マクロ定義
@@ -185,6 +186,8 @@ void ThrowRefree(int nIdxPlayer)
 
 		// ディスク投げ
 		SetDisk(posThrow, move * THROW_POWER, D3DXVECTOR3(0.0f, 0.0f, 0.0f), DISK_TYPE_NORMAL, -1, 90.0f);
+
+		PlaySound(SOUND_LABEL_SE_WHISTLE_START);
 	}
 }
 
