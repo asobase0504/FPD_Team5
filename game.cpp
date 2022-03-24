@@ -232,8 +232,8 @@ void UpdateGame(void)
 		UpdateDisk();			// ディスク
 		UpdateLandingMark();	// ディスクの落下地点
 		UpdateShadow();			// 影
-	}
 		UpdateUI();				// UI
+	}
 		UpdatePipe();			// 配管
 		UpdateGear();			// 歯車
 		UpdateEffect();			// エフェクト
