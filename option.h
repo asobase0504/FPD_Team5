@@ -31,5 +31,7 @@ void UninitOption(void);
 void UpdateOption(void);
 void DrawOption(void);
 void SetOption(void);
+int GetSelectMenuNow(void);
+int GetSelectMenuBefore(void);
 
 #endif

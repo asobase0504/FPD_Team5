@@ -381,7 +381,7 @@ void ColisionGoal(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pLastPos)
 						SetThoThrowRefreeIdx(1);	// “Š‚°‚é•ûŒü‚Ì‘I‘ð
 						*GetResetScore() = true;
 					}
-					PlaySound(SOUND_LABEL_SE_GOAL);
+					PlaySound(SOUND_LABEL_SE_GOAL1);
 					s_aGoal[nCntGoal].bGoal = true;
 					pDisk->move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 				}
@@ -393,8 +393,7 @@ void ColisionGoal(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pLastPos)
 					(s_aGoal[nCntGoal].pos + D3DXVECTOR3(0.0f, (STRIKE_GOAL_HEIGHT / 2), 0.0f)) - (s_aGoal[nCntGoal].pos - D3DXVECTOR3(0.0f, (STRIKE_GOAL_HEIGHT / 2), 0.0f))) == true)
 				{
 					if (s_aGoal[nCntGoal].bSide == false)
-					{
-						
+					{		
 						SetPop(D3DXVECTOR3(GOAL_POP_WIDTH / 2, pDisk->pos.y, 0.0f), s_aGoal[nCntGoal].rot, s_aGoal[nCntGoal].bSide, POP_TYPE_STRIKE, nCntGoal);
 						AddScore(5,1);
 						SetThoThrowRefreeIdx(0);	// “Š‚°‚é•ûŒü‚Ì‘I‘ð
@@ -405,7 +404,6 @@ void ColisionGoal(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pLastPos)
 					}
 					else
 					{
-
 						PointSmokeAnimation(0);
 						
 						SetPop(D3DXVECTOR3(SCREEN_WIDTH - GOAL_POP_WIDTH / 2, pDisk->pos.y, 0.0f), s_aGoal[nCntGoal].rot, s_aGoal[nCntGoal].bSide, POP_TYPE_STRIKE, nCntGoal);
@@ -413,7 +411,7 @@ void ColisionGoal(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pLastPos)
 						SetThoThrowRefreeIdx(1);	// “Š‚°‚é•ûŒü‚Ì‘I‘ð
 						*GetResetScore() = true;
 					}
-					PlaySound(SOUND_LABEL_SE_GOAL);
+					PlaySound(SOUND_LABEL_SE_GOAL2);
 					s_aGoal[nCntGoal].bGoal = true;
 					pDisk->move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 				}
