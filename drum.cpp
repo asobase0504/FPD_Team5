@@ -138,7 +138,7 @@ void InitDrum(void)
 		NULL
 	);
 
-	s_posPost = D3DXVECTOR3(GOAL_WIDTH * 0.5f + 50.0f,SCREEN_HEIGHT * 0.5f - 20.0f,0.0f);
+	s_posPost = D3DXVECTOR3(GOAL_WIDTH * 0.5f + 50.0f, SCREEN_HEIGHT * 0.5f - 20.0f, 0.0f);
 
 	//頂点バッファをロックし、頂点情報へのポインタを取得
 	s_pVtxBuffPost->Lock(0, 0, (void**)&pVtx, 0);
@@ -226,7 +226,7 @@ void UpdateDrum(void)
 {
 	VERTEX_2D *pVtx;				//頂点情報へのポインタ
 
-	//頂点バッファをロックし、頂点情報へのポインタを取得
+									//頂点バッファをロックし、頂点情報へのポインタを取得
 	s_pVtxBuffDrum->Lock(0, 0, (void**)&pVtx, 0);
 
 	for (int nCntDrum = 0; nCntDrum < MAX_DRUM; nCntDrum++, pVtx += 4)
@@ -314,14 +314,14 @@ void DrawDrum()
 {
 	LPDIRECT3DDEVICE9 pDevice = GetDevice();	//デバイスへのポインタ
 
-	//頂点バッファをデータストリームに設定
-	pDevice->SetStreamSource(0, s_pVtxBuffPost, 0, sizeof(VERTEX_2D));
+												//頂点バッファをデータストリームに設定
+	//pDevice->SetStreamSource(0, s_pVtxBuffPost, 0, sizeof(VERTEX_2D));
 
 	//頂点フォーマットの設定
 	pDevice->SetFVF(FVF_VERTEX_2D);
 
-	//テクスチャの設定
-	pDevice->SetTexture(0, s_pTexturePost);
+	////テクスチャの設定
+	//pDevice->SetTexture(0, s_pTexturePost);
 
 	//ポリゴンの描画
 	pDevice->DrawPrimitive

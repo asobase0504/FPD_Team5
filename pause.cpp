@@ -15,6 +15,7 @@
 #include "menu.h"
 #include "game.h"
 #include "mode.h"
+#include "sound.h"
 
 #include <assert.h>
 
@@ -173,6 +174,8 @@ void SetPause(void)
 	//メニューのリセット
 	ResetMenu(s_nIdxMenu);
 
+	PlaySound(SOUND_LABEL_SE_WHISTLE_STOP);
+
 	//メニューの設定
 	MenuArgument menu;
 	menu.nNumUse = MENU_MAX;
@@ -219,6 +222,8 @@ static void Input(void)
 		// 選択肢の変更
 		ChangeOption(s_nSelectMenu);
 
+		PlaySound(SOUND_LABEL_SE_SELECT);
+
 	}
 	else if (GetKeyboardTrigger(DIK_S) || GetJoypadTrigger(JOYKEY_DOWN, 0))
 	{// Sキーが押されたかどうか
@@ -229,6 +234,8 @@ static void Input(void)
 
 		// 選択肢の変更
 		ChangeOption(s_nSelectMenu);
+
+		PlaySound(SOUND_LABEL_SE_SELECT);
 	}
 
 	if (GetKeyboardTrigger(DIK_RETURN) || GetJoypadTrigger(JOYKEY_START, 0))
@@ -238,10 +245,12 @@ static void Input(void)
 		case MENU_GAME:			// ゲーム
 			SetEnablePause(false);
 			ResetMenu(s_nIdxMenu);
+			PlaySound(SOUND_LABEL_SE_WHISTLE_START);
 			break;
 
 		case MENU_TITLE:		// タイトル
 			ChangeMode(MODE_TITLE);
+			PlaySound(SOUND_LABEL_SE_WHISTLE_FINISH);
 			break;
 
 		default:
